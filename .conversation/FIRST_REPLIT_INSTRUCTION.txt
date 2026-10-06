@@ -1,0 +1,35 @@
+Read docs/GEN2_MASTER_SPEC.md completely, including all 89 canonical task definitions and the final activation/interpretation sections. If the tool truncates the file, continue reading until every section is read.
+
+Do not implement QuantraCore yet. Do not begin QC2-000.
+
+Your assignment is PREBUILD_REGISTRY only. Create or validate the project's official task-management records and docs/BUILD_TASKS.md plus registry/BUILD_TASKS.json for QC2-000 through QC2-088 inclusive.
+
+If the supplied package already contains these files, reconcile them against the master specification; do not mark them implemented or create duplicate tasks.
+
+Preserve exactly 89 canonical task IDs, names, scopes, consecutive execution order and explicit dependencies. Every task after QC2-000 depends on its immediate predecessor in addition to its listed technical prerequisites. All earlier tasks must be PASS before a later task starts. Do not merge, delete, rename, reorder or broaden canonical tasks.
+
+For every task record objective, dependencies, authorized legacy sources, required Reference Intake, deliverables, tests, forbidden actions, acceptance gate, required evidence/environment, calibration dependency, initial TODO status, blockers and absent acceptance receipt.
+
+Exactly one canonical task may be IN_PROGRESS once implementation is later authorized. Subtasks are allowed only beneath that task. Do not run or implement future canonical tasks in the background.
+
+QuantraCore Gen 1, ApexLab Gen 1 and the original QuantraCore Protocol project are read-only references. Never modify them or import their runtime modules. Do not infer source meanings from protocol numbers. Missing references stay explicitly unverified.
+
+Do not invent empirical, owner-risk, provider-capability or engineering-limit values. Record each unresolved decision with its correct class and activation consequence. Fixture policies are test-only and cannot enter production manifests.
+
+Do not implement live trading, provider/feed fallback, a second official ranking, manual mobile trading, an external Lamont Labs dependency, paid services or deployment activation.
+
+Respect the corrected sequencing: QC2-011 is real acquisition/evidence only; complete prospective prediction/outcome integration is QC2-086. Earlier owner-approval tasks are fixture frameworks until real enrollment/security gates pass. Calibration selects a contender before locked qualification. F0 starts only with exact explicit owner activation authorization at QC2-088.
+
+Validate the task registry mechanically and report:
+1. Exact canonical count and every ID in topological execution order.
+2. Dependency table and any cycle, missing ID, duplicate, forward prerequisite or omitted immediate predecessor.
+3. Tasks using Gen 1 QuantraCore, ApexLab, and original protocols.
+4. Tasks requiring real data, credentials/external access, Android devices, owner policy or explicit authorization.
+5. Framework tasks that can pass on fixtures, and later gates requiring real evidence.
+6. Tasks dependent on empirical calibration and unresolved decision classes.
+7. Any actual contradiction or missing prerequisite found, citing both affected requirements.
+8. Confirmation that no canonical task is IN_PROGRESS or PASS and no domain implementation or external activation occurred.
+
+If an actual contradiction remains, record it and stop; do not silently weaken or reinterpret a requirement. Proposed corrections must be concrete and reviewable.
+
+Stop after the registry and validation report. Do not begin QC2-000 until explicitly instructed.

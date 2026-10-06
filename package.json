@@ -1,12 +1,21 @@
 {
-  "name": "workspace",
+  "name": "quantracore-apex-gen2",
   "version": "0.0.0",
   "license": "MIT",
+  "packageManager": "pnpm@10.26.1",
+  "engines": {
+    "node": "24.x",
+    "pnpm": "10.26.1"
+  },
   "scripts": {
     "preinstall": "sh -c 'rm -f package-lock.json yarn.lock; case \"$npm_config_user_agent\" in pnpm/*) ;; *) echo \"Use pnpm instead\" >&2; exit 1 ;; esac'",
     "build": "pnpm run typecheck && pnpm -r --if-present run build",
     "typecheck:libs": "tsc --build",
-    "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck"
+    "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck",
+    "lint": "python3 -m ruff check tests tools && pnpm exec prettier --check package.json .github/workflows/ci.yml",
+    "test": "python3 -m pytest",
+    "smoke": "node -e 'if (process.version !== \"v24.13.0\") { console.error(\"Expected Node v24.13.0, got \" + process.version); process.exit(1); }' && pnpm --filter @workspace/scripts run hello && python3 -m pytest -q tests/bootstrap/test_environment_smoke.py",
+    "verify": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run smoke"
   },
   "private": true,
   "dependencies": {

@@ -1,0 +1,1 @@
+- [pnpm Node version reporting](pnpm-node-version-reporting.md) — pnpm may report a different Node patch from the shell; enforce exact patches separately from the package engine range.

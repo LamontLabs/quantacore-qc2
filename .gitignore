@@ -47,3 +47,33 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+
+# Local credentials and environment files. Keep the safe template tracked.
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+*.key
+
+# Python tooling
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.pythonlibs/
+.venv/
+venv/
+.coverage
+htmlcov/
+
+# Kotlin / Gradle outputs and machine-local Android settings
+.gradle/
+**/build/
+local.properties
+
+# Generated runtime data and binary artifacts (source under artifacts/ remains tracked)
+/generated-data/
+/model-artifacts/
+/runs/
+/logs/

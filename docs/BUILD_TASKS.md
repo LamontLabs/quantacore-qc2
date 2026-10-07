@@ -318,7 +318,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-009 — Market Data Adapter Contract and Canonical Alpaca Implementation
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Implement the sole F0 acquisition path with explicit bar semantics and complete provenance.
 **Dependencies:** QC2-003, QC2-006, QC2-007, QC2-008
 **Authorized legacy references:** Gen 1 Alpaca adapter and tests, ApexLab provider abstractions, optional

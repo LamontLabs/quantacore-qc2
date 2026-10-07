@@ -574,7 +574,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-017 — Runner Protocol Framework
 
-**Current status:** TODO
+**Current status:** BLOCKED
 **Objective:** Create a pure, isolated and resource-bounded structural-hypothesis API.
 **Dependencies:** QC2-003, QC2-013, QC2-014, QC2-016
 **Authorized legacy references:** Original protocol framework
@@ -599,7 +599,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Acceptance gate:** All prohibited side effects are prevented or detected by actual enforcement tests.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
-**Blockers:** None recorded.
+**Blockers:** Required dependencies QC2-013, QC2-014, and QC2-016 are not PASS. `python3 tools/task_workflow.py preflight QC2-017` fails because all three are not PASS. See docs/reference/QC2-013_BLOCKED_REPORT.md, docs/reference/QC2-014_BLOCKED_REPORT.md, and docs/reference/QC2-016_BLOCKED_REPORT.md.
 **Acceptance receipt:** Not recorded.
 
 ---

@@ -670,7 +670,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-020 — F0 Runner Protocol Migration Wave 2
 
-**Current status:** TODO
+**Current status:** BLOCKED
 **Objective:** Support more complex daily hypotheses without creating a second intelligence authority.
 **Dependencies:** QC2-013, QC2-014, QC2-017, QC2-018, QC2-019
 **Authorized legacy references:** Verified original breakout/divergence/stall/confluence/reversal/memory/trap/exhaustion sources
@@ -695,7 +695,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Acceptance gate:** Complex protocols remain reproducible research assets; active-set choice is deferred to calibration.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
-**Blockers:** None recorded.
+**Blockers:** Required dependencies QC2-013, QC2-014, QC2-017, QC2-018, and QC2-019 are not PASS. `python3 tools/task_workflow.py preflight QC2-020` fails because all five are not PASS. No authorized breakout/divergence/stall/confluence/reversal/memory/trap/exhaustion source was inspected; see the dependency blocker reports and docs/reference/QC2-020_BLOCKED_REPORT.md.
 **Acceptance receipt:** Not recorded.
 
 ---

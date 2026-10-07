@@ -1269,8 +1269,10 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "TODO",
-      "blockers": [],
+      "status": "BLOCKED",
+      "blockers": [
+        "Required dependencies QC2-013, QC2-014, QC2-017, QC2-018, and QC2-019 are not PASS. `python3 tools/task_workflow.py preflight QC2-020` fails because all five are not PASS. No authorized breakout/divergence/stall/confluence/reversal/memory/trap/exhaustion source was inspected; see the dependency blocker reports and docs/reference/QC2-020_BLOCKED_REPORT.md."
+      ],
       "acceptance_receipt": null
     },
     {

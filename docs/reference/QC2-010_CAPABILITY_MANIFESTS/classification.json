@@ -1,0 +1,20 @@
+{
+  "schema_name": "qc2.identity_market.DataCapabilityManifest.v1",
+  "schema_version": "1.0",
+  "id": "01a11846-9798-72e3-8733-064e9963f86d",
+  "created_at": "2026-10-07T21:30:41Z",
+  "owning_authority": "market_data",
+  "evidence_class": "FORWARD_OPERATIONAL",
+  "environment_namespace": "production",
+  "source_refs": [],
+  "deployment_fingerprint": "83f532be4b576a5958f4db8794ffa055d6d2d3179ed02db48c7e0fc2a7274216",
+  "account_fingerprint": "4c426c01ca1732ea982aa644458b4577b88bec5c98800ade1920516b4134ec0c",
+  "capability": "CLASSIFICATION",
+  "observed_result": "PARTIAL",
+  "feed": "IEX",
+  "tested_at": "2026-10-07T21:25:54Z",
+  "earliest_tested_session": null,
+  "effective_delay_ms": null,
+  "evidence_refs": [],
+  "expires_at": "2026-10-08T21:30:41Z"
+}

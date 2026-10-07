@@ -40,6 +40,14 @@ The API server and mockup workflows are inherited Replit scaffolding, not approv
 
 This bootstrap contains no production product behavior. Follow the canonical task contracts before adding authorities, data providers, execution behavior, or Android functionality.
 
+## Active build workflow
+
+- `registry/BUILD_TASKS.json` plus validated acceptance evidence is the canonical task state; native task-board labels and merge status are projections only.
+- Execute eligible canonical tasks sequentially. After a task's required checks pass and the implementation, receipt, registry, generated task docs, and workflow tests are integrated and validated, report progress and begin the next eligible task without requesting routine reauthorization.
+- Keep at most one canonical task `IN_PROGRESS`. If a predecessor needs repair, suspend the current task, repair/revalidate it, then return. Do not run future canonical work in detached background processes.
+- Routine engineering, test execution, receipt creation, and bookkeeping within the current contract are authorized. Preserve actual access, evidence, owner-risk/cost, device, external/destructive, architecture, production-model, and F0 activation gates.
+- Build-task acceptance does not depend on the future Android model-approval system. QC2-088 preparation does not activate F0; exact owner authorization for the specified epoch, manifest, and prospective start session remains mandatory.
+
 ## Gotchas
 
 - Keep `pnpm-lock.yaml` and `uv.lock` committed and use their frozen/locked install modes.

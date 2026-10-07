@@ -2,12 +2,13 @@
   "schema_version": "1.0",
   "spec_version": "2.0",
   "task_count": 89,
-  "implementation_status": "NOT_STARTED",
-  "dependency_policy": "Each task after QC2-000 depends on its immediate predecessor plus the listed technical prerequisites. All earlier tasks must PASS.",
+  "acceptance_workflow_version": "2.0",
+  "implementation_status": "ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipts.",
+  "dependency_policy": "Execute tasks in topological order; each task after QC2-000 depends on its immediate predecessor plus listed prerequisites. Preflight validates dependency receipts and implementation bytes in the receiving workspace. After accepted implementation and its records are integrated, automatically begin the next eligible task without renewed permission. Native task-board status is a projection and never establishes canonical PASS.",
   "common_forbidden_actions": [
     "Implement live trading or allow runtime provider/feed fallback.",
     "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-    "Broaden architecture, spend without authorization, or auto-start another canonical task."
+    "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
   ],
   "tasks": [
     {
@@ -31,7 +32,7 @@
         "Do not implement domain authorities, request new paid resources, or claim unattended hosting is proven.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "A clean checkout reproduces the toolchain; all environment limitations are explicit.",
       "evidence_requirements": [
@@ -71,7 +72,7 @@
         "Do not infer semantics from protocol numbers or earlier prose alone.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "PASS when all three logical roles map to inspectable, immutable source paths and their version, hash, license, test, and provenance limits are recorded. Later snapshots are acceptable under the mapping rule; unverified original/Gen 1/production identity is not claimed. BLOCKED only if a role lacks an inspectable source or required access is unavailable.",
       "evidence_requirements": [
@@ -112,7 +113,7 @@
         "Do not reintroduce external Lamont Labs dependencies or commercialization scope.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Documents agree with this specification and identify a unique owner for each kind of authoritative state.",
       "evidence_requirements": [
@@ -184,7 +185,7 @@
         "Do not defer omitted contracts as untyped dictionaries or accept permissive coercion.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "The complete boundary contract inventory is machine-validatable and state/authority rules are explicit.",
       "evidence_requirements": [
@@ -258,7 +259,7 @@
         "Do not rely on Python repr, unsorted database rows, local time, or mutable archive metadata.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Golden vectors pass and each scientific hash has one unambiguous byte definition.",
       "evidence_requirements": [
@@ -330,7 +331,7 @@
         "Do not use an all-powerful Core login for every module or destructive schema auto-sync.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Permission and transaction tests run against PostgreSQL, not only mocks.",
       "evidence_requirements": [
@@ -444,7 +445,7 @@
         "Do not claim a local chain detects all privileged tampering or use a timestamp as sequence.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "All defined attacker/fault cases yield the specified verdict; real anchoring remains an activation dependency.",
       "evidence_requirements": [
@@ -484,7 +485,7 @@
         "Do not guess empirical or owner-risk values to make startup green.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Invalid configuration blocks only the relevant capability and has an actionable reason.",
       "evidence_requirements": [
@@ -522,7 +523,7 @@
         "Do not scatter independent market-hours calculations across modules.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Calendar/clock behavior is deterministic with explicit unavailable states; measured live calendar support follows at QC2-010.",
       "evidence_requirements": [
@@ -562,7 +563,7 @@
         "Do not switch provider/feed, fabricate missing bars, or treat daily open as guaranteed executable auction price.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Deterministic fixtures produce complete or explicitly failed DataBundles with no silent substitution.",
       "evidence_requirements": [
@@ -597,7 +598,7 @@
         "Do not infer entitlement from documentation or pass this task without credentials.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Measured capabilities support a declared feasible regime or produce a concrete BLOCKED report.",
       "evidence_requirements": [
@@ -635,7 +636,7 @@
         "Do not build a temporary feature/scanner/model/outcome path or claim official F0 evidence.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "A genuine complete acquisition-to-evidence lineage is verified; full forward outcome lineage is reserved for QC2-086.",
       "evidence_requirements": [
@@ -676,7 +677,7 @@
         "Do not choose empirical price/liquidity cutoffs or silently remove difficult instruments.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Parameterized fixture universes reproduce exactly and actual metadata limitations remain explicit.",
       "evidence_requirements": [
@@ -714,7 +715,7 @@
         "Do not backdate known_at or treat provider asof as a historical knowledge timestamp.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Every dependency path either proves legal availability or blocks the consuming operation.",
       "evidence_requirements": [
@@ -754,7 +755,7 @@
         "Do not activate uncalibrated lookbacks or globally fit transforms.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Feature outputs are exact/reason-coded under registered definitions and are reproducible offline.",
       "evidence_requirements": [
@@ -793,7 +794,7 @@
         "Do not invent empirical runner thresholds or force unresolved outcomes to zero.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Labels have precise equations and release conditions; unresolved thresholds block production registration.",
       "evidence_requirements": [
@@ -833,7 +834,7 @@
         "Do not let research reviews edit outcomes or hide data failures as non-runners.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Known synthetic outcomes are exact, unknown outcomes remain explicit, and dependencies are scientifically independent.",
       "evidence_requirements": [
@@ -872,7 +873,7 @@
         "Do not give Runner Protocol BLOCK a hidden broker-permission meaning.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "All prohibited side effects are prevented or detected by actual enforcement tests.",
       "evidence_requirements": [
@@ -909,7 +910,7 @@
         "Do not fabricate missing protocols, source paths, or semantic equivalence.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Inventory is complete for verified sources; unresolved items are excluded from activation or block a required dependency.",
       "evidence_requirements": [
@@ -947,7 +948,7 @@
         "Do not activate candidates or preserve a legacy threshold merely because it exists.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Every queue item is either independently tested research code or an evidence-backed exclusion.",
       "evidence_requirements": [
@@ -987,7 +988,7 @@
         "Do not build synthetic intraday proxies and claim original intraday semantics.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Complex protocols remain reproducible research assets; active-set choice is deferred to calibration.",
       "evidence_requirements": [
@@ -1028,7 +1029,7 @@
         "Do not convert safety PASS into bullish points or claim unavailable broker integration is tested.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Safety classification and authority separation hold under hostile fixtures.",
       "evidence_requirements": [
@@ -1066,7 +1067,7 @@
         "Do not introduce a competing official scanner or tune the primary comparator after F0 starts.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Each baseline has inspectable equations, pinned fixture parameters, and no hidden model dependency.",
       "evidence_requirements": [
@@ -1108,7 +1109,7 @@
         "Do not choose a production Champion or load arbitrary pickle/joblib files.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Fixture artifacts load safely or fail explicitly and yield reproducible typed outputs.",
       "evidence_requirements": [
@@ -1148,7 +1149,7 @@
         "Do not equate a 0–100 score with a calibrated probability.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Score behavior is fully specified by one immutable manifest and cannot hide missing empirical decisions.",
       "evidence_requirements": [
@@ -1190,7 +1191,7 @@
         "Do not let Shadows, reports, or endpoints create another canonical ranking.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "One fixture session produces a complete immutable scientifically bound ranking with explicit failure dispositions.",
       "evidence_requirements": [
@@ -1231,7 +1232,7 @@
         "Do not invent performance/sample thresholds or award PASS from ordinary iid accuracy.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Known fixture metrics and decision boundaries match independently computed results; policy remains nonproduction.",
       "evidence_requirements": [
@@ -1268,7 +1269,7 @@
         "Do not learn winner membership from the Champion or discard unscorable events.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Independent event detection exactly matches labeled fixture markets and its scope is explicit.",
       "evidence_requirements": [
@@ -1309,7 +1310,7 @@
         "Do not backfill model foresight or expose future membership through similarity search.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Every genome/index lookup proves temporal eligibility for the consumer cutoff.",
       "evidence_requirements": [
@@ -1346,7 +1347,7 @@
         "Do not define failure simply as low realized P&L or one minus runner probability.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Negative memories are independently labeled, temporally eligible and replayable.",
       "evidence_requirements": [
@@ -1385,7 +1386,7 @@
         "Do not silently discard hard unmatched winners or evaluate probability calibration on balanced decoys.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Every match has explainable pre-outcome lineage and downstream sampling effects are explicit.",
       "evidence_requirements": [
@@ -1423,7 +1424,7 @@
         "Do not focus only on convenient examples or claim an exclusion was a prediction.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "All trigger-matching cases are generated with the correct failure category.",
       "evidence_requirements": [
@@ -1462,7 +1463,7 @@
         "Do not change the high-confidence definition after seeing the failed cases.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Fixture failures and uncertainty cases are correctly separated with immutable source references.",
       "evidence_requirements": [
@@ -1505,7 +1506,7 @@
         "Do not use global row-index splits, globally fitted preprocessors or a future final memory library.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Each dataset row and learned dependency can be traced to legal inputs and a verified fold assignment.",
       "evidence_requirements": [
@@ -1541,7 +1542,7 @@
         "Do not store only the winning run or call a previously examined holdout untouched.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "A complete reconstructed search history is possible from immutable records.",
       "evidence_requirements": [
@@ -1579,7 +1580,7 @@
         "Do not select the Champion, self-certify qualification or save unsafe production serialization.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Every required family can produce a provenance-complete candidate or a reason-coded incompatibility; no silent omission.",
       "evidence_requirements": [
@@ -1617,7 +1618,7 @@
         "Do not let the candidate package supply executable gate logic or certify itself.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Evaluation is independently reproducible and information release is logged with correct holdout status.",
       "evidence_requirements": [
@@ -1657,7 +1658,7 @@
         "Do not create a real Champion before competition/qualification or let trainer update the pointer.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Registry/lifecycle invariants pass with fixtures; actual bootstrap remains gated by QC2-083–084.",
       "evidence_requirements": [
@@ -1695,7 +1696,7 @@
         "Do not choose the best Shadow per session or feed Shadow outputs into trading.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Every registered Shadow has accountable forward attempts and immutable candidate-specific evidence.",
       "evidence_requirements": [
@@ -1742,7 +1743,7 @@
         "Do not compare only final scores or loosen numeric precision after a mismatch.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Complete fixture runs reproduce their ScientificPredictionPayload bytes and inventories exactly.",
       "evidence_requirements": [
@@ -1786,7 +1787,7 @@
         "Do not patch bytes after hashing or treat packager signature as independent eligibility.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "A bundle is fully verifiable from immutable dependencies and contains no unlisted executable payload.",
       "evidence_requirements": [
@@ -1824,7 +1825,7 @@
         "Do not accept a signed PASS string without its supporting evidence or execute package scripts.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Every bundle field and required evidence item is validated by the verifier authority.",
       "evidence_requirements": [
@@ -1862,7 +1863,7 @@
         "Do not invent a temporary production password or bypass later device enrollment.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Approval logic passes hostile fixtures while real authority remains disabled until identity/API security gates.",
       "evidence_requirements": [
@@ -1901,7 +1902,7 @@
         "Do not silently restore an old pointer, mutate an in-flight run, or enable real fixture approval.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Every injected failure leaves a determinate authoritative state and recoverable receipt.",
       "evidence_requirements": [
@@ -1942,7 +1943,7 @@
         "Do not choose empirical sizing/stops/targets or claim a daily-bar path reveals fills.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Strategy framework produces explainable proposals and cannot activate without signed caps and calibration.",
       "evidence_requirements": [
@@ -1981,7 +1982,7 @@
         "Do not submit orders from this task or mutate already transmitted intent bytes.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Each valid fixture action has one immutable intention and a safe explicit reservation effect.",
       "evidence_requirements": [
@@ -2022,7 +2023,7 @@
         "Do not interpret a network timeout or one not-found query as proof no order exists.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Faulted simulated broker interactions always produce known terminal or explicitly unresolved state.",
       "evidence_requirements": [
@@ -2061,7 +2062,7 @@
         "Do not add live mode, use paper=true as the only guard, or place a real test order without explicit sandbox authorization.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Only paper endpoints are reachable through the adapter; actual write behavior remains a QC2-086 gate.",
       "evidence_requirements": [
@@ -2100,7 +2101,7 @@
         "Do not treat broker snapshots as permission to erase contradictory local history.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Position and cash projections rebuild deterministically from the preserved ledger.",
       "evidence_requirements": [
@@ -2137,7 +2138,7 @@
         "Do not auto-delete discrepancies, invent fills, or resume merely because connectivity returned.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "All fixture discrepancies converge through explicit evidence or retain a blocking unresolved state.",
       "evidence_requirements": [
@@ -2180,7 +2181,7 @@
         "Do not implement one broad ready boolean or permit stale green assessments.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Each scientific stage exposes exact prerequisites and fails only for relevant unavailable evidence.",
       "evidence_requirements": [
@@ -2221,7 +2222,7 @@
         "Do not interpret resume request as approval to bypass safety or pause as liquidation.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Action-specific tests demonstrate the intended reduction of exposure while preserving fail-closed identity/evidence.",
       "evidence_requirements": [
@@ -2261,7 +2262,7 @@
         "Do not expand paid capacity automatically or make nightly training mandatory for prediction.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Research can be paused or fail independently with complete job/trial accounting.",
       "evidence_requirements": [
@@ -2300,7 +2301,7 @@
         "Do not store mobile private keys or broker credentials in the app/backend device records.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Identity lifecycle passes backend integration; real Keystore/device validation is required with Android work.",
       "evidence_requirements": [
@@ -2342,7 +2343,7 @@
         "Do not expose arbitrary SQL, mutable scientific rows or a second desktop product.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "All owner views are permissioned projections with traceable canonical sources.",
       "evidence_requirements": [
@@ -2380,7 +2381,7 @@
         "Do not enable offline queued approvals or treat HTTP success as completed transition.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Every permitted write maps to one scoped authority command; all other mutation classes are denied.",
       "evidence_requirements": [
@@ -2420,7 +2421,7 @@
         "Do not put secrets or actionable approval credentials into notification payloads.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Alerts reliably reflect source conditions and delivery state without becoming an authority shortcut.",
       "evidence_requirements": [
@@ -2458,7 +2459,7 @@
         "Do not invent hardware-backed status, add manual trading or retain fixture identities.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "A real device communicates with the test backend using its own registered key and all required user flows are reachable.",
       "evidence_requirements": [
@@ -2498,7 +2499,7 @@
         "Do not display fabricated confidence percentages, live P&L claims or a buy button.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Today accurately represents fixture and connected backend states on the supported device.",
       "evidence_requirements": [
@@ -2537,7 +2538,7 @@
         "Do not let the phone rerank canonically, hide bad outcomes or alter symbol eligibility.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "The owner can inspect any eligible row and identify the exact scientific evidence it represents.",
       "evidence_requirements": [
@@ -2575,7 +2576,7 @@
         "Do not present descriptive interim metrics as a final statistical win.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Validation UI communicates the actual frozen decision rules and uncertainty on a real device.",
       "evidence_requirements": [
@@ -2619,7 +2620,7 @@
         "Do not hide failed gates, automatically approve, or allow force promotion.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "End-to-end device decisions produce the exact server receipt or a clear denial without stale-state transition.",
       "evidence_requirements": [
@@ -2662,7 +2663,7 @@
         "Do not make alert acknowledgment or resume tap clear machine safety gates.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "The owner can identify and act on allowed operational states without gaining discretionary trading power.",
       "evidence_requirements": [
@@ -2707,7 +2708,7 @@
         "Do not select only favorable time windows or use unlabeled generated prose as evidence.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Every material number and verdict resolves to immutable inputs and a registered metric definition.",
       "evidence_requirements": [
@@ -2749,7 +2750,7 @@
         "Do not replace evidence with logs or expose diagnostic internals publicly.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Defined failure states are observable and recoverable using tested runbook steps.",
       "evidence_requirements": [
@@ -2789,7 +2790,7 @@
         "Do not claim restore success from an upload response or put secrets in plain archives.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "A real nonproduction recovery set is stored and verified against its complete inventory.",
       "evidence_requirements": [
@@ -2828,7 +2829,7 @@
         "Do not run a drill against the active epoch account or bypass identity/reconciliation.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Actual clean restore meets signed recovery objectives or task remains BLOCKED.",
       "evidence_requirements": [
@@ -2871,7 +2872,7 @@
         "Do not delete raw inputs solely because a newer model or report exists.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Retention closure remains complete across backup, retirement, and proposed deletion.",
       "evidence_requirements": [
@@ -2917,7 +2918,7 @@
         "Do not claim penetration-test certification or close a finding without evidence.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "All critical/high authority-boundary defects are fixed and retested; known limitations are explicit.",
       "evidence_requirements": [
@@ -2964,7 +2965,7 @@
         "Do not use high synthetic accuracy as real market predictive proof.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Every specified false-proof path is blocked or produces visibly nonqualifying evidence.",
       "evidence_requirements": [
@@ -3006,7 +3007,7 @@
         "Do not interpret this fixture suite as a real Alpaca write-integration test.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "All adversarial executions preserve bounded exposure and honest state without duplicate logical orders.",
       "evidence_requirements": [
@@ -3051,7 +3052,7 @@
         "Do not reset a database or discard unresolved jobs to make recovery pass.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "All declared crash points recover or hold explicitly with preserved evidence and no unauthorized effect.",
       "evidence_requirements": [
@@ -3098,7 +3099,7 @@
         "Do not excuse scientific/authority drift as an implementation detail.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "No unresolved critical/high architecture violation; framework status remains distinct from calibrated readiness.",
       "evidence_requirements": [
@@ -3140,7 +3141,7 @@
         "Do not label this preliminary corpus as a finalized production feature/label dataset or PIT-complete without evidence.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Real data supports a precisely scoped calibration/qualification plan; inadequate scope or volume blocks progression.",
       "evidence_requirements": [
@@ -3178,7 +3179,7 @@
         "Do not optimize universe on the unopened qualification set or later F0 winners.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "One justified eligibility policy is selected and immutable for subsequent qualification.",
       "evidence_requirements": [
@@ -3216,7 +3217,7 @@
         "Do not rewrite thresholds after qualification or equate one-session gap and multiday expansion.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Targets are exact, viable enough to test or explicitly blocked, and frozen before model qualification.",
       "evidence_requirements": [
@@ -3257,7 +3258,7 @@
         "Do not call provisional development models the operating Champion or amend earlier framework logic silently.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "A reproducible feature selection procedure and bounded candidate set are locked for bootstrap competition.",
       "evidence_requirements": [
@@ -3300,7 +3301,7 @@
         "Do not activate every legacy protocol to increase protocol count.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "One documented active-set selection procedure and parameter manifest are ready for bootstrap qualification.",
       "evidence_requirements": [
@@ -3342,7 +3343,7 @@
         "Do not select a score by viewing final qualification or pretend a later model can use incompatible fitted score weights.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Score candidates and the selection procedure are fixed; QC2-082 selects the final pair using development only.",
       "evidence_requirements": [
@@ -3384,7 +3385,7 @@
         "Do not claim daily backtests establish live fills or activate trading during calibration.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "One strategy/capital manifest is frozen with honest data limitations and all required owner choices resolved.",
       "evidence_requirements": [
@@ -3429,7 +3430,7 @@
         "Do not pick Shadow duration after seeing a candidate win or permit incompatible scientific changes within F0.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Promotion policy is fully numeric, justified and executable before prospective model evaluation.",
       "evidence_requirements": [
@@ -3470,7 +3471,7 @@
         "Do not treat symbol-days as independent or select analysis settings using F0/locked qualification outcomes.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "All decision parameters are resolved and justified; infeasible evidence requirements block activation rather than get weakened.",
       "evidence_requirements": [
@@ -3516,7 +3517,7 @@
         "Do not compare families on different favorable windows or select from qualification results.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Exactly one nominated artifact/pipeline exists with a development-only selection receipt.",
       "evidence_requirements": [
@@ -3555,7 +3556,7 @@
         "Do not hide failures, choose another model using the same holdout as if untouched, or automatically retrain through the holdout.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Nominated candidate passes all frozen gates, or task is BLOCKED pending a valid new evidence plan.",
       "evidence_requirements": [
@@ -3598,7 +3599,7 @@
         "Do not count predictions, start the official epoch or enable paper orders here.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "The exact qualified artifact is registered, independently verifiable and ready for epoch binding.",
       "evidence_requirements": [
@@ -3648,7 +3649,7 @@
         "Do not start collecting official sessions or edit the manifest after freeze.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Every required empirical, owner, capability and engineering value is resolved and content-addressed.",
       "evidence_requirements": [
@@ -3698,7 +3699,7 @@
         "Do not fabricate elapsed sessions, trade without explicit sandbox authorization or count dry-run outcomes toward F0.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "All real integration gates pass; missing credentials/device/anchor authorization or waiting for maturity remains BLOCKED.",
       "evidence_requirements": [
@@ -3742,7 +3743,7 @@
         "Do not waive scientific or authority blockers to meet a date.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "No unresolved critical/high scientific, security or execution defect; every activation requirement has actual evidence.",
       "evidence_requirements": [
@@ -3787,7 +3788,7 @@
         "Do not treat task registry creation, spec approval or a successful dry run as activation authorization.",
         "Implement live trading or allow runtime provider/feed fallback.",
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
-        "Broaden architecture, spend without authorization, or auto-start another canonical task."
+        "Broaden architecture, spend without authorization, or bypass dependency and acceptance checks."
       ],
       "acceptance_gate": "Exact authorized epoch becomes active prospectively with complete evidence; F0 success is not yet claimed.",
       "evidence_requirements": [

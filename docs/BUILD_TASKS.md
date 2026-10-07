@@ -4,17 +4,19 @@
 **Canonical tasks:** QC2-000 through QC2-088 (89 total).
 **Initial project baseline:** NOT_STARTED, with every task initially TODO and no
 acceptance receipts at specification creation.
+**Acceptance workflow version:** 2.0.
 **Authority:** `docs/GEN2_MASTER_SPEC.md` and `registry/BUILD_TASKS.json`.
 **Execution rule:**
-Each task after QC2-000 depends on its immediate predecessor plus the listed technical prerequisites. All earlier tasks must PASS.
+Execute tasks in topological order; each task after QC2-000 depends on its immediate predecessor plus listed prerequisites. Preflight validates dependency receipts and implementation bytes in the receiving workspace. After accepted implementation and its records are integrated, automatically begin the next eligible task without renewed permission. Native task-board status is a projection and never establishes canonical PASS.
+**Task-board rule:** Native task-board status and merge labels are projections only; they never establish canonical PASS.
 **Current registry implementation status:**
-NOT_STARTED
+ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipts.
 
 ## Common forbidden actions
 
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 ## Exact topological order
 
@@ -44,7 +46,7 @@ NOT_STARTED
 - Do not implement domain authorities, request new paid resources, or claim unattended hosting is proven.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** A clean checkout reproduces the toolchain; all environment limitations are explicit.
 **Required evidence/environment:** LOCAL_TOOLCHAIN
@@ -78,7 +80,7 @@ NOT_STARTED
 - Do not infer semantics from protocol numbers or earlier prose alone.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** PASS when all three logical roles map to inspectable, immutable source paths and their version, hash, license, test, and provenance limits are recorded. Later snapshots are acceptable under the mapping rule; unverified original/Gen 1/production identity is not claimed. BLOCKED only if a role lacks an inspectable source or required access is unavailable.
 **Required evidence/environment:** LEGACY_READ_ACCESS
@@ -110,7 +112,7 @@ NOT_STARTED
 - Do not reintroduce external Lamont Labs dependencies or commercialization scope.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Documents agree with this specification and identify a unique owner for each kind of authoritative state.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -142,7 +144,7 @@ NOT_STARTED
 - Do not defer omitted contracts as untyped dictionaries or accept permissive coercion.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** The complete boundary contract inventory is machine-validatable and state/authority rules are explicit.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -174,7 +176,7 @@ NOT_STARTED
 - Do not rely on Python repr, unsorted database rows, local time, or mutable archive metadata.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Golden vectors pass and each scientific hash has one unambiguous byte definition.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -206,7 +208,7 @@ NOT_STARTED
 - Do not use an all-powerful Core login for every module or destructive schema auto-sync.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Permission and transaction tests run against PostgreSQL, not only mocks.
 **Required evidence/environment:** POSTGRESQL_INTEGRATION
@@ -238,7 +240,7 @@ NOT_STARTED
 - Do not claim a local chain detects all privileged tampering or use a timestamp as sequence.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** All defined attacker/fault cases yield the specified verdict; real anchoring remains an activation dependency.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -270,7 +272,7 @@ NOT_STARTED
 - Do not guess empirical or owner-risk values to make startup green.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Invalid configuration blocks only the relevant capability and has an actionable reason.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -302,7 +304,7 @@ NOT_STARTED
 - Do not scatter independent market-hours calculations across modules.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Calendar/clock behavior is deterministic with explicit unavailable states; measured live calendar support follows at QC2-010.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -334,7 +336,7 @@ NOT_STARTED
 - Do not switch provider/feed, fabricate missing bars, or treat daily open as guaranteed executable auction price.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Deterministic fixtures produce complete or explicitly failed DataBundles with no silent substitution.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -366,7 +368,7 @@ NOT_STARTED
 - Do not infer entitlement from documentation or pass this task without credentials.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Measured capabilities support a declared feasible regime or produce a concrete BLOCKED report.
 **Required evidence/environment:** ALPACA_CREDENTIALS, REAL_MARKET_DATA
@@ -398,7 +400,7 @@ NOT_STARTED
 - Do not build a temporary feature/scanner/model/outcome path or claim official F0 evidence.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** A genuine complete acquisition-to-evidence lineage is verified; full forward outcome lineage is reserved for QC2-086.
 **Required evidence/environment:** ALPACA_CREDENTIALS, REAL_MARKET_DATA
@@ -430,7 +432,7 @@ NOT_STARTED
 - Do not choose empirical price/liquidity cutoffs or silently remove difficult instruments.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Parameterized fixture universes reproduce exactly and actual metadata limitations remain explicit.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -462,7 +464,7 @@ NOT_STARTED
 - Do not backdate known_at or treat provider asof as a historical knowledge timestamp.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Every dependency path either proves legal availability or blocks the consuming operation.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -494,7 +496,7 @@ NOT_STARTED
 - Do not activate uncalibrated lookbacks or globally fit transforms.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Feature outputs are exact/reason-coded under registered definitions and are reproducible offline.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -526,7 +528,7 @@ NOT_STARTED
 - Do not invent empirical runner thresholds or force unresolved outcomes to zero.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Labels have precise equations and release conditions; unresolved thresholds block production registration.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -558,7 +560,7 @@ NOT_STARTED
 - Do not let research reviews edit outcomes or hide data failures as non-runners.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Known synthetic outcomes are exact, unknown outcomes remain explicit, and dependencies are scientifically independent.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -590,7 +592,7 @@ NOT_STARTED
 - Do not give Runner Protocol BLOCK a hidden broker-permission meaning.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** All prohibited side effects are prevented or detected by actual enforcement tests.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -622,7 +624,7 @@ NOT_STARTED
 - Do not fabricate missing protocols, source paths, or semantic equivalence.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Inventory is complete for verified sources; unresolved items are excluded from activation or block a required dependency.
 **Required evidence/environment:** LEGACY_READ_ACCESS
@@ -654,7 +656,7 @@ NOT_STARTED
 - Do not activate candidates or preserve a legacy threshold merely because it exists.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Every queue item is either independently tested research code or an evidence-backed exclusion.
 **Required evidence/environment:** LEGACY_READ_ACCESS
@@ -686,7 +688,7 @@ NOT_STARTED
 - Do not build synthetic intraday proxies and claim original intraday semantics.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Complex protocols remain reproducible research assets; active-set choice is deferred to calibration.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -718,7 +720,7 @@ NOT_STARTED
 - Do not convert safety PASS into bullish points or claim unavailable broker integration is tested.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Safety classification and authority separation hold under hostile fixtures.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -750,7 +752,7 @@ NOT_STARTED
 - Do not introduce a competing official scanner or tune the primary comparator after F0 starts.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Each baseline has inspectable equations, pinned fixture parameters, and no hidden model dependency.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -782,7 +784,7 @@ NOT_STARTED
 - Do not choose a production Champion or load arbitrary pickle/joblib files.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Fixture artifacts load safely or fail explicitly and yield reproducible typed outputs.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -814,7 +816,7 @@ NOT_STARTED
 - Do not equate a 0–100 score with a calibrated probability.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Score behavior is fully specified by one immutable manifest and cannot hide missing empirical decisions.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -846,7 +848,7 @@ NOT_STARTED
 - Do not let Shadows, reports, or endpoints create another canonical ranking.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** One fixture session produces a complete immutable scientifically bound ranking with explicit failure dispositions.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -878,7 +880,7 @@ NOT_STARTED
 - Do not invent performance/sample thresholds or award PASS from ordinary iid accuracy.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Known fixture metrics and decision boundaries match independently computed results; policy remains nonproduction.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -910,7 +912,7 @@ NOT_STARTED
 - Do not learn winner membership from the Champion or discard unscorable events.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Independent event detection exactly matches labeled fixture markets and its scope is explicit.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -942,7 +944,7 @@ NOT_STARTED
 - Do not backfill model foresight or expose future membership through similarity search.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Every genome/index lookup proves temporal eligibility for the consumer cutoff.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -974,7 +976,7 @@ NOT_STARTED
 - Do not define failure simply as low realized P&L or one minus runner probability.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Negative memories are independently labeled, temporally eligible and replayable.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1006,7 +1008,7 @@ NOT_STARTED
 - Do not silently discard hard unmatched winners or evaluate probability calibration on balanced decoys.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Every match has explainable pre-outcome lineage and downstream sampling effects are explicit.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1038,7 +1040,7 @@ NOT_STARTED
 - Do not focus only on convenient examples or claim an exclusion was a prediction.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** All trigger-matching cases are generated with the correct failure category.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1070,7 +1072,7 @@ NOT_STARTED
 - Do not change the high-confidence definition after seeing the failed cases.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Fixture failures and uncertainty cases are correctly separated with immutable source references.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1102,7 +1104,7 @@ NOT_STARTED
 - Do not use global row-index splits, globally fitted preprocessors or a future final memory library.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Each dataset row and learned dependency can be traced to legal inputs and a verified fold assignment.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1134,7 +1136,7 @@ NOT_STARTED
 - Do not store only the winning run or call a previously examined holdout untouched.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** A complete reconstructed search history is possible from immutable records.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1166,7 +1168,7 @@ NOT_STARTED
 - Do not select the Champion, self-certify qualification or save unsafe production serialization.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Every required family can produce a provenance-complete candidate or a reason-coded incompatibility; no silent omission.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1198,7 +1200,7 @@ NOT_STARTED
 - Do not let the candidate package supply executable gate logic or certify itself.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Evaluation is independently reproducible and information release is logged with correct holdout status.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1230,7 +1232,7 @@ NOT_STARTED
 - Do not create a real Champion before competition/qualification or let trainer update the pointer.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Registry/lifecycle invariants pass with fixtures; actual bootstrap remains gated by QC2-083–084.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1262,7 +1264,7 @@ NOT_STARTED
 - Do not choose the best Shadow per session or feed Shadow outputs into trading.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Every registered Shadow has accountable forward attempts and immutable candidate-specific evidence.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1294,7 +1296,7 @@ NOT_STARTED
 - Do not compare only final scores or loosen numeric precision after a mismatch.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Complete fixture runs reproduce their ScientificPredictionPayload bytes and inventories exactly.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1326,7 +1328,7 @@ NOT_STARTED
 - Do not patch bytes after hashing or treat packager signature as independent eligibility.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** A bundle is fully verifiable from immutable dependencies and contains no unlisted executable payload.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1358,7 +1360,7 @@ NOT_STARTED
 - Do not accept a signed PASS string without its supporting evidence or execute package scripts.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Every bundle field and required evidence item is validated by the verifier authority.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1390,7 +1392,7 @@ NOT_STARTED
 - Do not invent a temporary production password or bypass later device enrollment.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Approval logic passes hostile fixtures while real authority remains disabled until identity/API security gates.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1422,7 +1424,7 @@ NOT_STARTED
 - Do not silently restore an old pointer, mutate an in-flight run, or enable real fixture approval.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Every injected failure leaves a determinate authoritative state and recoverable receipt.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1454,7 +1456,7 @@ NOT_STARTED
 - Do not choose empirical sizing/stops/targets or claim a daily-bar path reveals fills.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Strategy framework produces explainable proposals and cannot activate without signed caps and calibration.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1486,7 +1488,7 @@ NOT_STARTED
 - Do not submit orders from this task or mutate already transmitted intent bytes.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Each valid fixture action has one immutable intention and a safe explicit reservation effect.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1518,7 +1520,7 @@ NOT_STARTED
 - Do not interpret a network timeout or one not-found query as proof no order exists.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Faulted simulated broker interactions always produce known terminal or explicitly unresolved state.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1550,7 +1552,7 @@ NOT_STARTED
 - Do not add live mode, use paper=true as the only guard, or place a real test order without explicit sandbox authorization.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Only paper endpoints are reachable through the adapter; actual write behavior remains a QC2-086 gate.
 **Required evidence/environment:** ALPACA_CREDENTIALS, PAPER_READ_ONLY_INTEGRATION
@@ -1582,7 +1584,7 @@ NOT_STARTED
 - Do not treat broker snapshots as permission to erase contradictory local history.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Position and cash projections rebuild deterministically from the preserved ledger.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1614,7 +1616,7 @@ NOT_STARTED
 - Do not auto-delete discrepancies, invent fills, or resume merely because connectivity returned.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** All fixture discrepancies converge through explicit evidence or retain a blocking unresolved state.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1646,7 +1648,7 @@ NOT_STARTED
 - Do not implement one broad ready boolean or permit stale green assessments.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Each scientific stage exposes exact prerequisites and fails only for relevant unavailable evidence.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1678,7 +1680,7 @@ NOT_STARTED
 - Do not interpret resume request as approval to bypass safety or pause as liquidation.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Action-specific tests demonstrate the intended reduction of exposure while preserving fail-closed identity/evidence.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1710,7 +1712,7 @@ NOT_STARTED
 - Do not expand paid capacity automatically or make nightly training mandatory for prediction.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Research can be paused or fail independently with complete job/trial accounting.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1742,7 +1744,7 @@ NOT_STARTED
 - Do not store mobile private keys or broker credentials in the app/backend device records.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Identity lifecycle passes backend integration; real Keystore/device validation is required with Android work.
 **Required evidence/environment:** IDENTITY_INTEGRATION
@@ -1774,7 +1776,7 @@ NOT_STARTED
 - Do not expose arbitrary SQL, mutable scientific rows or a second desktop product.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** All owner views are permissioned projections with traceable canonical sources.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1806,7 +1808,7 @@ NOT_STARTED
 - Do not enable offline queued approvals or treat HTTP success as completed transition.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Every permitted write maps to one scoped authority command; all other mutation classes are denied.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1838,7 +1840,7 @@ NOT_STARTED
 - Do not put secrets or actionable approval credentials into notification payloads.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Alerts reliably reflect source conditions and delivery state without becoming an authority shortcut.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -1870,7 +1872,7 @@ NOT_STARTED
 - Do not invent hardware-backed status, add manual trading or retain fixture identities.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** A real device communicates with the test backend using its own registered key and all required user flows are reachable.
 **Required evidence/environment:** ANDROID_BUILD_ENVIRONMENT, REAL_ANDROID_DEVICE
@@ -1902,7 +1904,7 @@ NOT_STARTED
 - Do not display fabricated confidence percentages, live P&L claims or a buy button.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Today accurately represents fixture and connected backend states on the supported device.
 **Required evidence/environment:** ANDROID_BUILD_ENVIRONMENT, REAL_ANDROID_DEVICE
@@ -1934,7 +1936,7 @@ NOT_STARTED
 - Do not let the phone rerank canonically, hide bad outcomes or alter symbol eligibility.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** The owner can inspect any eligible row and identify the exact scientific evidence it represents.
 **Required evidence/environment:** ANDROID_BUILD_ENVIRONMENT, REAL_ANDROID_DEVICE
@@ -1966,7 +1968,7 @@ NOT_STARTED
 - Do not present descriptive interim metrics as a final statistical win.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Validation UI communicates the actual frozen decision rules and uncertainty on a real device.
 **Required evidence/environment:** ANDROID_BUILD_ENVIRONMENT, REAL_ANDROID_DEVICE
@@ -1998,7 +2000,7 @@ NOT_STARTED
 - Do not hide failed gates, automatically approve, or allow force promotion.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** End-to-end device decisions produce the exact server receipt or a clear denial without stale-state transition.
 **Required evidence/environment:** REAL_ANDROID_DEVICE, IDENTITY_INTEGRATION
@@ -2030,7 +2032,7 @@ NOT_STARTED
 - Do not make alert acknowledgment or resume tap clear machine safety gates.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** The owner can identify and act on allowed operational states without gaining discretionary trading power.
 **Required evidence/environment:** REAL_ANDROID_DEVICE
@@ -2062,7 +2064,7 @@ NOT_STARTED
 - Do not select only favorable time windows or use unlabeled generated prose as evidence.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Every material number and verdict resolves to immutable inputs and a registered metric definition.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -2094,7 +2096,7 @@ NOT_STARTED
 - Do not replace evidence with logs or expose diagnostic internals publicly.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Defined failure states are observable and recoverable using tested runbook steps.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -2126,7 +2128,7 @@ NOT_STARTED
 - Do not claim restore success from an upload response or put secrets in plain archives.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** A real nonproduction recovery set is stored and verified against its complete inventory.
 **Required evidence/environment:** BACKUP_DESTINATION_ACCESS, REAL_BACKUP_ARTIFACTS
@@ -2158,7 +2160,7 @@ NOT_STARTED
 - Do not run a drill against the active epoch account or bypass identity/reconciliation.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Actual clean restore meets signed recovery objectives or task remains BLOCKED.
 **Required evidence/environment:** CLEAN_ISOLATED_ENVIRONMENT, BACKUP_DESTINATION_ACCESS
@@ -2190,7 +2192,7 @@ NOT_STARTED
 - Do not delete raw inputs solely because a newer model or report exists.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Retention closure remains complete across backup, retirement, and proposed deletion.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -2222,7 +2224,7 @@ NOT_STARTED
 - Do not claim penetration-test certification or close a finding without evidence.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** All critical/high authority-boundary defects are fixed and retested; known limitations are explicit.
 **Required evidence/environment:** INTEGRATED_TEST_DEPLOYMENT
@@ -2254,7 +2256,7 @@ NOT_STARTED
 - Do not use high synthetic accuracy as real market predictive proof.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Every specified false-proof path is blocked or produces visibly nonqualifying evidence.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -2286,7 +2288,7 @@ NOT_STARTED
 - Do not interpret this fixture suite as a real Alpaca write-integration test.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** All adversarial executions preserve bounded exposure and honest state without duplicate logical orders.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -2318,7 +2320,7 @@ NOT_STARTED
 - Do not reset a database or discard unresolved jobs to make recovery pass.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** All declared crash points recover or hold explicitly with preserved evidence and no unauthorized effect.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -2350,7 +2352,7 @@ NOT_STARTED
 - Do not excuse scientific/authority drift as an implementation detail.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** No unresolved critical/high architecture violation; framework status remains distinct from calibrated readiness.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
@@ -2382,7 +2384,7 @@ NOT_STARTED
 - Do not label this preliminary corpus as a finalized production feature/label dataset or PIT-complete without evidence.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Real data supports a precisely scoped calibration/qualification plan; inadequate scope or volume blocks progression.
 **Required evidence/environment:** ALPACA_CREDENTIALS, REAL_HISTORICAL_DATA
@@ -2414,7 +2416,7 @@ NOT_STARTED
 - Do not optimize universe on the unopened qualification set or later F0 winners.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** One justified eligibility policy is selected and immutable for subsequent qualification.
 **Required evidence/environment:** REAL_HISTORICAL_DATA
@@ -2446,7 +2448,7 @@ NOT_STARTED
 - Do not rewrite thresholds after qualification or equate one-session gap and multiday expansion.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Targets are exact, viable enough to test or explicitly blocked, and frozen before model qualification.
 **Required evidence/environment:** REAL_HISTORICAL_DATA
@@ -2478,7 +2480,7 @@ NOT_STARTED
 - Do not call provisional development models the operating Champion or amend earlier framework logic silently.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** A reproducible feature selection procedure and bounded candidate set are locked for bootstrap competition.
 **Required evidence/environment:** REAL_HISTORICAL_DATA
@@ -2510,7 +2512,7 @@ NOT_STARTED
 - Do not activate every legacy protocol to increase protocol count.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** One documented active-set selection procedure and parameter manifest are ready for bootstrap qualification.
 **Required evidence/environment:** REAL_HISTORICAL_DATA
@@ -2542,7 +2544,7 @@ NOT_STARTED
 - Do not select a score by viewing final qualification or pretend a later model can use incompatible fitted score weights.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Score candidates and the selection procedure are fixed; QC2-082 selects the final pair using development only.
 **Required evidence/environment:** REAL_HISTORICAL_DATA
@@ -2574,7 +2576,7 @@ NOT_STARTED
 - Do not claim daily backtests establish live fills or activate trading during calibration.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** One strategy/capital manifest is frozen with honest data limitations and all required owner choices resolved.
 **Required evidence/environment:** REAL_HISTORICAL_DATA, OWNER_CAPITAL_POLICY
@@ -2606,7 +2608,7 @@ NOT_STARTED
 - Do not pick Shadow duration after seeing a candidate win or permit incompatible scientific changes within F0.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Promotion policy is fully numeric, justified and executable before prospective model evaluation.
 **Required evidence/environment:** REAL_HISTORICAL_DATA, OWNER_MODE_POLICY
@@ -2638,7 +2640,7 @@ NOT_STARTED
 - Do not treat symbol-days as independent or select analysis settings using F0/locked qualification outcomes.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** All decision parameters are resolved and justified; infeasible evidence requirements block activation rather than get weakened.
 **Required evidence/environment:** REAL_HISTORICAL_DATA, STATISTICAL_SIMULATION_EVIDENCE
@@ -2670,7 +2672,7 @@ NOT_STARTED
 - Do not compare families on different favorable windows or select from qualification results.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Exactly one nominated artifact/pipeline exists with a development-only selection receipt.
 **Required evidence/environment:** REAL_HISTORICAL_DATA
@@ -2702,7 +2704,7 @@ NOT_STARTED
 - Do not hide failures, choose another model using the same holdout as if untouched, or automatically retrain through the holdout.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Nominated candidate passes all frozen gates, or task is BLOCKED pending a valid new evidence plan.
 **Required evidence/environment:** REAL_HISTORICAL_DATA, INDEPENDENT_EVALUATOR
@@ -2734,7 +2736,7 @@ NOT_STARTED
 - Do not count predictions, start the official epoch or enable paper orders here.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** The exact qualified artifact is registered, independently verifiable and ready for epoch binding.
 **Required evidence/environment:** OWNER_SIGNED_BOOTSTRAP, REAL_ANDROID_DEVICE
@@ -2766,7 +2768,7 @@ NOT_STARTED
 - Do not start collecting official sessions or edit the manifest after freeze.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Every required empirical, owner, capability and engineering value is resolved and content-addressed.
 **Required evidence/environment:** OWNER_EPOCH_ACKNOWLEDGMENT, CALIBRATED_REAL_MANIFESTS
@@ -2798,7 +2800,7 @@ NOT_STARTED
 - Do not fabricate elapsed sessions, trade without explicit sandbox authorization or count dry-run outcomes toward F0.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** All real integration gates pass; missing credentials/device/anchor authorization or waiting for maturity remains BLOCKED.
 **Required evidence/environment:** REAL_MARKET_DATA, ALPACA_CREDENTIALS, INDEPENDENT_ANCHOR_ACCESS, REAL_ANDROID_DEVICE, OWNER_SANDBOX_PAPER_TEST_AUTHORIZATION
@@ -2830,7 +2832,7 @@ NOT_STARTED
 - Do not waive scientific or authority blockers to meet a date.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** No unresolved critical/high scientific, security or execution defect; every activation requirement has actual evidence.
 **Required evidence/environment:** INTEGRATED_DEPLOYMENT_EVIDENCE
@@ -2862,7 +2864,7 @@ NOT_STARTED
 - Do not treat task registry creation, spec approval or a successful dry run as activation authorization.
 - Implement live trading or allow runtime provider/feed fallback.
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
-- Broaden architecture, spend without authorization, or auto-start another canonical task.
+- Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
 **Acceptance gate:** Exact authorized epoch becomes active prospectively with complete evidence; F0 success is not yet claimed.
 **Required evidence/environment:** EXPLICIT_OWNER_F0_ACTIVATION_AUTHORIZATION, PRODUCTION_READINESS

@@ -22,7 +22,7 @@ from qc2_contracts.runtime import (  # noqa: E402
     verify_content_hash,
 )
 
-from generate_task_docs import render_documents  # noqa: E402
+from generate_task_docs import render_build_tasks, render_dependencies  # noqa: E402
 
 REGISTRY_PATH = ROOT / "registry/BUILD_TASKS.json"
 RECEIPT_SCHEMA_PATH = (
@@ -30,6 +30,7 @@ RECEIPT_SCHEMA_PATH = (
 )
 TASK_SCHEMA_PATH = ROOT / "packages/contracts/schemas/v1/BuildTask.schema.json"
 VALID_STATUSES = {"TODO", "IN_PROGRESS", "PASS", "BLOCKED"}
+WORKFLOW_VERSION = "2.0"
 COMMIT_PATTERN = re.compile(r"^[0-9a-f]{40}$")
 TEST_ID_PATTERN = re.compile(r"^[a-z][a-z0-9_-]{0,95}$")
 EXCLUDED_DIRS = {".git", ".pytest_cache", "__pycache__", "node_modules", ".venv"}
@@ -61,6 +62,16 @@ def _git(root: Path, *args: str, check: bool = True) -> subprocess.CompletedProc
         text=True,
         timeout=30,
     )
+
+
+def _git_bytes(root: Path, *args: str) -> bytes:
+    result = subprocess.run(
+        ["git", "-C", str(root), *args],
+        check=True,
+        capture_output=True,
+        timeout=30,
+    )
+    return result.stdout
 
 
 def _source_commit_available(root: Path, commit: str) -> bool:
@@ -113,6 +124,121 @@ def _artifact_hash(root: Path, value: str) -> str:
     return digest.hexdigest()
 
 
+def _git_blob_records(
+    root: Path, revision: str, value: str
+) -> list[tuple[str, str, str, str]]:
+    listing = _git(
+        root, "ls-tree", "-r", "-z", "--full-tree", revision, "--", value
+    ).stdout
+    records: list[tuple[str, str, str, str]] = []
+    for item in listing.split("\0"):
+        if not item:
+            continue
+        metadata, relative = item.split("\t", 1)
+        mode, object_type, object_id = metadata.split()
+        records.append((mode, object_type, object_id, relative))
+    return records
+
+
+def _artifact_hash_at_commit(root: Path, commit: str, value: str) -> str:
+    workspace_path = _safe_path(root, value)
+    value = value.rstrip("/")
+    records = _git_blob_records(root, commit, value)
+    files: list[tuple[str, bytes]] = []
+    for mode, object_type, object_id, relative in records:
+        parts = Path(relative).parts
+        if any(part in EXCLUDED_DIRS for part in parts):
+            continue
+        if object_type != "blob" or mode == "120000":
+            raise WorkflowError(
+                f"acceptance artifact is not a regular file at {commit}: {relative}"
+            )
+        if workspace_path.is_dir() and not relative.startswith(value + "/"):
+            continue
+        if not workspace_path.is_dir() and relative != value:
+            continue
+        files.append(
+            (relative, _git_bytes(root, "cat-file", "blob", object_id))
+        )
+
+    if not workspace_path.is_dir():
+        if len(files) != 1:
+            raise WorkflowError(f"artifact is absent from tested commit: {value}")
+        return hashlib.sha256(files[0][1]).hexdigest()
+    if not files:
+        raise WorkflowError(f"acceptance artifact directory is empty at {commit}: {value}")
+
+    digest = hashlib.sha256()
+    for relative, content in sorted(files, key=lambda item: item[0]):
+        digest.update(relative.encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(hashlib.sha256(content).hexdigest().encode("ascii"))
+        digest.update(b"\n")
+    return digest.hexdigest()
+
+
+def _require_integrated_file(root: Path, value: str) -> None:
+    workspace_path = _safe_path(root, value)
+    if not workspace_path.is_file() or workspace_path.is_symlink():
+        raise WorkflowError(f"acceptance record is not a regular file: {value}")
+    records = [
+        record
+        for record in _git_blob_records(root, "HEAD", value)
+        if record[3] == value
+    ]
+    if len(records) != 1:
+        raise WorkflowError(f"acceptance record is not integrated in HEAD: {value}")
+    mode, object_type, object_id, _ = records[0]
+    if object_type != "blob" or mode == "120000":
+        raise WorkflowError(f"acceptance record is not a regular Git blob: {value}")
+    if _git_bytes(root, "cat-file", "blob", object_id) != workspace_path.read_bytes():
+        raise WorkflowError(f"integrated acceptance record differs from workspace: {value}")
+
+
+def _acceptance_checklist_errors(
+    task: dict[str, Any], markdown: str
+) -> list[str]:
+    task_id = task["task_id"]
+    marker = "## Acceptance checklist"
+    if marker not in markdown:
+        return [f"{task_id}: acceptance checklist is missing"]
+    checklist = markdown.split(marker, 1)[1]
+    next_heading = re.search(r"(?m)^## ", checklist)
+    if next_heading:
+        checklist = checklist[: next_heading.start()]
+
+    expected = {
+        ("DELIVERABLE", item) for item in task.get("required_deliverables", [])
+    } | {("TEST", item) for item in task.get("required_tests", [])}
+    found: set[tuple[str, str]] = set()
+    errors: list[str] = []
+    for line in checklist.splitlines():
+        if not line.startswith("- [x] "):
+            continue
+        item = line[len("- [x] ") :]
+        kind = next(
+            (candidate for candidate in ("DELIVERABLE", "TEST") if item.startswith(f"{candidate}: ")),
+            None,
+        )
+        if kind is None:
+            errors.append(f"{task_id}: acceptance checklist has an unknown entry")
+            continue
+        body = item[len(kind) + 2 :]
+        description, separator, evidence = body.partition(" | evidence: ")
+        key = (kind, description)
+        if not separator or not evidence.strip():
+            errors.append(f"{task_id}: checklist entry lacks evidence: {description}")
+        if key not in expected:
+            errors.append(f"{task_id}: checklist entry is not in the task contract: {description}")
+        if key in found:
+            errors.append(f"{task_id}: duplicate acceptance checklist entry: {description}")
+        found.add(key)
+
+    for kind, description in sorted(expected - found):
+        errors.append(f"{task_id}: required {kind.lower()} is not checked: {description}")
+    return errors
+
+
 def _receipt_paths(receipt: dict[str, Any]) -> list[str]:
     return [
         receipt[key]
@@ -122,7 +248,10 @@ def _receipt_paths(receipt: dict[str, Any]) -> list[str]:
 
 
 def _validate_contract_receipt(
-    root: Path, task: dict[str, Any], receipt: dict[str, Any]
+    root: Path,
+    task: dict[str, Any],
+    receipt: dict[str, Any],
+    require_integrated: bool = False,
 ) -> list[str]:
     errors: list[str] = []
     task_id = task["task_id"]
@@ -144,6 +273,9 @@ def _validate_contract_receipt(
         return errors
     if receipt.get("result") != "PASS":
         errors.append(f"{task_id}: registry result is not PASS")
+    workflow_version = receipt.get("acceptance_workflow_version")
+    if workflow_version not in (None, WORKFLOW_VERSION):
+        errors.append(f"{task_id}: unsupported acceptance workflow version {workflow_version}")
     if not _source_commit_available(root, receipt["source_commit"]):
         errors.append(f"{task_id}: tested source commit is unavailable or not integrated")
     if not receipt["executed_commands"] or not receipt["test_counts"]:
@@ -153,15 +285,34 @@ def _validate_contract_receipt(
     for artifact_path, expected_hash in receipt["artifact_hashes"].items():
         try:
             actual_hash = _artifact_hash(root, artifact_path)
+            tested_hash = _artifact_hash_at_commit(
+                root, receipt["source_commit"], artifact_path
+            )
         except WorkflowError as exc:
             errors.append(f"{task_id}: {exc}")
             continue
         if actual_hash != expected_hash:
             errors.append(f"{task_id}: artifact hash changed: {artifact_path}")
+        if tested_hash != expected_hash:
+            errors.append(
+                f"{task_id}: artifact does not match tested source commit: {artifact_path}"
+            )
+        if require_integrated:
+            try:
+                integrated_hash = _artifact_hash_at_commit(root, "HEAD", artifact_path)
+            except WorkflowError as exc:
+                errors.append(f"{task_id}: {exc}")
+                continue
+            if integrated_hash != expected_hash:
+                errors.append(
+                    f"{task_id}: artifact does not match integrated HEAD: {artifact_path}"
+                )
 
     for key in ("receipt", "contract_receipt", "task_record"):
         try:
             _safe_path(root, receipt[key])
+            if require_integrated:
+                _require_integrated_file(root, receipt[key])
         except WorkflowError as exc:
             errors.append(f"{task_id}: {exc}")
     if errors:
@@ -175,6 +326,10 @@ def _validate_contract_receipt(
             errors.append(f"{task_id}: Markdown receipt does not identify the checked time")
         if receipt["source_commit"] not in markdown:
             errors.append(f"{task_id}: Markdown receipt does not identify the tested commit")
+        if workflow_version == WORKFLOW_VERSION:
+            if WORKFLOW_VERSION not in markdown:
+                errors.append(f"{task_id}: Markdown receipt omits its acceptance workflow version")
+            errors.extend(_acceptance_checklist_errors(task, markdown))
 
         task_record = json.loads(
             (root / receipt["task_record"]).read_text(encoding="utf-8")
@@ -197,6 +352,8 @@ def _validate_contract_receipt(
             errors.append(f"{task_id}: source commit differs between receipt records")
         if acceptance_record["checked_at"] != receipt["checked_at"]:
             errors.append(f"{task_id}: checked time differs between receipt records")
+        if acceptance_record["task_spec_version"] != receipt["task_spec_version"]:
+            errors.append(f"{task_id}: task specification version differs between receipt records")
         if acceptance_record["task_ref"]["target_id"] != task_record["id"]:
             errors.append(f"{task_id}: acceptance receipt points to another task record")
         if acceptance_record["task_ref"]["content_hash"] != task_record["content_hash"]:
@@ -209,15 +366,24 @@ def _validate_contract_receipt(
             errors.append(f"{task_id}: artifact hashes differ between receipt records")
         if acceptance_record["executed_commands"] != receipt["executed_commands"]:
             errors.append(f"{task_id}: commands differ between receipt records")
+        if acceptance_record["test_counts"] != receipt["test_counts"]:
+            errors.append(f"{task_id}: test counts differ between receipt records")
     except (OSError, json.JSONDecodeError, KeyError, WorkflowError, ValueError) as exc:
         errors.append(f"{task_id}: invalid structured acceptance evidence: {exc}")
     return errors
 
 
 def validate_registry(
-    registry: dict[str, Any], root: Path = ROOT, check_documents: bool = False
+    registry: dict[str, Any],
+    root: Path = ROOT,
+    check_documents: bool = False,
+    require_integrated: bool = False,
 ) -> list[str]:
     errors: list[str] = []
+    if registry.get("acceptance_workflow_version") != WORKFLOW_VERSION:
+        errors.append(
+            f"registry acceptance workflow version must be {WORKFLOW_VERSION}"
+        )
     tasks = registry.get("tasks")
     if not isinstance(tasks, list) or len(tasks) != registry.get("task_count"):
         return ["registry task_count does not match its task list"]
@@ -249,11 +415,17 @@ def validate_registry(
             if not isinstance(receipt, dict) or receipt.get("result") != "PASS":
                 errors.append(f"{task_id}: PASS requires a PASS acceptance receipt")
             elif index >= 3:
-                errors.extend(_validate_contract_receipt(root, task, receipt))
+                errors.extend(
+                    _validate_contract_receipt(
+                        root, task, receipt, require_integrated=require_integrated
+                    )
+                )
             else:
                 for path in _receipt_paths(receipt):
                     try:
                         _safe_path(root, path)
+                        if require_integrated:
+                            _require_integrated_file(root, path)
                     except WorkflowError as exc:
                         errors.append(f"{task_id}: {exc}")
         elif status == "TODO" and task.get("acceptance_receipt") is not None:
@@ -275,11 +447,26 @@ def validate_registry(
                     )
 
     if check_documents:
-        for path, expected in render_documents().items():
+        expected_documents = {
+            "docs/BUILD_TASKS.md": render_build_tasks(registry),
+            "docs/TASK_DEPENDENCIES.md": render_dependencies(registry),
+        }
+        for relative, expected in expected_documents.items():
+            path = root / relative
             if not path.exists() or path.read_text(encoding="utf-8") != expected:
                 errors.append(
-                    f"generated task document is stale: {path.relative_to(root).as_posix()}"
+                    f"generated task document is stale: {relative}"
                 )
+    if require_integrated and not in_progress:
+        for relative in (
+            "registry/BUILD_TASKS.json",
+            "docs/BUILD_TASKS.md",
+            "docs/TASK_DEPENDENCIES.md",
+        ):
+            try:
+                _require_integrated_file(root, relative)
+            except WorkflowError as exc:
+                errors.append(str(exc))
     return errors
 
 
@@ -295,6 +482,16 @@ def _preflight_errors(
     if task is None:
         return [f"unknown task: {task_id}"]
     errors: list[str] = []
+    if task.get("status") == "TODO":
+        for relative in (
+            "registry/BUILD_TASKS.json",
+            "docs/BUILD_TASKS.md",
+            "docs/TASK_DEPENDENCIES.md",
+        ):
+            try:
+                _require_integrated_file(root, relative)
+            except WorkflowError as exc:
+                errors.append(str(exc))
     for dependency_id in task.get("dependencies", []):
         dependency = tasks[dependency_id]
         if dependency.get("status") != "PASS":
@@ -304,11 +501,16 @@ def _preflight_errors(
         if not isinstance(receipt, dict) or receipt.get("result") != "PASS":
             errors.append(f"{dependency_id} has no PASS acceptance receipt")
         elif dependency_id >= "QC2-003":
-            errors.extend(_validate_contract_receipt(root, dependency, receipt))
+            errors.extend(
+                _validate_contract_receipt(
+                    root, dependency, receipt, require_integrated=True
+                )
+            )
         else:
             for path in _receipt_paths(receipt):
                 try:
                     _safe_path(root, path)
+                    _require_integrated_file(root, path)
                 except WorkflowError as exc:
                     errors.append(f"{dependency_id}: {exc}")
     return errors
@@ -358,8 +560,11 @@ def _update_local_task(
 
 
 def _render_all_documents(registry: dict[str, Any], root: Path) -> None:
-    for path, content in render_documents().items():
-        relative = path.relative_to(ROOT)
+    documents = {
+        "docs/BUILD_TASKS.md": render_build_tasks(registry),
+        "docs/TASK_DEPENDENCIES.md": render_dependencies(registry),
+    }
+    for relative, content in documents.items():
         destination = root / relative
         destination.write_text(content, encoding="utf-8", newline="\n")
 
@@ -428,6 +633,10 @@ def finish_task(args: argparse.Namespace, root: Path = ROOT) -> None:
     counts = [_parse_test_count(item) for item in args.test_count]
     if not counts:
         raise WorkflowError("at least one test count is required")
+    if not any(
+        count["passed"] + count["failed"] + count["skipped"] > 0 for count in counts
+    ):
+        raise WorkflowError("at least one executed acceptance test must be counted")
     if any(count["failed"] for count in counts):
         raise WorkflowError("a task with failed acceptance tests cannot be marked PASS")
     skipped = sum(int(count["skipped"]) for count in counts)
@@ -452,6 +661,9 @@ def finish_task(args: argparse.Namespace, root: Path = ROOT) -> None:
         raise WorkflowError("assessment already has generated completion metadata")
     if not re.search(r"(?im)^\s*[-*]\s*\*\*Result:\*\*\s*PASS", report):
         raise WorkflowError("assessment must explicitly state **Result:** PASS")
+    checklist_errors = _acceptance_checklist_errors(task, report)
+    if checklist_errors:
+        raise WorkflowError("acceptance checklist failed: " + "; ".join(checklist_errors))
 
     artifact_hashes = {
         item.rstrip("/"): _artifact_hash(root, item.rstrip("/"))
@@ -459,6 +671,14 @@ def finish_task(args: argparse.Namespace, root: Path = ROOT) -> None:
     }
     if len(artifact_hashes) != len(args.artifact_path):
         raise WorkflowError("artifact paths must be unique")
+    for artifact_path, expected_hash in artifact_hashes.items():
+        tested_hash = _artifact_hash_at_commit(
+            root, args.source_commit, artifact_path
+        )
+        if tested_hash != expected_hash:
+            raise WorkflowError(
+                f"artifact does not match tested source commit: {artifact_path}"
+            )
     checked_at = _utc_now()
     task_record = {
         "schema_name": "qc2.integrity_build.BuildTask.v1",
@@ -515,7 +735,8 @@ def finish_task(args: argparse.Namespace, root: Path = ROOT) -> None:
         "task_ref": task_ref,
         "task_spec_version": (
             f"{args.task_id} / registry schema {registry['schema_version']} / "
-            f"governing spec {registry['spec_version']}"
+            f"governing spec {registry['spec_version']} / "
+            f"acceptance workflow {WORKFLOW_VERSION}"
         ),
         "source_commit": args.source_commit,
         "changed_paths": list(artifact_hashes),
@@ -537,6 +758,7 @@ def finish_task(args: argparse.Namespace, root: Path = ROOT) -> None:
 
     receipt_meta = {
         "result": "PASS",
+        "acceptance_workflow_version": WORKFLOW_VERSION,
         "checked_at": checked_at,
         "task_spec_version": acceptance_record["task_spec_version"],
         "source_commit": args.source_commit,
@@ -561,6 +783,7 @@ def finish_task(args: argparse.Namespace, root: Path = ROOT) -> None:
         "",
         "- **Result:** PASS",
         f"- **Checked at (UTC):** {checked_at}",
+        f"- **Acceptance workflow version:** {WORKFLOW_VERSION}",
         f"- **Task/specification version:** {receipt_meta['task_spec_version']}",
         f"- **Tested source commit:** `{args.source_commit}`",
         f"- **Verification reason:** {receipt_meta['verification_reason']}",
@@ -660,7 +883,9 @@ def main() -> int:
             finish_task(args)
             print(f"{args.task_id} PASS recorded; receipts, registry, and task docs validated")
         else:
-            errors = validate_registry(_read_registry(), check_documents=True)
+            errors = validate_registry(
+                _read_registry(), check_documents=True, require_integrated=True
+            )
             if errors:
                 raise WorkflowError("; ".join(errors))
             print("task registry, acceptance records, and generated docs are valid")

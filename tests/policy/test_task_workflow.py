@@ -2,15 +2,25 @@ from __future__ import annotations
 
 import json
 import sys
+import subprocess
 from pathlib import Path
 from typing import Any
+
+import pytest
 
 TOOLS = Path(__file__).resolve().parents[2] / "tools"
 ROOT = TOOLS.parent
 sys.path.insert(0, str(TOOLS))
 
 from generate_task_docs import render_build_tasks, render_dependencies  # noqa: E402
-from task_workflow import validate_registry  # noqa: E402
+from task_workflow import (  # noqa: E402
+    WorkflowError,
+    _acceptance_checklist_errors,
+    _artifact_hash,
+    _artifact_hash_at_commit,
+    _require_integrated_file,
+    validate_registry,
+)
 
 
 def _registry() -> dict[str, Any]:
@@ -38,6 +48,8 @@ def test_generated_task_docs_include_registry_status_and_receipts() -> None:
     build_docs = render_build_tasks(registry)
     dependency_docs = render_dependencies(registry)
     assert "**Current status:** PASS" in build_docs
+    assert "**Acceptance workflow version:** 2.0." in build_docs
+    assert "Native task-board status and merge labels are projections only" in build_docs
     assert "QC2-003_ACCEPTANCE_RECORD.json" in build_docs
     assert "Tasks with authorized original-protocol references" in dependency_docs
     assert "not source access or inspection" in dependency_docs
@@ -69,3 +81,67 @@ def test_registry_rejects_multiple_active_tasks() -> None:
 
     errors = validate_registry(registry, check_documents=False)
     assert any("more than one canonical task is IN_PROGRESS" in error for error in errors)
+
+
+def test_acceptance_checklist_requires_every_exact_deliverable_and_test() -> None:
+    task = {
+        "task_id": "QC2-999",
+        "required_deliverables": ["Versioned authority record."],
+        "required_tests": ["pytest -q tests/test_authority.py"],
+    }
+    complete = """## Acceptance checklist
+- [x] DELIVERABLE: Versioned authority record. | evidence: docs/authority.md
+- [x] TEST: pytest -q tests/test_authority.py | evidence: 8 passed
+"""
+    assert _acceptance_checklist_errors(task, complete) == []
+
+    incomplete = """## Acceptance checklist
+- [x] DELIVERABLE: Versioned authority record. | evidence: docs/authority.md
+"""
+    errors = _acceptance_checklist_errors(task, incomplete)
+    assert any("required test is not checked" in error for error in errors)
+
+    wrong_contract = """## Acceptance checklist
+- [x] DELIVERABLE: Versioned authority record. | evidence: docs/authority.md
+- [x] TEST: pytest -q tests/other.py | evidence: 8 passed
+"""
+    errors = _acceptance_checklist_errors(task, wrong_contract)
+    assert any("not in the task contract" in error for error in errors)
+
+
+def test_receipt_artifact_hash_is_bound_to_commit_and_integrated_worktree(
+    tmp_path: Path,
+) -> None:
+    subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
+    subprocess.run(
+        ["git", "-C", str(tmp_path), "config", "user.email", "test@example.invalid"],
+        check=True,
+    )
+    subprocess.run(
+        ["git", "-C", str(tmp_path), "config", "user.name", "Acceptance Test"],
+        check=True,
+    )
+    artifact = tmp_path / "docs" / "output" / "receipt.txt"
+    artifact.parent.mkdir(parents=True)
+    artifact.write_text("tested bytes\n", encoding="utf-8")
+    subprocess.run(["git", "-C", str(tmp_path), "add", "docs/output"], check=True)
+    subprocess.run(
+        ["git", "-C", str(tmp_path), "commit", "-qm", "tested artifact"],
+        check=True,
+    )
+    commit = subprocess.run(
+        ["git", "-C", str(tmp_path), "rev-parse", "HEAD"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+
+    committed_hash = _artifact_hash_at_commit(tmp_path, commit, "docs/output")
+    assert committed_hash == _artifact_hash(tmp_path, "docs/output")
+    _require_integrated_file(tmp_path, "docs/output/receipt.txt")
+
+    artifact.write_text("uncommitted replacement\n", encoding="utf-8")
+    assert _artifact_hash_at_commit(tmp_path, commit, "docs/output") == committed_hash
+    assert _artifact_hash(tmp_path, "docs/output") != committed_hash
+    with pytest.raises(WorkflowError, match="differs from workspace"):
+        _require_integrated_file(tmp_path, "docs/output/receipt.txt")

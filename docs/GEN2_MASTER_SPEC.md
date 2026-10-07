@@ -18,6 +18,32 @@ This is a specification audit and redesign, not an audit of the three legacy rep
 
 The words **MUST**, **MUST NOT**, **SHALL**, and **FORBIDDEN** are mandatory. **MAY** identifies a bounded option. An illustrative value is not a production setting. An unresolved empirical decision is an explicit blocking record, never an implicit default.
 
+## Active build-workflow amendment — 2026-10-07
+
+This amendment governs ongoing implementation and supersedes earlier
+instructions to stop after each canonical task, request separate permission
+for routine acceptance/bookkeeping, or wait for a new resume instruction after
+an ordinarily resolvable dependency blocker. It does not restart
+`PREBUILD_REGISTRY`, alter the 89-task plan, or weaken any task's evidence,
+access, scientific, owner-risk, production, or activation requirements.
+
+Build tasks proceed sequentially through the canonical dependency graph. Keep
+at most one task `IN_PROGRESS`; after its required deliverables and checks pass,
+its evidence-backed receipt and registry/generated documentation are committed
+with the implementation and validated in the integrated workspace, report
+progress and start the next eligible task without another permission prompt.
+Native task-board states are projections and never establish canonical `PASS`.
+If a predecessor needs repair, suspend the current task, repair and revalidate
+the predecessor, then return automatically. Ordinary engineering actions
+within the existing contract are authorized; actual access, evidence, device,
+owner-risk/cost, destructive/external, architecture, and production gates
+remain in force.
+
+Build-task acceptance does not depend on the future Android model-approval
+system. QC2-088 may prepare the F0 activation package, but it must not activate
+F0 without exact owner authorization for the specified epoch, manifest, and
+prospective start session.
+
 ## 0. Governing interpretation and changes
 
 The following hierarchy applies: owner-approved constitutional amendment; this specification and its approved amendments; versioned contracts and frozen epoch manifests consistent with it; accepted task specifications; implementation. A later timestamp alone does not confer authority. An amendment must name the requirements changed, its reason, impact, migration, tests, and effective boundary.
@@ -680,13 +706,13 @@ Preserve exactly 89 canonical IDs and names. Execution order is QC2-000, QC2-001
 
 Exactly one canonical task may be IN_PROGRESS. Subtasks may exist only inside it. Do not parallelize canonical tasks or let background work mutate later-task artifacts. A later task may read an already accepted contract, but may not be partially implemented under an earlier task to make a demo appear complete.
 
-States are TODO → IN_PROGRESS → PASS or BLOCKED. A BLOCKED task may return to IN_PROGRESS only after a recorded blocker resolution and explicit instruction to resume. Reopening a PASS task requires an amendment/change request; dependent gates become NEEDS_REVALIDATION in acceptance metadata and cannot be used to advance until revalidated. NEEDS_REVALIDATION is gate metadata, not a hidden fourth successful task state.
+States are TODO → IN_PROGRESS → PASS or BLOCKED. A BLOCKED task may return to IN_PROGRESS after its blocker resolution is recorded and validated; ordinary predecessor repair under the active sequential-workflow amendment does not require a new resume instruction. Reopening a PASS task requires an amendment/change request; dependent gates become NEEDS_REVALIDATION in acceptance metadata and cannot be used to advance until revalidated. NEEDS_REVALIDATION is gate metadata, not a hidden fourth successful task state.
 
 Each task records ID/name, objective, dependencies, authorized legacy sources, mandatory reference intake, deliverables, required tests, forbidden actions, acceptance gate, required evidence class/environment, calibration dependency, status, blockers, and TaskAcceptanceReceipt. All tasks start TODO. Missing credentials, unverified sources, insufficient real data, unavailable devices, or failed gates are BLOCKED with concrete evidence, not inferred PASS.
 
 A TaskAcceptanceReceipt identifies task/spec versions; source commit; changed paths; exact executed commands; test/environment/data class; test counts and outcomes; artifact hashes; legacy-intake references; unresolved decisions; gate verdict; and reviewer/agent identity. Passing an empty test command, relying on a screenshot of a success message, or reporting intended tests as run is forbidden. Unit, integration, property, fault, and device tests are required only where they prove the task's actual invariants.
 
-After each canonical task, Replit stops and reports the receipt, failures, blockers, decision requests, and next eligible task. It does not automatically begin the next task. Current authorization to rewrite this specification is not authorization to activate F0 or submit paper orders.
+**Historical workflow rule, superseded by the active amendment at the beginning of this document:** the original process stopped after each canonical task and required a separate decision before beginning the next. Current implementation proceeds automatically after integrated acceptance and validation. This does not authorize F0 activation or paper orders.
 
 Framework work can pass before empirical calibration only if the parameterized contracts, fixtures, and fail-closed activation behavior work. Fixture constants cannot appear in production manifests. Calibration occurs in QC2-073–QC2-083; freeze/activation occurs in QC2-084–QC2-088. Earlier acceptance never means the whole system is operational.
 
@@ -3475,6 +3501,11 @@ F0 activation is forbidden unless all of the following are true and evidenced in
 If a required evidence source is unavailable, activation is BLOCKED. A smaller valid declared experiment may be proposed through an amendment, but the agent must not quietly relabel a weaker experiment as satisfying this one.
 
 ## 41. First Replit instruction — exact handoff
+
+> **Historical handoff:** The `PREBUILD_REGISTRY` assignment below was
+> completed. Preserve it as the original handoff record, but do not repeat that
+> task or apply its stop-after-registry rule to active implementation. The
+> current build workflow is the amendment at the beginning of this document.
 
 Use the following assignment after placing this document at `docs/GEN2_MASTER_SPEC.md`:
 

@@ -119,9 +119,44 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "TODO",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "checked": "2026-10-06",
+        "task_spec_version": "2.0",
+        "source_commit": "38e0dfa9bdbf7aa7da7c5a2e2938324aa02d592e",
+        "receipt": "docs/reference/QC2-002_ACCEPTANCE_RECEIPT.md",
+        "changed_paths": [
+          "docs/GEN2_CONSTITUTION.md",
+          "docs/AUTHORITY_MODEL.md",
+          "docs/DECISION_LOG.md",
+          "docs/UNKNOWN_LEDGER.md",
+          "docs/CHANGE_CLASSIFICATION.md",
+          "tests/policy/test_qc2_002_governance.py",
+          "docs/reference/QC2-002_ACCEPTANCE_RECEIPT.md",
+          "registry/BUILD_TASKS.json"
+        ],
+        "executed_commands": [
+          "python3 -m pytest -q tests/policy/test_qc2_002_governance.py — PASS, 8 tests",
+          "python3 -m ruff check tests/policy/test_qc2_002_governance.py — PASS",
+          "pnpm run verify — PASS, lint, typecheck, 10 Python tests, smoke"
+        ],
+        "evidence_class": "LOCAL_FIXTURE_AND_CODE_EVIDENCE",
+        "artifact_hashes": {
+          "docs/GEN2_CONSTITUTION.md": "99dc2049addf02fea1f9aa272582c4dc47c2d0d5fc294d759de4abf3d50820ac",
+          "docs/AUTHORITY_MODEL.md": "0614fa5acdbe7b5203ffb8457863b18e1eb70f28bdc2a36865292f118d85e1c0",
+          "docs/DECISION_LOG.md": "d6efb0e7a991c94f1a0b6edbbc89ac7f968e1f282013ac2756db8ca8f6a798fe",
+          "docs/UNKNOWN_LEDGER.md": "10c15c46c38ea750db63cdae791edf311b3f35808f6cc1e77d06071abfe9352c",
+          "docs/CHANGE_CLASSIFICATION.md": "cd3e6c1a6b696964e23df17312d439944ad8e77b753c8d54af2c0cc893ecaf8b",
+          "tests/policy/test_qc2_002_governance.py": "6de8a2a2be63eda7ac8c053a90394512cfc037301d59a04df655cbbeea78f1d4"
+        },
+        "legacy_intake_references": [],
+        "unresolved_decisions": "All 21 typed ledger entries remain unresolved; no production value, fixture, fallback, or guessed threshold was selected. Affected capability and F0 activation remain blocked.",
+        "gate_verdict": "PASS for governance documents, unique ownership, invariant test plans, contradiction review, and no unresolved production defaults. Later capability/calibration/activation gates remain unsatisfied.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": "No independent reviewer supplied."
+      }
     },
     {
       "task_id": "QC2-003",

@@ -286,7 +286,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-008 — Market Calendar Authority
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Provide a single versioned exchange-session and deadline truth.
 **Dependencies:** QC2-003, QC2-005, QC2-007
 **Authorized legacy references:** Gen 1 schedulers/calendar handling
@@ -312,7 +312,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-07T18:06:35Z: `docs/reference/QC2-008_ACCEPTANCE.md`, `docs/reference/QC2-008_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-008_TASK_RECORD.json`
 
 ---
 

@@ -1,0 +1,58 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a1178b-b81d-768d-9ed6-54a9266a129d",
+  "created_at": "2026-10-07T18:06:35Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "5c5bf0f8939cd07495a4ab5b444a34b9d8bf2d6f1fa3aefedf062330b6a1044a",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a1178b-b819-74aa-bd13-2fa5ab5fdf17",
+    "content_hash": "af0f6eef31e42ec00d85588e09df98c376ae428e0c687a691778f607688ca325"
+  },
+  "task_spec_version": "QC2-008 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "cad938c1ea384a1bf812178eb5cbfdda8b7e08e1",
+  "changed_paths": [
+    "packages/calendar_authority",
+    "tests/calendar_authority"
+  ],
+  "executed_commands": [
+    "pnpm run verify",
+    "python3 -m pytest -q tests/calendar_authority",
+    "python3 -m ruff check packages/calendar_authority tests/calendar_authority",
+    "python3 -m ruff format --check packages/calendar_authority tests/calendar_authority"
+  ],
+  "test_counts": [
+    {
+      "test_id": "qc2_008_calendar",
+      "passed": 17,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "full_python",
+      "passed": 98,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "database_guards",
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "75feea4371a6ad8e70882c50a589f0fffefa66c8e8adca1e201b1e55cf57fb96",
+    "0f6ba745d80c569c621d08b854f6dec521287c602b30b968ba3e8d5f87e3f5f2"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-07T18:06:35Z"
+}

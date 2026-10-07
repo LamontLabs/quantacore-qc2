@@ -19,6 +19,7 @@ from task_workflow import (  # noqa: E402
     _authorized_artifact_drift,
     _artifact_hash,
     _artifact_hash_at_commit,
+    _evidence_requirement_slug,
     _require_integrated_file,
     validate_registry,
 )
@@ -82,6 +83,16 @@ def test_registry_rejects_multiple_active_tasks() -> None:
 
     errors = validate_registry(registry, check_documents=False)
     assert any("more than one canonical task is IN_PROGRESS" in error for error in errors)
+
+
+def test_build_task_evidence_identifier_preserves_all_registry_requirements() -> None:
+    task = next(
+        item for item in _registry()["tasks"] if item["task_id"] == "QC2-010"
+    )
+
+    assert _evidence_requirement_slug(task) == (
+        "alpaca_credentials_and_real_market_data"
+    )
 
 
 def test_artifact_drift_requires_explicit_scope_and_downstream_acceptance() -> None:

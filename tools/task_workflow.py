@@ -664,6 +664,30 @@ def _parse_test_count(value: str) -> dict[str, int | str]:
     }
 
 
+def _evidence_requirement_slug(task: dict[str, Any]) -> str:
+    requirements = task.get("evidence_requirements") or [
+        "local_fixture_and_code_evidence"
+    ]
+    if not isinstance(requirements, list):
+        raise WorkflowError("evidence_requirements must be a list")
+
+    normalized: list[str] = []
+    for requirement in requirements:
+        if not isinstance(requirement, str) or not requirement.strip():
+            raise WorkflowError("evidence requirements must be non-empty strings")
+        token = re.sub(r"[^a-z0-9_-]+", "_", requirement.strip().lower()).strip("_-")
+        if not token:
+            raise WorkflowError("evidence requirements must produce lowercase identifiers")
+        normalized.append(token)
+
+    # BuildTask v1 has one evidence_requirement field; retain every registry
+    # requirement as a conjunctive identifier in that field.
+    slug = "_and_".join(normalized)
+    if not re.fullmatch(r"[a-z][a-z0-9_-]{0,95}", slug):
+        raise WorkflowError("combined evidence requirement exceeds BuildTask v1 limits")
+    return slug
+
+
 def _utc_now() -> str:
     return (
         datetime.now(timezone.utc)
@@ -702,11 +726,6 @@ def finish_task(args: argparse.Namespace, root: Path = ROOT) -> None:
         raise WorkflowError("at least one implementation artifact path is required")
     if not _source_commit_available(root, args.source_commit):
         raise WorkflowError("source commit must exist and be integrated into current HEAD")
-    if task.get("evidence_requirements") and len(task["evidence_requirements"]) != 1:
-        raise WorkflowError(
-            "TaskAcceptanceReceipt.v1 BuildTask reference requires one evidence requirement"
-        )
-
     evidence_path = _safe_path(root, args.evidence)
     if not evidence_path.is_file() or "## Acceptance assessment" not in evidence_path.read_text(
         encoding="utf-8"
@@ -754,11 +773,7 @@ def finish_task(args: argparse.Namespace, root: Path = ROOT) -> None:
         "deliverable_refs": task.get("required_deliverables", []),
         "required_test_refs": task.get("required_tests", []),
         "acceptance_gate": task["acceptance_gate"],
-        "evidence_requirement": (
-            task.get("evidence_requirements", ["local_fixture_and_code_evidence"])[0]
-            .lower()
-            .replace(" ", "_")
-        ),
+        "evidence_requirement": _evidence_requirement_slug(task),
         "calibration_dependency": task.get(
             "calibration_dependency", "FRAMEWORK_OR_POLICY_ONLY"
         ),

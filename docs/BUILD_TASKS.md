@@ -354,6 +354,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Objective:** Measure the actual account and deployment capabilities needed for the intended F0 regime.
 **Dependencies:** QC2-008, QC2-009
 **Authorized legacy references:** None.
+**Authorized artifact drift:** QC2-007 — QC2-010 must preserve both ALPACA_CREDENTIALS and REAL_MARKET_DATA in a BuildTask v1 receipt whose evidence_requirement field is singular. The acceptance workflow now combines all registry requirements into one conjunctive identifier, and the regression test verifies both. QC2-007 remains historically verified at its tested source commit; QC2-010 revalidates these changed workflow artifacts. Paths: `tools/task_workflow.py`, `tests/policy/test_task_workflow.py`
 **Required reference intake:** None. Do not inspect or copy legacy code for this task without a scoped amendment.
 
 **Required deliverables:**

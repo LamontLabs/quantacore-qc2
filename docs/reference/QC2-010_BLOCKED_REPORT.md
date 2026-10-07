@@ -70,3 +70,18 @@ These facts remain unknown, not failed and not inferred from documentation or fi
 - **Manifest feed field:** The schema requires a feed value even for account, calendar, classification, and corporate-action records. Those records use `IEX` to identify the proposed diagnostic context; it does not claim those endpoints are sourced from IEX.
 - **Feed proposal:** Propose IEX for an explicitly pinned, completed-daily diagnostic acquisition because the account returned complete SPY daily coverage for the five tested sessions and historical IEX data. Do not silently fall back to SIP or another provider. IEX is a single-exchange feed; its volume must not be described as consolidated market volume. SIP remains unavailable, broad-universe coverage and exact provider-side delay remain unresolved, and the proposal does not activate F0 or authorize a paper order.
 - **Gate verdict:** PASS for the actual capability measurement and the limited IEX-only daily diagnostic proposal. The unresolved limitations above remain explicit; this is not an F0 activation or trading-authorization receipt. The acceptance record binds these manifest and report artifacts by hash; no independent digital signature is claimed.
+
+## Acceptance assessment
+
+- **Result:** PASS
+- The authenticated measurements establish a feasible, explicitly pinned IEX completed-daily diagnostic proposal for the sampled SPY sessions. SIP access is unavailable, while broad-universe coverage and exact provider-side delay remain unresolved and are not represented as capabilities. The production market-data endpoint was used for read-only data requests; no live brokerage endpoint or broker write was used.
+- The paper account fingerprint is recorded without the account ID or financial fields. Six `DataCapabilityManifest` records and this report are bound into the acceptance receipt by artifact hashes.
+
+## Acceptance checklist
+
+- [x] DELIVERABLE: Signed/evidenced DataCapabilityManifest with real feed access, delay, history, coverage and rate observations. | evidence: `docs/reference/QC2-010_CAPABILITY_MANIFESTS/` and the timing/rate observations in this report
+- [x] DELIVERABLE: Classification/action/calendar capability results and paper account fingerprint. | evidence: six manifests and the account/classification/action/calendar measurements in this report
+- [x] DELIVERABLE: Pre-activation feed selection proposal and unresolved access limitations. | evidence: IEX-only diagnostic proposal and explicit unresolved limits above
+- [x] TEST: Real authenticated read-only requests test success and error cases without leaking credentials. | evidence: 33 sanitized authenticated GET outcomes; no secret values or raw response bodies persisted
+- [x] TEST: Explicit SIP/IEX distinction, supported ranges, and pagination are demonstrated. | evidence: separate feed results, SPY historical bounds, and four-page IEX pagination test above
+- [x] TEST: No broker write, paid upgrade, or live-endpoint probe occurs. | evidence: no broker write, paid upgrade, or live brokerage-host probe; read-only market-data requests only

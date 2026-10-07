@@ -859,6 +859,16 @@
         "ALPACA_CREDENTIALS",
         "REAL_MARKET_DATA"
       ],
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-007",
+          "artifact_paths": [
+            "tools/task_workflow.py",
+            "tests/policy/test_task_workflow.py"
+          ],
+          "reason": "QC2-010 must preserve both ALPACA_CREDENTIALS and REAL_MARKET_DATA in a BuildTask v1 receipt whose evidence_requirement field is singular. The acceptance workflow now combines all registry requirements into one conjunctive identifier, and the regression test verifies both. QC2-007 remains historically verified at its tested source commit; QC2-010 revalidates these changed workflow artifacts."
+        }
+      ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
       "status": "IN_PROGRESS",
       "blockers": [],

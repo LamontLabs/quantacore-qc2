@@ -542,7 +542,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-016 — Ground Truth Authority
 
-**Current status:** TODO
+**Current status:** BLOCKED
 **Objective:** Resolve future outcomes independently from predictions, ranks, and model opinions.
 **Dependencies:** QC2-006, QC2-009, QC2-012, QC2-013, QC2-015
 **Authorized legacy references:** Gen 1 ForwardValidator
@@ -567,7 +567,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Acceptance gate:** Known synthetic outcomes are exact, unknown outcomes remain explicit, and dependencies are scientifically independent.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
-**Blockers:** None recorded.
+**Blockers:** Required dependencies QC2-012, QC2-013, and QC2-015 are not PASS. `python3 tools/task_workflow.py preflight QC2-016` fails because all three are not PASS. See docs/reference/QC2-012_BLOCKED_REPORT.md, docs/reference/QC2-013_BLOCKED_REPORT.md, and docs/reference/QC2-015_BLOCKED_REPORT.md.
 **Acceptance receipt:** Not recorded.
 
 ---

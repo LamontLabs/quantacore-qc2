@@ -350,7 +350,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-010 — Real Account Capability Probe
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Measure the actual account and deployment capabilities needed for the intended F0 regime.
 **Dependencies:** QC2-008, QC2-009
 **Authorized legacy references:** None.

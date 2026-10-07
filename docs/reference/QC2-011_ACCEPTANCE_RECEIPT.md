@@ -1,0 +1,31 @@
+# QC2-011 — Early Real-Data Vertical Slice Acceptance Assessment
+
+## Acceptance assessment
+
+- **Result:** PASS
+- **Evidence class / environment:** `FORWARD_OPERATIONAL` / `production`.
+- **Accepted capture:** Alpaca SPY `IEX`, `RAW`, `1DAY`, completed session `2026-10-07`; 1 expected bar, 1 verified bar, coverage `1.000000000000`.
+- **Capability boundary:** The accepted IEX capability manifest is pinned by SHA-256 `264da50d7c794bdb871b5eabfa6251b5c1526faaeb311d86a288ce6df7fd8d0b`. It reports `PARTIAL`; `effective_delay_ms` remains null. The capture proves only this bounded diagnostic request, not general feed availability or provider-side delay.
+- **Lineage:** Contract closure and content hashes verified locally; offline reconstruction from the final saved raw receipts passed. No external anchor is claimed.
+- **Diagnostic-only limits:** The census contains one instrument and the diagnostic UniverseManifest marks it unscorable, with zero eligible members. No official universe qualification, prediction, future outcomes, F0 activation, or trading/order submission occurred.
+- **Historical note:** An earlier attempt stopped before sealing because the provider calendar returned time-only session closes. The parser was corrected to apply the session date and New York timezone; the successful capture is the one recorded in `docs/reference/QC2-011_CAPTURE/`.
+
+## Acceptance checklist
+
+- [x] DELIVERABLE: Real diagnostic census, raw receipts, normalized daily DataBundle, immutable diagnostic snapshot. | evidence: `docs/reference/QC2-011_CAPTURE/diagnostic_census.json`, `docs/reference/QC2-011_CAPTURE/objects/contracts/RawReceipt/`, `docs/reference/QC2-011_CAPTURE/objects/raw/`, `docs/reference/QC2-011_CAPTURE/normalized_data_bundle.json`, and content-addressed snapshot `docs/reference/QC2-011_CAPTURE/objects/snapshots/e22f0ad637d2611c282d07d83b6032275acbfd53b8dcac43d981c89fb1e1ca35.json`; DataBundle ID `01a11864-f97c-7398-8388-a99dea395477`.
+- [x] DELIVERABLE: Acquisition/coverage timing report and verified evidence chain. | evidence: `docs/reference/QC2-011_CAPTURE/acquisition_timing_report.json`, `evidence_chain.json`, and `diagnostic_verification.json`; final saved-byte validation reports `FULL_VERIFIED`.
+- [x] DELIVERABLE: Explicit separation from official prediction, universe qualification, and future outcomes. | evidence: `docs/reference/QC2-011_CAPTURE/capture_report.json`, `diagnostic_universe_manifest.json` (zero eligible, one unscorable), and `evidence_chain.json`.
+- [x] TEST: Reconstruct normalized diagnostic bytes from saved raw receipts offline. | evidence: `tests/market_data_adapter/test_adapter.py::test_offline_reconstruction_uses_only_saved_receipts` and `docs/reference/QC2-011_CAPTURE/offline_replay_report.json` (`PASS`, network access disabled during replay).
+- [x] TEST: Corrupt/missing receipt prevents the diagnostic seal. | evidence: parametrized `tests/market_data_adapter/test_adapter.py::test_missing_or_corrupt_receipt_blocks_diagnostic_seal` covers both missing and corrupted receipt bytes.
+- [x] TEST: Real feed/semantics and actual receipt times agree with the capability manifest. | evidence: `tests/market_data_adapter/test_adapter.py::test_diagnostic_seal_pins_iex_semantics_and_capability_timing`, `capture_report.json`, and `evidence_chain.json`; actual IEX receipt times are within the pinned capability window and provider delay remains unresolved.
+
+## Capture and verification details
+
+- **Capture window:** `2026-10-07T22:03:52Z` through seal at `2026-10-07T22:04:37Z`.
+- **Actual market-data receipt times:** `2026-10-07T22:03:52.900902Z` and `2026-10-07T22:03:53.007813Z`; raw SHA-256 values are recorded in `capture_report.json` and `evidence_chain.json`.
+- **Capability window:** tested `2026-10-07T21:29:06Z`, expires `2026-10-08T21:30:41Z`. The capture sealed within that window.
+- **Snapshot:** ID `01a11865-a7f9-7dd2-971a-aef9ac08a0b3`; SHA-256 `e22f0ad637d2611c282d07d83b6032275acbfd53b8dcac43d981c89fb1e1ca35`.
+- **UniverseManifest:** ID `01a11865-a7f9-7cb2-a618-5916019a6c20`; SHA-256 `b7f39e7315f3db503263ee7112ba76ce620b5345fe02b00b907be5b2b07107cb`.
+- **Verification commands:** `uv run --no-sync pytest -q tests/contracts/test_contract_package.py tests/market_data_adapter tests/policy/test_task_workflow.py` — 44 passed; `uv run --no-sync ruff check packages/market_data_adapter tests/market_data_adapter tools/qc2_011_vertical_slice.py` — passed; `python3 -m compileall -q packages/market_data_adapter tools/qc2_011_vertical_slice.py` — passed; `python3 tools/task_workflow.py preflight QC2-011` — passed.
+- **Live capture command:** `python3 tools/qc2_011_vertical_slice.py` — complete, pinned to IEX, no fallback or trading endpoint.
+- **Persisted evidence:** `docs/reference/QC2-011_CAPTURE/`; the initial blocked note is preserved separately in `docs/reference/QC2-011_BLOCKED_REPORT.md`.

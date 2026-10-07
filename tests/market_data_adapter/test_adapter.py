@@ -33,6 +33,14 @@ from qc2_market_data_adapter import (  # noqa: E402
     MarketDataRequest,
     RetryPolicy,
 )
+from qc2_market_data_adapter.diagnostic import (  # noqa: E402
+    seal_diagnostic_snapshot,
+)
+from qc2_market_data_adapter.errors import MarketDataError  # noqa: E402
+from qc2_market_data_adapter.replay import (  # noqa: E402
+    CaptureRuntime,
+    reconstruct_from_saved_receipts,
+)
 
 UTC_NOW = "2026-10-07T22:00:00Z"
 BAR_SESSION = "2026-10-06"
@@ -96,6 +104,7 @@ def make_request(
     *,
     expected_sessions: dict[str, tuple[str, ...]] | None = None,
     cutoff: str = UTC_NOW,
+    feed: str = "SIP",
     evidence_class: str = "SYNTHETIC_FIXTURE",
 ) -> MarketDataRequest:
     next_input_id = count(1)
@@ -177,11 +186,16 @@ def make_request(
         id=new_id(),
         created_at=UTC_NOW,
         provider="alpaca",
-        feed="SIP",
+        feed=feed,
         timeframe="1DAY",
         interval_timezone="America/New_York",
         field_meanings=[
-            "Daily OHLC is not an official auction execution; volume can include extended-hours trade conditions."
+            "Daily OHLC is not an official auction execution; volume can include extended-hours trade conditions.",
+            *(
+                ["IEX volume represents a single venue and is not consolidated market volume."]
+                if feed == "IEX"
+                else []
+            ),
         ],
         revision_policy="Preserve each raw response; later provider revisions remain separately observable.",
         finalization_rule=(
@@ -212,7 +226,7 @@ def make_request(
     ]
     return MarketDataRequest(
         provider="alpaca",
-        feed="SIP",
+        feed=feed,
         adjustment="RAW",
         timeframe="1DAY",
         currency="USD",
@@ -706,3 +720,170 @@ def test_feed_adjustment_and_asof_have_no_constructor_defaults() -> None:
         field = MarketDataRequest.__dataclass_fields__[name]
         assert field.default is MISSING
         assert field.default_factory is MISSING
+
+
+def _make_diagnostic_capture(
+    tmp_path: Path,
+    payloads: dict[str, dict[str, Any]],
+):
+    request = make_request(
+        payloads,
+        symbols=("AAA",),
+        expected_sessions={"AAA": (BAR_SESSION,)},
+        feed="IEX",
+    )
+    capability = deepcopy(payloads["DataCapabilityManifest"])
+    capability.update(
+        capability="MARKET_DATA",
+        feed="IEX",
+        evidence_class="SYNTHETIC_FIXTURE",
+        environment_namespace="test",
+        tested_at="2026-10-07T21:00:00Z",
+        expires_at="2026-10-08T00:00:00Z",
+        effective_delay_ms=None,
+    )
+    transport = ScriptedTransport(
+        {
+            "/v2/stocks/bars": [
+                json_response(
+                    {
+                        "bars": {"AAA": [bar()]},
+                        "next_page_token": None,
+                    }
+                )
+            ],
+            "/v1/corporate-actions": [empty_actions()],
+        }
+    )
+    output_ids = count(30000)
+    fixed_time = datetime.fromisoformat(UTC_NOW.replace("Z", "+00:00"))
+    runtime = CaptureRuntime(
+        clock_source=lambda: fixed_time,
+        id_source=lambda: _deterministic_uuid7(next(output_ids)),
+    )
+    store = ContentAddressedStore(tmp_path / "objects")
+    adapter = AlpacaMarketDataAdapter(
+        transport=transport,
+        store=store,
+        clock=runtime.clock,
+        sleeper=lambda _: None,
+        id_factory=runtime.new_id,
+    )
+    result = adapter.acquire(request)
+    return request, result, store, capability, runtime
+
+
+def test_offline_reconstruction_uses_only_saved_receipts(
+    tmp_path: Path,
+    valid_contract_fixtures: dict[str, dict[str, Any]],
+) -> None:
+    request, captured, store, _, runtime = _make_diagnostic_capture(
+        tmp_path, valid_contract_fixtures
+    )
+
+    reconstructed = reconstruct_from_saved_receipts(
+        request,
+        captured,
+        store,
+        clock_trace=runtime.clock_trace,
+        id_trace=runtime.id_trace,
+        replay_root=tmp_path / "offline-reconstruction",
+    )
+
+    assert reconstructed.data_bundle == captured.data_bundle
+    assert reconstructed.daily_bars == captured.daily_bars
+    assert reconstructed.artifact_inventory == captured.artifact_inventory
+
+
+@pytest.mark.parametrize(
+    ("damage", "expected_code"),
+    [
+        ("missing", "artifact_store_object_missing"),
+        ("corrupt", "artifact_store_content_hash_mismatch"),
+    ],
+)
+def test_missing_or_corrupt_receipt_blocks_diagnostic_seal(
+    tmp_path: Path,
+    damage: str,
+    expected_code: str,
+    valid_contract_fixtures: dict[str, dict[str, Any]],
+) -> None:
+    request, result, store, capability, _ = _make_diagnostic_capture(
+        tmp_path, valid_contract_fixtures
+    )
+    digest = result.raw_receipts[0]["raw_sha256"]
+    receipt_path = tmp_path / "objects" / "raw" / f"{digest}.bin"
+    if damage == "missing":
+        receipt_path.unlink()
+    else:
+        receipt_path.write_bytes(b"corrupt receipt bytes")
+
+    with pytest.raises(MarketDataError) as error:
+        seal_diagnostic_snapshot(
+            request,
+            result,
+            store,
+            capability,
+            sealed_at=UTC_NOW,
+            id_factory=lambda: _deterministic_uuid7(40000),
+        )
+    assert error.value.code == expected_code
+
+
+def test_diagnostic_seal_pins_iex_semantics_and_capability_timing(
+    tmp_path: Path,
+    valid_contract_fixtures: dict[str, dict[str, Any]],
+) -> None:
+    request, result, store, capability, _ = _make_diagnostic_capture(
+        tmp_path, valid_contract_fixtures
+    )
+
+    seal = seal_diagnostic_snapshot(
+        request,
+        result,
+        store,
+        capability,
+        sealed_at=UTC_NOW,
+        id_factory=lambda: _deterministic_uuid7(41000),
+    )
+
+    assert seal.verification.status == "FULL_VERIFIED"
+    assert seal.verification.verification_level == (
+        "LOCAL_CONTRACT_CLOSURE_AND_CONTENT_HASHES"
+    )
+    assert seal.verification.external_anchor is False
+    assert seal.verification.feed == "IEX"
+    assert seal.verification.receipt_received_at == (UTC_NOW, UTC_NOW)
+    assert seal.verification.effective_delay_ms is None
+    assert seal.snapshot["feed"] == capability["feed"]
+    assert seal.universe_manifest["eligible_instrument_refs"] == []
+    assert seal.universe_manifest["unscorable_instrument_refs"] == (
+        request.candidate_census["instrument_refs"]
+    )
+
+    wrong_feed = deepcopy(capability)
+    wrong_feed["feed"] = "SIP"
+    with pytest.raises(MarketDataError, match="diagnostic_feed_semantics_mismatch"):
+        seal_diagnostic_snapshot(
+            request,
+            result,
+            store,
+            wrong_feed,
+            sealed_at=UTC_NOW,
+            id_factory=lambda: _deterministic_uuid7(41001),
+        )
+
+    late_manifest = deepcopy(capability)
+    late_manifest["tested_at"] = "2026-10-07T22:00:01Z"
+    with pytest.raises(
+        MarketDataError,
+        match="diagnostic_receipt_outside_capability_window",
+    ):
+        seal_diagnostic_snapshot(
+            request,
+            result,
+            store,
+            late_manifest,
+            sealed_at="2026-10-07T22:00:02Z",
+            id_factory=lambda: _deterministic_uuid7(41002),
+        )

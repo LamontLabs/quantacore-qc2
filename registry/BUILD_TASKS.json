@@ -978,6 +978,16 @@
         "ALPACA_CREDENTIALS",
         "REAL_MARKET_DATA"
       ],
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-009",
+          "artifact_paths": [
+            "packages/market_data_adapter",
+            "tests/market_data_adapter"
+          ],
+          "reason": "QC2-011 adds fail-closed diagnostic sealing, offline reconstruction, and their regression tests to the accepted adapter. The in-progress authorization permits only these two paths until QC2-011 records a PASS receipt with tested hashes; it does not change QC2-009's historical receipt."
+        }
+      ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
       "status": "IN_PROGRESS",
       "blockers": [],

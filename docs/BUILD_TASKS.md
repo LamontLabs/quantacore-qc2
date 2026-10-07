@@ -387,6 +387,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Objective:** Prove real acquisition, normalization, durable diagnostic sealing, and evidence lineage before deeper implementation.
 **Dependencies:** QC2-006, QC2-008, QC2-009, QC2-010
 **Authorized legacy references:** None.
+**Authorized artifact drift:** QC2-009 — QC2-011 adds fail-closed diagnostic sealing, offline reconstruction, and their regression tests to the accepted adapter. The in-progress authorization permits only these two paths until QC2-011 records a PASS receipt with tested hashes; it does not change QC2-009's historical receipt. Paths: `packages/market_data_adapter`, `tests/market_data_adapter`
 **Required reference intake:** None. Do not inspect or copy legacy code for this task without a scoped amendment.
 
 **Required deliverables:**

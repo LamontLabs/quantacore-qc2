@@ -74,3 +74,43 @@ class ContentAddressedStore:
             byte_length=len(body),
             media_type=media_type,
         )
+
+    def read(self, relative_path: str, expected_sha256: str) -> bytes:
+        """Read a stored object only when its path and bytes match the receipt."""
+        if (
+            not isinstance(relative_path, str)
+            or not isinstance(expected_sha256, str)
+            or len(expected_sha256) != 64
+            or any(char not in "0123456789abcdef" for char in expected_sha256)
+        ):
+            raise MarketDataError("artifact_store_read_input_invalid")
+
+        path = PurePosixPath(relative_path)
+        windows_path = PureWindowsPath(relative_path)
+        if (
+            not relative_path
+            or path.is_absolute()
+            or windows_path.is_absolute()
+            or ".." in path.parts
+            or "\\" in relative_path
+            or any(part in {"", "."} for part in path.parts)
+        ):
+            raise MarketDataError("artifact_store_path_invalid")
+
+        destination = self._root / Path(*path.parts)
+        cursor = self._root
+        for part in path.parts:
+            cursor = cursor / part
+            if cursor.is_symlink():
+                raise MarketDataError("artifact_store_object_not_regular")
+        if destination.resolve() != destination:
+            raise MarketDataError("artifact_store_path_invalid")
+        if not destination.exists():
+            raise MarketDataError("artifact_store_object_missing")
+        if not destination.is_file():
+            raise MarketDataError("artifact_store_object_not_regular")
+
+        body = destination.read_bytes()
+        if hashlib.sha256(body).hexdigest() != expected_sha256:
+            raise MarketDataError("artifact_store_content_hash_mismatch")
+        return body

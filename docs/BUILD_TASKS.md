@@ -416,7 +416,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-012 — Universe Authority
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Implement stable identity, candidate census, and deterministic scientific eligibility independent of trading.
 **Dependencies:** QC2-003, QC2-008, QC2-009, QC2-010, QC2-011
 **Authorized legacy references:** Gen 1 scanner/universe code
@@ -442,7 +442,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-07T23:41:24Z: `docs/reference/QC2-012_ACCEPTANCE.md`, `docs/reference/QC2-012_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-012_TASK_RECORD.json`
 
 ---
 

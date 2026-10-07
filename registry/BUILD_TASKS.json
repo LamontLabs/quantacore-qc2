@@ -1182,9 +1182,63 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-07T23:41:24Z",
+        "task_spec_version": "QC2-012 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "410aed0e002dd60611634f1136c4d47e0e6e8d12",
+        "receipt": "docs/reference/QC2-012_ACCEPTANCE.md",
+        "contract_receipt": "docs/reference/QC2-012_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-012_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/instrument_universe",
+          "tests/instrument_universe"
+        ],
+        "executed_commands": [
+          "python3 -m pytest -q tests/instrument_universe",
+          "python3 -m ruff check packages/instrument_universe/src tests/instrument_universe",
+          "pnpm run verify",
+          "python3 tools/task_workflow.py preflight QC2-012"
+        ],
+        "test_counts": [
+          {
+            "test_id": "instrument_universe",
+            "passed": 8,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "project_python",
+            "passed": 124,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "database_guards",
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "smoke_checks",
+            "passed": 2,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/instrument_universe": "53a5b408b9178a46ac19f85e70f8bd4a852d38c602e579763b1fb4733db75e9b",
+          "tests/instrument_universe": "1882c006fe5f4f68b561ecd613b3f1eeb6fb0fa7a3fba44efac2e28474c4a9bb"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "Acceptance used the current source and deterministic local fixtures; no historical market-data or production validation was claimed.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-013",

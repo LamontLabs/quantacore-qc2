@@ -1,0 +1,39 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a118be-43cf-7400-9680-e2f3cff0629d",
+  "created_at": "2026-10-07T23:41:24Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "098c0eb833e311a24c30189bf2580dadb21be87d9f2430678da472136f5ccbdd",
+  "task_id": "qc2-012",
+  "task_name": "Universe Authority",
+  "objective": "Implement stable identity, candidate census, and deterministic scientific eligibility independent of trading.",
+  "dependency_task_ids": [
+    "QC2-003",
+    "QC2-008",
+    "QC2-009",
+    "QC2-010",
+    "QC2-011"
+  ],
+  "authorized_legacy_refs": [
+    "Gen 1 scanner/universe code"
+  ],
+  "deliverable_refs": [
+    "Instrument/symbol/classification history; candidate, eligible, unscorable and execution sets.",
+    "Acyclic census→bundle→universe→snapshot construction and reason taxonomy.",
+    "Point-in-time fidelity assessments and unresolved classification handling."
+  ],
+  "required_test_refs": [
+    "Ticker reuse, rename, IPO, delisting, ETF/common-share ambiguity, unavailable listing age.",
+    "Broker restriction does not alter scientific universe.",
+    "Every candidate has one inclusion/exclusion disposition; current listings cannot claim historical completeness."
+  ],
+  "acceptance_gate": "Parameterized fixture universes reproduce exactly and actual metadata limitations remain explicit.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

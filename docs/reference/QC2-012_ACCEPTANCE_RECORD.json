@@ -1,0 +1,64 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a118be-43d6-7294-b6d7-8f63506e3360",
+  "created_at": "2026-10-07T23:41:24Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "9e3818ee9b89e97a5f40332b9bc0867e03f5f057a335dc68679825080b90c5b3",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a118be-43cf-7400-9680-e2f3cff0629d",
+    "content_hash": "098c0eb833e311a24c30189bf2580dadb21be87d9f2430678da472136f5ccbdd"
+  },
+  "task_spec_version": "QC2-012 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "410aed0e002dd60611634f1136c4d47e0e6e8d12",
+  "changed_paths": [
+    "packages/instrument_universe",
+    "tests/instrument_universe"
+  ],
+  "executed_commands": [
+    "python3 -m pytest -q tests/instrument_universe",
+    "python3 -m ruff check packages/instrument_universe/src tests/instrument_universe",
+    "pnpm run verify",
+    "python3 tools/task_workflow.py preflight QC2-012"
+  ],
+  "test_counts": [
+    {
+      "test_id": "instrument_universe",
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "project_python",
+      "passed": 124,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "database_guards",
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "smoke_checks",
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "53a5b408b9178a46ac19f85e70f8bd4a852d38c602e579763b1fb4733db75e9b",
+    "1882c006fe5f4f68b561ecd613b3f1eeb6fb0fa7a3fba44efac2e28474c4a9bb"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-07T23:41:24Z"
+}

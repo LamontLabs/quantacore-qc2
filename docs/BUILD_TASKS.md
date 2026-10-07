@@ -448,7 +448,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-013 — Temporal Firewall
 
-**Current status:** BLOCKED
+**Current status:** TODO
 **Objective:** Enforce recursive information and learning availability for forward and reconstructed modes.
 **Dependencies:** QC2-003, QC2-007, QC2-012
 **Authorized legacy references:** ApexLab temporal audit findings and supporting source
@@ -473,7 +473,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Acceptance gate:** Every dependency path either proves legal availability or blocks the consuming operation.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
-**Blockers:** Required dependency QC2-012 is BLOCKED. `python3 tools/task_workflow.py preflight QC2-013` fails with `QC2-012 is not PASS`. See docs/reference/QC2-012_BLOCKED_REPORT.md.
+**Blockers:** None recorded.
 **Acceptance receipt:** Not recorded.
 
 ---

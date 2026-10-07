@@ -25,4 +25,13 @@ QC2-012 is blocked because QC2-010 and QC2-011 are not PASS. The upstream report
 2. Complete QC2-012 and record its PASS receipt.
 3. Re-run QC2-013 preflight before beginning temporal-firewall implementation and required reference intake.
 
-Until those gates pass, QC2-013 remains BLOCKED. No live trading, provider/feed fallback, or other forbidden action occurred.
+At the checked time above, QC2-013 remained BLOCKED. No live trading, provider/feed fallback, or other forbidden action occurred.
+
+## Superseding status reconciliation
+
+- **Checked at:** 2026-10-07T23:52:10Z (UTC)
+- **Resolved dependency:** QC2-012 now has a canonical PASS status and integrated acceptance receipt at `docs/reference/QC2-012_ACCEPTANCE_RECORD.json`.
+- **Other dependencies:** QC2-003 and QC2-007 also have canonical PASS statuses and integrated acceptance receipts.
+- **Preflight evidence:** `python3 tools/task_workflow.py preflight QC2-013` reports that dependencies and acceptance evidence are available.
+- **Registry action:** The stale QC2-012 blocker was removed and QC2-013 returned to `TODO`.
+- **Scope boundary:** QC2-013 remains unstarted; this reconciliation does not authorize its implementation or change any later task status.

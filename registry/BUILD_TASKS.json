@@ -1274,10 +1274,8 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "BLOCKED",
-      "blockers": [
-        "Required dependency QC2-012 is BLOCKED. `python3 tools/task_workflow.py preflight QC2-013` fails with `QC2-012 is not PASS`. See docs/reference/QC2-012_BLOCKED_REPORT.md."
-      ],
+      "status": "TODO",
+      "blockers": [],
       "acceptance_receipt": null
     },
     {

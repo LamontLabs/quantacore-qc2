@@ -26,7 +26,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-000 — Repository Bootstrap
 
-**Current status:** TODO
+**Current status:** BLOCKED
 **Objective:** Establish an isolated monorepo and reproducible toolchain without implementing scientific or trading behavior.
 **Dependencies:** None
 **Authorized legacy references:** None.
@@ -51,7 +51,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Acceptance gate:** A clean checkout reproduces the toolchain; all environment limitations are explicit.
 **Required evidence/environment:** LOCAL_TOOLCHAIN
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
-**Blockers:** None recorded.
+**Blockers:** Required dependencies QC2-012, QC2-013, QC2-014, QC2-015, and QC2-021 are not PASS. `python3 tools/task_workflow.py preflight QC2-022` fails because all five are not PASS. Their upstream blocker chain includes QC2-010 authenticated Alpaca requests returning HTTP 401; see docs/reference/QC2-012_BLOCKED_REPORT.md, docs/reference/QC2-013_BLOCKED_REPORT.md, docs/reference/QC2-014_BLOCKED_REPORT.md, docs/reference/QC2-015_BLOCKED_REPORT.md, docs/reference/QC2-021_BLOCKED_REPORT.md, and docs/reference/QC2-022_BLOCKED_REPORT.md.
 **Acceptance receipt:** Not recorded.
 
 ---

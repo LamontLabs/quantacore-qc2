@@ -383,7 +383,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-011 — Early Real-Data Vertical Slice
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Prove real acquisition, normalization, durable diagnostic sealing, and evidence lineage before deeper implementation.
 **Dependencies:** QC2-006, QC2-008, QC2-009, QC2-010
 **Authorized legacy references:** None.

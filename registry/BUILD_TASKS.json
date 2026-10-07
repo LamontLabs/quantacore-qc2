@@ -979,7 +979,7 @@
         "REAL_MARKET_DATA"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "blockers": [],
       "acceptance_receipt": null
     },

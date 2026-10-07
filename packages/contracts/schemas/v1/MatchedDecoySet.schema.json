@@ -414,6 +414,29 @@
       "id"
     ],
     "content_addressed": true,
+    "content_hash_fields": [
+      "owning_authority",
+      "evidence_class",
+      "environment_namespace",
+      "source_refs",
+      "positive_event_refs",
+      "decoy_instrument_refs",
+      "matching_procedure_hash",
+      "pre_outcome_variable_ids",
+      "strata",
+      "calipers",
+      "unmatched_cases",
+      "outcome_membership_hash"
+    ],
+    "content_hash_excluded_fields": [
+      "schema_name",
+      "schema_version",
+      "id",
+      "created_at",
+      "content_hash"
+    ],
+    "scientific_payload_fields": [],
+    "operational_envelope_fields": [],
     "android_visible": false,
     "state_field": null,
     "state_transitions": {},

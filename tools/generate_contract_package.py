@@ -55,7 +55,6 @@ def source_refs_spec(name: str) -> c.FieldSpec | None:
 
 def object_fields(name: str) -> tuple[c.FieldSpec, ...]:
     result: list[c.FieldSpec] = []
-    source_refs = source_refs_spec(name)
     for field in CONTRACTS[name][1]:
         if field.name not in COMMON_FIELD_TYPES:
             result.append(field)
@@ -485,6 +484,7 @@ def contract_metadata(name: str) -> dict[str, Any]:
         "reader_roles": sorted(set(family.reader_roles) | {owner}),
         "identity_fields": list(c.IDENTITY_FIELDS.get(name, ("id",))),
         "content_addressed": name in c.CONTENT_ADDRESSED,
+        **c.serialization_field_metadata(name),
         "android_visible": name in c.ANDROID_VISIBLE,
         "state_field": state_field,
         "state_transitions": c.STATE_MACHINES.get(name, {}),
@@ -1769,7 +1769,6 @@ def render_kotlin_models() -> str:
         "",
     ]
     for name in sorted(c.ANDROID_VISIBLE):
-        fields = CONTRACTS[name][1]
         members: list[tuple[str, str]] = [
             ("schema_name", "String"),
             ("schema_version", "String"),
@@ -1802,7 +1801,6 @@ def render_kotlin_fixtures(valid_fixtures: dict[str, dict[str, Any]]) -> str:
     visible = sorted(c.ANDROID_VISIBLE)
     for name in visible:
         payload = valid_fixtures[name]
-        fields = CONTRACTS[name][1]
         args: list[tuple[str, str, str]] = [
             ("schema_name", "text", payload["schema_name"]),
             ("schema_version", "text", payload["schema_version"]),
@@ -1839,13 +1837,13 @@ def render_kotlin_fixtures(valid_fixtures: dict[str, dict[str, Any]]) -> str:
 
 def render_catalog_doc() -> str:
     lines = [
-        "# QC2-003 Canonical Contract Catalog",
+        "# QC2 Canonical Contract Catalog",
         "",
         f"**Status:** generated, version 1.0. **Objects:** {len(CONTRACTS)}. **Aliases:** none.",
         "",
-        f"`packages/contracts/src/qc2_contracts/catalog.py` is the source catalog. "
-        f"Every object named in `GEN2_MASTER_SPEC.md` §12 is represented by its exact "
-        f"name and a strict JSON Schema in `packages/contracts/schemas/v1/`.",
+        "`packages/contracts/src/qc2_contracts/catalog.py` is the source catalog. "
+        "Every object named in `GEN2_MASTER_SPEC.md` §12 is represented by its exact "
+        "name and a strict JSON Schema in `packages/contracts/schemas/v1/`.",
         "",
         "The catalog defines contracts and boundary rules only. It does not add a persistence "
         "service, choose empirical thresholds, activate fixture values, or grant runtime roles. "
@@ -1862,10 +1860,22 @@ def render_catalog_doc() -> str:
         "continuous scientific values use exactly 12 decimal places with round-half-even; "
         "QuantraScore uses 6. Prices and quantities preserve exact input precision. Negative zero "
         "is canonicalized to positive zero; non-finite values and JSON floats are rejected.",
-        "- Canonical bytes use UTF-8, NFC strings, lexicographically sorted object keys, preserved "
-        "array order, and compact separators. A content hash excludes its own field and any "
-        "declared mutable state field; ArtifactManifest also excludes its detached signature "
-        "and external transport hash before applying the schema-domain SHA-256 prefix.",
+        "- Canonical JSON v1 uses UTF-8 without a BOM, NFC Unicode scalar strings, object keys "
+        "sorted by normalized UTF-8 bytes, preserved array order, and compact JSON escaping. "
+        "Only exact integers within the JavaScript safe-integer range are allowed; scientific "
+        "decimals are strings with no exponent or locale formatting. Fixed-precision values are "
+        "quantized before hashing (12 places for continuous/probability values; 6 for QuantraScore); "
+        "serialization never rounds, and signed zero loses its minus sign.",
+        "- QC2-HASH-V1 hashes ASCII `QC2-HASH-V1`, one NUL byte, a lowercase ASCII domain, "
+        "one NUL byte, then the payload bytes. Contract content domains are "
+        "`qc2.contract-content.v1/<lowercase schema name>/<schema_version>`. Content hashes "
+        "exclude schema fields, UUIDv7 ID, creation time, their own hash, and declared mutable "
+        "state. Artifact inventories use `qc2.artifact-inventory.v1` and sort records by "
+        "normalized relative-path UTF-8 bytes; ArtifactManifest content hashes include that "
+        "inventory hash and exclude detached signature and transport hash.",
+        "- ScientificPredictionPayload hashes exactly its listed scientific fields; schema/identity/"
+        "creation/provenance envelope fields are excluded. Every generated schema and the catalog "
+        "list included and excluded content-hash fields explicitly.",
         "- A foreign reference carries the exact target schema name and UUIDv7 object ID. The hash "
         "is required when the referenced contract is content-addressed. Schemas validate target "
         "shape; the owning authority resolves existence and transactional consistency.",
@@ -1890,6 +1900,23 @@ def render_catalog_doc() -> str:
             f"{', '.join(f'`{field}`' for field in meta['identity_fields'])} | "
             f"{'yes' if meta['content_addressed'] else 'no'} | {state} |"
         )
+
+    lines.extend(
+        [
+            "",
+            "## Content-hash field partitions",
+            "",
+            "| Contract | Included fields | Excluded envelope / mutable fields |",
+            "|---|---|---|",
+        ]
+    )
+    for name in sorted(c.CONTENT_ADDRESSED):
+        meta = c.serialization_field_metadata(name)
+        included = ", ".join(f"`{field}`" for field in meta["content_hash_fields"])
+        excluded = ", ".join(
+            f"`{field}`" for field in meta["content_hash_excluded_fields"]
+        )
+        lines.append(f"| `{name}` | {included} | {excluded} |")
 
     for family in c.FAMILIES:
         lines.extend(["", f"## {family.name}", ""])

@@ -4,7 +4,11 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
+import secrets
+import time
 import unicodedata
+import uuid
 from collections import defaultdict
 from collections.abc import Iterable, Mapping
 from datetime import date, datetime
@@ -17,13 +21,16 @@ from jsonschema import Draft202012Validator, FormatChecker
 from .catalog import (
     AUTHORITY_OVERRIDES,
     CONTENT_ADDRESSED,
+    CONTENT_HASH_ENVELOPE_FIELDS,
     CONTRACT_INVARIANTS,
     FAMILIES,
     IDENTITY_FIELDS,
+    SCIENTIFIC_PREDICTION_PAYLOAD_FIELDS,
     STATE_FIELD,
     STATE_GUARDS,
     STATE_MACHINES,
     contract_rows,
+    serialization_field_metadata,
 )
 
 SCHEMA_DIR = Path(__file__).resolve().parents[2] / "schemas" / "v1"
@@ -83,8 +90,21 @@ def parse_json_strict(text: str) -> Any:
         raise ContractValidationError(f"Invalid strict JSON: {exc}") from exc
 
 
+_DECIMAL_PATTERN = re.compile(r"-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?\Z")
+_DOMAIN_PATTERN = re.compile(r"[a-z0-9][a-z0-9._/-]{0,127}\Z")
+_MAX_UUID7_TIMESTAMP = (1 << 48) - 1
+_MAX_UUID7_RANDOM = (1 << 74) - 1
+_MAX_SAFE_INTEGER = 9_007_199_254_740_991
+
+
 def _normalize_json(value: Any) -> Any:
-    if value is None or isinstance(value, bool) or isinstance(value, int):
+    if value is None or isinstance(value, bool):
+        return value
+    if isinstance(value, int):
+        if abs(value) > _MAX_SAFE_INTEGER:
+            raise ContractValidationError(
+                "Canonical QC2 JSON integers must be exactly representable across platforms"
+            )
         return value
     if isinstance(value, float):
         raise ContractValidationError("Canonical QC2 JSON does not permit binary floats")
@@ -107,6 +127,81 @@ def _normalize_json(value: Any) -> Any:
     raise ContractValidationError(f"Unsupported canonical JSON value: {type(value).__name__}")
 
 
+def _quote_canonical_string(value: str) -> str:
+    try:
+        normalized = unicodedata.normalize("NFC", value)
+        normalized.encode("utf-8")
+    except UnicodeEncodeError as exc:
+        raise ContractValidationError(
+            "Canonical QC2 JSON strings must contain valid Unicode scalar values"
+        ) from exc
+    return json.dumps(normalized, ensure_ascii=False, separators=(",", ":"))
+
+
+def _canonical_json_text(value: Any) -> str:
+    if value is None:
+        return "null"
+    if value is True:
+        return "true"
+    if value is False:
+        return "false"
+    if isinstance(value, int):
+        return str(value)
+    if isinstance(value, str):
+        return _quote_canonical_string(value)
+    if isinstance(value, list):
+        return "[" + ",".join(_canonical_json_text(item) for item in value) + "]"
+    if isinstance(value, dict):
+        ordered = sorted(
+            value.items(),
+            key=lambda item: item[0].encode("utf-8"),
+        )
+        return (
+            "{"
+            + ",".join(
+                _quote_canonical_string(key) + ":" + _canonical_json_text(item)
+                for key, item in ordered
+            )
+            + "}"
+        )
+    raise ContractValidationError(
+        f"Unsupported canonical JSON value: {type(value).__name__}"
+    )
+
+
+def canonical_decimal_text(value: str, precision: int | None = None) -> str:
+    """Validate an exact decimal string and canonicalize signed zero without rounding."""
+    if not isinstance(value, str) or not _DECIMAL_PATTERN.fullmatch(value):
+        raise ContractValidationError(
+            "Canonical decimals must use plain base-10 notation without exponent or locale formatting"
+        )
+    try:
+        parsed = Decimal(value)
+    except InvalidOperation as exc:
+        raise ContractValidationError("Decimal fields must be exact decimal strings") from exc
+    if not parsed.is_finite():
+        raise ContractValidationError("Decimal fields must be finite")
+    if precision is not None:
+        if isinstance(precision, bool) or not isinstance(precision, int) or precision < 0:
+            raise ContractValidationError("Decimal precision must be a nonnegative integer")
+        places = len(value.partition(".")[2])
+        if places != precision:
+            raise ContractValidationError(
+                f"Decimal value must have exactly {precision} fractional places"
+            )
+    return value[1:] if value.startswith("-") and parsed.is_zero() else value
+
+
+def domain_separated_sha256(domain: str, payload: bytes) -> str:
+    """Hash bytes with the QC2-HASH-V1 domain framing shared by all clients."""
+    if not isinstance(domain, str) or not _DOMAIN_PATTERN.fullmatch(domain):
+        raise ContractValidationError("Hash domain must be a lowercase ASCII identifier")
+    if not isinstance(payload, bytes):
+        raise ContractValidationError("Hash payload must be bytes")
+    preimage = b"QC2-HASH-V1\x00" + domain.encode("ascii") + b"\x00" + payload
+    return hashlib.sha256(preimage).hexdigest()
+
+
 _DECIMAL_TYPES = {
     "decimal",
     "continuous_decimal",
@@ -122,13 +217,7 @@ _DECIMAL_TYPES = {
 def _canonical_decimal(value: Any) -> Any:
     if not isinstance(value, str):
         return value
-    try:
-        parsed = Decimal(value)
-    except InvalidOperation as exc:
-        raise ContractValidationError("Decimal fields must be exact decimal strings") from exc
-    if not parsed.is_finite():
-        raise ContractValidationError("Decimal fields must be finite")
-    return format(parsed.copy_abs(), "f") if parsed.is_zero() else value
+    return canonical_decimal_text(value)
 
 
 def _canonical_field_value(type_name: str, value: Any) -> Any:
@@ -137,11 +226,16 @@ def _canonical_field_value(type_name: str, value: Any) -> Any:
     if type_name.startswith("nullable_"):
         return _canonical_field_value(type_name.removeprefix("nullable_"), value)
     if type_name in _DECIMAL_TYPES:
-        return _canonical_decimal(value)
+        precision = (
+            12
+            if type_name in {"continuous_decimal", "probability", "fraction"}
+            else 6 if type_name == "score" else None
+        )
+        return canonical_decimal_text(value, precision)
     if type_name == "decimal_list":
         return [_canonical_decimal(item) for item in value]
     if type_name == "continuous_decimal_list":
-        return [_canonical_decimal(item) for item in value]
+        return [canonical_decimal_text(item, 12) for item in value]
     if type_name == "feature_value_list":
         return [
             {
@@ -158,9 +252,9 @@ def _canonical_field_value(type_name: str, value: Any) -> Any:
         return [
             {
                 **item,
-                "value": _canonical_decimal(item["value"]),
+                "value": canonical_decimal_text(item["value"], 12),
                 "uncertainty": (
-                    _canonical_decimal(item["uncertainty"])
+                    canonical_decimal_text(item["uncertainty"], 12)
                     if item["uncertainty"] is not None
                     else None
                 ),
@@ -171,17 +265,11 @@ def _canonical_field_value(type_name: str, value: Any) -> Any:
 
 
 def canonical_json_bytes(value: Any) -> bytes:
-    """Encode normalized UTF-8 JSON with sorted object keys and stable separators."""
+    """Encode QC2 canonical JSON v1: NFC, UTF-8, UTF-8-key order, and compact form."""
     normalized = _normalize_json(value)
     try:
-        return json.dumps(
-            normalized,
-            ensure_ascii=False,
-            allow_nan=False,
-            sort_keys=True,
-            separators=(",", ":"),
-        ).encode("utf-8")
-    except (TypeError, ValueError) as exc:
+        return _canonical_json_text(normalized).encode("utf-8")
+    except (TypeError, ValueError, UnicodeEncodeError) as exc:
         raise ContractValidationError(f"Cannot canonicalize QC2 JSON: {exc}") from exc
 
 
@@ -425,11 +513,15 @@ def _validate_semantics(name: str, payload: dict[str, Any]) -> None:
         raise ContractValidationError("QuantraScore uses exactly 6 decimal places")
 
     if name == "ArtifactManifest":
-        paths = [item["relative_path"] for item in payload["files"]]
+        paths = [
+            unicodedata.normalize("NFC", item["relative_path"])
+            for item in payload["files"]
+        ]
         if len(paths) != len(set(paths)):
             raise ContractValidationError("ArtifactManifest file paths must be unique")
         if any(
             path.startswith("/")
+            or re.match(r"^[A-Za-z]:", path) is not None
             or "\\" in path
             or any(part in {"", ".", ".."} for part in path.split("/"))
             for path in paths
@@ -619,7 +711,7 @@ def assert_immutable_update(
 
 
 def canonical_content_hash(contract_name: str, payload: dict[str, Any]) -> str:
-    """Hash validated canonical content with a schema-specific domain separator."""
+    """Hash immutable content, separate from operational UUID/time identity."""
     if contract_name not in CONTENT_ADDRESSED:
         raise ContractValidationError(f"{contract_name} is not content-addressed")
     validate_contract(contract_name, payload)
@@ -631,23 +723,125 @@ def canonical_content_hash(contract_name: str, payload: dict[str, Any]) -> str:
             normalized[field.name] = _canonical_field_value(
                 field.type_name, normalized[field.name]
             )
-    normalized.pop("content_hash", None)
+    if contract_name == "ScientificPredictionPayload":
+        normalized = {
+            name: normalized[name] for name in SCIENTIFIC_PREDICTION_PAYLOAD_FIELDS
+        }
+    else:
+        for field_name in CONTENT_HASH_ENVELOPE_FIELDS:
+            normalized.pop(field_name, None)
     if contract_name in STATE_FIELD:
         normalized.pop(STATE_FIELD[contract_name], None)
     if contract_name == "ArtifactManifest":
         normalized.pop("detached_signature", None)
         normalized.pop("transport_hash", None)
-    prefix = f"QC2-CONTENT\0{schema_name}\0".encode("utf-8")
-    return hashlib.sha256(prefix + canonical_json_bytes(normalized)).hexdigest()
+        normalized["files"] = _ordered_artifact_files(normalized["files"])
+    domain = (
+        f"qc2.contract-content.v1/{schema_name.lower()}/"
+        f"{payload['schema_version'].lower()}"
+    )
+    return domain_separated_sha256(domain, canonical_json_bytes(normalized))
+
+
+def _ordered_artifact_files(files: Any) -> list[dict[str, Any]]:
+    if not isinstance(files, list):
+        raise ContractValidationError("ArtifactManifest files must be an array")
+    ordered: list[tuple[bytes, dict[str, Any]]] = []
+    seen_paths: set[str] = set()
+    required = {
+        "relative_path",
+        "length_bytes",
+        "media_type",
+        "schema_name",
+        "schema_version",
+        "sha256",
+    }
+    for record in files:
+        if not isinstance(record, dict) or set(record) != required:
+            raise ContractValidationError(
+                "Artifact inventory entries must have exactly the declared file fields"
+            )
+        path = record["relative_path"]
+        if not isinstance(path, str):
+            raise ContractValidationError("Artifact inventory paths must be strings")
+        normalized_path = unicodedata.normalize("NFC", path)
+        if (
+            normalized_path.startswith("/")
+            or re.match(r"^[A-Za-z]:", normalized_path) is not None
+            or "\\" in normalized_path
+            or any(part in {"", ".", ".."} for part in normalized_path.split("/"))
+        ):
+            raise ContractValidationError(
+                "ArtifactManifest paths must be normalized relative paths"
+            )
+        if normalized_path in seen_paths:
+            raise ContractValidationError(
+                "ArtifactManifest paths must be unique after Unicode normalization"
+            )
+        seen_paths.add(normalized_path)
+        length_bytes = record["length_bytes"]
+        if (
+            isinstance(length_bytes, bool)
+            or not isinstance(length_bytes, int)
+            or not 0 <= length_bytes <= _MAX_SAFE_INTEGER
+        ):
+            raise ContractValidationError(
+                "Artifact inventory length_bytes must be a nonnegative safe integer"
+            )
+        if any(
+            not isinstance(record[field], str)
+            for field in ("media_type", "schema_name", "schema_version", "sha256")
+        ) or not re.fullmatch(r"[0-9a-f]{64}", record["sha256"]):
+            raise ContractValidationError("Artifact inventory entry has invalid string fields")
+        ordered.append((normalized_path.encode("utf-8"), record))
+    ordered.sort(key=lambda item: item[0])
+    return [record for _, record in ordered]
+
+
+def artifact_inventory_hash(files: list[dict[str, Any]]) -> str:
+    """Hash the ordered artifact file inventory, independent of archive metadata."""
+    ordered_files = _ordered_artifact_files(files)
+    return domain_separated_sha256(
+        "qc2.artifact-inventory.v1", canonical_json_bytes(ordered_files)
+    )
+
+
+def scientific_payload_hash(payload: dict[str, Any]) -> str:
+    """Hash only the declared scientific fields of ScientificPredictionPayload."""
+    return canonical_content_hash("ScientificPredictionPayload", payload)
 
 
 def verify_content_hash(contract_name: str, payload: dict[str, Any]) -> None:
     """Verify the stored hash for content-addressed immutable content."""
+    if contract_name == "ArtifactManifest":
+        actual_inventory_hash = artifact_inventory_hash(payload["files"])
+        if payload["inventory_hash"] != actual_inventory_hash:
+            raise ContractValidationError(
+                "ArtifactManifest inventory_hash does not match its canonical file inventory"
+            )
     expected = canonical_content_hash(contract_name, payload)
     if payload["content_hash"] != expected:
         raise ContractValidationError(
             f"{contract_name} content_hash does not match canonical immutable content"
         )
+
+
+def _uuidv7_from_parts(timestamp_ms: int, random_bits: int) -> str:
+    if not isinstance(timestamp_ms, int) or not 0 <= timestamp_ms <= _MAX_UUID7_TIMESTAMP:
+        raise ContractValidationError("UUIDv7 timestamp must fit its 48-bit millisecond field")
+    if not isinstance(random_bits, int) or not 0 <= random_bits <= _MAX_UUID7_RANDOM:
+        raise ContractValidationError("UUIDv7 random component must fit 74 bits")
+    uuid_bits = (timestamp_ms << 80) | (7 << 76)
+    uuid_bits |= ((random_bits >> 62) & 0xFFF) << 64
+    uuid_bits |= 0b10 << 62
+    uuid_bits |= random_bits & ((1 << 62) - 1)
+    return str(uuid.UUID(int=uuid_bits))
+
+
+def new_uuidv7() -> str:
+    """Create an RFC 9562 UUIDv7 with a UTC Unix-millisecond timestamp."""
+    timestamp_ms = time.time_ns() // 1_000_000
+    return _uuidv7_from_parts(timestamp_ms, secrets.randbits(74))
 
 
 def contract_metadata(name: str) -> dict[str, Any]:
@@ -656,6 +850,7 @@ def contract_metadata(name: str) -> dict[str, Any]:
     _, _, field_specs = next(row for row in contract_rows() if row[1] == name)
     owner = AUTHORITY_OVERRIDES[name]
     state_field = STATE_FIELD.get(name)
+    serialization = serialization_field_metadata(name)
     return {
         "family": family.name,
         "schema_name": schema_name,
@@ -663,6 +858,7 @@ def contract_metadata(name: str) -> dict[str, Any]:
         "readers": sorted(set(family.reader_roles) | {owner}),
         "identity_fields": list(IDENTITY_FIELDS.get(name, ("id",))),
         "content_addressed": name in CONTENT_ADDRESSED,
+        **serialization,
         "state_field": state_field,
         "state_transitions": STATE_MACHINES.get(name, {}),
         "state_guard": STATE_GUARDS.get(name),

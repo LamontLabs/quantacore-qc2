@@ -460,6 +460,30 @@
       "regime"
     ],
     "content_addressed": true,
+    "content_hash_fields": [
+      "owning_authority",
+      "evidence_class",
+      "environment_namespace",
+      "source_refs",
+      "epoch_key",
+      "regime",
+      "mode",
+      "start_session",
+      "manifest_ref",
+      "champion_ref",
+      "reference_model_ref",
+      "activated_at"
+    ],
+    "content_hash_excluded_fields": [
+      "schema_name",
+      "schema_version",
+      "id",
+      "created_at",
+      "content_hash",
+      "epoch_state"
+    ],
+    "scientific_payload_fields": [],
+    "operational_envelope_fields": [],
     "android_visible": true,
     "state_field": "epoch_state",
     "state_transitions": {

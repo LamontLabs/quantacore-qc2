@@ -466,6 +466,32 @@
       "id"
     ],
     "content_addressed": true,
+    "content_hash_fields": [
+      "owning_authority",
+      "evidence_class",
+      "environment_namespace",
+      "source_refs",
+      "paper_account_fingerprint",
+      "account_mode",
+      "opened_at",
+      "opening_cash",
+      "currency",
+      "opening_position_refs",
+      "opening_order_refs",
+      "strategy_ref",
+      "capital_policy_ref",
+      "sealed_at",
+      "episode_hash"
+    ],
+    "content_hash_excluded_fields": [
+      "schema_name",
+      "schema_version",
+      "id",
+      "created_at",
+      "content_hash"
+    ],
+    "scientific_payload_fields": [],
+    "operational_envelope_fields": [],
     "android_visible": true,
     "state_field": null,
     "state_transitions": {},

@@ -417,6 +417,10 @@
       "id"
     ],
     "content_addressed": false,
+    "content_hash_fields": [],
+    "content_hash_excluded_fields": [],
+    "scientific_payload_fields": [],
+    "operational_envelope_fields": [],
     "android_visible": false,
     "state_field": null,
     "state_transitions": {},

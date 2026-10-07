@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+import base64
 import json
 import shutil
 import subprocess
 import sys
+import time
+import uuid
 from copy import deepcopy
 from pathlib import Path
 from typing import Any
@@ -11,15 +14,26 @@ from typing import Any
 import pytest
 from jsonschema import Draft202012Validator
 
-from qc2_contracts.catalog import AUTHORITY_OVERRIDES, CONTENT_ADDRESSED, contract_rows
+from qc2_contracts.catalog import (
+    AUTHORITY_OVERRIDES,
+    CONTENT_ADDRESSED,
+    SCIENTIFIC_PREDICTION_PAYLOAD_FIELDS,
+    contract_rows,
+)
 from qc2_contracts.runtime import (
     CONTRACTS,
     ContractValidationError,
     assert_immutable_update,
     assert_transition,
+    artifact_inventory_hash,
     canonical_content_hash,
+    canonical_decimal_text,
     canonical_json_bytes,
+    contract_metadata,
+    domain_separated_sha256,
+    new_uuidv7,
     parse_json_strict,
+    scientific_payload_hash,
     validate_contract,
     validate_contract_collection,
     verify_content_hash,
@@ -33,6 +47,16 @@ FIXTURE_THIRD_ID = "018f0000-0000-7000-8000-000000000003"
 def _invalid_fixtures(root: Path) -> list[dict[str, Any]]:
     path = root / "packages/contracts/fixtures/v1/invalid.json"
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _serialization_vectors(root: Path) -> dict[str, str]:
+    path = root / "packages/contracts/fixtures/v1/serialization-golden-vectors.properties"
+    return {
+        key: value
+        for line in path.read_text(encoding="ascii").splitlines()
+        if line and not line.startswith("#")
+        for key, value in [line.split("=", 1)]
+    }
 
 
 def _complete_fixture_collection(
@@ -80,6 +104,11 @@ def test_every_schema_and_valid_fixture_pass(
         assert "identity_fields" in schema["x-qc2"]
         assert "immutable_fields" in schema["x-qc2"]
         assert "mutable_fields" in schema["x-qc2"]
+        if name in CONTENT_ADDRESSED:
+            included = set(schema["x-qc2"]["content_hash_fields"])
+            excluded = set(schema["x-qc2"]["content_hash_excluded_fields"])
+            assert included.isdisjoint(excluded)
+            assert included | excluded == set(schema["properties"])
         validate_contract(name, payload)
     outcome_schema = json.loads(
         (schema_dir / "Outcome.schema.json").read_text(encoding="utf-8")
@@ -133,6 +162,156 @@ def test_canonical_json_normalizes_unicode_and_rejects_collisions() -> None:
         canonical_json_bytes({"é": 1, "e\u0301": 2})
     with pytest.raises(ContractValidationError, match="binary floats"):
         canonical_json_bytes({"value": 1.25})
+    with pytest.raises(ContractValidationError, match="representable across platforms"):
+        canonical_json_bytes({"value": 9_007_199_254_740_992})
+    assert canonical_json_bytes({"\ue000": 1, "\U00010000": 2}).hex() == (
+        "7b22ee8080223a312c22f0908080223a327d"
+    )
+
+
+def test_qc2_serialization_golden_vectors(
+    project_root: Path,
+    valid_contract_fixtures: dict[str, dict[str, Any]],
+) -> None:
+    vectors = _serialization_vectors(project_root)
+    decomposed = base64.b64decode(vectors["canonical.value_base64"]).decode("utf-8")
+    canonical = canonical_json_bytes({"z": decomposed, "a": [True, None, 7]})
+    assert canonical.hex() == vectors["canonical.expected_bytes_hex"]
+    control_value = base64.b64decode(vectors["canonical.control_value_base64"]).decode(
+        "utf-8"
+    )
+    assert canonical_json_bytes(control_value).hex() == vectors[
+        "canonical.control_expected_hex"
+    ]
+    assert domain_separated_sha256(vectors["canonical.domain"], canonical) == vectors[
+        "canonical.expected_hash"
+    ]
+    assert domain_separated_sha256("qc2.golden.other.v1", canonical) != vectors[
+        "canonical.expected_hash"
+    ]
+
+    assert canonical_decimal_text(
+        vectors["decimal.negative_zero"],
+        precision=int(vectors["decimal.fixed_precision"]),
+    ) == vectors["decimal.expected_zero"]
+    assert canonical_decimal_text(
+        vectors["decimal.trailing_zero_input"]
+    ) == vectors["decimal.trailing_zero_expected"]
+    with pytest.raises(ContractValidationError, match="exactly 12"):
+        canonical_decimal_text("0.5", precision=12)
+    with pytest.raises(ContractValidationError, match="without exponent"):
+        canonical_decimal_text("1e2")
+
+    files = [
+        {
+            "relative_path": vectors[f"artifact.{index}.relative_path"],
+            "length_bytes": int(vectors[f"artifact.{index}.length_bytes"]),
+            "media_type": vectors[f"artifact.{index}.media_type"],
+            "schema_name": vectors[f"artifact.{index}.schema_name"],
+            "schema_version": vectors[f"artifact.{index}.schema_version"],
+            "sha256": vectors[f"artifact.{index}.sha256"],
+        }
+        for index in range(int(vectors["artifact.count"]))
+    ]
+    assert artifact_inventory_hash(files) == vectors["artifact.expected_hash"]
+    assert artifact_inventory_hash(list(reversed(files))) == vectors["artifact.expected_hash"]
+    with pytest.raises(ContractValidationError, match="relative paths"):
+        artifact_inventory_hash([{**files[0], "relative_path": "C:/private/model.bin"}])
+    with pytest.raises(ContractValidationError, match="unique after Unicode normalization"):
+        artifact_inventory_hash(
+            [
+                {**files[0], "relative_path": "models/e\u0301.bin"},
+                {**files[1], "relative_path": "models/é.bin"},
+            ]
+        )
+    with pytest.raises(ContractValidationError, match="nonnegative safe integer"):
+        artifact_inventory_hash([{**files[0], "length_bytes": -1}])
+    manifest = deepcopy(valid_contract_fixtures["ArtifactManifest"])
+    manifest.update(
+        id=vectors["artifact.manifest_id"],
+        created_at=vectors["artifact.manifest_created_at"],
+        owning_authority=vectors["artifact.manifest_authority"],
+        evidence_class=vectors["artifact.manifest_evidence_class"],
+        environment_namespace=vectors["artifact.manifest_environment_namespace"],
+        source_refs=[],
+        content_hash="a" * 64,
+        files=files,
+        inventory_hash=artifact_inventory_hash(files),
+        manifest_version=int(vectors["artifact.manifest_version"]),
+        detached_signature=vectors["artifact.manifest_signature"],
+        transport_hash=vectors["artifact.manifest_transport_hash"],
+    )
+    manifest_hash = canonical_content_hash("ArtifactManifest", manifest)
+    assert manifest_hash == vectors["artifact.manifest_expected_hash"]
+    manifest["content_hash"] = manifest_hash
+    verify_content_hash("ArtifactManifest", manifest)
+    changed_manifest_envelope = deepcopy(manifest)
+    changed_manifest_envelope.update(
+        id="018f0000-0000-7000-8000-000000000030",
+        created_at="2026-10-07T12:00:00Z",
+        content_hash="f" * 64,
+        detached_signature="Ag",
+        transport_hash="c" * 64,
+    )
+    assert (
+        canonical_content_hash("ArtifactManifest", changed_manifest_envelope)
+        == manifest_hash
+    )
+
+    payload = valid_contract_fixtures["ScientificPredictionPayload"]
+    assert list(SCIENTIFIC_PREDICTION_PAYLOAD_FIELDS) == [
+        "session_id",
+        "reference_kind",
+        "reference_price",
+        "instrument_ref",
+        "horizon_label_refs",
+        "head_output_refs",
+        "dependency_refs",
+        "score",
+        "rank",
+        "disposition",
+        "model_hash",
+        "epoch_ref",
+        "regime",
+    ]
+    metadata = contract_metadata("ScientificPredictionPayload")
+    assert metadata["scientific_payload_fields"] == list(
+        SCIENTIFIC_PREDICTION_PAYLOAD_FIELDS
+    )
+    assert set(metadata["scientific_payload_fields"]).isdisjoint(
+        metadata["operational_envelope_fields"]
+    )
+    assert scientific_payload_hash(payload) == vectors["scientific.expected_hash"]
+    changed_envelope = deepcopy(payload)
+    changed_envelope.update(
+        id=vectors["scientific.envelope_id"],
+        created_at=vectors["scientific.envelope_created_at"],
+        evidence_class="SYNTHETIC_FIXTURE",
+        environment_namespace="development",
+        source_refs=[
+            {
+                "target_schema_name": CONTRACTS["DailyBar"][1],
+                "target_id": FIXTURE_SECOND_ID,
+            }
+        ],
+        content_hash="f" * 64,
+    )
+    assert scientific_payload_hash(changed_envelope) == vectors["scientific.expected_hash"]
+    changed_science = deepcopy(payload)
+    changed_science["score"] = "50.000001"
+    assert scientific_payload_hash(changed_science) != vectors["scientific.expected_hash"]
+
+
+def test_uuidv7_ids_are_valid_and_distinct() -> None:
+    generated = [new_uuidv7() for _ in range(32)]
+    assert len(generated) == len(set(generated))
+    before_ms = time.time_ns() // 1_000_000
+    for value in generated:
+        parsed = uuid.UUID(value)
+        assert parsed.version == 7
+        assert parsed.variant == uuid.RFC_4122
+        timestamp_ms = int.from_bytes(parsed.bytes[:6], "big")
+        assert 0 < timestamp_ms <= before_ms
 
 
 def test_content_hash_excludes_its_own_field_and_mutable_state(
@@ -154,6 +333,13 @@ def test_content_hash_excludes_its_own_field_and_mutable_state(
     assert negative_zero_hash == positive_zero_hash
 
     outcome["content_hash"] = positive_zero_hash
+    changed_identity = deepcopy(outcome)
+    changed_identity.update(
+        id=FIXTURE_SECOND_ID,
+        created_at="2026-10-07T17:00:00Z",
+        content_hash="f" * 64,
+    )
+    assert canonical_content_hash("Outcome", changed_identity) == positive_zero_hash
     verify_content_hash("Outcome", outcome)
 
     feature = copy_payload(valid_contract_fixtures["FeatureSnapshot"])
@@ -164,8 +350,13 @@ def test_content_hash_excludes_its_own_field_and_mutable_state(
     verify_content_hash("FeatureSnapshot", feature)
 
     manifest = copy_payload(valid_contract_fixtures["ArtifactManifest"])
+    manifest["inventory_hash"] = artifact_inventory_hash(manifest["files"])
     manifest_hash = canonical_content_hash("ArtifactManifest", manifest)
     manifest["content_hash"] = manifest_hash
+    reordered = copy_payload(manifest)
+    reordered["files"].reverse()
+    assert artifact_inventory_hash(reordered["files"]) == manifest["inventory_hash"]
+    assert canonical_content_hash("ArtifactManifest", reordered) == manifest_hash
     manifest["detached_signature"] = "AQ"
     manifest["transport_hash"] = "b" * 64
     assert canonical_content_hash("ArtifactManifest", manifest) == manifest_hash
@@ -310,11 +501,77 @@ def test_typescript_projection_compiles(project_root: Path) -> None:
             "--strict",
             "--target",
             "ES2022",
+            "--lib",
+            "ES2022,DOM",
             "packages/contracts/src/qc2_contracts/generated.ts",
+            "packages/contracts/src/qc2_contracts/serialization.ts",
         ],
         cwd=project_root,
         check=True,
         timeout=120,
+    )
+
+
+def test_cross_language_serialization_golden_vectors(
+    project_root: Path, tmp_path: Path
+) -> None:
+    vectors = project_root / "packages/contracts/fixtures/v1/serialization-golden-vectors.properties"
+    if shutil.which("pnpm") is not None and shutil.which("node") is not None:
+        output_dir = tmp_path / "typescript"
+        subprocess.run(
+            [
+                "pnpm",
+                "exec",
+                "tsc",
+                "--strict",
+                "--target",
+                "ES2022",
+                "--module",
+                "commonjs",
+                "--lib",
+                "ES2022,DOM",
+                "--outDir",
+                str(output_dir),
+                "packages/contracts/src/qc2_contracts/serialization.ts",
+            ],
+            cwd=project_root,
+            check=True,
+            timeout=120,
+        )
+        subprocess.run(
+            [
+                "node",
+                "tests/contracts/serialization_smoke.cjs",
+                str(output_dir / "serialization.js"),
+                str(vectors),
+            ],
+            cwd=project_root,
+            check=True,
+            timeout=30,
+        )
+
+    compiler = shutil.which("kotlinc")
+    java = shutil.which("java")
+    if compiler is None or java is None:
+        pytest.skip("Kotlin compiler and Java are unavailable in this environment")
+    jar_path = tmp_path / "qc2-serialization-vectors.jar"
+    subprocess.run(
+        [
+            compiler,
+            "packages/contracts/android/Qc2Serialization.kt",
+            "packages/contracts/android/Qc2SerializationSmoke.kt",
+            "-include-runtime",
+            "-d",
+            str(jar_path),
+        ],
+        cwd=project_root,
+        check=True,
+        timeout=180,
+    )
+    subprocess.run(
+        [java, "-jar", str(jar_path), str(vectors)],
+        check=True,
+        timeout=30,
     )
 
 

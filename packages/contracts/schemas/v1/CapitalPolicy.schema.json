@@ -402,6 +402,33 @@
       "id"
     ],
     "content_addressed": true,
+    "content_hash_fields": [
+      "owning_authority",
+      "evidence_class",
+      "environment_namespace",
+      "source_refs",
+      "paper_starting_capital",
+      "currency",
+      "maximum_position_cost",
+      "maximum_position_fraction",
+      "maximum_gross_exposure",
+      "cash_reserve",
+      "maximum_concurrent_positions",
+      "daily_loss_limit",
+      "drawdown_response",
+      "participation_limit",
+      "external_activity_policy",
+      "owner_approval_ref"
+    ],
+    "content_hash_excluded_fields": [
+      "schema_name",
+      "schema_version",
+      "id",
+      "created_at",
+      "content_hash"
+    ],
+    "scientific_payload_fields": [],
+    "operational_envelope_fields": [],
     "android_visible": false,
     "state_field": null,
     "state_transitions": {},

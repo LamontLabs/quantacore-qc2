@@ -859,8 +859,8 @@ CONTRACT_INVARIANTS: Final[dict[str, tuple[str, ...]]] = {
     "ArtifactManifest": (
         "paths are normalized, relative, traversal-free, and unique",
         "the artifact verifier rejects symlinks, hardlinks, decompression bombs, and executable surprises",
-        "canonical manifest content excludes its own content_hash, detached_signature, and transport_hash",
-        "inventory_hash binds the ordered file inventory; detached signature bytes do not hash themselves",
+        "content_hash excludes schema metadata, operational id/time, its own hash, detached_signature, and transport_hash",
+        "inventory_hash binds file records sorted by normalized relative-path UTF-8 bytes; detached signature bytes do not hash themselves",
     ),
     "ArtifactDependency": ("retention dependency graph is acyclic",),
     "DatasetManifest": ("dataset and split lineage is immutable and availability-cutoff filtered",),
@@ -954,6 +954,99 @@ CONTENT_ADDRESSED: Final[frozenset[str]] = frozenset(
         "TaskAcceptanceReceipt",
     }
 )
+
+
+CONTENT_HASH_ENVELOPE_FIELDS: Final[tuple[str, ...]] = (
+    "schema_name",
+    "schema_version",
+    "id",
+    "created_at",
+    "content_hash",
+)
+
+SCIENTIFIC_PREDICTION_PAYLOAD_FIELDS: Final[tuple[str, ...]] = (
+    "session_id",
+    "reference_kind",
+    "reference_price",
+    "instrument_ref",
+    "horizon_label_refs",
+    "head_output_refs",
+    "dependency_refs",
+    "score",
+    "rank",
+    "disposition",
+    "model_hash",
+    "epoch_ref",
+    "regime",
+)
+
+SCIENTIFIC_PREDICTION_ENVELOPE_FIELDS: Final[tuple[str, ...]] = (
+    "schema_name",
+    "schema_version",
+    "id",
+    "created_at",
+    "owning_authority",
+    "evidence_class",
+    "environment_namespace",
+    "source_refs",
+    "content_hash",
+)
+
+
+def serialization_field_metadata(name: str) -> dict[str, list[str]]:
+    """Return the explicit content/envelope field partition for one contract."""
+    if name not in AUTHORITY_OVERRIDES:
+        raise KeyError(f"Unknown QC2 contract: {name}")
+    row = next((row for row in contract_rows() if row[1] == name), None)
+    if row is None:
+        raise KeyError(f"Unknown QC2 contract: {name}")
+
+    _, _, field_specs = row
+    ordered_fields = [
+        "schema_name",
+        "schema_version",
+        "id",
+        "created_at",
+        "owning_authority",
+        "evidence_class",
+        "environment_namespace",
+        "source_refs",
+    ]
+    if name in CONTENT_ADDRESSED:
+        ordered_fields.append("content_hash")
+    ordered_fields.extend(
+        field.name for field in field_specs if field.name not in ordered_fields
+    )
+
+    if name == "ScientificPredictionPayload":
+        included = list(SCIENTIFIC_PREDICTION_PAYLOAD_FIELDS)
+        excluded = [
+            field_name
+            for field_name in ordered_fields
+            if field_name not in included
+        ]
+        return {
+            "content_hash_fields": included,
+            "content_hash_excluded_fields": excluded,
+            "scientific_payload_fields": included,
+            "operational_envelope_fields": list(
+                SCIENTIFIC_PREDICTION_ENVELOPE_FIELDS
+            ),
+        }
+
+    excluded_set = set(CONTENT_HASH_ENVELOPE_FIELDS)
+    if name in STATE_FIELD:
+        excluded_set.add(STATE_FIELD[name])
+    if name == "ArtifactManifest":
+        excluded_set.update(("detached_signature", "transport_hash"))
+    excluded = [field_name for field_name in ordered_fields if field_name in excluded_set]
+    included = [field_name for field_name in ordered_fields if field_name not in excluded_set]
+    return {
+        "content_hash_fields": included if name in CONTENT_ADDRESSED else [],
+        "content_hash_excluded_fields": excluded if name in CONTENT_ADDRESSED else [],
+        "scientific_payload_fields": [],
+        "operational_envelope_fields": [],
+    }
 
 
 FIELD_TYPES: Final[dict[str, tuple[str, str]]] = {

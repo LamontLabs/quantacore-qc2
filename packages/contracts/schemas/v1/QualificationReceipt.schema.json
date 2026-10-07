@@ -440,6 +440,32 @@
       "id"
     ],
     "content_addressed": true,
+    "content_hash_fields": [
+      "owning_authority",
+      "evidence_class",
+      "environment_namespace",
+      "source_refs",
+      "epoch_ref",
+      "session_id",
+      "prediction_seal_ref",
+      "prediction_integrity",
+      "denominator_status",
+      "on_time_seal",
+      "on_time_anchor",
+      "comparator_available",
+      "protocol_conformity",
+      "sealed_at",
+      "checkpoint_ref"
+    ],
+    "content_hash_excluded_fields": [
+      "schema_name",
+      "schema_version",
+      "id",
+      "created_at",
+      "content_hash"
+    ],
+    "scientific_payload_fields": [],
+    "operational_envelope_fields": [],
     "android_visible": false,
     "state_field": null,
     "state_transitions": {},

@@ -37,10 +37,6 @@ SNAPSHOT_SCHEMA = "qc2.identity_market.MarketSnapshot.v1"
 EVIDENCE_SCHEMA = "qc2.integrity_build.EvidenceEvent.v1"
 DAILY_BAR_SCHEMA = "qc2.identity_market.DailyBar.v1"
 
-_CONTRACT_BY_SCHEMA = {
-    schema_name: contract_name
-    for contract_name, (_, schema_name) in CONTRACTS.items()
-}
 def _fail(code: str, detail: str | None = None) -> None:
     raise UniverseAuthorityError(code, detail)
 
@@ -276,8 +272,8 @@ class UniverseAuthority:
         _parse_utc(created_at)
 
         instrument_by_id = _unique_records(instruments, label="instrument")
-        assignment_by_id = _unique_records(symbol_assignments, label="symbol_assignment")
-        classification_by_id = _unique_records(classifications, label="classification")
+        _unique_records(symbol_assignments, label="symbol_assignment")
+        _unique_records(classifications, label="classification")
         bar_by_id = _unique_records(daily_bars, label="daily_bar")
         candidate_ids = tuple(
             sorted(
@@ -294,13 +290,11 @@ class UniverseAuthority:
         if data_bundle["census_ref"]["target_schema_name"] != CENSUS_SCHEMA:
             _fail("data_bundle_census_reference_invalid")
 
-        census_session = _parse_date(str(candidate_census["session_id"]))
-        if census_session != session_date or str(data_bundle["history_start"]) > session_id:
-            # The later history-end check below gives the same explicit failure code.
-            pass
-
         expected_bar_ids = _manifest_ref_set(data_bundle["bar_refs"], DAILY_BAR_SCHEMA)
-        if expected_bar_ids != set(bar_by_id):
+        if (
+            expected_bar_ids != set(bar_by_id)
+            or len(expected_bar_ids) != len(data_bundle["bar_refs"])
+        ):
             _fail("data_bundle_bar_inventory_mismatch")
 
         for assignment in symbol_assignments:
@@ -338,7 +332,10 @@ class UniverseAuthority:
             ].append(classification)
         bars_by_instrument: dict[str, list[Contract]] = defaultdict(list)
         for bar in daily_bars:
-            bars_by_instrument[str(bar["instrument_ref"]["target_id"])].append(bar)
+            bar_instrument_id = _ref_id(bar["instrument_ref"], INSTRUMENT_SCHEMA)
+            if bar_instrument_id not in instrument_by_id:
+                _fail("data_bundle_bar_outside_census", bar_instrument_id)
+            bars_by_instrument[bar_instrument_id].append(bar)
 
         source_available = _source_manifests_known_by_cutoff(
             candidate_census, object_index, cutoff
@@ -354,6 +351,8 @@ class UniverseAuthority:
                 cutoff=cutoff,
                 cutoff_text=cutoff_text,
                 source_available=source_available,
+                object_index=object_index,
+                data_bundle=data_bundle,
             )
             dispositions.append(disposition)
 
@@ -473,6 +472,8 @@ class UniverseAuthority:
         cutoff: datetime,
         cutoff_text: str,
         source_available: bool,
+        object_index: Mapping[tuple[str, str], Contract],
+        data_bundle: Contract,
     ) -> CandidateDisposition:
         instrument_id = str(instrument["id"])
 
@@ -516,7 +517,13 @@ class UniverseAuthority:
             item
             for item in assignments
             if _known_in_range(str(item["known_from"]), item.get("known_to"), cutoff)
-            and _evidence_known_at(item, self._active_object_index, cutoff)
+            and _evidence_known_at(item, object_index, cutoff)
+        ]
+        historically_known_assignments = [
+            item
+            for item in assignments
+            if _parse_utc(str(item["known_from"])) <= cutoff
+            and _evidence_known_at(item, object_index, cutoff)
         ]
         active_assignments = [
             item for item in effective_assignments if item in known_assignments
@@ -526,7 +533,7 @@ class UniverseAuthority:
         if not active_assignments:
             if effective_assignments:
                 return decision("UNSCORABLE", "symbol_assignment_not_known_at_cutoff")
-            if known_assignments:
+            if historically_known_assignments:
                 return decision("EXCLUDED", "symbol_not_effective_for_session")
             if not assignments:
                 return decision("UNSCORABLE", "symbol_assignment_missing")
@@ -554,7 +561,7 @@ class UniverseAuthority:
             item
             for item in session_classifications
             if _parse_utc(str(item["created_at"])) <= cutoff
-            and _evidence_known_at(item, self._active_object_index, cutoff)
+            and _evidence_known_at(item, object_index, cutoff)
         ]
         if len(known_classifications) > 1:
             return decision("UNSCORABLE", "classification_ambiguous", assignment=assignment)
@@ -589,10 +596,17 @@ class UniverseAuthority:
                 classification=classification,
             )
 
+        if data_bundle["completeness"] == "FAILED":
+            return decision(
+                "UNSCORABLE",
+                "data_bundle_failed",
+                assignment=assignment,
+                classification=classification,
+            )
         if not (
-            _parse_date(str(data_bundle_start(self._active_data_bundle)))  # type: ignore[name-defined]
+            _parse_date(str(data_bundle["history_start"]))
             <= session_date
-            <= _parse_date(str(data_bundle_end(self._active_data_bundle)))  # type: ignore[name-defined]
+            <= _parse_date(str(data_bundle["history_end"]))
         ):
             return decision(
                 "UNSCORABLE",
@@ -693,8 +707,11 @@ class UniverseAuthority:
             _fail("snapshot_chain_session_mismatch")
 
         snapshot_key = (SNAPSHOT_SCHEMA, str(market_snapshot["id"]))
-        for name, payload in (("DataBundle", data_bundle), ("UniverseManifest", universe_manifest)):
-            contract_schema = CONTRACTS[name][1]
+        for name, payload in (
+            ("CandidateCensus", candidate_census),
+            ("DataBundle", data_bundle),
+            ("UniverseManifest", universe_manifest),
+        ):
             for reference in _walk_references(payload):
                 if _ref_key(reference) == snapshot_key:
                     _fail("snapshot_chain_cycle", name)
@@ -714,10 +731,6 @@ class UniverseAuthority:
             ("MarketSnapshot", market_snapshot),
         ]
         _validate_collection(supporting_objects, objects)
-
-    def _assess_with_index(self, *args: Any, **kwargs: Any) -> CandidateDisposition:
-        return self._assess_candidate(*args, **kwargs)
-
 
 def _walk_references(value: Any):
     if isinstance(value, Mapping):

@@ -638,7 +638,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-019 — F0 Runner Protocol Migration Wave 1
 
-**Current status:** TODO
+**Current status:** BLOCKED
 **Objective:** Rewrite the verified daily-compatible inspection queue as research protocols.
 **Dependencies:** QC2-014, QC2-017, QC2-018
 **Authorized legacy references:** Verified original P55/T34/T37/T38/T41/T42/T44/T57/T77/T78/T92/T102/T103/T104/T108/T109/T110 sources
@@ -663,7 +663,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Acceptance gate:** Every queue item is either independently tested research code or an evidence-backed exclusion.
 **Required evidence/environment:** LEGACY_READ_ACCESS
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
-**Blockers:** None recorded.
+**Blockers:** Required dependencies QC2-014, QC2-017, and QC2-018 are not PASS. `python3 tools/task_workflow.py preflight QC2-019` fails because all three are not PASS. No authorized protocol source has been inspected; see docs/reference/QC2-014_BLOCKED_REPORT.md, docs/reference/QC2-017_BLOCKED_REPORT.md, and docs/reference/QC2-018_BLOCKED_REPORT.md.
 **Acceptance receipt:** Not recorded.
 
 ---

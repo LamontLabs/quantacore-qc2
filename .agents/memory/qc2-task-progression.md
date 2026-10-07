@@ -3,8 +3,8 @@ name: QC2 task progression
 description: The user's preference for autonomous task completion bookkeeping and sequential progression in the QC2 build.
 ---
 
-In the QC2 build, do not ask the owner to mark each task complete. Handle completion bookkeeping and move through the task sequence automatically.
+In the QC2 build, resume at the earliest canonical task that is not PASS, even when the platform assignment points to a later task. Do not ask the owner to mark each task complete; handle completion bookkeeping and proceed sequentially.
 
-**Why:** the user asked to move through the tasks without having to mark each one complete.
+**Why:** the user corrected the prior sequence to begin with the earliest unfinished canonical task and continue toward the assigned later task, without per-task completion prompts.
 
-**How to apply:** Complete task bookkeeping and continue to the next eligible task without a per-task confirmation prompt. Canonical dependency, evidence, and approval gates remain in force; do not mark blocked work accepted or bypass a gate.
+**How to apply:** Reconcile the platform assignment against the canonical registry before implementation. Complete the current task's acceptance bookkeeping, then advance only when its scope permits; stop at an explicit task boundary without starting downstream work. Keep dependency, evidence, and approval gates in force.

@@ -1,0 +1,616 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:qc2:schema:qc2.governance_owner.PromotionChallenge.v1",
+  "title": "PromotionChallenge",
+  "description": "Strict persisted QC2 contract qc2.governance_owner.PromotionChallenge.v1. Unknown properties and coercion are forbidden.",
+  "type": "object",
+  "properties": {
+    "schema_name": {
+      "type": "string",
+      "const": "qc2.governance_owner.PromotionChallenge.v1"
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$"
+    },
+    "owning_authority": {
+      "type": "string",
+      "const": "promotion"
+    },
+    "evidence_class": {
+      "type": "string",
+      "enum": [
+        "SYNTHETIC_FIXTURE",
+        "HISTORICAL_RECONSTRUCTED",
+        "FORWARD_OPERATIONAL",
+        "FORWARD_SEALED"
+      ]
+    },
+    "environment_namespace": {
+      "type": "string",
+      "enum": [
+        "development",
+        "test",
+        "research",
+        "production"
+      ]
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "target_schema_name": {
+            "type": "string",
+            "enum": [
+              "qc2.time_operation.CalendarManifest.v1",
+              "qc2.time_operation.CalendarRevision.v1",
+              "qc2.time_operation.MarketSession.v1",
+              "qc2.time_operation.ClockAssessment.v1",
+              "qc2.time_operation.JobDefinition.v1",
+              "qc2.time_operation.JobLease.v1",
+              "qc2.time_operation.JobAttempt.v1",
+              "qc2.time_operation.OutboxMessage.v1",
+              "qc2.time_operation.ReadinessAssessment.v1",
+              "qc2.time_operation.DeploymentCapabilityManifest.v1",
+              "qc2.identity_market.Instrument.v1",
+              "qc2.identity_market.SymbolAssignment.v1",
+              "qc2.identity_market.InstrumentClassification.v1",
+              "qc2.identity_market.CorporateActionRecord.v1",
+              "qc2.identity_market.AdjustmentManifest.v1",
+              "qc2.identity_market.CandidateCensus.v1",
+              "qc2.identity_market.DailyBar.v1",
+              "qc2.identity_market.RawReceipt.v1",
+              "qc2.identity_market.RequestManifest.v1",
+              "qc2.identity_market.DataCapabilityManifest.v1",
+              "qc2.identity_market.BarSemanticsManifest.v1",
+              "qc2.identity_market.DataBundle.v1",
+              "qc2.identity_market.UniverseManifest.v1",
+              "qc2.identity_market.MarketSnapshot.v1",
+              "qc2.identity_market.MarketSnapshotRevision.v1",
+              "qc2.identity_market.QuarantineCase.v1",
+              "qc2.scientific_definitions.FeatureDefinition.v1",
+              "qc2.scientific_definitions.FeatureRegistry.v1",
+              "qc2.scientific_definitions.FeatureSnapshot.v1",
+              "qc2.scientific_definitions.RunnerProtocolDefinition.v1",
+              "qc2.scientific_definitions.RunnerProtocolRegistry.v1",
+              "qc2.scientific_definitions.RunnerProtocolResult.v1",
+              "qc2.scientific_definitions.SafetyProtocolDefinition.v1",
+              "qc2.scientific_definitions.SafetyProtocolResult.v1",
+              "qc2.scientific_definitions.LabelDefinition.v1",
+              "qc2.scientific_definitions.LabelRegistry.v1",
+              "qc2.scientific_definitions.ScoreDefinition.v1",
+              "qc2.scientific_definitions.ScoreManifest.v1",
+              "qc2.scientific_definitions.BaselineManifest.v1",
+              "qc2.models_prediction.ModelManifest.v1",
+              "qc2.models_prediction.ModelHeadDefinition.v1",
+              "qc2.models_prediction.ModelHeadOutput.v1",
+              "qc2.models_prediction.InferenceReceipt.v1",
+              "qc2.models_prediction.PredictionRun.v1",
+              "qc2.models_prediction.Prediction.v1",
+              "qc2.models_prediction.ScientificPredictionPayload.v1",
+              "qc2.models_prediction.PredictionSeal.v1",
+              "qc2.models_prediction.RunDisposition.v1",
+              "qc2.models_prediction.ShadowPredictionSet.v1",
+              "qc2.models_prediction.ReplayRequest.v1",
+              "qc2.models_prediction.ReplayReceipt.v1",
+              "qc2.outcomes_research.Outcome.v1",
+              "qc2.outcomes_research.OutcomeRevision.v1",
+              "qc2.outcomes_research.RunnerEvent.v1",
+              "qc2.outcomes_research.RunnerGenome.v1",
+              "qc2.outcomes_research.FailureGenome.v1",
+              "qc2.outcomes_research.MemoryIndexManifest.v1",
+              "qc2.outcomes_research.MatchedDecoySet.v1",
+              "qc2.outcomes_research.ReviewCase.v1",
+              "qc2.outcomes_research.DatasetManifest.v1",
+              "qc2.outcomes_research.DatasetRowLineage.v1",
+              "qc2.outcomes_research.SplitManifest.v1",
+              "qc2.outcomes_research.HoldoutAccessReceipt.v1",
+              "qc2.outcomes_research.Experiment.v1",
+              "qc2.outcomes_research.CandidateEvaluation.v1",
+              "qc2.outcomes_research.ChallengerEvaluation.v1",
+              "qc2.outcomes_research.DriftAssessment.v1",
+              "qc2.validation.ValidationEpoch.v1",
+              "qc2.validation.EpochManifest.v1",
+              "qc2.validation.ScheduledAttempt.v1",
+              "qc2.validation.ValidationSession.v1",
+              "qc2.validation.QualificationReceipt.v1",
+              "qc2.validation.MetricDefinition.v1",
+              "qc2.validation.MetricResult.v1",
+              "qc2.validation.StatisticalAnalysisPlan.v1",
+              "qc2.validation.ValidationReport.v1",
+              "qc2.validation.ReportAmendment.v1",
+              "qc2.execution.StrategyManifest.v1",
+              "qc2.execution.CapitalPolicy.v1",
+              "qc2.execution.PaperOrderIntent.v1",
+              "qc2.execution.IntentDecision.v1",
+              "qc2.execution.SubmissionAttempt.v1",
+              "qc2.execution.BrokerOrder.v1",
+              "qc2.execution.BrokerOrderEvent.v1",
+              "qc2.execution.Fill.v1",
+              "qc2.execution.FillCorrection.v1",
+              "qc2.execution.Position.v1",
+              "qc2.execution.CashLedgerEntry.v1",
+              "qc2.execution.Reservation.v1",
+              "qc2.execution.ReconciliationReport.v1",
+              "qc2.execution.ExecutionEpisode.v1",
+              "qc2.governance_owner.PromotionPolicy.v1",
+              "qc2.governance_owner.PromotionBundleManifest.v1",
+              "qc2.governance_owner.PromotionRequest.v1",
+              "qc2.governance_owner.PromotionChallenge.v1",
+              "qc2.governance_owner.PromotionDecision.v1",
+              "qc2.governance_owner.PromotionReceipt.v1",
+              "qc2.governance_owner.ChampionPointer.v1",
+              "qc2.governance_owner.EpochActivationChallenge.v1",
+              "qc2.governance_owner.EpochActivationDecision.v1",
+              "qc2.governance_owner.EpochActivationReceipt.v1",
+              "qc2.governance_owner.OwnerDevice.v1",
+              "qc2.governance_owner.OwnerSession.v1",
+              "qc2.governance_owner.EnrollmentChallenge.v1",
+              "qc2.governance_owner.RecoveryEvent.v1",
+              "qc2.governance_owner.OwnerCommand.v1",
+              "qc2.governance_owner.OwnerCommandReceipt.v1",
+              "qc2.governance_owner.Alert.v1",
+              "qc2.integrity_build.EvidenceEvent.v1",
+              "qc2.integrity_build.Checkpoint.v1",
+              "qc2.integrity_build.AnchorReceipt.v1",
+              "qc2.integrity_build.ArtifactManifest.v1",
+              "qc2.integrity_build.ArtifactDependency.v1",
+              "qc2.integrity_build.BackupManifest.v1",
+              "qc2.integrity_build.RestoreReceipt.v1",
+              "qc2.integrity_build.ConfigurationManifest.v1",
+              "qc2.integrity_build.UnknownDecision.v1",
+              "qc2.integrity_build.ChangeRequest.v1",
+              "qc2.integrity_build.ReferenceIntake.v1",
+              "qc2.integrity_build.BuildTask.v1",
+              "qc2.integrity_build.TaskAcceptanceReceipt.v1"
+            ]
+          },
+          "target_id": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          },
+          "content_hash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "target_schema_name",
+          "target_id"
+        ],
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "target_schema_name": {
+                  "enum": [
+                    "qc2.integrity_build.ArtifactManifest.v1",
+                    "qc2.integrity_build.BackupManifest.v1",
+                    "qc2.scientific_definitions.BaselineManifest.v1",
+                    "qc2.integrity_build.BuildTask.v1",
+                    "qc2.time_operation.CalendarManifest.v1",
+                    "qc2.execution.CapitalPolicy.v1",
+                    "qc2.integrity_build.ChangeRequest.v1",
+                    "qc2.integrity_build.Checkpoint.v1",
+                    "qc2.integrity_build.ConfigurationManifest.v1",
+                    "qc2.outcomes_research.DatasetManifest.v1",
+                    "qc2.outcomes_research.DatasetRowLineage.v1",
+                    "qc2.governance_owner.EpochActivationChallenge.v1",
+                    "qc2.governance_owner.EpochActivationDecision.v1",
+                    "qc2.validation.EpochManifest.v1",
+                    "qc2.integrity_build.EvidenceEvent.v1",
+                    "qc2.execution.ExecutionEpisode.v1",
+                    "qc2.outcomes_research.Experiment.v1",
+                    "qc2.outcomes_research.FailureGenome.v1",
+                    "qc2.scientific_definitions.FeatureDefinition.v1",
+                    "qc2.scientific_definitions.FeatureRegistry.v1",
+                    "qc2.scientific_definitions.FeatureSnapshot.v1",
+                    "qc2.scientific_definitions.LabelDefinition.v1",
+                    "qc2.scientific_definitions.LabelRegistry.v1",
+                    "qc2.outcomes_research.MatchedDecoySet.v1",
+                    "qc2.outcomes_research.MemoryIndexManifest.v1",
+                    "qc2.models_prediction.ModelManifest.v1",
+                    "qc2.outcomes_research.Outcome.v1",
+                    "qc2.governance_owner.OwnerCommand.v1",
+                    "qc2.execution.PaperOrderIntent.v1",
+                    "qc2.models_prediction.Prediction.v1",
+                    "qc2.models_prediction.PredictionSeal.v1",
+                    "qc2.governance_owner.PromotionBundleManifest.v1",
+                    "qc2.governance_owner.PromotionChallenge.v1",
+                    "qc2.governance_owner.PromotionDecision.v1",
+                    "qc2.governance_owner.PromotionPolicy.v1",
+                    "qc2.validation.QualificationReceipt.v1",
+                    "qc2.integrity_build.ReferenceIntake.v1",
+                    "qc2.outcomes_research.RunnerGenome.v1",
+                    "qc2.scientific_definitions.RunnerProtocolDefinition.v1",
+                    "qc2.scientific_definitions.RunnerProtocolRegistry.v1",
+                    "qc2.scientific_definitions.SafetyProtocolDefinition.v1",
+                    "qc2.scientific_definitions.SafetyProtocolResult.v1",
+                    "qc2.models_prediction.ScientificPredictionPayload.v1",
+                    "qc2.scientific_definitions.ScoreDefinition.v1",
+                    "qc2.scientific_definitions.ScoreManifest.v1",
+                    "qc2.models_prediction.ShadowPredictionSet.v1",
+                    "qc2.outcomes_research.SplitManifest.v1",
+                    "qc2.validation.StatisticalAnalysisPlan.v1",
+                    "qc2.execution.StrategyManifest.v1",
+                    "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+                    "qc2.validation.ValidationEpoch.v1",
+                    "qc2.validation.ValidationReport.v1"
+                  ]
+                }
+              },
+              "required": [
+                "target_schema_name"
+              ]
+            },
+            "then": {
+              "required": [
+                "content_hash"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "request_ref": {
+      "type": "object",
+      "properties": {
+        "target_schema_name": {
+          "const": "qc2.governance_owner.PromotionRequest.v1"
+        },
+        "target_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "target_schema_name",
+        "target_id"
+      ],
+      "additionalProperties": false,
+      "description": "Unit: typed foreign reference to the listed contract.",
+      "x-unit": "typed foreign reference to the listed contract"
+    },
+    "bundle_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "Unit: SHA-256 digest (lowercase hexadecimal).",
+      "x-unit": "SHA-256 digest (lowercase hexadecimal)"
+    },
+    "candidate_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "Unit: SHA-256 digest (lowercase hexadecimal).",
+      "x-unit": "SHA-256 digest (lowercase hexadecimal)"
+    },
+    "expected_champion_hash": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Unit: SHA-256 digest (lowercase hexadecimal).",
+      "x-unit": "SHA-256 digest (lowercase hexadecimal)"
+    },
+    "expected_generation": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Unit: ordinal/count (unit is named by the field).",
+      "x-unit": "ordinal/count (unit is named by the field)"
+    },
+    "epoch_ref": {
+      "type": "object",
+      "properties": {
+        "target_schema_name": {
+          "const": "qc2.validation.ValidationEpoch.v1"
+        },
+        "target_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "target_schema_name",
+        "target_id",
+        "content_hash"
+      ],
+      "additionalProperties": false,
+      "description": "Unit: typed foreign reference to the listed contract.",
+      "x-unit": "typed foreign reference to the listed contract"
+    },
+    "registry_refs": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "target_schema_name": {
+                "const": "qc2.scientific_definitions.FeatureRegistry.v1"
+              },
+              "target_id": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "content_hash": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            },
+            "required": [
+              "target_schema_name",
+              "target_id",
+              "content_hash"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "target_schema_name": {
+                "const": "qc2.scientific_definitions.RunnerProtocolRegistry.v1"
+              },
+              "target_id": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "content_hash": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            },
+            "required": [
+              "target_schema_name",
+              "target_id",
+              "content_hash"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "target_schema_name": {
+                "const": "qc2.scientific_definitions.LabelRegistry.v1"
+              },
+              "target_id": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "content_hash": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            },
+            "required": [
+              "target_schema_name",
+              "target_id",
+              "content_hash"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "target_schema_name": {
+                "const": "qc2.scientific_definitions.ScoreManifest.v1"
+              },
+              "target_id": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "content_hash": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            },
+            "required": [
+              "target_schema_name",
+              "target_id",
+              "content_hash"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "target_schema_name": {
+                "const": "qc2.scientific_definitions.BaselineManifest.v1"
+              },
+              "target_id": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "content_hash": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            },
+            "required": [
+              "target_schema_name",
+              "target_id",
+              "content_hash"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "description": "Unit: typed foreign reference to the listed contract.",
+      "x-unit": "typed foreign reference to the listed contract"
+    },
+    "policy_ref": {
+      "type": "object",
+      "properties": {
+        "target_schema_name": {
+          "const": "qc2.governance_owner.PromotionPolicy.v1"
+        },
+        "target_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "target_schema_name",
+        "target_id",
+        "content_hash"
+      ],
+      "additionalProperties": false,
+      "description": "Unit: typed foreign reference to the listed contract.",
+      "x-unit": "typed foreign reference to the listed contract"
+    },
+    "nonce": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]{0,95}$",
+      "description": "Unit: lowercase identifier.",
+      "x-unit": "lowercase identifier"
+    },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$",
+      "description": "Unit: UTC instant.",
+      "x-unit": "UTC instant"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$",
+      "description": "Unit: UTC instant.",
+      "x-unit": "UTC instant"
+    },
+    "device_ref": {
+      "type": "object",
+      "properties": {
+        "target_schema_name": {
+          "const": "qc2.governance_owner.OwnerDevice.v1"
+        },
+        "target_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "target_schema_name",
+        "target_id"
+      ],
+      "additionalProperties": false,
+      "description": "Unit: typed foreign reference to the listed contract.",
+      "x-unit": "typed foreign reference to the listed contract"
+    },
+    "key_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]{0,95}$",
+      "description": "Unit: lowercase identifier.",
+      "x-unit": "lowercase identifier"
+    }
+  },
+  "required": [
+    "schema_name",
+    "schema_version",
+    "id",
+    "created_at",
+    "owning_authority",
+    "evidence_class",
+    "environment_namespace",
+    "source_refs",
+    "content_hash",
+    "request_ref",
+    "bundle_hash",
+    "candidate_hash",
+    "expected_champion_hash",
+    "expected_generation",
+    "epoch_ref",
+    "registry_refs",
+    "policy_ref",
+    "nonce",
+    "issued_at",
+    "expires_at",
+    "device_ref",
+    "key_id"
+  ],
+  "additionalProperties": false,
+  "x-qc2": {
+    "family": "Governance and owner",
+    "family_slug": "governance_owner",
+    "schema_name": "qc2.governance_owner.PromotionChallenge.v1",
+    "writer_role": "promotion",
+    "reader_roles": [
+      "alert",
+      "evidence",
+      "execution",
+      "identity",
+      "model_registry",
+      "owner_api",
+      "promotion",
+      "validation"
+    ],
+    "identity_fields": [
+      "id"
+    ],
+    "content_addressed": true,
+    "android_visible": false,
+    "state_field": null,
+    "state_transitions": {},
+    "state_guard": null,
+    "immutable_fields": [
+      "schema_name",
+      "schema_version",
+      "id",
+      "created_at",
+      "owning_authority",
+      "evidence_class",
+      "environment_namespace",
+      "source_refs",
+      "content_hash",
+      "request_ref",
+      "bundle_hash",
+      "candidate_hash",
+      "expected_champion_hash",
+      "expected_generation",
+      "epoch_ref",
+      "registry_refs",
+      "policy_ref",
+      "nonce",
+      "issued_at",
+      "expires_at",
+      "device_ref",
+      "key_id"
+    ],
+    "mutable_fields": [],
+    "invariants": []
+  }
+}

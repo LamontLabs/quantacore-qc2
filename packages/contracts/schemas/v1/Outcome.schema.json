@@ -1,0 +1,681 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:qc2:schema:qc2.outcomes_research.Outcome.v1",
+  "title": "Outcome",
+  "description": "Strict persisted QC2 contract qc2.outcomes_research.Outcome.v1. Unknown properties and coercion are forbidden.",
+  "type": "object",
+  "properties": {
+    "schema_name": {
+      "type": "string",
+      "const": "qc2.outcomes_research.Outcome.v1"
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$"
+    },
+    "owning_authority": {
+      "type": "string",
+      "const": "ground_truth"
+    },
+    "evidence_class": {
+      "type": "string",
+      "enum": [
+        "SYNTHETIC_FIXTURE",
+        "HISTORICAL_RECONSTRUCTED",
+        "FORWARD_OPERATIONAL",
+        "FORWARD_SEALED"
+      ]
+    },
+    "environment_namespace": {
+      "type": "string",
+      "enum": [
+        "development",
+        "test",
+        "research",
+        "production"
+      ]
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "target_schema_name": {
+                "const": "qc2.identity_market.DailyBar.v1"
+              },
+              "target_id": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "content_hash": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            },
+            "required": [
+              "target_schema_name",
+              "target_id"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "target_schema_name": {
+                "const": "qc2.identity_market.CorporateActionRecord.v1"
+              },
+              "target_id": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "content_hash": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            },
+            "required": [
+              "target_schema_name",
+              "target_id"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "target_schema_name": {
+                "const": "qc2.identity_market.MarketSnapshotRevision.v1"
+              },
+              "target_id": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "content_hash": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            },
+            "required": [
+              "target_schema_name",
+              "target_id"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "description": "Unit: typed foreign reference to the listed contract.",
+      "x-unit": "typed foreign reference to the listed contract"
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "instrument_ref": {
+      "type": "object",
+      "properties": {
+        "target_schema_name": {
+          "const": "qc2.identity_market.Instrument.v1"
+        },
+        "target_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "target_schema_name",
+        "target_id"
+      ],
+      "additionalProperties": false,
+      "description": "Unit: typed foreign reference to the listed contract.",
+      "x-unit": "typed foreign reference to the listed contract"
+    },
+    "session_id": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Unit: exchange session date (YYYY-MM-DD).",
+      "x-unit": "exchange session date (YYYY-MM-DD)"
+    },
+    "label_ref": {
+      "type": "object",
+      "properties": {
+        "target_schema_name": {
+          "const": "qc2.scientific_definitions.LabelDefinition.v1"
+        },
+        "target_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "target_schema_name",
+        "target_id",
+        "content_hash"
+      ],
+      "additionalProperties": false,
+      "description": "Unit: typed foreign reference to the listed contract.",
+      "x-unit": "typed foreign reference to the listed contract"
+    },
+    "horizon_sessions": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Unit: exchange sessions.",
+      "x-unit": "exchange sessions"
+    },
+    "reference_bar_ref": {
+      "type": "object",
+      "properties": {
+        "target_schema_name": {
+          "const": "qc2.identity_market.DailyBar.v1"
+        },
+        "target_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "target_schema_name",
+        "target_id"
+      ],
+      "additionalProperties": false,
+      "description": "Unit: typed foreign reference to the listed contract.",
+      "x-unit": "typed foreign reference to the listed contract"
+    },
+    "reference_price": {
+      "type": "string",
+      "pattern": "^(?:[1-9][0-9]*(?:\\.[0-9]+)?|0\\.(?:[0-9]*[1-9][0-9]*))$",
+      "description": "Unit: currency specified by the adjacent currency field per share.",
+      "x-unit": "currency specified by the adjacent currency field per share"
+    },
+    "next_open_bar_ref": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "target_schema_name": {
+              "const": "qc2.identity_market.DailyBar.v1"
+            },
+            "target_id": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "content_hash": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "target_schema_name",
+            "target_id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Unit: typed foreign reference to the listed contract.",
+      "x-unit": "typed foreign reference to the listed contract"
+    },
+    "next_open_reference_price": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^(?:[1-9][0-9]*(?:\\.[0-9]+)?|0\\.(?:[0-9]*[1-9][0-9]*))$"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Unit: currency specified by the adjacent currency field per share.",
+      "x-unit": "currency specified by the adjacent currency field per share"
+    },
+    "outcome_state": {
+      "type": "string",
+      "enum": [
+        "PENDING_MATURITY",
+        "RESOLVED",
+        "PARTIALLY_RESOLVABLE",
+        "UNRESOLVED_DATA",
+        "CORPORATE_ACTION_REVIEW",
+        "CENSORED_TERMINAL_EVENT"
+      ],
+      "description": "Unit: enumerated state/dimension; see the named enum.",
+      "x-unit": "enumerated state/dimension; see the named enum"
+    },
+    "endpoint_return": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^-?(?:0|[1-9][0-9]*)\\.[0-9]{12}$"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Unit: fractional return (1.0 = 100%).",
+      "x-unit": "fractional return (1.0 = 100%)"
+    },
+    "max_high_return": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^-?(?:0|[1-9][0-9]*)\\.[0-9]{12}$"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Unit: fractional return (1.0 = 100%).",
+      "x-unit": "fractional return (1.0 = 100%)"
+    },
+    "min_low_return": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^-?(?:0|[1-9][0-9]*)\\.[0-9]{12}$"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Unit: fractional return (1.0 = 100%).",
+      "x-unit": "fractional return (1.0 = 100%)"
+    },
+    "mfe": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^-?(?:0|[1-9][0-9]*)\\.[0-9]{12}$"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Unit: fractional return (1.0 = 100%).",
+      "x-unit": "fractional return (1.0 = 100%)"
+    },
+    "mae": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^-?(?:0|[1-9][0-9]*)\\.[0-9]{12}$"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Unit: fractional return (1.0 = 100%).",
+      "x-unit": "fractional return (1.0 = 100%)"
+    },
+    "max_high_price": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^(?:[1-9][0-9]*(?:\\.[0-9]+)?|0\\.(?:[0-9]*[1-9][0-9]*))$"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Unit: currency specified by the adjacent currency field per share.",
+      "x-unit": "currency specified by the adjacent currency field per share"
+    },
+    "max_high_session": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Unit: exchange session date (YYYY-MM-DD).",
+      "x-unit": "exchange session date (YYYY-MM-DD)"
+    },
+    "max_high_session_offset": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 1
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Unit: exchange sessions.",
+      "x-unit": "exchange sessions"
+    },
+    "min_low_price": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^(?:[1-9][0-9]*(?:\\.[0-9]+)?|0\\.(?:[0-9]*[1-9][0-9]*))$"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Unit: currency specified by the adjacent currency field per share.",
+      "x-unit": "currency specified by the adjacent currency field per share"
+    },
+    "min_low_session": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Unit: exchange session date (YYYY-MM-DD).",
+      "x-unit": "exchange session date (YYYY-MM-DD)"
+    },
+    "min_low_session_offset": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 1
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Unit: exchange sessions.",
+      "x-unit": "exchange sessions"
+    },
+    "extrema_tie_break": {
+      "type": "string",
+      "enum": [
+        "EARLIEST_SESSION"
+      ],
+      "description": "Unit: enumerated state/dimension; see the named enum.",
+      "x-unit": "enumerated state/dimension; see the named enum"
+    },
+    "opening_gap_return": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^-?(?:0|[1-9][0-9]*)\\.[0-9]{12}$"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Unit: fractional return (1.0 = 100%).",
+      "x-unit": "fractional return (1.0 = 100%)"
+    },
+    "next_open_proxy_endpoint_return": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^-?(?:0|[1-9][0-9]*)\\.[0-9]{12}$"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Unit: fractional return (1.0 = 100%).",
+      "x-unit": "fractional return (1.0 = 100%)"
+    },
+    "next_open_proxy_max_high_return": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^-?(?:0|[1-9][0-9]*)\\.[0-9]{12}$"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Unit: fractional return (1.0 = 100%).",
+      "x-unit": "fractional return (1.0 = 100%)"
+    },
+    "next_open_proxy_min_low_return": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^-?(?:0|[1-9][0-9]*)\\.[0-9]{12}$"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Unit: fractional return (1.0 = 100%).",
+      "x-unit": "fractional return (1.0 = 100%)"
+    },
+    "next_open_proxy_mfe": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^-?(?:0|[1-9][0-9]*)\\.[0-9]{12}$"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Unit: fractional return (1.0 = 100%).",
+      "x-unit": "fractional return (1.0 = 100%)"
+    },
+    "next_open_proxy_mae": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^-?(?:0|[1-9][0-9]*)\\.[0-9]{12}$"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Unit: fractional return (1.0 = 100%).",
+      "x-unit": "fractional return (1.0 = 100%)"
+    },
+    "field_validity": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "field_name": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]{0,95}$"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "VALID",
+              "MISSING",
+              "UNRESOLVED",
+              "NOT_APPLICABLE",
+              "CENSORED"
+            ]
+          },
+          "reason_code": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_-]{0,95}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "field_name",
+          "status",
+          "reason_code"
+        ],
+        "additionalProperties": false
+      },
+      "description": "Unit: ordered array; item unit/type is stated by the field.",
+      "x-unit": "ordered array; item unit/type is stated by the field"
+    },
+    "reason_codes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Unit: ordered array; item unit/type is stated by the field.",
+      "x-unit": "ordered array; item unit/type is stated by the field"
+    },
+    "available_for_learning_at": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Unit: UTC instant.",
+      "x-unit": "UTC instant"
+    }
+  },
+  "required": [
+    "schema_name",
+    "schema_version",
+    "id",
+    "created_at",
+    "owning_authority",
+    "evidence_class",
+    "environment_namespace",
+    "source_refs",
+    "content_hash",
+    "instrument_ref",
+    "session_id",
+    "label_ref",
+    "horizon_sessions",
+    "reference_bar_ref",
+    "reference_price",
+    "next_open_bar_ref",
+    "next_open_reference_price",
+    "outcome_state",
+    "endpoint_return",
+    "max_high_return",
+    "min_low_return",
+    "mfe",
+    "mae",
+    "max_high_price",
+    "max_high_session",
+    "max_high_session_offset",
+    "min_low_price",
+    "min_low_session",
+    "min_low_session_offset",
+    "extrema_tie_break",
+    "opening_gap_return",
+    "next_open_proxy_endpoint_return",
+    "next_open_proxy_max_high_return",
+    "next_open_proxy_min_low_return",
+    "next_open_proxy_mfe",
+    "next_open_proxy_mae",
+    "field_validity",
+    "reason_codes",
+    "available_for_learning_at"
+  ],
+  "additionalProperties": false,
+  "x-qc2": {
+    "family": "Outcomes and research",
+    "family_slug": "outcomes_research",
+    "schema_name": "qc2.outcomes_research.Outcome.v1",
+    "writer_role": "ground_truth",
+    "reader_roles": [
+      "apexlab",
+      "evidence",
+      "ground_truth",
+      "model_registry",
+      "owner_api",
+      "prediction",
+      "validation"
+    ],
+    "identity_fields": [
+      "id",
+      "instrument_ref",
+      "session_id",
+      "label_ref",
+      "horizon_sessions"
+    ],
+    "content_addressed": true,
+    "android_visible": false,
+    "state_field": null,
+    "state_transitions": {},
+    "state_guard": null,
+    "immutable_fields": [
+      "schema_name",
+      "schema_version",
+      "id",
+      "created_at",
+      "owning_authority",
+      "evidence_class",
+      "environment_namespace",
+      "source_refs",
+      "content_hash",
+      "instrument_ref",
+      "session_id",
+      "label_ref",
+      "horizon_sessions",
+      "reference_bar_ref",
+      "reference_price",
+      "next_open_bar_ref",
+      "next_open_reference_price",
+      "outcome_state",
+      "endpoint_return",
+      "max_high_return",
+      "min_low_return",
+      "mfe",
+      "mae",
+      "max_high_price",
+      "max_high_session",
+      "max_high_session_offset",
+      "min_low_price",
+      "min_low_session",
+      "min_low_session_offset",
+      "extrema_tie_break",
+      "opening_gap_return",
+      "next_open_proxy_endpoint_return",
+      "next_open_proxy_max_high_return",
+      "next_open_proxy_min_low_return",
+      "next_open_proxy_mfe",
+      "next_open_proxy_mae",
+      "field_validity",
+      "reason_codes",
+      "available_for_learning_at"
+    ],
+    "mutable_fields": [],
+    "invariants": [
+      "MFE=max(0,max_high_return) and MAE=min(0,min_low_return)",
+      "next-open-proxy endpoint, extrema, MFE, and MAE use the next-session open denominator and remain separate from close-reference outcomes",
+      "peak/trough price, session, positive session offset, and earliest-session tie-break preserve the observed extrema",
+      "field validity and explicit reason preserve unknown, unavailable, or censored measurements"
+    ]
+  }
+}

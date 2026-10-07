@@ -1,7 +1,7 @@
 # QuantraCore Apex Gen 2 — Canonical Build Tasks
 
 **Canonical tasks:** QC2-000 through QC2-088 (89 total).
-**Initial implementation state:** NOT_STARTED. Every task begins TODO; no acceptance receipts are present.
+**Initial project baseline:** NOT_STARTED, with every task initially TODO and no acceptance receipts at specification creation.
 **Authority:** `docs/GEN2_MASTER_SPEC.md` and `registry/BUILD_TASKS.json`. This file is a generated human-readable rendering.
 **Execution rule:** Consecutive topological order; each task after QC2-000 depends on its immediate predecessor plus listed technical prerequisites. All earlier tasks must PASS. Exactly one canonical task may be IN_PROGRESS after explicit advancement; stop after each acceptance receipt.
 
@@ -62,25 +62,28 @@
 
 ### QC2-001 — Legacy Reference Manifest
 
-**Objective:** Ground every permitted historical reference in a specific immutable source identity.
+**Objective:** Map each authorized historical source role to an inspectable, reproducibly identified snapshot without assuming one repository per role or requiring a literal Gen 1 repository name.
 
 **Dependencies:** QC2-000
 
-**Authorized legacy references:** QuantraCore Gen 1; ApexLab Gen 1; Original QuantraCore Protocol project
+**Authorized logical source roles:** QuantraCore production/core implementation; ApexLab research/training; original QuantraCore runner-protocol lineage.
 
-**Required reference intake:** Mandatory for each referenced repository/file actually inspected; record revision, path/hash, source-supported meaning, tests, conflicts, license, and disposition.
+**Reference mapping rule:** A repository may cover multiple roles and a role may use more than one repository/path. Later snapshots are acceptable only with exact revisions, version labels, and provenance limits recorded. A role label does not prove Gen 1, original-lineage, or production-release identity.
+
+**Required reference intake:** For each repository and file inspected, record revision, path/hash, source-supported meaning, relevant tests, conflicts, license, access limits, and disposition.
 
 **Required deliverables:**
 
-- Three repository manifests with available revisions, files, hashes, relevant tests, and access limitations.
-- Protocol namespace inventory; T24/T25 and T34 verification cases.
-- Read-only handling and licensing/provenance records.
+- Repository manifests for inspected candidates plus a map from the three logical roles to exact paths and revisions; do not require three distinct repositories.
+- Protocol namespace inventory with repository-qualified IDs, duplicate-ID handling, and source-derived T24/T25/T34 verification cases.
+- Read-only handling, hash checks, test coverage/limitations, licensing, conflicts, and provenance records.
+- A scoped QC2-001 decision record; do not create the broader QC2-002 decision log or other QC2-002 deliverables here.
 
 **Required tests:**
 
-- Recompute sampled file hashes and distinguish duplicate IDs across projects.
+- Recompute sampled file hashes and distinguish duplicate IDs by repository and path; never merge meanings from a bare protocol ID.
 - Show legacy working trees were not changed.
-- Unavailable source access is reported as a blocker or explicitly approved exclusion, never invented.
+- Do not invent unavailable source content. Later snapshots may map to a role only with unproven historical origin or production status explicitly recorded; a role with no inspectable source remains a blocker.
 
 **Forbidden actions (task-specific and common):**
 
@@ -89,17 +92,17 @@
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
 - Broaden architecture, spend without authorization, or auto-start another canonical task.
 
-**Acceptance gate:** Every available reference is locatable by exact source identity; any required inaccessible reference is resolved or the task is BLOCKED.
+**Acceptance gate:** PASS when all three logical roles map to inspectable, immutable source paths and their version, hash, license, test, and provenance limits are recorded. Later snapshots are acceptable under the mapping rule; unverified original/Gen 1/production identity is not claimed. BLOCKED only if a role lacks an inspectable source or required access is unavailable.
 
 **Required evidence/environment:** LEGACY_READ_ACCESS
 
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 
-**Initial status:** TODO
+**Initial status:** TODO at specification creation
 
-**Blockers:** None recorded; verify required inputs when the task begins.
+**Current result:** PASS — all three roles are mapped to pinned snapshots; production-release and original-lineage provenance limits remain explicit.
 
-**Acceptance receipt:** Absent.
+**Acceptance receipt:** `docs/reference/QC2-001_SOURCE_MANIFEST.md`; scoped decision: `docs/reference/QC2-001_DECISION.md`.
 
 ---
 

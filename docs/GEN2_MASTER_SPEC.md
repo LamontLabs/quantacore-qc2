@@ -785,33 +785,42 @@ Additional technical dependencies are listed beside the immediate predecessor. R
 
 ### QC2-001 — Legacy Reference Manifest
 
-**Objective:** Ground every permitted historical reference in a specific immutable source identity.
+**Objective:** Map each authorized historical source role to an inspectable, reproducibly identified snapshot without assuming one repository per role or requiring a literal Gen 1 repository name.
 
 **Dependencies:** QC2-000  
-**Authorized legacy references:** QuantraCore Gen 1; ApexLab Gen 1; Original QuantraCore Protocol project  
-**Reference intake:** Mandatory for each referenced repository/file actually inspected; record revision, path/hash, source-supported meaning, tests, conflicts, license, and disposition.
+
+**Authorized logical source roles:** QuantraCore production/core implementation; ApexLab research/training; original QuantraCore runner-protocol lineage.
+
+**Reference mapping rule:** A repository may cover multiple roles and a role may use more than one repository/path. A later snapshot may map to a role only when its exact revision and version labels are recorded with provenance limits. A role label does not prove Gen 1, original-lineage, or production-release identity.
+
+**Reference intake:** For each repository and file inspected, record revision, path/hash, source-supported meaning, relevant tests, conflicts, license, access limits, and disposition.
 
 **Required deliverables:**
 
-- Three repository manifests with available revisions, files, hashes, relevant tests, and access limitations.
-- Protocol namespace inventory; T24/T25 and T34 verification cases.
-- Read-only handling and licensing/provenance records.
+- Repository manifests for inspected candidates plus a map from the three logical roles to exact paths and revisions; do not require three distinct repositories.
+- Protocol namespace inventory with repository-qualified IDs, duplicate-ID handling, and source-derived T24/T25/T34 verification cases.
+- Read-only handling, hash checks, test coverage/limitations, licensing, conflicts, and provenance records.
+- A scoped QC2-001 decision record; do not create the broader QC2-002 decision log or other QC2-002 deliverables here.
 
 **Required tests:**
 
-- Recompute sampled file hashes and distinguish duplicate IDs across projects.
+- Recompute sampled file hashes and distinguish duplicate IDs by repository and path; never merge meanings from a bare protocol ID.
 - Show legacy working trees were not changed.
-- Unavailable source access is reported as a blocker or explicitly approved exclusion, never invented.
+- Do not invent unavailable source content. If a later snapshot maps to a role, keep unproven historical origin or production status explicitly unverified; a role with no inspectable source remains a blocker.
 
 **Task-specific forbidden actions:**
 
 - Do not infer semantics from protocol numbers or earlier prose alone.
 
-**Acceptance gate:** Every available reference is locatable by exact source identity; any required inaccessible reference is resolved or the task is BLOCKED.
+**Acceptance gate:** PASS when all three logical roles map to inspectable, immutable source paths and their version, hash, license, test, and provenance limits are recorded. Later snapshots are acceptable under the mapping rule; unverified original/Gen 1/production identity is not claimed. BLOCKED only if a role lacks an inspectable source or required access is unavailable.
 
 **Evidence/environment:** LEGACY_READ_ACCESS  
 **Calibration state:** FRAMEWORK_OR_POLICY_ONLY  
-**Initial status:** TODO. **Blockers:** none assessed; required inputs must be verified when the task begins. **Acceptance receipt:** absent; no work is certified complete.
+**Initial baseline:** TODO; no blockers had been assessed and no receipt existed when the task was defined.
+
+**Current result:** PASS — all three roles are mapped to pinned snapshots with the unresolved historical and production provenance recorded.
+
+**Acceptance receipt:** `docs/reference/QC2-001_SOURCE_MANIFEST.md`; scoped decision: `docs/reference/QC2-001_DECISION.md`.
 
 ### QC2-002 — Constitution and Authority Model
 
@@ -3484,7 +3493,7 @@ For every task record objective, dependencies, authorized legacy sources, requir
 
 Exactly one canonical task may be IN_PROGRESS once implementation is later authorized. Subtasks are allowed only beneath that task. Do not run or implement future canonical tasks in the background.
 
-QuantraCore Gen 1, ApexLab Gen 1 and the original QuantraCore Protocol project are read-only references. Never modify them or import their runtime modules. Do not infer source meanings from protocol numbers. Missing references stay explicitly unverified.
+The QC2-001 logical reference roles—QuantraCore production/core, ApexLab research/training, and original QuantraCore runner-protocol lineage—are read-only. A role can map to overlapping repositories, paths, or later revisions only when exact identity and provenance limits are recorded; the role names do not prove Gen 1, original-lineage, or production-release identity. Never modify reference sources or import their runtime modules. Do not infer meanings from protocol numbers. Missing or unproven lineage stays explicitly unverified.
 
 Do not invent empirical, owner-risk, provider-capability or engineering-limit values. Record each unresolved decision with its correct class and activation consequence. Fixture policies are test-only and cannot enter production manifests.
 

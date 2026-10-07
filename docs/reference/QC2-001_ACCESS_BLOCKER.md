@@ -1,23 +1,36 @@
-# QC2-001 — Legacy source identity blocker
+# QC2-001 — Initial legacy source identity blocker (historical)
 
-**Status:** BLOCKED — do not accept or mark complete  
-**Checked:** 2026-10-06  
-**Authorized references:** QuantraCore Gen 1; ApexLab Gen 1; Original QuantraCore Protocol project
+- **Current status:** Superseded by the approved logical-role mapping; QC2-001 result is PASS with provenance limits.
+- **Historical status:** BLOCKED at initial discovery; the original findings below are retained as context.
+- **Checked:** 2026-10-06
+- **Current logical roles:** QuantraCore production/core implementation; ApexLab research/training; original QuantraCore runner-protocol lineage.
 
-## Finding
+## Current resolution
+
+The task scope was corrected to authorize logical source roles rather than require three literal Gen 1 repositories. A later, inspectable snapshot may map to a role when the exact revision, version labels, and provenance limits are recorded; the mapping does not prove original lineage or production-release status.
+
+| Logical role | Mapped source | Current limit |
+|---|---|---|
+| QuantraCore production/core implementation | `Lamont-Labs/QuantraCore-Apex` at `d65ad25b813977b1087b94db5f88a32963426477`, `src/quantracore_apex/core/` and `risk/` | The code is inspectable, but the empty `QuantraCore_production` repository and conflicting release/license statements do not establish a production deployment or approved production release. |
+| ApexLab research/training | The same Apex revision, `src/quantracore_apex/apexlab/` and its pipeline test | Source supports a training/data-labeling role; no ApexLab Gen 1 identity is proven. |
+| Original QuantraCore runner-protocol lineage | `Lamont-Labs/QuantraCore-Engine` at `67597a2a63fd3957e6ec50e270dba8e3df1d3757` (T01–T12 scaffold) and the later Apex tier protocols at the Apex revision | The protocol role is source-mapped, but neither snapshot proves the original protocol project's identity or historical origin. |
+
+The full repository/file manifests, hash checks, namespace inventory, semantic conflicts, and T24/T25/T34 source-derived cases are in [`QC2-001_SOURCE_MANIFEST.md`](QC2-001_SOURCE_MANIFEST.md). The scoped interpretation is recorded in [`QC2-001_DECISION.md`](QC2-001_DECISION.md). No downstream task was started.
+
+## Initial finding (historical; before the role-scope correction)
 
 The GitHub connection is usable for read-only repository discovery, but the accessible repositories do not establish exact identities for all three authorized references. In particular, no confirmed ApexLab Gen 1 or Original QuantraCore Protocol repository was identified. Two QuantraCore-named repositories are plausible candidates but do not prove which historical sources the task authorizes.
 
 No protocol meanings, T24/T25/T34 verification cases, or cross-project duplicate-ID conclusions are asserted here. Current/v9-era material and protocol numbers are not substitutes for identified historical sources.
 
-## Discovery and handling
+## Initial discovery and handling
 
 - Queried the connected GitHub API using GET requests only. No GitHub writes, clones, checkouts, or legacy-source edits were performed.
 - The accessible repository listings included 14 repositories in `Lamont-Labs` and 11 under `LamontLabs`. No exact repository identity for the three authorized labels was established.
 - The workspace had no local legacy source trees. Its `git status --short` was clean before this blocker note was added.
 - No legacy tests were run. Running tests or importing code from an unconfirmed/current candidate would not verify the authorized historical references.
 
-## Candidate repositories examined
+## Candidate repositories examined (initial disposition; detailed mapping is now in the source manifest)
 
 These are discovery candidates, **not accepted legacy references**.
 
@@ -41,7 +54,7 @@ For each row below, the GitHub blob SHA-1 was recomputed from `blob <size>\\0<ra
 | Apex `d65ad25b813977b1087b94db5f88a32963426477` | `config/protocol_manifest.yaml` | `3cf7246cbe1169e79e62a9313da68a90f1732303` | `410409e1cf98dbda4d2f4302b629a7ea9f9dadf2f1ec3584c6706328ee62bee3` |
 | Apex `d65ad25b813977b1087b94db5f88a32963426477` | `docs/PROTOCOLS_TIER.md` | `83ac4c5c1234b960a5ca8a415ce22a196f1904d2` | `6aa104ceab9dcd94f4a0e777f952cdd7d06bc1740fa0b93053103ffeb8bdae16` |
 
-## Acceptance gaps
+## Initial acceptance gaps (historical)
 
 - Exact immutable source identities and manifests for the three authorized references remain unresolved.
 - Relevant historical tests and their outcomes are unknown.
@@ -49,6 +62,6 @@ For each row below, the GitHub blob SHA-1 was recomputed from `blob <size>\\0<ra
 - Duplicate protocol IDs cannot yet be distinguished across the authorized projects.
 - No evidence of legacy working-tree changes exists: no local legacy trees were present, and all remote requests made were GET-only.
 
-## Required to unblock
+## Original unblock condition (historical)
 
-Provide the exact repository URLs (and an immutable revision, if a specific historical snapshot is intended) for the three references, or explicitly approve which named reference(s) may be excluded. Until then, keep QC2-001 blocked and do not start downstream tasks.
+At the time this note was first written, the working interpretation required literal source identities. The later role-scope correction and the evidence-backed snapshot mapping above supersede that condition for QC2-001. The provenance gaps remain recorded; they are not claims that the original Gen 1 or production sources were found.

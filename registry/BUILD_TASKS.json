@@ -45,25 +45,27 @@
     {
       "task_id": "QC2-001",
       "name": "Legacy Reference Manifest",
-      "objective": "Ground every permitted historical reference in a specific immutable source identity.",
+      "objective": "Map each authorized historical source role to an inspectable, reproducibly identified snapshot without assuming one repository per role or requiring a literal Gen 1 repository name.",
       "dependencies": [
         "QC2-000"
       ],
       "authorized_legacy_references": [
-        "QuantraCore Gen 1",
-        "ApexLab Gen 1",
-        "Original QuantraCore Protocol project"
+        "QuantraCore production/core implementation",
+        "ApexLab research/training",
+        "Original QuantraCore runner-protocol lineage"
       ],
-      "required_reference_intake": "Mandatory for each referenced repository/file actually inspected; record revision, path/hash, source-supported meaning, tests, conflicts, license, and disposition.",
+      "reference_mapping_rule": "A repository may cover multiple roles and a role may use multiple repositories or paths. A later snapshot may map to a role only when its exact revision and version labels are recorded with provenance limits. A role label does not prove Gen 1, original-lineage, or production-release identity.",
+      "required_reference_intake": "For each repository and file inspected, record revision, path/hash, source-supported meaning, relevant tests, conflicts, license, access limits, and disposition.",
       "required_deliverables": [
-        "Three repository manifests with available revisions, files, hashes, relevant tests, and access limitations.",
-        "Protocol namespace inventory; T24/T25 and T34 verification cases.",
-        "Read-only handling and licensing/provenance records."
+        "Repository manifests for inspected candidates plus a map from the three logical roles to exact paths and revisions; do not require three distinct repositories.",
+        "Protocol namespace inventory with repository-qualified IDs, duplicate-ID handling, and source-derived T24/T25/T34 verification cases.",
+        "Read-only handling, hash checks, test coverage/limitations, licensing, conflicts, and provenance records.",
+        "A scoped QC2-001 decision record; do not create the broader QC2-002 decision log or other QC2-002 deliverables here."
       ],
       "required_tests": [
-        "Recompute sampled file hashes and distinguish duplicate IDs across projects.",
+        "Recompute sampled file hashes and distinguish duplicate IDs by repository and path; never merge meanings from a bare protocol ID.",
         "Show legacy working trees were not changed.",
-        "Unavailable source access is reported as a blocker or explicitly approved exclusion, never invented."
+        "Do not invent unavailable source content. If a later snapshot maps to a role, keep unproven historical origin or production status explicitly unverified; a role with no inspectable source remains a blocker."
       ],
       "forbidden_actions": [
         "Do not infer semantics from protocol numbers or earlier prose alone.",
@@ -71,14 +73,21 @@
         "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
         "Broaden architecture, spend without authorization, or auto-start another canonical task."
       ],
-      "acceptance_gate": "Every available reference is locatable by exact source identity; any required inaccessible reference is resolved or the task is BLOCKED.",
+      "acceptance_gate": "PASS when all three logical roles map to inspectable, immutable source paths and their version, hash, license, test, and provenance limits are recorded. Later snapshots are acceptable under the mapping rule; unverified original/Gen 1/production identity is not claimed. BLOCKED only if a role lacks an inspectable source or required access is unavailable.",
       "evidence_requirements": [
         "LEGACY_READ_ACCESS"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "TODO",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "checked": "2026-10-06",
+        "source_manifest": "docs/reference/QC2-001_SOURCE_MANIFEST.md",
+        "decision_record": "docs/reference/QC2-001_DECISION.md",
+        "historical_blocker": "docs/reference/QC2-001_ACCESS_BLOCKER.md",
+        "summary": "All three logical roles map to exact inspectable snapshots. Version, license, test, duplicate-ID, and unresolved provenance limits are recorded; remote sources were read-only and unchanged."
+      }
     },
     {
       "task_id": "QC2-002",

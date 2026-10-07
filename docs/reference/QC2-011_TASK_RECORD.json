@@ -1,0 +1,36 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a11870-78a0-75ee-aba1-a6da3e13a189",
+  "created_at": "2026-10-07T22:16:26Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "FORWARD_OPERATIONAL",
+  "environment_namespace": "production",
+  "source_refs": [],
+  "content_hash": "6b38b13b446244fb0134ff5514b53f1d6d6c79a586fb5c5aa60ce04cd2a37ae9",
+  "task_id": "qc2-011",
+  "task_name": "Early Real-Data Vertical Slice",
+  "objective": "Prove real acquisition, normalization, durable diagnostic sealing, and evidence lineage before deeper implementation.",
+  "dependency_task_ids": [
+    "QC2-006",
+    "QC2-008",
+    "QC2-009",
+    "QC2-010"
+  ],
+  "authorized_legacy_refs": [],
+  "deliverable_refs": [
+    "Real diagnostic census, raw receipts, normalized daily DataBundle, immutable diagnostic snapshot.",
+    "Acquisition/coverage timing report and verified evidence chain.",
+    "Explicit separation from official prediction, universe qualification, and future outcomes."
+  ],
+  "required_test_refs": [
+    "Reconstruct normalized diagnostic bytes from saved raw receipts offline.",
+    "Corrupt/missing receipt prevents the diagnostic seal.",
+    "Real feed/semantics and actual receipt times agree with the capability manifest."
+  ],
+  "acceptance_gate": "A genuine complete acquisition-to-evidence lineage is verified; full forward outcome lineage is reserved for QC2-086.",
+  "evidence_requirement": "alpaca_credentials_and_real_market_data",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

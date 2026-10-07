@@ -383,7 +383,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-011 — Early Real-Data Vertical Slice
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Prove real acquisition, normalization, durable diagnostic sealing, and evidence lineage before deeper implementation.
 **Dependencies:** QC2-006, QC2-008, QC2-009, QC2-010
 **Authorized legacy references:** None.
@@ -410,7 +410,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** ALPACA_CREDENTIALS, REAL_MARKET_DATA
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-07T22:16:26Z: `docs/reference/QC2-011_ACCEPTANCE_RECEIPT.md`, `docs/reference/QC2-011_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-011_TASK_RECORD.json`
 
 ---
 

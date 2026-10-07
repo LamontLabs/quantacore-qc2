@@ -39,10 +39,8 @@
         "LOCAL_TOOLCHAIN"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "BLOCKED",
-      "blockers": [
-        "Required dependencies QC2-012, QC2-013, QC2-014, QC2-015, and QC2-021 are not PASS. `python3 tools/task_workflow.py preflight QC2-022` fails because all five are not PASS. Their upstream blocker chain includes QC2-010 authenticated Alpaca requests returning HTTP 401; see docs/reference/QC2-012_BLOCKED_REPORT.md, docs/reference/QC2-013_BLOCKED_REPORT.md, docs/reference/QC2-014_BLOCKED_REPORT.md, docs/reference/QC2-015_BLOCKED_REPORT.md, docs/reference/QC2-021_BLOCKED_REPORT.md, and docs/reference/QC2-022_BLOCKED_REPORT.md."
-      ],
+      "status": "TODO",
+      "blockers": [],
       "acceptance_receipt": null
     },
     {
@@ -1354,8 +1352,10 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "TODO",
-      "blockers": [],
+      "status": "BLOCKED",
+      "blockers": [
+        "Required dependencies QC2-012, QC2-013, QC2-014, QC2-015, and QC2-021 are not PASS. `python3 tools/task_workflow.py preflight QC2-022` fails because all five are not PASS. Their upstream blocker chain includes QC2-010 authenticated Alpaca requests returning HTTP 401; see docs/reference/QC2-012_BLOCKED_REPORT.md, docs/reference/QC2-013_BLOCKED_REPORT.md, docs/reference/QC2-014_BLOCKED_REPORT.md, docs/reference/QC2-015_BLOCKED_REPORT.md, docs/reference/QC2-021_BLOCKED_REPORT.md, and docs/reference/QC2-022_BLOCKED_REPORT.md."
+      ],
       "acceptance_receipt": null
     },
     {

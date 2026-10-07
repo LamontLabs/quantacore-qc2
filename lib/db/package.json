@@ -8,8 +8,9 @@
     "./schema": "./src/schema/index.ts"
   },
   "scripts": {
-    "push": "drizzle-kit push --config ./drizzle.config.ts",
-    "push-force": "drizzle-kit push --force --config ./drizzle.config.ts"
+    "migrate": "node ./run-migrations.mjs",
+    "test:guards": "node --test ./test/environment.test.mjs",
+    "test:postgres": "node ./test/run-postgres-integration.mjs"
   },
   "dependencies": {
     "drizzle-orm": "catalog:",

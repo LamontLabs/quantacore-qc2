@@ -1,0 +1,36 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a116b9-4807-7b2e-aea3-33d887101416",
+  "created_at": "2026-10-07T14:16:43Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "6337fe773d95f79726078597388e74ecc978b18ebe7c29582da5362a5bf8e19b",
+  "task_id": "qc2-004",
+  "task_name": "Canonical Serialization and Identity",
+  "objective": "Implement reproducible scientific bytes and distinct operational identities.",
+  "dependency_task_ids": [
+    "QC2-003"
+  ],
+  "authorized_legacy_refs": [
+    "Gen 1 hashing utilities",
+    "ApexLab hashing utilities"
+  ],
+  "deliverable_refs": [
+    "Canonical JSON/decimal format, domain-separated SHA-256 functions, UUIDv7 ID utility.",
+    "Scientific versus operational-envelope field lists; fixed precision and ordering rules.",
+    "Cross-platform golden vectors and artifact-manifest hashing."
+  ],
+  "required_test_refs": [
+    "Equivalent permitted inputs hash identically; scientific mutation changes hash.",
+    "Replay metadata changes do not alter scientific payload hash.",
+    "Unicode, negative zero, duplicate keys, nonfinite values, and hash self-reference are tested."
+  ],
+  "acceptance_gate": "Golden vectors pass and each scientific hash has one unambiguous byte definition.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

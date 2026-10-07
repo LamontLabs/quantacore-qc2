@@ -1,0 +1,48 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a116b9-480e-7e82-a265-ba6194d832e8",
+  "created_at": "2026-10-07T14:16:43Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "d33bc79610122335c27e05094f28c5d34846981ef8d4ebd7841fe6d0292f69be",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a116b9-4807-7b2e-aea3-33d887101416",
+    "content_hash": "6337fe773d95f79726078597388e74ecc978b18ebe7c29582da5362a5bf8e19b"
+  },
+  "task_spec_version": "QC2-004 / registry schema 1.0 / governing spec 2.0",
+  "source_commit": "297cb0695213daeb3b325c2335fc3f929f67b290",
+  "changed_paths": [
+    "packages/contracts",
+    "tests/contracts",
+    "tools/generate_contract_package.py",
+    "docs/reference/QC2-003_CONTRACT_CATALOG.md"
+  ],
+  "executed_commands": [
+    "python3 -m pytest -q tests/contracts/test_contract_package.py -k 'strict_json_parser_rejects_ambiguous_or_inexact_values or canonical_json_normalizes_unicode_and_rejects_collisions or qc2_serialization_golden_vectors or uuidv7_ids_are_valid_and_distinct or content_hash_excludes_its_own_field_and_mutable_state or cross_language_serialization_golden_vectors'",
+    "python3 tools/generate_contract_package.py --check"
+  ],
+  "test_counts": [
+    {
+      "test_id": "qc2_004_serialization_acceptance",
+      "passed": 9,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "79783796bd506f731cd20441dc17af2c13e0db5776aeb1b3bb6e2b3e123fe533",
+    "9547ec2aafdca92d2f0ef1c08c82092dda50ad046f5e2b909710291c46d8265b",
+    "0d186a03016ea003f0b3159e5310da3d76068a1cb4550790b32e7da2b8167a39",
+    "34df8071669f18a280e9549638170eb9d550563761444d07c98843fd32a40afd"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-07T14:16:43Z"
+}

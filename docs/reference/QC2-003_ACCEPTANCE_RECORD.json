@@ -1,0 +1,48 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a116b7-e83a-7034-ba63-af7f1caaa451",
+  "created_at": "2026-10-07T14:15:13Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "093aaa6941db69e9c2186d851c554f706bb13c3a1f245cddda5a42fc0456409b",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a116b7-e821-766d-b44a-f34559987a94",
+    "content_hash": "18ff9f30da60016ba95cb095dac7bef149f85dfb26d5318a5c10c129b65f8248"
+  },
+  "task_spec_version": "QC2-003 / registry schema 1.0 / governing spec 2.0",
+  "source_commit": "297cb0695213daeb3b325c2335fc3f929f67b290",
+  "changed_paths": [
+    "packages/contracts",
+    "tests/contracts",
+    "tools/generate_contract_package.py",
+    "docs/reference/QC2-003_CONTRACT_CATALOG.md"
+  ],
+  "executed_commands": [
+    "python3 -m pytest -q tests/contracts/test_contract_package.py -k 'contract_names_match_section_12 or every_schema_and_valid_fixture_pass or all_invalid_fixtures_are_rejected or strict_json_parser_rejects_ambiguous_or_inexact_values or state_changes_are_guarded_and_other_fields_are_immutable or foreign_references_resolve_and_dependency_graph_is_acyclic or overlapping_symbol_assignments_are_rejected or model_head_output_uses_registered_decimal_precision or typescript_projection_compiles or kotlin_projection_and_shared_fixtures_compile_and_run'",
+    "python3 tools/generate_contract_package.py --check"
+  ],
+  "test_counts": [
+    {
+      "test_id": "qc2_003_acceptance",
+      "passed": 13,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "79783796bd506f731cd20441dc17af2c13e0db5776aeb1b3bb6e2b3e123fe533",
+    "9547ec2aafdca92d2f0ef1c08c82092dda50ad046f5e2b909710291c46d8265b",
+    "0d186a03016ea003f0b3159e5310da3d76068a1cb4550790b32e7da2b8167a39",
+    "34df8071669f18a280e9549638170eb9d550563761444d07c98843fd32a40afd"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-07T14:15:13Z"
+}

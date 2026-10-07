@@ -606,7 +606,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-018 — Historical Protocol Lineage Registry
 
-**Current status:** TODO
+**Current status:** BLOCKED
 **Objective:** Account for original concepts without assuming all are valid or daily-compatible.
 **Dependencies:** QC2-001, QC2-017
 **Authorized legacy references:** Original QuantraCore Protocol project
@@ -631,7 +631,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Acceptance gate:** Inventory is complete for verified sources; unresolved items are excluded from activation or block a required dependency.
 **Required evidence/environment:** LEGACY_READ_ACCESS
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
-**Blockers:** None recorded.
+**Blockers:** Required dependency QC2-017 is not PASS. `python3 tools/task_workflow.py preflight QC2-018` fails because QC2-017 is not PASS. The authorized original protocol source has not been inspected; see docs/reference/QC2-017_BLOCKED_REPORT.md.
 **Acceptance receipt:** Not recorded.
 
 ---

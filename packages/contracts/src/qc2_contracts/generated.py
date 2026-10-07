@@ -107,7 +107,7 @@ OwnerCommandScope = Literal['PROMOTION', 'EPOCH_ACTIVATION', 'PAUSE', 'RESUME', 
 OwnerCommandReceiptState = Literal['ACCEPTED', 'DUPLICATE', 'DENIED', 'STALE', 'EXPIRED', 'EXECUTED']
 AlertSeverity = Literal['INFO', 'NOTICE', 'WARNING', 'CRITICAL', 'EMERGENCY']
 ProofLevel = Literal['BACKEND_LOCAL_TAMPER_EVIDENT', 'INDEPENDENT_PREOUTCOME_ANCHORED']
-ConfigurationDomain = Literal['SYSTEM', 'EPOCH_SCIENTIFIC', 'STRATEGY', 'RESEARCH', 'DEPLOYMENT', 'OWNER_IDENTITY']
+ConfigurationDomain = Literal['SECRETS', 'SYSTEM', 'EPOCH_SCIENTIFIC', 'STRATEGY', 'RESEARCH', 'DEPLOYMENT', 'OWNER_IDENTITY']
 UnknownDecisionClass = Literal['ARCHITECTURAL_CONSTANT', 'OWNER_POLICY_REQUIRED', 'CAPABILITY_MEASUREMENT_REQUIRED', 'EMPIRICAL_CALIBRATION_REQUIRED', 'ENGINEERING_LIMIT_REQUIRED']
 UnknownDecisionState = Literal['UNRESOLVED', 'RESOLVED', 'SUPERSEDED']
 ChangeClass = Literal['C0', 'C1', 'C2', 'C3', 'C4']
@@ -273,6 +273,11 @@ class Reference_ClockAssessment(TypedDict):
 
 class Reference_ConfigurationManifest(TypedDict):
     target_schema_name: Literal['qc2.integrity_build.ConfigurationManifest.v1']
+    target_id: UuidV7
+    content_hash: Sha256
+
+class Reference_ConfigurationSetting(TypedDict):
+    target_schema_name: Literal['qc2.integrity_build.ConfigurationSetting.v1']
     target_id: UuidV7
     content_hash: Sha256
 
@@ -636,6 +641,11 @@ class Reference_Reservation(TypedDict):
     target_id: UuidV7
     content_hash: NotRequired[Sha256]
 
+class Reference_ResourceBudget(TypedDict):
+    target_schema_name: Literal['qc2.integrity_build.ResourceBudget.v1']
+    target_id: UuidV7
+    content_hash: Sha256
+
 class Reference_RestoreReceipt(TypedDict):
     target_schema_name: Literal['qc2.integrity_build.RestoreReceipt.v1']
     target_id: UuidV7
@@ -703,6 +713,11 @@ class Reference_ScoreDefinition(TypedDict):
 
 class Reference_ScoreManifest(TypedDict):
     target_schema_name: Literal['qc2.scientific_definitions.ScoreManifest.v1']
+    target_id: UuidV7
+    content_hash: Sha256
+
+class Reference_SecretReference(TypedDict):
+    target_schema_name: Literal['qc2.integrity_build.SecretReference.v1']
     target_id: UuidV7
     content_hash: Sha256
 
@@ -840,7 +855,7 @@ class JobDefinition(TypedDict):
     logical_key: str
     dependency_refs: list[Reference_JobDefinition]
     deadline: str
-    resource_budget_ref: Reference_ConfigurationManifest
+    resource_budget_ref: Reference_ResourceBudget
     checkpoint_ref: Reference_Checkpoint | None
     state: JobState
 
@@ -918,7 +933,8 @@ class DeploymentCapabilityManifest(TypedDict):
     deployment_fingerprint: str
     observed_at: str
     capability_results: list[GateResultRecord]
-    resource_limits_ref: Reference_ConfigurationManifest
+    configuration_ref: Reference_ConfigurationManifest
+    resource_limits_ref: Reference_ResourceBudget
     revalidation_due_at: str
 
 class Instrument(TypedDict):
@@ -1961,7 +1977,8 @@ class Experiment(TypedDict):
     candidate_refs: list[Reference_ModelManifest]
     algorithm: str
     seed: int
-    budget_ref: Reference_ConfigurationManifest
+    configuration_ref: Reference_ConfigurationManifest
+    budget_ref: Reference_ResourceBudget
     compute_cost: str
     evaluation_access: list[str]
     result_ref: Reference_CandidateEvaluation | None
@@ -2061,6 +2078,7 @@ class EpochManifest(TypedDict):
     model_ref: Reference_ModelManifest
     reference_model_ref: Reference_ModelManifest
     strategy_ref: Reference_StrategyManifest
+    configuration_ref: Reference_ConfigurationManifest
     effective_session: str
 
 class ScheduledAttempt(TypedDict):
@@ -2240,6 +2258,7 @@ class StrategyManifest(TypedDict):
     cancellation_policy: str
     gap_no_fill_policy: str
     competing_action_rule: str
+    configuration_ref: Reference_ConfigurationManifest
 
 class CapitalPolicy(TypedDict):
     schema_name: Literal['qc2.execution.CapitalPolicy.v1']
@@ -2977,11 +2996,80 @@ class ConfigurationManifest(TypedDict):
     configuration_domain: ConfigurationDomain
     version: int
     effective_from: str
-    setting_refs: list[str]
+    capability_scope: list[str]
+    required_setting_keys: list[str]
+    setting_refs: list[Reference_ConfigurationSetting]
+    resource_budget_refs: list[Reference_ResourceBudget]
     policy_hash: str
     unresolved_decision_refs: list[Reference_UnknownDecision]
     fixture_only: bool
     signed_by_owner: bool
+
+class ConfigurationSetting(TypedDict):
+    schema_name: Literal['qc2.integrity_build.ConfigurationSetting.v1']
+    schema_version: Literal['1.0']
+    id: UuidV7
+    created_at: UtcInstant
+    owning_authority: Literal['configuration']
+    evidence_class: EvidenceClass
+    environment_namespace: EnvironmentNamespace
+    source_refs: list[ForeignReference]
+    content_hash: Sha256
+    setting_key: str
+    configuration_domain: ConfigurationDomain
+    version: int
+    effective_from: str
+    value_hash: str
+    value_class: UnknownDecisionClass
+    value_authority: str
+    required_capabilities: list[str]
+    production_required: bool
+    fixture_only: bool
+    secret_reference_ref: Reference_SecretReference | None
+    resource_budget_ref: Reference_ResourceBudget | None
+    owner_approval_ref: Reference_OwnerCommandReceipt | None
+
+class SecretReference(TypedDict):
+    schema_name: Literal['qc2.integrity_build.SecretReference.v1']
+    schema_version: Literal['1.0']
+    id: UuidV7
+    created_at: UtcInstant
+    owning_authority: Literal['configuration']
+    evidence_class: EvidenceClass
+    environment_namespace: EnvironmentNamespace
+    source_refs: list[ForeignReference]
+    content_hash: Sha256
+    secret_key_name: str
+    provider: str
+    version: int
+    required_capabilities: list[str]
+    rotation_due_at: str | None
+    last_verified_at: str | None
+
+class ResourceBudget(TypedDict):
+    schema_name: Literal['qc2.integrity_build.ResourceBudget.v1']
+    schema_version: Literal['1.0']
+    id: UuidV7
+    created_at: UtcInstant
+    owning_authority: Literal['configuration']
+    evidence_class: EvidenceClass
+    environment_namespace: EnvironmentNamespace
+    source_refs: list[ForeignReference]
+    content_hash: Sha256
+    budget_key: str
+    configuration_domain: ConfigurationDomain
+    version: int
+    max_experiments: int
+    max_concurrent_jobs: int
+    max_elapsed_seconds: int
+    max_cpu_seconds: int
+    max_memory_bytes: int
+    max_artifact_bytes: int
+    authorized_cost_minor_units: int
+    currency: str
+    owner_approval_ref: Reference_OwnerCommandReceipt | None
+    effective_from: str
+    fixture_only: bool
 
 class UnknownDecision(TypedDict):
     schema_name: Literal['qc2.integrity_build.UnknownDecision.v1']
@@ -2996,6 +3084,7 @@ class UnknownDecision(TypedDict):
     decision_class: UnknownDecisionClass
     reason: str
     affected_contract_refs: list[Reference_ConfigurationManifest | Reference_OwnerCommandReceipt | Reference_ValidationReport | Reference_EvidenceEvent | Reference_ArtifactManifest | Reference_BuildTask]
+    affected_capabilities: list[str]
     responsible_authority: str
     evidence_needed: str
     activation_consequence: str
@@ -3019,6 +3108,7 @@ class ChangeRequest(TypedDict):
     migration_plan: str
     test_refs: list[str]
     effective_boundary: str
+    is_restrictive_only: bool
     owner_approval_ref: Reference_OwnerCommandReceipt | None
     status: ChangeRequestState
 
@@ -3093,4 +3183,4 @@ class TaskAcceptanceReceipt(TypedDict):
     reviewer_identity: str | None
     checked_at: str
 
-__all__ = ['EvidenceClass', 'EnvironmentNamespace', 'MarketPhase', 'ClockStatus', 'JobState', 'JobAttemptState', 'OutboxState', 'ReadinessAction', 'ReadinessStatus', 'IdentityStatus', 'InstrumentClass', 'CorporateActionType', 'ActionUncertainty', 'MarketFeed', 'AdjustmentMode', 'BarTimeframe', 'BarStatus', 'DataCapability', 'CapabilityResult', 'CompletenessState', 'QuarantineDisposition', 'MissingnessPolicy', 'ZeroDenominatorPolicy', 'SignalDirection', 'RunnerProtocolResultState', 'SafetyResultState', 'MissingnessStatus', 'FeatureMissingReason', 'OutcomeFieldStatus', 'GateStatus', 'WarningPolicy', 'PriceReference', 'LabelTarget', 'MissingHeadPolicy', 'BaselineKind', 'ComparatorRole', 'ModelHeadKind', 'HeadAvailability', 'ModelLifecycle', 'PredictionRunState', 'PredictionDisposition', 'PredictionRowDisposition', 'ExtremaTieBreak', 'PredictionRole', 'ReplayMode', 'ReplayVerdict', 'OutcomeState', 'RunnerEventType', 'FailureType', 'MemoryIndexKind', 'ReviewKind', 'UniverseFidelity', 'AvailabilityPolicy', 'SplitUnit', 'HoldoutAccessScope', 'EvaluationVerdict', 'DriftState', 'OperatingMode', 'EpochState', 'ScheduledAttemptState', 'IntegrityVerdict', 'CoverageStatus', 'MetricDirection', 'ValidationVerdict', 'QuantityRounding', 'PaperAction', 'OrderSide', 'OrderType', 'TimeInForce', 'SessionRestriction', 'AccountMode', 'IntentState', 'IntentDecisionState', 'SubmissionOutcome', 'BrokerOrderState', 'BrokerOrderEventType', 'FillCorrectionKind', 'ReconciliationStatus', 'CashEntryKind', 'ReservationKind', 'ReservationState', 'PromotionRequestState', 'OwnerDecision', 'PromotionReceiptState', 'ChampionRole', 'EpochActivationChoice', 'ActivationState', 'SigningAlgorithm', 'DeviceSecurityLevel', 'DeviceRevocationState', 'RecoveryEventKind', 'OwnerCommandType', 'OwnerCommandScope', 'OwnerCommandReceiptState', 'AlertSeverity', 'ProofLevel', 'ConfigurationDomain', 'UnknownDecisionClass', 'UnknownDecisionState', 'ChangeClass', 'ChangeRequestState', 'ReferenceDisposition', 'CalibrationDependency', 'BuildTaskState', 'BuildGateVerdict', 'TimezoneId', 'CalendarManifest', 'CalendarRevision', 'MarketSession', 'ClockAssessment', 'JobDefinition', 'JobLease', 'JobAttempt', 'OutboxMessage', 'ReadinessAssessment', 'DeploymentCapabilityManifest', 'Instrument', 'SymbolAssignment', 'InstrumentClassification', 'CorporateActionRecord', 'AdjustmentManifest', 'CandidateCensus', 'DailyBar', 'RawReceipt', 'RequestManifest', 'DataCapabilityManifest', 'BarSemanticsManifest', 'DataBundle', 'UniverseManifest', 'MarketSnapshot', 'MarketSnapshotRevision', 'QuarantineCase', 'FeatureDefinition', 'FeatureRegistry', 'FeatureSnapshot', 'RunnerProtocolDefinition', 'RunnerProtocolRegistry', 'RunnerProtocolResult', 'SafetyProtocolDefinition', 'SafetyProtocolResult', 'LabelDefinition', 'LabelRegistry', 'ScoreDefinition', 'ScoreManifest', 'BaselineManifest', 'ModelManifest', 'ModelHeadDefinition', 'ModelHeadOutput', 'InferenceReceipt', 'PredictionRun', 'Prediction', 'ScientificPredictionPayload', 'PredictionSeal', 'RunDisposition', 'ShadowPredictionSet', 'ReplayRequest', 'ReplayReceipt', 'Outcome', 'OutcomeRevision', 'RunnerEvent', 'RunnerGenome', 'FailureGenome', 'MemoryIndexManifest', 'MatchedDecoySet', 'ReviewCase', 'DatasetManifest', 'DatasetRowLineage', 'SplitManifest', 'HoldoutAccessReceipt', 'Experiment', 'CandidateEvaluation', 'ChallengerEvaluation', 'DriftAssessment', 'ValidationEpoch', 'EpochManifest', 'ScheduledAttempt', 'ValidationSession', 'QualificationReceipt', 'MetricDefinition', 'MetricResult', 'StatisticalAnalysisPlan', 'ValidationReport', 'ReportAmendment', 'StrategyManifest', 'CapitalPolicy', 'PaperOrderIntent', 'IntentDecision', 'SubmissionAttempt', 'BrokerOrder', 'BrokerOrderEvent', 'Fill', 'FillCorrection', 'Position', 'CashLedgerEntry', 'Reservation', 'ReconciliationReport', 'ExecutionEpisode', 'PromotionPolicy', 'PromotionBundleManifest', 'PromotionRequest', 'PromotionChallenge', 'PromotionDecision', 'PromotionReceipt', 'ChampionPointer', 'EpochActivationChallenge', 'EpochActivationDecision', 'EpochActivationReceipt', 'OwnerDevice', 'OwnerSession', 'EnrollmentChallenge', 'RecoveryEvent', 'OwnerCommand', 'OwnerCommandReceipt', 'Alert', 'EvidenceEvent', 'Checkpoint', 'AnchorReceipt', 'ArtifactManifest', 'ArtifactDependency', 'BackupManifest', 'RestoreReceipt', 'ConfigurationManifest', 'UnknownDecision', 'ChangeRequest', 'ReferenceIntake', 'BuildTask', 'TaskAcceptanceReceipt']
+__all__ = ['EvidenceClass', 'EnvironmentNamespace', 'MarketPhase', 'ClockStatus', 'JobState', 'JobAttemptState', 'OutboxState', 'ReadinessAction', 'ReadinessStatus', 'IdentityStatus', 'InstrumentClass', 'CorporateActionType', 'ActionUncertainty', 'MarketFeed', 'AdjustmentMode', 'BarTimeframe', 'BarStatus', 'DataCapability', 'CapabilityResult', 'CompletenessState', 'QuarantineDisposition', 'MissingnessPolicy', 'ZeroDenominatorPolicy', 'SignalDirection', 'RunnerProtocolResultState', 'SafetyResultState', 'MissingnessStatus', 'FeatureMissingReason', 'OutcomeFieldStatus', 'GateStatus', 'WarningPolicy', 'PriceReference', 'LabelTarget', 'MissingHeadPolicy', 'BaselineKind', 'ComparatorRole', 'ModelHeadKind', 'HeadAvailability', 'ModelLifecycle', 'PredictionRunState', 'PredictionDisposition', 'PredictionRowDisposition', 'ExtremaTieBreak', 'PredictionRole', 'ReplayMode', 'ReplayVerdict', 'OutcomeState', 'RunnerEventType', 'FailureType', 'MemoryIndexKind', 'ReviewKind', 'UniverseFidelity', 'AvailabilityPolicy', 'SplitUnit', 'HoldoutAccessScope', 'EvaluationVerdict', 'DriftState', 'OperatingMode', 'EpochState', 'ScheduledAttemptState', 'IntegrityVerdict', 'CoverageStatus', 'MetricDirection', 'ValidationVerdict', 'QuantityRounding', 'PaperAction', 'OrderSide', 'OrderType', 'TimeInForce', 'SessionRestriction', 'AccountMode', 'IntentState', 'IntentDecisionState', 'SubmissionOutcome', 'BrokerOrderState', 'BrokerOrderEventType', 'FillCorrectionKind', 'ReconciliationStatus', 'CashEntryKind', 'ReservationKind', 'ReservationState', 'PromotionRequestState', 'OwnerDecision', 'PromotionReceiptState', 'ChampionRole', 'EpochActivationChoice', 'ActivationState', 'SigningAlgorithm', 'DeviceSecurityLevel', 'DeviceRevocationState', 'RecoveryEventKind', 'OwnerCommandType', 'OwnerCommandScope', 'OwnerCommandReceiptState', 'AlertSeverity', 'ProofLevel', 'ConfigurationDomain', 'UnknownDecisionClass', 'UnknownDecisionState', 'ChangeClass', 'ChangeRequestState', 'ReferenceDisposition', 'CalibrationDependency', 'BuildTaskState', 'BuildGateVerdict', 'TimezoneId', 'CalendarManifest', 'CalendarRevision', 'MarketSession', 'ClockAssessment', 'JobDefinition', 'JobLease', 'JobAttempt', 'OutboxMessage', 'ReadinessAssessment', 'DeploymentCapabilityManifest', 'Instrument', 'SymbolAssignment', 'InstrumentClassification', 'CorporateActionRecord', 'AdjustmentManifest', 'CandidateCensus', 'DailyBar', 'RawReceipt', 'RequestManifest', 'DataCapabilityManifest', 'BarSemanticsManifest', 'DataBundle', 'UniverseManifest', 'MarketSnapshot', 'MarketSnapshotRevision', 'QuarantineCase', 'FeatureDefinition', 'FeatureRegistry', 'FeatureSnapshot', 'RunnerProtocolDefinition', 'RunnerProtocolRegistry', 'RunnerProtocolResult', 'SafetyProtocolDefinition', 'SafetyProtocolResult', 'LabelDefinition', 'LabelRegistry', 'ScoreDefinition', 'ScoreManifest', 'BaselineManifest', 'ModelManifest', 'ModelHeadDefinition', 'ModelHeadOutput', 'InferenceReceipt', 'PredictionRun', 'Prediction', 'ScientificPredictionPayload', 'PredictionSeal', 'RunDisposition', 'ShadowPredictionSet', 'ReplayRequest', 'ReplayReceipt', 'Outcome', 'OutcomeRevision', 'RunnerEvent', 'RunnerGenome', 'FailureGenome', 'MemoryIndexManifest', 'MatchedDecoySet', 'ReviewCase', 'DatasetManifest', 'DatasetRowLineage', 'SplitManifest', 'HoldoutAccessReceipt', 'Experiment', 'CandidateEvaluation', 'ChallengerEvaluation', 'DriftAssessment', 'ValidationEpoch', 'EpochManifest', 'ScheduledAttempt', 'ValidationSession', 'QualificationReceipt', 'MetricDefinition', 'MetricResult', 'StatisticalAnalysisPlan', 'ValidationReport', 'ReportAmendment', 'StrategyManifest', 'CapitalPolicy', 'PaperOrderIntent', 'IntentDecision', 'SubmissionAttempt', 'BrokerOrder', 'BrokerOrderEvent', 'Fill', 'FillCorrection', 'Position', 'CashLedgerEntry', 'Reservation', 'ReconciliationReport', 'ExecutionEpisode', 'PromotionPolicy', 'PromotionBundleManifest', 'PromotionRequest', 'PromotionChallenge', 'PromotionDecision', 'PromotionReceipt', 'ChampionPointer', 'EpochActivationChallenge', 'EpochActivationDecision', 'EpochActivationReceipt', 'OwnerDevice', 'OwnerSession', 'EnrollmentChallenge', 'RecoveryEvent', 'OwnerCommand', 'OwnerCommandReceipt', 'Alert', 'EvidenceEvent', 'Checkpoint', 'AnchorReceipt', 'ArtifactManifest', 'ArtifactDependency', 'BackupManifest', 'RestoreReceipt', 'ConfigurationManifest', 'ConfigurationSetting', 'SecretReference', 'ResourceBudget', 'UnknownDecision', 'ChangeRequest', 'ReferenceIntake', 'BuildTask', 'TaskAcceptanceReceipt']

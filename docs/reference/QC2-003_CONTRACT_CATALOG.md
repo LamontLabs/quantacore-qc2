@@ -1,6 +1,6 @@
 # QC2 Canonical Contract Catalog
 
-**Status:** generated, version 1.0. **Objects:** 121. **Aliases:** none.
+**Status:** generated, version 1.0. **Objects:** 124. **Aliases:** none.
 
 `packages/contracts/src/qc2_contracts/catalog.py` is the source catalog. Every object named in `GEN2_MASTER_SPEC.md` §12 is represented by its exact name and a strict JSON Schema in `packages/contracts/schemas/v1/`.
 
@@ -137,7 +137,10 @@ The catalog defines contracts and boundary rules only. It does not add a persist
 | `ArtifactDependency` | `qc2.integrity_build.ArtifactDependency.v1` | `model_registry` | apexlab, build_governance, configuration, core, evidence, governance, model_registry, owner_api, validation | `id` | no | immutable record |
 | `BackupManifest` | `qc2.integrity_build.BackupManifest.v1` | `evidence` | apexlab, build_governance, configuration, core, evidence, governance, model_registry, owner_api, validation | `id` | yes | immutable record |
 | `RestoreReceipt` | `qc2.integrity_build.RestoreReceipt.v1` | `evidence` | apexlab, build_governance, configuration, core, evidence, governance, model_registry, owner_api, validation | `id` | no | immutable record |
-| `ConfigurationManifest` | `qc2.integrity_build.ConfigurationManifest.v1` | `configuration` | apexlab, build_governance, configuration, core, evidence, governance, model_registry, owner_api, validation | `id` | yes | immutable record |
+| `ConfigurationManifest` | `qc2.integrity_build.ConfigurationManifest.v1` | `configuration` | apexlab, build_governance, configuration, core, evidence, governance, model_registry, owner_api, validation | `configuration_domain`, `environment_namespace`, `version` | yes | immutable record |
+| `ConfigurationSetting` | `qc2.integrity_build.ConfigurationSetting.v1` | `configuration` | apexlab, build_governance, configuration, core, evidence, governance, model_registry, owner_api, validation | `configuration_domain`, `environment_namespace`, `setting_key`, `version` | yes | immutable record |
+| `SecretReference` | `qc2.integrity_build.SecretReference.v1` | `configuration` | apexlab, build_governance, configuration, core, evidence, governance, model_registry, owner_api, validation | `environment_namespace`, `secret_key_name`, `version` | yes | immutable record |
+| `ResourceBudget` | `qc2.integrity_build.ResourceBudget.v1` | `configuration` | apexlab, build_governance, configuration, core, evidence, governance, model_registry, owner_api, validation | `configuration_domain`, `environment_namespace`, `budget_key`, `version` | yes | immutable record |
 | `UnknownDecision` | `qc2.integrity_build.UnknownDecision.v1` | `configuration` | apexlab, build_governance, configuration, core, evidence, governance, model_registry, owner_api, validation | `id` | no | immutable record |
 | `ChangeRequest` | `qc2.integrity_build.ChangeRequest.v1` | `build_governance` | apexlab, build_governance, configuration, core, evidence, governance, model_registry, owner_api, validation | `id` | yes | immutable record |
 | `ReferenceIntake` | `qc2.integrity_build.ReferenceIntake.v1` | `build_governance` | apexlab, build_governance, configuration, core, evidence, governance, model_registry, owner_api, validation | `id` | yes | immutable record |
@@ -154,17 +157,18 @@ The catalog defines contracts and boundary rules only. It does not add a persist
 | `BuildTask` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `task_id`, `task_name`, `objective`, `dependency_task_ids`, `authorized_legacy_refs`, `deliverable_refs`, `required_test_refs`, `acceptance_gate`, `evidence_requirement`, `calibration_dependency`, `task_state`, `blocker_refs` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `CalendarManifest` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `calendar_version`, `timezone`, `valid_from`, `valid_through`, `sessions` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `CapitalPolicy` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `paper_starting_capital`, `currency`, `maximum_position_cost`, `maximum_position_fraction`, `maximum_gross_exposure`, `cash_reserve`, `maximum_concurrent_positions`, `daily_loss_limit`, `drawdown_response`, `participation_limit`, `external_activity_policy`, `owner_approval_ref` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
-| `ChangeRequest` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `change_class`, `requirements_changed`, `reason`, `impact_analysis`, `migration_plan`, `test_refs`, `effective_boundary`, `owner_approval_ref`, `status` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
+| `ChangeRequest` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `change_class`, `requirements_changed`, `reason`, `impact_analysis`, `migration_plan`, `test_refs`, `effective_boundary`, `is_restrictive_only`, `owner_approval_ref`, `status` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `Checkpoint` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `stream_id`, `head_sequence`, `head_hash`, `event_count`, `artifact_root_hash`, `checkpoint_hash` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
-| `ConfigurationManifest` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `configuration_domain`, `version`, `effective_from`, `setting_refs`, `policy_hash`, `unresolved_decision_refs`, `fixture_only`, `signed_by_owner` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
+| `ConfigurationManifest` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `configuration_domain`, `version`, `effective_from`, `capability_scope`, `required_setting_keys`, `setting_refs`, `resource_budget_refs`, `policy_hash`, `unresolved_decision_refs`, `fixture_only`, `signed_by_owner` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
+| `ConfigurationSetting` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `setting_key`, `configuration_domain`, `version`, `effective_from`, `value_hash`, `value_class`, `value_authority`, `required_capabilities`, `production_required`, `fixture_only`, `secret_reference_ref`, `resource_budget_ref`, `owner_approval_ref` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `DatasetManifest` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `universe_fidelity`, `snapshot_refs`, `raw_receipt_refs`, `action_refs`, `registry_refs`, `memory_cutoff`, `availability_policy`, `row_lineage_hash`, `membership_hash`, `time_start`, `time_end`, `symbol_count`, `missingness_counts`, `revision_refs`, `split_assignment_hash`, `normalization_ref`, `sampling_policy`, `artifact_hash` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `DatasetRowLineage` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `dataset_ref`, `row_key`, `instrument_ref`, `session_id`, `horizon_sessions`, `target_ref`, `lineage_hash` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `EpochActivationChallenge` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `epoch_manifest_ref`, `prospective_start_session`, `account_identity_hash`, `strategy_hash`, `nonce`, `issued_at`, `expires_at`, `device_ref`, `key_id` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `EpochActivationDecision` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `challenge_ref`, `epoch_manifest_hash`, `decision`, `device_ref`, `key_id`, `signature`, `signed_at` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
-| `EpochManifest` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `epoch_key`, `regime`, `mode`, `calendar_ref`, `universe_ref`, `registry_refs`, `model_ref`, `reference_model_ref`, `strategy_ref`, `effective_session` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
+| `EpochManifest` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `epoch_key`, `regime`, `mode`, `calendar_ref`, `universe_ref`, `registry_refs`, `model_ref`, `reference_model_ref`, `strategy_ref`, `configuration_ref`, `effective_session` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `EvidenceEvent` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `installation_id`, `stream_id`, `sequence`, `event_type`, `actor_identity`, `authorized_command_ref`, `correlation_id`, `payload_hash`, `dependency_refs`, `previous_event_hash`, `event_hash`, `wall_clock_at`, `monotonic_generation` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `ExecutionEpisode` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `paper_account_fingerprint`, `account_mode`, `opened_at`, `opening_cash`, `currency`, `opening_position_refs`, `opening_order_refs`, `strategy_ref`, `capital_policy_ref`, `sealed_at`, `episode_hash` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
-| `Experiment` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `hypothesis`, `search_space_hash`, `code_hash`, `environment_fingerprint`, `dataset_ref`, `split_ref`, `candidate_refs`, `algorithm`, `seed`, `budget_ref`, `compute_cost`, `evaluation_access`, `result_ref`, `rejection_reason`, `artifact_refs` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
+| `Experiment` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `hypothesis`, `search_space_hash`, `code_hash`, `environment_fingerprint`, `dataset_ref`, `split_ref`, `candidate_refs`, `algorithm`, `seed`, `configuration_ref`, `budget_ref`, `compute_cost`, `evaluation_access`, `result_ref`, `rejection_reason`, `artifact_refs` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `FailureGenome` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `event_ref`, `failure_type`, `pre_event_snapshot_refs`, `prediction_refs`, `outcome_refs`, `provenance_refs`, `curation_version`, `event_time`, `available_for_learning_at`, `temporal_dependency_refs` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `FeatureDefinition` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `stable_key`, `version`, `equation`, `input_refs`, `input_units`, `lookback_sessions`, `warmup_sessions`, `alignment`, `missingness_policy`, `zero_denominator_policy`, `supported_regime`, `dependency_refs`, `implementation_hash`, `invariance_properties` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `FeatureRegistry` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `registry_version`, `definition_refs`, `ordered_feature_ids`, `effective_from` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
@@ -185,6 +189,7 @@ The catalog defines contracts and boundary rules only. It does not add a persist
 | `PromotionPolicy` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `policy_key`, `version`, `prospective_sessions`, `minimum_events`, `uncertainty_requirements`, `calibration_bounds`, `coverage_limits`, `stability_limits`, `regression_gates`, `maximum_attempts`, `cooldown_sessions`, `permitted_artifact_types`, `compatibility_envelope`, `epoch_modes`, `frozen_at` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `QualificationReceipt` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `epoch_ref`, `session_id`, `prediction_seal_ref`, `prediction_integrity`, `denominator_status`, `on_time_seal`, `on_time_anchor`, `comparator_available`, `protocol_conformity`, `sealed_at`, `checkpoint_ref` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `ReferenceIntake` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `repository_identity`, `revision`, `file_path`, `file_sha256`, `inspected_symbol`, `relevant_test_refs`, `reason_for_inspection`, `source_supported_meaning`, `useful_concepts`, `conflicts`, `license`, `provenance_limits`, `disposition` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
+| `ResourceBudget` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `budget_key`, `configuration_domain`, `version`, `max_experiments`, `max_concurrent_jobs`, `max_elapsed_seconds`, `max_cpu_seconds`, `max_memory_bytes`, `max_artifact_bytes`, `authorized_cost_minor_units`, `currency`, `owner_approval_ref`, `effective_from`, `fixture_only` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `RunnerGenome` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `event_ref`, `pre_event_snapshot_refs`, `prediction_refs`, `outcome_refs`, `provenance_refs`, `curation_version`, `event_time`, `available_for_learning_at`, `temporal_dependency_refs` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `RunnerProtocolDefinition` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `protocol_namespace`, `protocol_id`, `version`, `hypothesis`, `direction`, `input_refs`, `parameter_refs`, `implementation_hash`, `regime` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `RunnerProtocolRegistry` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `registry_version`, `definition_refs`, `active_protocol_ids`, `effective_from` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
@@ -193,10 +198,11 @@ The catalog defines contracts and boundary rules only. It does not add a persist
 | `ScientificPredictionPayload` | `session_id`, `reference_kind`, `reference_price`, `instrument_ref`, `horizon_label_refs`, `head_output_refs`, `dependency_refs`, `score`, `rank`, `disposition`, `model_hash`, `epoch_ref`, `regime` | `schema_name`, `schema_version`, `id`, `created_at`, `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `content_hash` |
 | `ScoreDefinition` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `stable_key`, `version`, `coefficients`, `transforms`, `clipping_policy`, `missing_head_policy`, `tie_break_rule`, `input_refs` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `ScoreManifest` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `definition_ref`, `score_precision`, `score_unit`, `frozen_at` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
+| `SecretReference` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `secret_key_name`, `provider`, `version`, `required_capabilities`, `rotation_due_at`, `last_verified_at` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `ShadowPredictionSet` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `model_ref`, `eligible_at`, `target_label_refs`, `comparison_window_sessions`, `comparator_refs`, `registration_hash` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `SplitManifest` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `dataset_ref`, `split_unit`, `training_intervals`, `validation_intervals`, `qualification_interval`, `purge_sessions`, `embargo_sessions`, `cutoff_policy`, `split_hash` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `StatisticalAnalysisPlan` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `epoch_ref`, `primary_metric_ref`, `comparator_ref`, `interval_method`, `alpha`, `practical_minimum_effect`, `minimum_event_clusters`, `minimum_effective_blocks`, `resample_count`, `missingness_method`, `stopping_rule`, `frozen_at` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
-| `StrategyManifest` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `strategy_key`, `version`, `selection_k`, `rank_rule`, `entry_window`, `allocation_order`, `price_cap_rule`, `quantity_rounding`, `stop_rule`, `target_rule`, `trailing_rule`, `maximum_holding_sessions`, `reentry_policy`, `reservation_policy`, `cancellation_policy`, `gap_no_fill_policy`, `competing_action_rule` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
+| `StrategyManifest` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `strategy_key`, `version`, `selection_k`, `rank_rule`, `entry_window`, `allocation_order`, `price_cap_rule`, `quantity_rounding`, `stop_rule`, `target_rule`, `trailing_rule`, `maximum_holding_sessions`, `reentry_policy`, `reservation_policy`, `cancellation_policy`, `gap_no_fill_policy`, `competing_action_rule`, `configuration_ref` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `TaskAcceptanceReceipt` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `task_ref`, `task_spec_version`, `source_commit`, `changed_paths`, `executed_commands`, `test_counts`, `artifact_hashes`, `legacy_intake_refs`, `unresolved_decisions`, `gate_verdict`, `agent_identity`, `reviewer_identity`, `checked_at` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `ValidationEpoch` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `epoch_key`, `regime`, `mode`, `start_session`, `manifest_ref`, `champion_ref`, `reference_model_ref`, `activated_at` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash`, `epoch_state` |
 | `ValidationReport` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `epoch_ref`, `verdict`, `scheduled_attempt_refs`, `qualification_refs`, `metric_refs`, `missingness_bounds`, `limitation_codes`, `report_hash`, `sealed_at` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
@@ -315,7 +321,7 @@ Identity: `id`, `logical_key`. Immutable fields: `schema_name`, `schema_version`
 | `logical_key` | yes | `slug` | lowercase identifier | — |
 | `dependency_refs` | yes | `refs<JobDefinition>` | typed foreign reference to the listed contract | JobDefinition |
 | `deadline` | yes | `utc_instant` | UTC instant | — |
-| `resource_budget_ref` | yes | `ref<ConfigurationManifest>` | typed foreign reference to the listed contract | ConfigurationManifest |
+| `resource_budget_ref` | yes | `ref<ResourceBudget>` | typed foreign reference to the listed contract | ResourceBudget |
 | `checkpoint_ref` | yes | `nullable_ref<Checkpoint>` | typed foreign reference to the listed contract | — |
 | `state` | yes | `enum<JobState>` | enumerated state/dimension; see the named enum | — |
 
@@ -437,7 +443,7 @@ Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `create
 
 Schema: `qc2.time_operation.DeploymentCapabilityManifest.v1`. Writer: `configuration`. Readers: calendar, configuration, core, durable_job_service, evidence, owner_api, prediction, safety, validation.
 
-Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `created_at`, `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `deployment_fingerprint`, `observed_at`, `capability_results`, `resource_limits_ref`, `revalidation_due_at`.
+Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `created_at`, `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `deployment_fingerprint`, `observed_at`, `capability_results`, `configuration_ref`, `resource_limits_ref`, `revalidation_due_at`.
 
 | Field | Required | Type | Unit | Foreign target |
 |---|---:|---|---|---|
@@ -452,7 +458,8 @@ Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `create
 | `deployment_fingerprint` | yes | `sha256` | SHA-256 digest (lowercase hexadecimal) | — |
 | `observed_at` | yes | `utc_instant` | UTC instant | — |
 | `capability_results` | yes | `gate_result_list` | ordered array; item unit/type is stated by the field | — |
-| `resource_limits_ref` | yes | `ref<ConfigurationManifest>` | typed foreign reference to the listed contract | ConfigurationManifest |
+| `configuration_ref` | yes | `ref<ConfigurationManifest>` | typed foreign reference to the listed contract | ConfigurationManifest |
+| `resource_limits_ref` | yes | `ref<ResourceBudget>` | typed foreign reference to the listed contract | ResourceBudget |
 | `revalidation_due_at` | yes | `utc_instant` | UTC instant | — |
 
 
@@ -1920,7 +1927,7 @@ Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `create
 
 Schema: `qc2.outcomes_research.Experiment.v1`. Writer: `apexlab`. Readers: apexlab, evidence, ground_truth, model_registry, owner_api, prediction, validation.
 
-Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `created_at`, `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `content_hash`, `hypothesis`, `search_space_hash`, `code_hash`, `environment_fingerprint`, `dataset_ref`, `split_ref`, `candidate_refs`, `algorithm`, `seed`, `budget_ref`, `compute_cost`, `evaluation_access`, `result_ref`, `rejection_reason`, `artifact_refs`.
+Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `created_at`, `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `content_hash`, `hypothesis`, `search_space_hash`, `code_hash`, `environment_fingerprint`, `dataset_ref`, `split_ref`, `candidate_refs`, `algorithm`, `seed`, `configuration_ref`, `budget_ref`, `compute_cost`, `evaluation_access`, `result_ref`, `rejection_reason`, `artifact_refs`.
 
 | Field | Required | Type | Unit | Foreign target |
 |---|---:|---|---|---|
@@ -1942,7 +1949,8 @@ Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `create
 | `candidate_refs` | yes | `refs<ModelManifest>` | typed foreign reference to the listed contract | ModelManifest |
 | `algorithm` | yes | `slug` | lowercase identifier | — |
 | `seed` | yes | `nonnegative_int` | integer count (unit is named by the field) | — |
-| `budget_ref` | yes | `ref<ConfigurationManifest>` | typed foreign reference to the listed contract | ConfigurationManifest |
+| `configuration_ref` | yes | `ref<ConfigurationManifest>` | typed foreign reference to the listed contract | ConfigurationManifest |
+| `budget_ref` | yes | `ref<ResourceBudget>` | typed foreign reference to the listed contract | ResourceBudget |
 | `compute_cost` | yes | `decimal` | currency amount in the adjacent currency field | — |
 | `evaluation_access` | yes | `text_list` | ordered array; item unit/type is stated by the field | — |
 | `result_ref` | yes | `nullable_ref<CandidateEvaluation>` | typed foreign reference to the listed contract | — |
@@ -2068,7 +2076,7 @@ State field: `epoch_state`. Guard: Activation requires exact signed owner decisi
 
 Schema: `qc2.validation.EpochManifest.v1`. Writer: `validation`. Readers: apexlab, evidence, ground_truth, model_registry, owner_api, prediction, promotion, validation.
 
-Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `created_at`, `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `content_hash`, `epoch_key`, `regime`, `mode`, `calendar_ref`, `universe_ref`, `registry_refs`, `model_ref`, `reference_model_ref`, `strategy_ref`, `effective_session`.
+Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `created_at`, `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `content_hash`, `epoch_key`, `regime`, `mode`, `calendar_ref`, `universe_ref`, `registry_refs`, `model_ref`, `reference_model_ref`, `strategy_ref`, `configuration_ref`, `effective_session`.
 
 | Field | Required | Type | Unit | Foreign target |
 |---|---:|---|---|---|
@@ -2090,6 +2098,7 @@ Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `create
 | `model_ref` | yes | `ref<ModelManifest>` | typed foreign reference to the listed contract | ModelManifest |
 | `reference_model_ref` | yes | `ref<ModelManifest>` | typed foreign reference to the listed contract | ModelManifest |
 | `strategy_ref` | yes | `ref<StrategyManifest>` | typed foreign reference to the listed contract | StrategyManifest |
+| `configuration_ref` | yes | `ref<ConfigurationManifest>` | typed foreign reference to the listed contract | ConfigurationManifest |
 | `effective_session` | yes | `session` | exchange session date (YYYY-MM-DD) | — |
 
 ### ScheduledAttempt
@@ -2305,7 +2314,7 @@ Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `create
 
 Schema: `qc2.execution.StrategyManifest.v1`. Writer: `strategy`. Readers: alert, configuration, evidence, execution, instrument_universe, market_data, owner_api, prediction, safety, strategy.
 
-Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `created_at`, `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `content_hash`, `strategy_key`, `version`, `selection_k`, `rank_rule`, `entry_window`, `allocation_order`, `price_cap_rule`, `quantity_rounding`, `stop_rule`, `target_rule`, `trailing_rule`, `maximum_holding_sessions`, `reentry_policy`, `reservation_policy`, `cancellation_policy`, `gap_no_fill_policy`, `competing_action_rule`.
+Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `created_at`, `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `content_hash`, `strategy_key`, `version`, `selection_k`, `rank_rule`, `entry_window`, `allocation_order`, `price_cap_rule`, `quantity_rounding`, `stop_rule`, `target_rule`, `trailing_rule`, `maximum_holding_sessions`, `reentry_policy`, `reservation_policy`, `cancellation_policy`, `gap_no_fill_policy`, `competing_action_rule`, `configuration_ref`.
 
 | Field | Required | Type | Unit | Foreign target |
 |---|---:|---|---|---|
@@ -2335,6 +2344,7 @@ Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `create
 | `cancellation_policy` | yes | `text` | text | — |
 | `gap_no_fill_policy` | yes | `text` | text | — |
 | `competing_action_rule` | yes | `text` | text | — |
+| `configuration_ref` | yes | `ref<ConfigurationManifest>` | typed foreign reference to the listed contract | ConfigurationManifest |
 
 ### CapitalPolicy
 
@@ -3374,7 +3384,7 @@ Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `create
 
 Schema: `qc2.integrity_build.ConfigurationManifest.v1`. Writer: `configuration`. Readers: apexlab, build_governance, configuration, core, evidence, governance, model_registry, owner_api, validation.
 
-Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `created_at`, `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `content_hash`, `configuration_domain`, `version`, `effective_from`, `setting_refs`, `policy_hash`, `unresolved_decision_refs`, `fixture_only`, `signed_by_owner`.
+Identity: `configuration_domain`, `environment_namespace`, `version`. Immutable fields: `schema_name`, `schema_version`, `id`, `created_at`, `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `content_hash`, `configuration_domain`, `version`, `effective_from`, `capability_scope`, `required_setting_keys`, `setting_refs`, `resource_budget_refs`, `policy_hash`, `unresolved_decision_refs`, `fixture_only`, `signed_by_owner`.
 
 | Field | Required | Type | Unit | Foreign target |
 |---|---:|---|---|---|
@@ -3390,17 +3400,126 @@ Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `create
 | `configuration_domain` | yes | `enum<ConfigurationDomain>` | enumerated state/dimension; see the named enum | — |
 | `version` | yes | `positive_int` | integer count (unit is named by the field) | — |
 | `effective_from` | yes | `session` | exchange session date (YYYY-MM-DD) | — |
-| `setting_refs` | yes | `text_list` | ordered array; item unit/type is stated by the field | — |
+| `capability_scope` | yes | `text_list` | ordered array; item unit/type is stated by the field | — |
+| `required_setting_keys` | yes | `text_list` | ordered array; item unit/type is stated by the field | — |
+| `setting_refs` | yes | `refs<ConfigurationSetting>` | typed foreign reference to the listed contract | ConfigurationSetting |
+| `resource_budget_refs` | yes | `refs<ResourceBudget>` | typed foreign reference to the listed contract | ResourceBudget |
 | `policy_hash` | yes | `sha256` | SHA-256 digest (lowercase hexadecimal) | — |
 | `unresolved_decision_refs` | yes | `refs<UnknownDecision>` | typed foreign reference to the listed contract | UnknownDecision |
 | `fixture_only` | yes | `boolean` | not applicable | — |
 | `signed_by_owner` | yes | `boolean` | not applicable | — |
 
+Invariants:
+- configuration setting and budget references are typed, hash-pinned, and effective for the manifest environment and session
+- required_setting_keys are unique and include every bound production-required setting
+- one latest effective manifest exists per configuration domain and capability
+- invalid configuration blocks only capabilities in capability_scope
+
+### ConfigurationSetting
+
+Schema: `qc2.integrity_build.ConfigurationSetting.v1`. Writer: `configuration`. Readers: apexlab, build_governance, configuration, core, evidence, governance, model_registry, owner_api, validation.
+
+Identity: `configuration_domain`, `environment_namespace`, `setting_key`, `version`. Immutable fields: `schema_name`, `schema_version`, `id`, `created_at`, `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `content_hash`, `setting_key`, `configuration_domain`, `version`, `effective_from`, `value_hash`, `value_class`, `value_authority`, `required_capabilities`, `production_required`, `fixture_only`, `secret_reference_ref`, `resource_budget_ref`, `owner_approval_ref`.
+
+| Field | Required | Type | Unit | Foreign target |
+|---|---:|---|---|---|
+| `schema_name` | yes | `text` | text | — |
+| `schema_version` | yes | `text` | text | — |
+| `id` | yes | `uuidv7` | UUIDv7 identifier | — |
+| `created_at` | yes | `utc_instant` | UTC instant | — |
+| `owning_authority` | yes | `slug` | lowercase identifier | — |
+| `evidence_class` | yes | `enum<EvidenceClass>` | enumerated state/dimension; see the named enum | — |
+| `environment_namespace` | yes | `enum<EnvironmentNamespace>` | enumerated state/dimension; see the named enum | — |
+| `source_refs` | yes | `ref_list` | ordered array; item unit/type is stated by the field | — |
+| `content_hash` | yes | `sha256` | SHA-256 digest (lowercase hexadecimal) | — |
+| `setting_key` | yes | `slug` | lowercase identifier | — |
+| `configuration_domain` | yes | `enum<ConfigurationDomain>` | enumerated state/dimension; see the named enum | — |
+| `version` | yes | `positive_int` | integer count (unit is named by the field) | — |
+| `effective_from` | yes | `session` | exchange session date (YYYY-MM-DD) | — |
+| `value_hash` | yes | `sha256` | SHA-256 digest (lowercase hexadecimal) | — |
+| `value_class` | yes | `enum<UnknownDecisionClass>` | enumerated state/dimension; see the named enum | — |
+| `value_authority` | yes | `slug` | lowercase identifier | — |
+| `required_capabilities` | yes | `text_list` | ordered array; item unit/type is stated by the field | — |
+| `production_required` | yes | `boolean` | not applicable | — |
+| `fixture_only` | yes | `boolean` | not applicable | — |
+| `secret_reference_ref` | yes | `nullable_ref<SecretReference>` | typed foreign reference to the listed contract | — |
+| `resource_budget_ref` | yes | `nullable_ref<ResourceBudget>` | typed foreign reference to the listed contract | — |
+| `owner_approval_ref` | yes | `nullable_ref<OwnerCommandReceipt>` | typed foreign reference to the listed contract | — |
+
+Invariants:
+- at most one authoritative setting definition is effective for a domain, environment, and key at a session
+- setting values are represented by value_hash; secret values are never persisted in this contract
+- OWNER_POLICY_REQUIRED values carry a typed owner-approval reference
+
+### SecretReference
+
+Schema: `qc2.integrity_build.SecretReference.v1`. Writer: `configuration`. Readers: apexlab, build_governance, configuration, core, evidence, governance, model_registry, owner_api, validation.
+
+Identity: `environment_namespace`, `secret_key_name`, `version`. Immutable fields: `schema_name`, `schema_version`, `id`, `created_at`, `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `content_hash`, `secret_key_name`, `provider`, `version`, `required_capabilities`, `rotation_due_at`, `last_verified_at`.
+
+| Field | Required | Type | Unit | Foreign target |
+|---|---:|---|---|---|
+| `schema_name` | yes | `text` | text | — |
+| `schema_version` | yes | `text` | text | — |
+| `id` | yes | `uuidv7` | UUIDv7 identifier | — |
+| `created_at` | yes | `utc_instant` | UTC instant | — |
+| `owning_authority` | yes | `slug` | lowercase identifier | — |
+| `evidence_class` | yes | `enum<EvidenceClass>` | enumerated state/dimension; see the named enum | — |
+| `environment_namespace` | yes | `enum<EnvironmentNamespace>` | enumerated state/dimension; see the named enum | — |
+| `source_refs` | yes | `ref_list` | ordered array; item unit/type is stated by the field | — |
+| `content_hash` | yes | `sha256` | SHA-256 digest (lowercase hexadecimal) | — |
+| `secret_key_name` | yes | `slug` | lowercase identifier | — |
+| `provider` | yes | `slug` | lowercase identifier | — |
+| `version` | yes | `positive_int` | integer count (unit is named by the field) | — |
+| `required_capabilities` | yes | `text_list` | ordered array; item unit/type is stated by the field | — |
+| `rotation_due_at` | yes | `nullable_utc_instant` | UTC instant | — |
+| `last_verified_at` | yes | `nullable_utc_instant` | UTC instant | — |
+
+Invariants:
+- the contract contains a symbolic, environment-scoped secret handle and never credential material
+
+### ResourceBudget
+
+Schema: `qc2.integrity_build.ResourceBudget.v1`. Writer: `configuration`. Readers: apexlab, build_governance, configuration, core, evidence, governance, model_registry, owner_api, validation.
+
+Identity: `configuration_domain`, `environment_namespace`, `budget_key`, `version`. Immutable fields: `schema_name`, `schema_version`, `id`, `created_at`, `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `content_hash`, `budget_key`, `configuration_domain`, `version`, `max_experiments`, `max_concurrent_jobs`, `max_elapsed_seconds`, `max_cpu_seconds`, `max_memory_bytes`, `max_artifact_bytes`, `authorized_cost_minor_units`, `currency`, `owner_approval_ref`, `effective_from`, `fixture_only`.
+
+| Field | Required | Type | Unit | Foreign target |
+|---|---:|---|---|---|
+| `schema_name` | yes | `text` | text | — |
+| `schema_version` | yes | `text` | text | — |
+| `id` | yes | `uuidv7` | UUIDv7 identifier | — |
+| `created_at` | yes | `utc_instant` | UTC instant | — |
+| `owning_authority` | yes | `slug` | lowercase identifier | — |
+| `evidence_class` | yes | `enum<EvidenceClass>` | enumerated state/dimension; see the named enum | — |
+| `environment_namespace` | yes | `enum<EnvironmentNamespace>` | enumerated state/dimension; see the named enum | — |
+| `source_refs` | yes | `ref_list` | ordered array; item unit/type is stated by the field | — |
+| `content_hash` | yes | `sha256` | SHA-256 digest (lowercase hexadecimal) | — |
+| `budget_key` | yes | `slug` | lowercase identifier | — |
+| `configuration_domain` | yes | `enum<ConfigurationDomain>` | enumerated state/dimension; see the named enum | — |
+| `version` | yes | `positive_int` | integer count (unit is named by the field) | — |
+| `max_experiments` | yes | `nonnegative_int` | integer count (unit is named by the field) | — |
+| `max_concurrent_jobs` | yes | `positive_int` | integer count (unit is named by the field) | — |
+| `max_elapsed_seconds` | yes | `positive_int` | integer count (unit is named by the field) | — |
+| `max_cpu_seconds` | yes | `positive_int` | integer count (unit is named by the field) | — |
+| `max_memory_bytes` | yes | `positive_int` | bytes | — |
+| `max_artifact_bytes` | yes | `positive_int` | bytes | — |
+| `authorized_cost_minor_units` | yes | `nonnegative_int` | integer count (unit is named by the field) | — |
+| `currency` | yes | `currency_code` | ISO 4217 currency code | — |
+| `owner_approval_ref` | yes | `nullable_ref<OwnerCommandReceipt>` | typed foreign reference to the listed contract | — |
+| `effective_from` | yes | `session` | exchange session date (YYYY-MM-DD) | — |
+| `fixture_only` | yes | `boolean` | not applicable | — |
+
+Invariants:
+- measured usage does not exceed any declared limit
+- nonzero authorized_cost_minor_units requires a typed owner-approval reference
+- fixture-only budgets are not eligible in production
+
 ### UnknownDecision
 
 Schema: `qc2.integrity_build.UnknownDecision.v1`. Writer: `configuration`. Readers: apexlab, build_governance, configuration, core, evidence, governance, model_registry, owner_api, validation.
 
-Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `created_at`, `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `decision_key`, `decision_class`, `reason`, `affected_contract_refs`, `responsible_authority`, `evidence_needed`, `activation_consequence`, `decision_state`, `resolved_by`.
+Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `created_at`, `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `decision_key`, `decision_class`, `reason`, `affected_contract_refs`, `affected_capabilities`, `responsible_authority`, `evidence_needed`, `activation_consequence`, `decision_state`, `resolved_by`.
 
 | Field | Required | Type | Unit | Foreign target |
 |---|---:|---|---|---|
@@ -3416,17 +3535,22 @@ Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `create
 | `decision_class` | yes | `enum<UnknownDecisionClass>` | enumerated state/dimension; see the named enum | — |
 | `reason` | yes | `text` | text | — |
 | `affected_contract_refs` | yes | `refs<ConfigurationManifest|OwnerCommandReceipt|ValidationReport|EvidenceEvent|ArtifactManifest|BuildTask>` | typed foreign reference to the listed contract | ConfigurationManifest, OwnerCommandReceipt, ValidationReport, EvidenceEvent, ArtifactManifest, BuildTask |
+| `affected_capabilities` | yes | `text_list` | ordered array; item unit/type is stated by the field | — |
 | `responsible_authority` | yes | `slug` | lowercase identifier | — |
 | `evidence_needed` | yes | `text` | text | — |
 | `activation_consequence` | yes | `text` | text | — |
 | `decision_state` | yes | `enum<UnknownDecisionState>` | enumerated state/dimension; see the named enum | — |
 | `resolved_by` | yes | `nullable_ref<OwnerCommandReceipt>` | typed foreign reference to the listed contract | — |
 
+Invariants:
+- unresolved production decisions block only their affected capabilities
+- a decision becomes resolved only with the named authority and required evidence
+
 ### ChangeRequest
 
 Schema: `qc2.integrity_build.ChangeRequest.v1`. Writer: `build_governance`. Readers: apexlab, build_governance, configuration, core, evidence, governance, model_registry, owner_api, validation.
 
-Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `created_at`, `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `content_hash`, `change_class`, `requirements_changed`, `reason`, `impact_analysis`, `migration_plan`, `test_refs`, `effective_boundary`, `owner_approval_ref`, `status`.
+Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `created_at`, `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `content_hash`, `change_class`, `requirements_changed`, `reason`, `impact_analysis`, `migration_plan`, `test_refs`, `effective_boundary`, `is_restrictive_only`, `owner_approval_ref`, `status`.
 
 | Field | Required | Type | Unit | Foreign target |
 |---|---:|---|---|---|
@@ -3446,8 +3570,13 @@ Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `create
 | `migration_plan` | yes | `text` | text | — |
 | `test_refs` | yes | `text_list` | ordered array; item unit/type is stated by the field | — |
 | `effective_boundary` | yes | `text` | text | — |
+| `is_restrictive_only` | yes | `boolean` | not applicable | — |
 | `owner_approval_ref` | yes | `nullable_ref<OwnerCommandReceipt>` | typed foreign reference to the listed contract | — |
 | `status` | yes | `enum<ChangeRequestState>` | enumerated state/dimension; see the named enum | — |
+
+Invariants:
+- C0/C1 are release-bound, C1 requires equivalence tests, and C2 is bound to a non-past epoch session
+- C3 carries the exact owner-approval hash and C4 can only take effect immediately when restrictive
 
 ### ReferenceIntake
 
@@ -3549,6 +3678,6 @@ The Android app remains a reserved boundary with no serializer/runtime or Androi
 
 ## Fixtures and verification
 
-`fixtures/v1/valid.json` contains one valid synthetic fixture for each of the 121 contracts. `fixtures/v1/invalid.json` contains unknown-field and incompatible-version cases for every object, plus hostile decimal, timezone, temporal, identity/reference, execution, missingness, state-transition, and field-consistency examples. They are test data only and are never activation evidence.
+`fixtures/v1/valid.json` contains one valid synthetic fixture for each of the 124 contracts. `fixtures/v1/invalid.json` contains unknown-field and incompatible-version cases for every object, plus hostile decimal, timezone, temporal, identity/reference, execution, missingness, state-transition, and field-consistency examples. They are test data only and are never activation evidence.
 
 Run `python3 tools/generate_contract_package.py --check`, `python3 -m pytest tests/contracts -q`, the generated Kotlin smoke compile, and `pnpm exec tsc --noEmit --strict --target ES2022 packages/contracts/src/qc2_contracts/generated.ts` to verify generated artifacts and cross-language shapes.

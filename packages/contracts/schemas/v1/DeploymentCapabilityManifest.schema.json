@@ -168,6 +168,9 @@
               "qc2.integrity_build.BackupManifest.v1",
               "qc2.integrity_build.RestoreReceipt.v1",
               "qc2.integrity_build.ConfigurationManifest.v1",
+              "qc2.integrity_build.ConfigurationSetting.v1",
+              "qc2.integrity_build.SecretReference.v1",
+              "qc2.integrity_build.ResourceBudget.v1",
               "qc2.integrity_build.UnknownDecision.v1",
               "qc2.integrity_build.ChangeRequest.v1",
               "qc2.integrity_build.ReferenceIntake.v1",
@@ -204,6 +207,7 @@
                     "qc2.integrity_build.ChangeRequest.v1",
                     "qc2.integrity_build.Checkpoint.v1",
                     "qc2.integrity_build.ConfigurationManifest.v1",
+                    "qc2.integrity_build.ConfigurationSetting.v1",
                     "qc2.outcomes_research.DatasetManifest.v1",
                     "qc2.outcomes_research.DatasetRowLineage.v1",
                     "qc2.governance_owner.EpochActivationChallenge.v1",
@@ -232,6 +236,7 @@
                     "qc2.governance_owner.PromotionPolicy.v1",
                     "qc2.validation.QualificationReceipt.v1",
                     "qc2.integrity_build.ReferenceIntake.v1",
+                    "qc2.integrity_build.ResourceBudget.v1",
                     "qc2.outcomes_research.RunnerGenome.v1",
                     "qc2.scientific_definitions.RunnerProtocolDefinition.v1",
                     "qc2.scientific_definitions.RunnerProtocolRegistry.v1",
@@ -240,6 +245,7 @@
                     "qc2.models_prediction.ScientificPredictionPayload.v1",
                     "qc2.scientific_definitions.ScoreDefinition.v1",
                     "qc2.scientific_definitions.ScoreManifest.v1",
+                    "qc2.integrity_build.SecretReference.v1",
                     "qc2.models_prediction.ShadowPredictionSet.v1",
                     "qc2.outcomes_research.SplitManifest.v1",
                     "qc2.validation.StatisticalAnalysisPlan.v1",
@@ -431,6 +437,9 @@
                     "qc2.integrity_build.BackupManifest.v1",
                     "qc2.integrity_build.RestoreReceipt.v1",
                     "qc2.integrity_build.ConfigurationManifest.v1",
+                    "qc2.integrity_build.ConfigurationSetting.v1",
+                    "qc2.integrity_build.SecretReference.v1",
+                    "qc2.integrity_build.ResourceBudget.v1",
                     "qc2.integrity_build.UnknownDecision.v1",
                     "qc2.integrity_build.ChangeRequest.v1",
                     "qc2.integrity_build.ReferenceIntake.v1",
@@ -467,6 +476,7 @@
                           "qc2.integrity_build.ChangeRequest.v1",
                           "qc2.integrity_build.Checkpoint.v1",
                           "qc2.integrity_build.ConfigurationManifest.v1",
+                          "qc2.integrity_build.ConfigurationSetting.v1",
                           "qc2.outcomes_research.DatasetManifest.v1",
                           "qc2.outcomes_research.DatasetRowLineage.v1",
                           "qc2.governance_owner.EpochActivationChallenge.v1",
@@ -495,6 +505,7 @@
                           "qc2.governance_owner.PromotionPolicy.v1",
                           "qc2.validation.QualificationReceipt.v1",
                           "qc2.integrity_build.ReferenceIntake.v1",
+                          "qc2.integrity_build.ResourceBudget.v1",
                           "qc2.outcomes_research.RunnerGenome.v1",
                           "qc2.scientific_definitions.RunnerProtocolDefinition.v1",
                           "qc2.scientific_definitions.RunnerProtocolRegistry.v1",
@@ -503,6 +514,7 @@
                           "qc2.models_prediction.ScientificPredictionPayload.v1",
                           "qc2.scientific_definitions.ScoreDefinition.v1",
                           "qc2.scientific_definitions.ScoreManifest.v1",
+                          "qc2.integrity_build.SecretReference.v1",
                           "qc2.models_prediction.ShadowPredictionSet.v1",
                           "qc2.outcomes_research.SplitManifest.v1",
                           "qc2.validation.StatisticalAnalysisPlan.v1",
@@ -539,11 +551,35 @@
       "description": "Unit: ordered array; item unit/type is stated by the field.",
       "x-unit": "ordered array; item unit/type is stated by the field"
     },
-    "resource_limits_ref": {
+    "configuration_ref": {
       "type": "object",
       "properties": {
         "target_schema_name": {
           "const": "qc2.integrity_build.ConfigurationManifest.v1"
+        },
+        "target_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "target_schema_name",
+        "target_id",
+        "content_hash"
+      ],
+      "additionalProperties": false,
+      "description": "Unit: typed foreign reference to the listed contract.",
+      "x-unit": "typed foreign reference to the listed contract"
+    },
+    "resource_limits_ref": {
+      "type": "object",
+      "properties": {
+        "target_schema_name": {
+          "const": "qc2.integrity_build.ResourceBudget.v1"
         },
         "target_id": {
           "type": "string",
@@ -583,6 +619,7 @@
     "deployment_fingerprint",
     "observed_at",
     "capability_results",
+    "configuration_ref",
     "resource_limits_ref",
     "revalidation_due_at"
   ],
@@ -627,6 +664,7 @@
       "deployment_fingerprint",
       "observed_at",
       "capability_results",
+      "configuration_ref",
       "resource_limits_ref",
       "revalidation_due_at"
     ],

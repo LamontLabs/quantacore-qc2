@@ -90,6 +90,16 @@ def render_build_tasks(registry: dict[str, Any]) -> str:
         )
         if task.get("reference_mapping_rule"):
             lines.append(f"**Reference mapping rule:** {task['reference_mapping_rule']}")
+        for authorization in task.get("authorized_artifact_drift", []):
+            paths = ", ".join(
+                f"`{path}`" for path in authorization.get("artifact_paths", [])
+            )
+            lines.append(
+                "**Authorized artifact drift:** "
+                f"{authorization.get('prior_task_id', 'unknown task')} — "
+                f"{authorization.get('reason', 'No reason recorded')} "
+                f"Paths: {paths or 'None.'}"
+            )
         lines.extend(
             [
                 f"**Required reference intake:** {task['required_reference_intake']}",

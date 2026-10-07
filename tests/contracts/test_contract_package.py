@@ -83,7 +83,7 @@ def test_contract_names_match_section_12(project_root: Path) -> None:
             expected.extend(item.strip() for item in columns[1].split(","))
 
     actual = [name for _, name, _ in contract_rows()]
-    assert len(actual) == 121
+    assert len(actual) == 124
     assert len(actual) == len(set(actual))
     assert set(actual) == set(expected)
     assert set(actual) == set(AUTHORITY_OVERRIDES)

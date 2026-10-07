@@ -247,8 +247,50 @@ def _receipt_paths(receipt: dict[str, Any]) -> list[str]:
     ]
 
 
+def _authorized_artifact_drift(
+    registry: dict[str, Any],
+    prior_task_id: str,
+    artifact_path: str,
+    current_hash: str,
+) -> str | None:
+    """Return a reason only when a later task explicitly accepts this exact artifact change."""
+    tasks = registry.get("tasks", [])
+    positions = {
+        task.get("task_id"): index
+        for index, task in enumerate(tasks)
+        if isinstance(task, dict)
+    }
+    prior_position = positions.get(prior_task_id)
+    if prior_position is None:
+        return None
+
+    for later in tasks[prior_position + 1 :]:
+        for authorization in later.get("authorized_artifact_drift", []):
+            if (
+                authorization.get("prior_task_id") != prior_task_id
+                or artifact_path not in authorization.get("artifact_paths", [])
+            ):
+                continue
+            reason = authorization.get("reason")
+            if later.get("status") == "IN_PROGRESS":
+                return reason if isinstance(reason, str) and reason.strip() else None
+            if later.get("status") != "PASS":
+                continue
+            receipt = later.get("acceptance_receipt")
+            if not isinstance(receipt, dict) or receipt.get("result") != "PASS":
+                continue
+            if artifact_path not in receipt.get("changed_paths", []):
+                continue
+            if receipt.get("artifact_hashes", {}).get(artifact_path) != current_hash:
+                continue
+            if isinstance(reason, str) and reason.strip():
+                return reason
+    return None
+
+
 def _validate_contract_receipt(
     root: Path,
+    registry: dict[str, Any],
     task: dict[str, Any],
     receipt: dict[str, Any],
     require_integrated: bool = False,
@@ -291,8 +333,12 @@ def _validate_contract_receipt(
         except WorkflowError as exc:
             errors.append(f"{task_id}: {exc}")
             continue
-        if actual_hash != expected_hash:
-            errors.append(f"{task_id}: artifact hash changed: {artifact_path}")
+        if actual_hash != expected_hash and _authorized_artifact_drift(
+            registry, task_id, artifact_path, actual_hash
+        ) is None:
+            errors.append(
+                f"{task_id}: artifact hash changed without an authorized downstream acceptance: {artifact_path}"
+            )
         if tested_hash != expected_hash:
             errors.append(
                 f"{task_id}: artifact does not match tested source commit: {artifact_path}"
@@ -303,9 +349,11 @@ def _validate_contract_receipt(
             except WorkflowError as exc:
                 errors.append(f"{task_id}: {exc}")
                 continue
-            if integrated_hash != expected_hash:
+            if integrated_hash != expected_hash and _authorized_artifact_drift(
+                registry, task_id, artifact_path, integrated_hash
+            ) is None:
                 errors.append(
-                    f"{task_id}: artifact does not match integrated HEAD: {artifact_path}"
+                    f"{task_id}: artifact does not match integrated HEAD or authorized downstream acceptance: {artifact_path}"
                 )
 
     for key in ("receipt", "contract_receipt", "task_record"):
@@ -417,7 +465,11 @@ def validate_registry(
             elif index >= 3:
                 errors.extend(
                     _validate_contract_receipt(
-                        root, task, receipt, require_integrated=require_integrated
+                        root,
+                        registry,
+                        task,
+                        receipt,
+                        require_integrated=require_integrated,
                     )
                 )
             else:
@@ -503,7 +555,11 @@ def _preflight_errors(
         elif dependency_id >= "QC2-003":
             errors.extend(
                 _validate_contract_receipt(
-                    root, dependency, receipt, require_integrated=True
+                    root,
+                    registry,
+                    dependency,
+                    receipt,
+                    require_integrated=True,
                 )
             )
         else:

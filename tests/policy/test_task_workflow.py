@@ -16,6 +16,7 @@ from generate_task_docs import render_build_tasks, render_dependencies  # noqa: 
 from task_workflow import (  # noqa: E402
     WorkflowError,
     _acceptance_checklist_errors,
+    _authorized_artifact_drift,
     _artifact_hash,
     _artifact_hash_at_commit,
     _require_integrated_file,
@@ -81,6 +82,43 @@ def test_registry_rejects_multiple_active_tasks() -> None:
 
     errors = validate_registry(registry, check_documents=False)
     assert any("more than one canonical task is IN_PROGRESS" in error for error in errors)
+
+
+def test_artifact_drift_requires_explicit_scope_and_downstream_acceptance() -> None:
+    registry = _registry()
+    _reset_task_states(registry)
+    task = next(item for item in registry["tasks"] if item["task_id"] == "QC2-007")
+    task["status"] = "IN_PROGRESS"
+
+    reason = _authorized_artifact_drift(
+        registry, "QC2-003", "packages/contracts", "new-contract-hash"
+    )
+    assert reason and "adds required configuration contracts" in reason
+    assert (
+        _authorized_artifact_drift(
+            registry, "QC2-003", "packages/integrity_build", "new-contract-hash"
+        )
+        is None
+    )
+
+    task["status"] = "PASS"
+    task["acceptance_receipt"] = {
+        "result": "PASS",
+        "changed_paths": ["packages/contracts"],
+        "artifact_hashes": {"packages/contracts": "accepted-contract-hash"},
+    }
+    assert (
+        _authorized_artifact_drift(
+            registry, "QC2-003", "packages/contracts", "accepted-contract-hash"
+        )
+        is not None
+    )
+    assert (
+        _authorized_artifact_drift(
+            registry, "QC2-003", "packages/contracts", "later-unaccepted-hash"
+        )
+        is None
+    )
 
 
 def test_acceptance_checklist_requires_every_exact_deliverable_and_test() -> None:

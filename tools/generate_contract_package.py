@@ -904,6 +904,34 @@ def fixture_for(name: str) -> dict[str, Any]:
                 "missing_reason": "WARMUP_REQUIRED",
             }
         ]
+    if name == "ConfigurationManifest":
+        payload.update(
+            configuration_domain="SYSTEM",
+            capability_scope=["configuration_read"],
+            required_setting_keys=[],
+            setting_refs=[],
+            resource_budget_refs=[],
+            unresolved_decision_refs=[],
+            fixture_only=True,
+            signed_by_owner=False,
+        )
+    if name == "ConfigurationSetting":
+        payload.update(
+            configuration_domain="SYSTEM",
+            setting_key="fixture_setting",
+            required_capabilities=["configuration_read"],
+            production_required=False,
+            fixture_only=True,
+        )
+    if name == "SecretReference":
+        payload["secret_key_name"] = "fixture_secret_key"
+    if name == "ResourceBudget":
+        payload.update(
+            configuration_domain="RESEARCH",
+            budget_key="fixture_budget",
+            authorized_cost_minor_units=0,
+            fixture_only=True,
+        )
     return payload
 
 

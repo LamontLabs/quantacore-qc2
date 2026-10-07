@@ -252,10 +252,12 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-007 — Configuration Authority
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Create one versioned source of truth for each setting and a fail-closed unknown ledger.
 **Dependencies:** QC2-002, QC2-003, QC2-005, QC2-006
 **Authorized legacy references:** QuantraCore Gen 1 configuration, ApexLab Gen 1 configuration
+**Authorized artifact drift:** QC2-003 — QC2-007 adds required configuration contracts to the shared schema package. QC2-003 remains historically verified at its tested source commit; QC2-007 must revalidate the expanded schemas, fixtures, and projections. Paths: `packages/contracts`, `tests/contracts`, `tools/generate_contract_package.py`, `docs/reference/QC2-003_CONTRACT_CATALOG.md`
+**Authorized artifact drift:** QC2-004 — QC2-007 updates generated contract envelopes and projections for the new hash-pinned configuration contracts. QC2-004 remains historically verified at its tested source commit; QC2-007 reruns the contract and cross-language serialization checks. Paths: `packages/contracts`, `tests/contracts`, `tools/generate_contract_package.py`, `docs/reference/QC2-003_CONTRACT_CATALOG.md`
 **Required reference intake:** Mandatory for each referenced repository/file actually inspected; record revision, path/hash, source-supported meaning, tests, conflicts, license, and disposition.
 
 **Required deliverables:**

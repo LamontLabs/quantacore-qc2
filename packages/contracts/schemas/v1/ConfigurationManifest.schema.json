@@ -168,6 +168,9 @@
               "qc2.integrity_build.BackupManifest.v1",
               "qc2.integrity_build.RestoreReceipt.v1",
               "qc2.integrity_build.ConfigurationManifest.v1",
+              "qc2.integrity_build.ConfigurationSetting.v1",
+              "qc2.integrity_build.SecretReference.v1",
+              "qc2.integrity_build.ResourceBudget.v1",
               "qc2.integrity_build.UnknownDecision.v1",
               "qc2.integrity_build.ChangeRequest.v1",
               "qc2.integrity_build.ReferenceIntake.v1",
@@ -204,6 +207,7 @@
                     "qc2.integrity_build.ChangeRequest.v1",
                     "qc2.integrity_build.Checkpoint.v1",
                     "qc2.integrity_build.ConfigurationManifest.v1",
+                    "qc2.integrity_build.ConfigurationSetting.v1",
                     "qc2.outcomes_research.DatasetManifest.v1",
                     "qc2.outcomes_research.DatasetRowLineage.v1",
                     "qc2.governance_owner.EpochActivationChallenge.v1",
@@ -232,6 +236,7 @@
                     "qc2.governance_owner.PromotionPolicy.v1",
                     "qc2.validation.QualificationReceipt.v1",
                     "qc2.integrity_build.ReferenceIntake.v1",
+                    "qc2.integrity_build.ResourceBudget.v1",
                     "qc2.outcomes_research.RunnerGenome.v1",
                     "qc2.scientific_definitions.RunnerProtocolDefinition.v1",
                     "qc2.scientific_definitions.RunnerProtocolRegistry.v1",
@@ -240,6 +245,7 @@
                     "qc2.models_prediction.ScientificPredictionPayload.v1",
                     "qc2.scientific_definitions.ScoreDefinition.v1",
                     "qc2.scientific_definitions.ScoreManifest.v1",
+                    "qc2.integrity_build.SecretReference.v1",
                     "qc2.models_prediction.ShadowPredictionSet.v1",
                     "qc2.outcomes_research.SplitManifest.v1",
                     "qc2.validation.StatisticalAnalysisPlan.v1",
@@ -270,6 +276,7 @@
     "configuration_domain": {
       "type": "string",
       "enum": [
+        "SECRETS",
         "SYSTEM",
         "EPOCH_SCIENTIFIC",
         "STRATEGY",
@@ -293,7 +300,7 @@
       "description": "Unit: exchange session date (YYYY-MM-DD).",
       "x-unit": "exchange session date (YYYY-MM-DD)"
     },
-    "setting_refs": {
+    "capability_scope": {
       "type": "array",
       "items": {
         "type": "string",
@@ -301,6 +308,77 @@
       },
       "description": "Unit: ordered array; item unit/type is stated by the field.",
       "x-unit": "ordered array; item unit/type is stated by the field"
+    },
+    "required_setting_keys": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Unit: ordered array; item unit/type is stated by the field.",
+      "x-unit": "ordered array; item unit/type is stated by the field"
+    },
+    "setting_refs": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "target_schema_name": {
+                "const": "qc2.integrity_build.ConfigurationSetting.v1"
+              },
+              "target_id": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "content_hash": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            },
+            "required": [
+              "target_schema_name",
+              "target_id",
+              "content_hash"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "description": "Unit: typed foreign reference to the listed contract.",
+      "x-unit": "typed foreign reference to the listed contract"
+    },
+    "resource_budget_refs": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "target_schema_name": {
+                "const": "qc2.integrity_build.ResourceBudget.v1"
+              },
+              "target_id": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "content_hash": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            },
+            "required": [
+              "target_schema_name",
+              "target_id",
+              "content_hash"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "description": "Unit: typed foreign reference to the listed contract.",
+      "x-unit": "typed foreign reference to the listed contract"
     },
     "policy_hash": {
       "type": "string",
@@ -362,7 +440,10 @@
     "configuration_domain",
     "version",
     "effective_from",
+    "capability_scope",
+    "required_setting_keys",
     "setting_refs",
+    "resource_budget_refs",
     "policy_hash",
     "unresolved_decision_refs",
     "fixture_only",
@@ -386,7 +467,9 @@
       "validation"
     ],
     "identity_fields": [
-      "id"
+      "configuration_domain",
+      "environment_namespace",
+      "version"
     ],
     "content_addressed": true,
     "content_hash_fields": [
@@ -397,7 +480,10 @@
       "configuration_domain",
       "version",
       "effective_from",
+      "capability_scope",
+      "required_setting_keys",
       "setting_refs",
+      "resource_budget_refs",
       "policy_hash",
       "unresolved_decision_refs",
       "fixture_only",
@@ -429,13 +515,21 @@
       "configuration_domain",
       "version",
       "effective_from",
+      "capability_scope",
+      "required_setting_keys",
       "setting_refs",
+      "resource_budget_refs",
       "policy_hash",
       "unresolved_decision_refs",
       "fixture_only",
       "signed_by_owner"
     ],
     "mutable_fields": [],
-    "invariants": []
+    "invariants": [
+      "configuration setting and budget references are typed, hash-pinned, and effective for the manifest environment and session",
+      "required_setting_keys are unique and include every bound production-required setting",
+      "one latest effective manifest exists per configuration domain and capability",
+      "invalid configuration blocks only capabilities in capability_scope"
+    ]
   }
 }

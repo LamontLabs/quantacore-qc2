@@ -101,7 +101,7 @@
       "dependency_refs": [],
       "deadline": "2026-10-05T20:00:00Z",
       "resource_budget_ref": {
-        "target_schema_name": "qc2.integrity_build.ConfigurationManifest.v1",
+        "target_schema_name": "qc2.integrity_build.ResourceBudget.v1",
         "target_id": "018f0000-0000-7000-8000-000000000001",
         "content_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
       },
@@ -219,8 +219,13 @@
           "source_refs": []
         }
       ],
-      "resource_limits_ref": {
+      "configuration_ref": {
         "target_schema_name": "qc2.integrity_build.ConfigurationManifest.v1",
+        "target_id": "018f0000-0000-7000-8000-000000000001",
+        "content_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "resource_limits_ref": {
+        "target_schema_name": "qc2.integrity_build.ResourceBudget.v1",
         "target_id": "018f0000-0000-7000-8000-000000000001",
         "content_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
       },
@@ -2196,8 +2201,13 @@
       ],
       "algorithm": "fixture",
       "seed": 0,
-      "budget_ref": {
+      "configuration_ref": {
         "target_schema_name": "qc2.integrity_build.ConfigurationManifest.v1",
+        "target_id": "018f0000-0000-7000-8000-000000000001",
+        "content_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "budget_ref": {
+        "target_schema_name": "qc2.integrity_build.ResourceBudget.v1",
         "target_id": "018f0000-0000-7000-8000-000000000001",
         "content_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
       },
@@ -2400,6 +2410,11 @@
       },
       "strategy_ref": {
         "target_schema_name": "qc2.execution.StrategyManifest.v1",
+        "target_id": "018f0000-0000-7000-8000-000000000001",
+        "content_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "configuration_ref": {
+        "target_schema_name": "qc2.integrity_build.ConfigurationManifest.v1",
         "target_id": "018f0000-0000-7000-8000-000000000001",
         "content_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
       },
@@ -2684,7 +2699,12 @@
       "reservation_policy": "fixture",
       "cancellation_policy": "fixture",
       "gap_no_fill_policy": "fixture",
-      "competing_action_rule": "fixture"
+      "competing_action_rule": "fixture",
+      "configuration_ref": {
+        "target_schema_name": "qc2.integrity_build.ConfigurationManifest.v1",
+        "target_id": "018f0000-0000-7000-8000-000000000001",
+        "content_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
     }
   },
   {
@@ -3923,18 +3943,95 @@
       "configuration_domain": "SYSTEM",
       "version": 1,
       "effective_from": "2026-10-05",
-      "setting_refs": [
+      "capability_scope": [
+        "configuration_read"
+      ],
+      "required_setting_keys": [],
+      "setting_refs": [],
+      "resource_budget_refs": [],
+      "policy_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "unresolved_decision_refs": [],
+      "fixture_only": true,
+      "signed_by_owner": false
+    }
+  },
+  {
+    "contract": "ConfigurationSetting",
+    "payload": {
+      "schema_name": "qc2.integrity_build.ConfigurationSetting.v1",
+      "schema_version": "1.0",
+      "id": "018f0000-0000-7000-8000-000000000001",
+      "created_at": "2026-10-05T20:00:00Z",
+      "owning_authority": "configuration",
+      "evidence_class": "SYNTHETIC_FIXTURE",
+      "environment_namespace": "test",
+      "source_refs": [],
+      "content_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "setting_key": "fixture_setting",
+      "configuration_domain": "SYSTEM",
+      "version": 1,
+      "effective_from": "2026-10-05",
+      "value_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "value_class": "ARCHITECTURAL_CONSTANT",
+      "value_authority": "fixture",
+      "required_capabilities": [
+        "configuration_read"
+      ],
+      "production_required": false,
+      "fixture_only": true,
+      "secret_reference_ref": null,
+      "resource_budget_ref": null,
+      "owner_approval_ref": null
+    }
+  },
+  {
+    "contract": "SecretReference",
+    "payload": {
+      "schema_name": "qc2.integrity_build.SecretReference.v1",
+      "schema_version": "1.0",
+      "id": "018f0000-0000-7000-8000-000000000001",
+      "created_at": "2026-10-05T20:00:00Z",
+      "owning_authority": "configuration",
+      "evidence_class": "SYNTHETIC_FIXTURE",
+      "environment_namespace": "test",
+      "source_refs": [],
+      "content_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "secret_key_name": "fixture_secret_key",
+      "provider": "fixture",
+      "version": 1,
+      "required_capabilities": [
         "fixture"
       ],
-      "policy_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      "unresolved_decision_refs": [
-        {
-          "target_schema_name": "qc2.integrity_build.UnknownDecision.v1",
-          "target_id": "018f0000-0000-7000-8000-000000000001"
-        }
-      ],
-      "fixture_only": true,
-      "signed_by_owner": true
+      "rotation_due_at": null,
+      "last_verified_at": null
+    }
+  },
+  {
+    "contract": "ResourceBudget",
+    "payload": {
+      "schema_name": "qc2.integrity_build.ResourceBudget.v1",
+      "schema_version": "1.0",
+      "id": "018f0000-0000-7000-8000-000000000001",
+      "created_at": "2026-10-05T20:00:00Z",
+      "owning_authority": "configuration",
+      "evidence_class": "SYNTHETIC_FIXTURE",
+      "environment_namespace": "test",
+      "source_refs": [],
+      "content_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "budget_key": "fixture_budget",
+      "configuration_domain": "RESEARCH",
+      "version": 1,
+      "max_experiments": 0,
+      "max_concurrent_jobs": 1,
+      "max_elapsed_seconds": 1,
+      "max_cpu_seconds": 1,
+      "max_memory_bytes": 1,
+      "max_artifact_bytes": 1,
+      "authorized_cost_minor_units": 0,
+      "currency": "USD",
+      "owner_approval_ref": null,
+      "effective_from": "2026-10-05",
+      "fixture_only": true
     }
   },
   {
@@ -3957,6 +4054,9 @@
           "target_id": "018f0000-0000-7000-8000-000000000001",
           "content_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
         }
+      ],
+      "affected_capabilities": [
+        "fixture"
       ],
       "responsible_authority": "fixture",
       "evidence_needed": "fixture",
@@ -3988,6 +4088,7 @@
         "fixture"
       ],
       "effective_boundary": "fixture",
+      "is_restrictive_only": true,
       "owner_approval_ref": null,
       "status": "PROPOSED"
     }

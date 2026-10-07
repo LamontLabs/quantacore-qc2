@@ -562,8 +562,30 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "blockers": [],
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-003",
+          "artifact_paths": [
+            "packages/contracts",
+            "tests/contracts",
+            "tools/generate_contract_package.py",
+            "docs/reference/QC2-003_CONTRACT_CATALOG.md"
+          ],
+          "reason": "QC2-007 adds required configuration contracts to the shared schema package. QC2-003 remains historically verified at its tested source commit; QC2-007 must revalidate the expanded schemas, fixtures, and projections."
+        },
+        {
+          "prior_task_id": "QC2-004",
+          "artifact_paths": [
+            "packages/contracts",
+            "tests/contracts",
+            "tools/generate_contract_package.py",
+            "docs/reference/QC2-003_CONTRACT_CATALOG.md"
+          ],
+          "reason": "QC2-007 updates generated contract envelopes and projections for the new hash-pinned configuration contracts. QC2-004 remains historically verified at its tested source commit; QC2-007 reruns the contract and cross-language serialization checks."
+        }
+      ],
       "acceptance_receipt": null
     },
     {

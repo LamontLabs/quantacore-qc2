@@ -1,0 +1,31 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a118a4-0733-73ae-8a5a-33469d0bc3a9",
+  "created_at": "2026-10-07T23:12:45Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "FORWARD_OPERATIONAL",
+  "environment_namespace": "development",
+  "source_refs": [],
+  "content_hash": "75f89e60a5b75b4f4637825592b58cf05ceee301e2bf301fc7be79f3a21da10b",
+  "task_id": "qc2-000",
+  "task_name": "Repository Bootstrap",
+  "objective": "Establish an isolated monorepo and reproducible toolchain without implementing scientific or trading behavior.",
+  "dependency_task_ids": [],
+  "authorized_legacy_refs": [],
+  "deliverable_refs": [
+    "Pinned Python/package/test/lint configuration; Kotlin/Compose directory reserved without product behavior.",
+    "Repository boundaries, environment namespaces, CI skeleton, secret/artifact ignores, migration conventions.",
+    "Preliminary hosting/resource capability checklist and deployment-isolation decision; unresolved capabilities recorded."
+  ],
+  "required_test_refs": [
+    "Clean install/import and meaningful smoke test on the selected runtime.",
+    "Lint/type/test commands actually run; generated credentials and artifacts are ignored.",
+    "No production credential or legacy import is present."
+  ],
+  "acceptance_gate": "A clean checkout reproduces the toolchain; all environment limitations are explicit.",
+  "evidence_requirement": "local_toolchain",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

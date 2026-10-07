@@ -28,3 +28,7 @@
 4. Re-run QC2-012 preflight before beginning universe implementation and required reference intake.
 
 Until those gates pass, QC2-012 remains BLOCKED. No live brokerage request, broker write, paid upgrade, runtime feed fallback, or F0 activation occurred.
+
+## Superseding status reconciliation
+
+This report records the state at its checked time and is retained as historical evidence. Subsequent canonical acceptance records now show QC2-010 and QC2-011 as PASS. A fresh `python3 tools/task_workflow.py preflight QC2-012` confirms that all declared dependencies and their acceptance evidence are available. The earlier dependency blocker is therefore resolved; the canonical task has been reopened for its own preflight and implementation. This does not authorize production access, broker writes, empirical universe cutoffs, or F0 activation.

@@ -1,0 +1,107 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a118a4-073a-70c0-96ea-3802244e007c",
+  "created_at": "2026-10-07T23:12:45Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "FORWARD_OPERATIONAL",
+  "environment_namespace": "development",
+  "source_refs": [],
+  "content_hash": "c49527ca9afba659f0182e73d25f1ad9de5f622a6f16e24f1d3e6fab67de611c",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a118a4-0733-73ae-8a5a-33469d0bc3a9",
+    "content_hash": "75f89e60a5b75b4f4637825592b58cf05ceee301e2bf301fc7be79f3a21da10b"
+  },
+  "task_spec_version": "QC2-000 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "8b41234dc9cebfe503056a6664db7c62c398356f",
+  "changed_paths": [
+    ".node-version",
+    ".python-version",
+    ".replit",
+    ".gitignore",
+    "package.json",
+    "pnpm-workspace.yaml",
+    "pnpm-lock.yaml",
+    "pyproject.toml",
+    "uv.lock",
+    "tsconfig.json",
+    "tsconfig.base.json",
+    ".github/workflows/ci.yml",
+    "apps/android/README.md",
+    "docs/REPOSITORY_BOUNDARIES.md",
+    "docs/ENVIRONMENTS.md",
+    "docs/BOOTSTRAP_TOOLCHAIN.md",
+    "migrations/README.md"
+  ],
+  "executed_commands": [
+    "pnpm install --frozen-lockfile",
+    "uv sync --locked",
+    "pnpm run verify",
+    "git check-ignore probes for six credential/artifact paths",
+    "tracked-file credential-pattern and legacy import/path scans"
+  ],
+  "test_counts": [
+    {
+      "test_id": "python_tests",
+      "passed": 116,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "database_guard_tests",
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "smoke_tests",
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "ignored_path_probes",
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "credential_pattern_scan",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "legacy_import_scan",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "55ce66383dffcaf804e6d3b03993b0d332cb5d7c38e26e9f92fb78ab040dc70c",
+    "9fa33d932bbf6e5784f15b467a9a10e4ce43993c2341ee742f23ce0196fd73e9",
+    "46d258abad185903f26768bfdee78aebf2cd4dc53f343cdf79a1a6e52a4f29c6",
+    "12b333022b10392ab6fa0a66f15e9b94575458f2117c2691281e63a3dcb726da",
+    "dfcb021219a2d38b2cae03cb12a8fea98100ae94a3de82b1a1c98a783e25f65b",
+    "7a86737fd93da0bc3836c9c969777e11cf2c4e8487b25297f3f8aa916cc918f4",
+    "759e3b4f411fb20e21069ebd30cfbc35a3c81073e339d411da213aaa4069105b",
+    "a23c299ea2e2d38bd35d9265f5ca08885ce2f6a199ed802c8bebc733da9b1ee9",
+    "8e5a2493dcc6dce22ceea2d758fde2c5926cf9691462459f2ba43de71752e3da",
+    "8883c5dbf9e073ef0c7e91769b3e4abccca022df69b62fa7518d73e1512b37ef",
+    "2dfaa6f6168f618e0e6deff048c17e4f5f73d59325bd935d471905ae6773585c",
+    "c5f4b8c3477c9d15c22e17ef5c84f1919674059a143622fc3c2e441774f2a6ac",
+    "4121b13e1116a4fbdff5217010771f5e77dcc6bbb971105854713e814acf45f4",
+    "c9e08b26ac6ebfb2e880a851e3fe69e52e13a675411ad3faba538d0ad7c59bf6",
+    "bb761c8a99beb7beabfa2a8d7de33886bf94315e47a8e5bac6b6e2f247575eb7",
+    "761d725df459bf7bde6bb4f52d9e3896eff6c7925a6f05fd8c7c98f9968628d8",
+    "c7281fe428855153d2aa91d6611060247c77d0968f48ef1304dbe687b011b55a"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-07T23:12:45Z"
+}

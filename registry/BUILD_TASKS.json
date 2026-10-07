@@ -39,9 +39,106 @@
         "LOCAL_TOOLCHAIN"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "TODO",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-07T23:12:45Z",
+        "task_spec_version": "QC2-000 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "8b41234dc9cebfe503056a6664db7c62c398356f",
+        "receipt": "docs/reference/QC2-000_ACCEPTANCE_RECEIPT.md",
+        "contract_receipt": "docs/reference/QC2-000_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-000_TASK_RECORD.json",
+        "changed_paths": [
+          ".node-version",
+          ".python-version",
+          ".replit",
+          ".gitignore",
+          "package.json",
+          "pnpm-workspace.yaml",
+          "pnpm-lock.yaml",
+          "pyproject.toml",
+          "uv.lock",
+          "tsconfig.json",
+          "tsconfig.base.json",
+          ".github/workflows/ci.yml",
+          "apps/android/README.md",
+          "docs/REPOSITORY_BOUNDARIES.md",
+          "docs/ENVIRONMENTS.md",
+          "docs/BOOTSTRAP_TOOLCHAIN.md",
+          "migrations/README.md"
+        ],
+        "executed_commands": [
+          "pnpm install --frozen-lockfile",
+          "uv sync --locked",
+          "pnpm run verify",
+          "git check-ignore probes for six credential/artifact paths",
+          "tracked-file credential-pattern and legacy import/path scans"
+        ],
+        "test_counts": [
+          {
+            "test_id": "python_tests",
+            "passed": 116,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "database_guard_tests",
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "smoke_tests",
+            "passed": 2,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "ignored_path_probes",
+            "passed": 6,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "credential_pattern_scan",
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "legacy_import_scan",
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          ".node-version": "55ce66383dffcaf804e6d3b03993b0d332cb5d7c38e26e9f92fb78ab040dc70c",
+          ".python-version": "9fa33d932bbf6e5784f15b467a9a10e4ce43993c2341ee742f23ce0196fd73e9",
+          ".replit": "46d258abad185903f26768bfdee78aebf2cd4dc53f343cdf79a1a6e52a4f29c6",
+          ".gitignore": "12b333022b10392ab6fa0a66f15e9b94575458f2117c2691281e63a3dcb726da",
+          "package.json": "dfcb021219a2d38b2cae03cb12a8fea98100ae94a3de82b1a1c98a783e25f65b",
+          "pnpm-workspace.yaml": "7a86737fd93da0bc3836c9c969777e11cf2c4e8487b25297f3f8aa916cc918f4",
+          "pnpm-lock.yaml": "759e3b4f411fb20e21069ebd30cfbc35a3c81073e339d411da213aaa4069105b",
+          "pyproject.toml": "a23c299ea2e2d38bd35d9265f5ca08885ce2f6a199ed802c8bebc733da9b1ee9",
+          "uv.lock": "8e5a2493dcc6dce22ceea2d758fde2c5926cf9691462459f2ba43de71752e3da",
+          "tsconfig.json": "8883c5dbf9e073ef0c7e91769b3e4abccca022df69b62fa7518d73e1512b37ef",
+          "tsconfig.base.json": "2dfaa6f6168f618e0e6deff048c17e4f5f73d59325bd935d471905ae6773585c",
+          ".github/workflows/ci.yml": "c5f4b8c3477c9d15c22e17ef5c84f1919674059a143622fc3c2e441774f2a6ac",
+          "apps/android/README.md": "4121b13e1116a4fbdff5217010771f5e77dcc6bbb971105854713e814acf45f4",
+          "docs/REPOSITORY_BOUNDARIES.md": "c9e08b26ac6ebfb2e880a851e3fe69e52e13a675411ad3faba538d0ad7c59bf6",
+          "docs/ENVIRONMENTS.md": "bb761c8a99beb7beabfa2a8d7de33886bf94315e47a8e5bac6b6e2f247575eb7",
+          "docs/BOOTSTRAP_TOOLCHAIN.md": "761d725df459bf7bde6bb4f52d9e3896eff6c7925a6f05fd8c7c98f9968628d8",
+          "migrations/README.md": "c7281fe428855153d2aa91d6611060247c77d0968f48ef1304dbe687b011b55a"
+        },
+        "evidence_class": "FORWARD_OPERATIONAL",
+        "environment_namespace": "development",
+        "verification_reason": "Revalidated the existing bootstrap in the development workspace with locked installs and the required verification suite.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-001",
@@ -1085,10 +1182,8 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "BLOCKED",
-      "blockers": [
-        "QC2-010 and QC2-011 are not PASS. `python3 tools/task_workflow.py preflight QC2-012` fails because both prerequisites are not PASS; QC2-010 remains blocked after authenticated Alpaca requests returned HTTP 401, and QC2-011 has no real acquisition-to-evidence slice. See docs/reference/QC2-010_BLOCKED_REPORT.md, docs/reference/QC2-011_BLOCKED_REPORT.md, and docs/reference/QC2-012_BLOCKED_REPORT.md."
-      ],
+      "status": "TODO",
+      "blockers": [],
       "acceptance_receipt": null
     },
     {

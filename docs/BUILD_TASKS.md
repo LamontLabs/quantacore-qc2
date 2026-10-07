@@ -318,7 +318,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-009 — Market Data Adapter Contract and Canonical Alpaca Implementation
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Implement the sole F0 acquisition path with explicit bar semantics and complete provenance.
 **Dependencies:** QC2-003, QC2-006, QC2-007, QC2-008
 **Authorized legacy references:** Gen 1 Alpaca adapter and tests, ApexLab provider abstractions, optional
@@ -344,7 +344,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-07T18:43:34Z: `docs/reference/QC2-009_ACCEPTANCE_RECEIPT.md`, `docs/reference/QC2-009_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-009_TASK_RECORD.json`
 
 ---
 

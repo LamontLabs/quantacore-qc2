@@ -1,0 +1,39 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a117ad-9607-78ef-b713-386dea25b39f",
+  "created_at": "2026-10-07T18:43:34Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "d00936312d850a8c0b9ba98dee43393b924c7bec824d6da2361256870c907081",
+  "task_id": "qc2-009",
+  "task_name": "Market Data Adapter Contract and Canonical Alpaca Implementation",
+  "objective": "Implement the sole F0 acquisition path with explicit bar semantics and complete provenance.",
+  "dependency_task_ids": [
+    "QC2-003",
+    "QC2-006",
+    "QC2-007",
+    "QC2-008"
+  ],
+  "authorized_legacy_refs": [
+    "Gen 1 Alpaca adapter and tests",
+    "ApexLab provider abstractions, optional"
+  ],
+  "deliverable_refs": [
+    "Pinned request adapter, raw receipts, normalized DataBundle, pagination/rate-limit policy.",
+    "BarSemanticsManifest, raw/split adjustment handling, anomaly/quarantine pipeline.",
+    "Corporate-action retrieval/versioning and sanitized request evidence."
+  ],
+  "required_test_refs": [
+    "Multi-symbol pagination, short pages, repeated tokens, 429/403, partial coverage, conflicting duplicates.",
+    "No default feed/adjustment/asof; invalid OHLC and future revisions fail correctly.",
+    "Volume finalization and split fixtures demonstrate declared semantics."
+  ],
+  "acceptance_gate": "Deterministic fixtures produce complete or explicitly failed DataBundles with no silent substitution.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

@@ -1,0 +1,47 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a117ad-960e-7a7d-b12d-668dcd7dc54a",
+  "created_at": "2026-10-07T18:43:34Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "022c6c3eb8405a647d19a6b7fd17cf40572157719f2a76ae270a5d3300666b38",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a117ad-9607-78ef-b713-386dea25b39f",
+    "content_hash": "d00936312d850a8c0b9ba98dee43393b924c7bec824d6da2361256870c907081"
+  },
+  "task_spec_version": "QC2-009 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "cb1961a1796950f478d68f686a62db76aced8cc5",
+  "changed_paths": [
+    "packages/market_data_adapter",
+    "tests/market_data_adapter"
+  ],
+  "executed_commands": [
+    "uv run --no-sync pytest -q tests/market_data_adapter tests/contracts tests/policy",
+    "uv run --no-sync ruff check packages/market_data_adapter tests/market_data_adapter",
+    "python3 -m compileall -q packages/market_data_adapter",
+    "python3 tools/task_workflow.py validate",
+    "python3 tools/task_workflow.py preflight QC2-009"
+  ],
+  "test_counts": [
+    {
+      "test_id": "qc2_009_acceptance",
+      "passed": 51,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "828264394b38e1f9aad0440bdf2877d22013ec6a97d7ecdf904f6e08660fa330",
+    "7682dc3aa12647007181bba9b14d95b60c3be297bd085ef976c41e3d16f64737"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-07T18:43:34Z"
+}

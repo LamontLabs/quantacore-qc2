@@ -1,0 +1,34 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a116e5-ffff-7a9d-b561-f5eb96068d4b",
+  "created_at": "2026-10-07T15:05:34Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "development",
+  "source_refs": [],
+  "content_hash": "67fd4253102d98f3337ced88e1a0a5b891463534534a495a6fe8e321a3fb06bf",
+  "task_id": "qc2-005",
+  "task_name": "PostgreSQL Authority Foundation",
+  "objective": "Build durable transaction boundaries and least-privilege storage enforcement.",
+  "dependency_task_ids": [
+    "QC2-003",
+    "QC2-004"
+  ],
+  "authorized_legacy_refs": [],
+  "deliverable_refs": [
+    "All required schemas/roles, non-runtime migration role, constrained mutation interfaces.",
+    "Unique keys, referential integrity, immutable-record protections, job leases/outboxes.",
+    "Development/test/production identity guards and migration policy."
+  ],
+  "required_test_refs": [
+    "Attempt cross-authority writes using actual runtime roles; each unauthorized write fails.",
+    "Test rollback, isolation, stale-generation writes, duplicate IDs, and conflicting reservations.",
+    "Verify application roles cannot DDL, bypass RLS, alter immutable rows, or escalate."
+  ],
+  "acceptance_gate": "Permission and transaction tests run against PostgreSQL, not only mocks.",
+  "evidence_requirement": "postgresql_integration",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

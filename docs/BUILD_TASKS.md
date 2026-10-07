@@ -186,7 +186,7 @@ NOT_STARTED
 
 ### QC2-005 — PostgreSQL Authority Foundation
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Build durable transaction boundaries and least-privilege storage enforcement.
 **Dependencies:** QC2-003, QC2-004
 **Authorized legacy references:** None.
@@ -212,7 +212,7 @@ NOT_STARTED
 **Required evidence/environment:** POSTGRESQL_INTEGRATION
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-07T15:05:34Z: `docs/reference/QC2-005_ACCEPTANCE_RECEIPT.md`, `docs/reference/QC2-005_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-005_TASK_RECORD.json`
 
 ---
 

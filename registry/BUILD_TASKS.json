@@ -337,9 +337,85 @@
         "POSTGRESQL_INTEGRATION"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "checked_at": "2026-10-07T15:05:34Z",
+        "task_spec_version": "QC2-005 / registry schema 1.0 / governing spec 2.0",
+        "source_commit": "9608ca01fd78c77df908d723b7b6e2ebbe4b4e2f",
+        "receipt": "docs/reference/QC2-005_ACCEPTANCE_RECEIPT.md",
+        "contract_receipt": "docs/reference/QC2-005_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-005_TASK_RECORD.json",
+        "changed_paths": [
+          "migrations/0001_postgresql_authority_foundation.sql",
+          "tests/database/qc2_005_postgres_acceptance.sql",
+          "lib/db/src/environment.js",
+          "lib/db/src/environment.d.ts",
+          "lib/db/src/index.ts",
+          "lib/db/run-migrations.mjs",
+          "lib/db/test/environment.test.mjs",
+          "lib/db/test/run-postgres-integration.mjs",
+          "tests/policy/test_qc2_005_migration_policy.py",
+          "lib/db/drizzle.config.ts",
+          "lib/db/package.json",
+          "scripts/post-merge.sh",
+          "docs/ENVIRONMENTS.md",
+          "migrations/README.md",
+          "package.json"
+        ],
+        "executed_commands": [
+          "pnpm run verify",
+          "python3 tools/task_workflow.py preflight QC2-005",
+          "pnpm --filter @workspace/db run migrate (without --apply; fail-closed)",
+          "production migration guard with a dummy unreachable URL; rejected before connecting",
+          "Replit PostgreSQL callback: BEGIN ISOLATION LEVEL SERIALIZABLE; migration and acceptance SQL; ROLLBACK",
+          "Replit PostgreSQL callback: read-only post-rollback check confirmed zero QC2 roles and no qc2_control schema",
+          "git diff --check"
+        ],
+        "test_counts": [
+          {
+            "test_id": "qc2_005_python_tests",
+            "passed": 37,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "qc2_005_runtime_guards",
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "qc2_005_postgresql_suite",
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "migrations/0001_postgresql_authority_foundation.sql": "a705ed0b3c309172beccff373a85283aed722ac4a0163d53358e04744d7949ac",
+          "tests/database/qc2_005_postgres_acceptance.sql": "56a1f95350302006cf63d0c5e40d637d447e6736c84f5d2a6a49b5fdcbb1880e",
+          "lib/db/src/environment.js": "7a5ca4a69bf8ed29827a3d20e8ce6f91ab320a278eb4d1bfd35c474d512c8469",
+          "lib/db/src/environment.d.ts": "ebaddcd91b459c1ed5d027f85af4ab24739cce7c5d96a8edc775006779dfc965",
+          "lib/db/src/index.ts": "b5be4d51bd9b27176bd315714f748b7194ddb6ced2b835771da3a5937b21e8d3",
+          "lib/db/run-migrations.mjs": "e2d87e0aae3b6c81a331b3edc8140bc04a683004ca8c6489c845ca7c6d30b021",
+          "lib/db/test/environment.test.mjs": "68f4504cad5aa22a7a57b90f74f7a640e896f8ed1384537ac404e3d224e54fe5",
+          "lib/db/test/run-postgres-integration.mjs": "16b234104ca4497e0414066a6c755d8e39f03e95414575d4fb6dc12d76bbeaf2",
+          "tests/policy/test_qc2_005_migration_policy.py": "41956719e6a016637530863b84b28aa2426058f9e5939820dcae67fd024449df",
+          "lib/db/drizzle.config.ts": "7d87d2d95ec403c53f3336f2b552a5f7e2e7fe766ce2ddfb87c29cf9bcb32a8c",
+          "lib/db/package.json": "f62b1acb32348eceb47e7ec39761bfb9193ec684decafc102e6ad05f7e49a47e",
+          "scripts/post-merge.sh": "5e5f553b2ac0c2f4e19d49c25c1d894f117161065757ae04aa9010417a07f139",
+          "docs/ENVIRONMENTS.md": "bb761c8a99beb7beabfa2a8d7de33886bf94315e47a8e5bac6b6e2f247575eb7",
+          "migrations/README.md": "c7281fe428855153d2aa91d6611060247c77d0968f48ef1304dbe687b011b55a",
+          "package.json": "dfcb021219a2d38b2cae03cb12a8fea98100ae94a3de82b1a1c98a783e25f65b"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "development",
+        "verification_reason": "Acceptance was run now against the current source because no trustworthy QC2-005 receipt existed. The PostgreSQL permission and transaction suite ran on the development database through the Replit SQL callback inside a serializable rollback-only transaction. No persistent migration or password-authenticated runtime login is claimed because no QC2 test/runtime/migration URL or credentials are configured; production was not accessed.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-006",

@@ -414,7 +414,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-012 — Universe Authority
 
-**Current status:** TODO
+**Current status:** BLOCKED
 **Objective:** Implement stable identity, candidate census, and deterministic scientific eligibility independent of trading.
 **Dependencies:** QC2-003, QC2-008, QC2-009, QC2-010, QC2-011
 **Authorized legacy references:** Gen 1 scanner/universe code
@@ -439,7 +439,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Acceptance gate:** Parameterized fixture universes reproduce exactly and actual metadata limitations remain explicit.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
-**Blockers:** None recorded.
+**Blockers:** QC2-010 and QC2-011 are not PASS. `python3 tools/task_workflow.py preflight QC2-012` fails because both prerequisites are not PASS; QC2-010 remains blocked after authenticated Alpaca requests returned HTTP 401, and QC2-011 has no real acquisition-to-evidence slice. See docs/reference/QC2-010_BLOCKED_REPORT.md, docs/reference/QC2-011_BLOCKED_REPORT.md, and docs/reference/QC2-012_BLOCKED_REPORT.md.
 **Acceptance receipt:** Not recorded.
 
 ---

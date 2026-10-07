@@ -510,7 +510,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-015 — Label Authority
 
-**Current status:** TODO
+**Current status:** BLOCKED
 **Objective:** Define exact target semantics and enforce mature-only learning release.
 **Dependencies:** QC2-003, QC2-008, QC2-013, QC2-014
 **Authorized legacy references:** ApexLab label implementation as a hypothesis/anti-pattern to verify
@@ -535,7 +535,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Acceptance gate:** Labels have precise equations and release conditions; unresolved thresholds block production registration.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
-**Blockers:** None recorded.
+**Blockers:** Required dependencies QC2-013 and QC2-014 are not PASS. `python3 tools/task_workflow.py preflight QC2-015` fails because both dependencies are not PASS. See docs/reference/QC2-013_BLOCKED_REPORT.md and docs/reference/QC2-014_BLOCKED_REPORT.md.
 **Acceptance receipt:** Not recorded.
 
 ---

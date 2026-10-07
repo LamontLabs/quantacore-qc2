@@ -9,7 +9,7 @@
 
 ## Dependency state
 
-- QC2-012 is blocked by QC2-010 and QC2-011. QC2-010's latest authenticated read-only requests returned HTTP 401; no account identity or real feed capability was established. The secret values were not read or printed. See `docs/reference/QC2-010_BLOCKED_REPORT.md` and `docs/reference/QC2-012_BLOCKED_REPORT.md`.
+- QC2-012 remains blocked by QC2-011. QC2-010 now has a PASS acceptance receipt supported by authenticated read-only capability measurements and six `DataCapabilityManifest` records. The evidence supports only a proposed, explicitly pinned IEX completed-daily diagnostic regime; SIP is unavailable, exact provider-side delay is unmeasured, and broad-universe coverage is unresolved. See `docs/reference/QC2-010_BLOCKED_REPORT.md` and `docs/reference/QC2-012_BLOCKED_REPORT.md`.
 - QC2-013 and QC2-014 remain blocked by QC2-012; QC2-015 remains blocked by QC2-013 and QC2-014. See their linked blocker reports.
 - QC2-021 remains blocked by QC2-013, QC2-017, and QC2-020; see `docs/reference/QC2-021_BLOCKED_REPORT.md`.
 
@@ -22,8 +22,8 @@
 
 ## Resume conditions
 
-1. Resolve QC2-010's authenticated Alpaca credential failure through Replit Secrets without sharing credential values in chat.
-2. Complete QC2-011 and QC2-012, then QC2-013, QC2-014, QC2-015, and QC2-021 with required evidence and PASS receipts.
+1. Complete QC2-011 and QC2-012 with their required evidence and PASS receipts; QC2-010 is now PASS.
+2. Complete QC2-013, QC2-014, QC2-015, and QC2-021 with their required evidence and PASS receipts.
 3. Re-run QC2-022 preflight before implementing the baseline engines.
 
 Until these dependencies pass, no comparator ranking or baseline evidence is asserted.

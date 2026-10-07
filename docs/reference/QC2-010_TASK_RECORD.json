@@ -1,0 +1,34 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a1184f-3e68-7e80-9bbe-aebc2c9c5554",
+  "created_at": "2026-10-07T21:40:08Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "FORWARD_OPERATIONAL",
+  "environment_namespace": "production",
+  "source_refs": [],
+  "content_hash": "a52ae5a72802868deb9b4f5a32d2c23e4093ba67f6ba080490bb00a6664f3de8",
+  "task_id": "qc2-010",
+  "task_name": "Real Account Capability Probe",
+  "objective": "Measure the actual account and deployment capabilities needed for the intended F0 regime.",
+  "dependency_task_ids": [
+    "QC2-008",
+    "QC2-009"
+  ],
+  "authorized_legacy_refs": [],
+  "deliverable_refs": [
+    "Signed/evidenced DataCapabilityManifest with real feed access, delay, history, coverage and rate observations.",
+    "Classification/action/calendar capability results and paper account fingerprint.",
+    "Pre-activation feed selection proposal and unresolved access limitations."
+  ],
+  "required_test_refs": [
+    "Real authenticated read-only requests test success and error cases without leaking credentials.",
+    "Explicit SIP/IEX distinction, supported ranges, and pagination are demonstrated.",
+    "No broker write, paid upgrade, or live-endpoint probe occurs."
+  ],
+  "acceptance_gate": "Measured capabilities support a declared feasible regime or produce a concrete BLOCKED report.",
+  "evidence_requirement": "alpaca_credentials_and_real_market_data",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

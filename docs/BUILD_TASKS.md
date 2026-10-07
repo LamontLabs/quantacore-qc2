@@ -350,7 +350,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-010 — Real Account Capability Probe
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Measure the actual account and deployment capabilities needed for the intended F0 regime.
 **Dependencies:** QC2-008, QC2-009
 **Authorized legacy references:** None.
@@ -377,7 +377,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** ALPACA_CREDENTIALS, REAL_MARKET_DATA
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-07T21:40:08Z: `docs/reference/QC2-010_BLOCKED_REPORT.md`, `docs/reference/QC2-010_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-010_TASK_RECORD.json`
 
 ---
 

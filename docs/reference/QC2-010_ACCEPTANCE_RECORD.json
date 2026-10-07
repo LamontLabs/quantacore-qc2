@@ -1,0 +1,81 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a1184f-3e6f-7752-8362-4707336e9fae",
+  "created_at": "2026-10-07T21:40:08Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "FORWARD_OPERATIONAL",
+  "environment_namespace": "production",
+  "source_refs": [],
+  "content_hash": "f8833d0a45dfd5b72aad6b630f9d670bc996736dd2319b1c60b359b93446ecf8",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a1184f-3e68-7e80-9bbe-aebc2c9c5554",
+    "content_hash": "a52ae5a72802868deb9b4f5a32d2c23e4093ba67f6ba080490bb00a6664f3de8"
+  },
+  "task_spec_version": "QC2-010 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "7e905c7df041f26a7618756cdd9d0f1603487d65",
+  "changed_paths": [
+    "docs/reference/QC2-010_CAPABILITY_MANIFESTS/market_data_iex.json",
+    "docs/reference/QC2-010_CAPABILITY_MANIFESTS/market_data_sip.json",
+    "docs/reference/QC2-010_CAPABILITY_MANIFESTS/paper_trading.json",
+    "docs/reference/QC2-010_CAPABILITY_MANIFESTS/calendar.json",
+    "docs/reference/QC2-010_CAPABILITY_MANIFESTS/classification.json",
+    "docs/reference/QC2-010_CAPABILITY_MANIFESTS/corporate_actions.json",
+    "tools/task_workflow.py",
+    "tests/policy/test_task_workflow.py"
+  ],
+  "executed_commands": [
+    "Authenticated read-only Alpaca probe: 33 GET requests; paper account and data endpoints; responses sanitized; no retries or writes",
+    "uv run --no-sync pytest -q tests/contracts/test_contract_package.py tests/market_data_adapter — PASS, 32 tests",
+    "uv run --no-sync ruff check packages/market_data_adapter tests/market_data_adapter — PASS",
+    "uv run --no-sync pytest -q tests/policy/test_task_workflow.py — PASS, 8 tests",
+    "uv run --no-sync ruff check tools/task_workflow.py tests/policy/test_task_workflow.py — PASS",
+    "DataCapabilityManifest contract validation — PASS, 6/6 records",
+    "python3 tools/task_workflow.py validate — PASS",
+    "python3 tools/task_workflow.py preflight QC2-010 — PASS",
+    "git diff --check — PASS"
+  ],
+  "test_counts": [
+    {
+      "test_id": "qc2_010_live_probe",
+      "passed": 31,
+      "failed": 0,
+      "skipped": 2
+    },
+    {
+      "test_id": "qc2_010_contract_adapter_tests",
+      "passed": 32,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "qc2_010_task_workflow_tests",
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "qc2_010_manifest_contracts",
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "264da50d7c794bdb871b5eabfa6251b5c1526faaeb311d86a288ce6df7fd8d0b",
+    "0d87f352fff65c4a8156b53f8d95761c999fa27d103db64ffc5c54867dc654b5",
+    "48a7a6cc24e900eeabbe5811222b97769475e115d8978e49bdb4816840ff8811",
+    "c706fbbdb9ce543dd7e6f4b367dfb5597b92b4076bc7c1b67c5a7b8e27c14faa",
+    "5b814fb8cedbc0eb42afd1119b409a2010d14602887225ba74b96030b821c9da",
+    "22cea41caf054be44e0130906ea2df5ddedaa73aa783e659c7e793667055e422",
+    "ae076937c531500cb98266bb4f455cc125f6d10dc25d05d78be141debb832b70",
+    "5c3627430306846d9d7d5a31af13e27d2a4e204577abcc8473200ecebae49aa0"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-07T21:40:08Z"
+}

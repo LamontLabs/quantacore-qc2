@@ -860,10 +860,8 @@
         "REAL_MARKET_DATA"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "BLOCKED",
-      "blockers": [
-        "Authenticated read-only requests to the configured Alpaca paper-account and market-data endpoints returned HTTP 401; no account identity or feed capability could be established. See docs/reference/QC2-010_BLOCKED_REPORT.md."
-      ],
+      "status": "TODO",
+      "blockers": [],
       "acceptance_receipt": null
     },
     {

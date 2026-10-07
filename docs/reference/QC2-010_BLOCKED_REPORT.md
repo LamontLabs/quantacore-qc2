@@ -44,3 +44,9 @@ These facts remain unknown, not failed and not inferred from documentation or fi
 - **Capability conclusion:** No account identity or account fingerprint was returned. Feed entitlement, effective delay, supported history, coverage, pagination behavior, rate limits, action/classification/calendar availability, and paper-account operations remain unknown. No DataCapabilityManifest or feed-selection proposal is issued from these errors.
 - **Safety:** Every probe used authenticated GET requests only. No anonymous probe, broker write, order, paid upgrade, or live-brokerage request occurred. Error bodies were not stored or printed; only status codes and response hashes were recorded.
 - **Unblock condition:** Verify that the two Replit Secrets contain a matching Alpaca paper-trading API key pair with account access, update them through Replit Secrets if needed, then rerun QC2-010. Do not send credential values in chat. Until successful authenticated responses are measured, QC2-010 remains BLOCKED and F0 must not be activated.
+
+## Reopened after secure credential update
+
+- **Checked at:** 2026-10-07T21:17:00Z (UTC)
+- The required secret names were submitted or confirmed through Replit's secure Secrets flow. Secret values were not accessed, printed, or recorded.
+- QC2-010 has been reopened for a fresh authenticated capability probe against the updated secret pair. The prior HTTP 401 responses remain historical evidence; no capability is yet established by this update.

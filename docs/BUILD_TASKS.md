@@ -286,7 +286,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-008 — Market Calendar Authority
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Provide a single versioned exchange-session and deadline truth.
 **Dependencies:** QC2-003, QC2-005, QC2-007
 **Authorized legacy references:** Gen 1 schedulers/calendar handling

@@ -1,3 +1,4 @@
 - [pnpm Node version reporting](pnpm-node-version-reporting.md) — pnpm may report a different Node patch from the shell; enforce exact patches separately from the package engine range.
 - [PostgreSQL role-boundary testing](postgresql-role-boundary-testing.md) — use real session authorization; account for CREATEROLE's implicit role membership.
 - [PostgreSQL acceptance session state](postgresql-acceptance-session-state.md) — sequential rollback-only suites share transaction-local settings; reset test-only GUCs before later RLS checks.
+- [Contract validation JSON types](contract-validation-json-types.md) — thaw immutable mappings and tuples to dicts and lists before JSON Schema validation.

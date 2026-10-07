@@ -383,7 +383,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-011 — Early Real-Data Vertical Slice
 
-**Current status:** BLOCKED
+**Current status:** TODO
 **Objective:** Prove real acquisition, normalization, durable diagnostic sealing, and evidence lineage before deeper implementation.
 **Dependencies:** QC2-006, QC2-008, QC2-009, QC2-010
 **Authorized legacy references:** None.
@@ -408,7 +408,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Acceptance gate:** A genuine complete acquisition-to-evidence lineage is verified; full forward outcome lineage is reserved for QC2-086.
 **Required evidence/environment:** ALPACA_CREDENTIALS, REAL_MARKET_DATA
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
-**Blockers:** Preflight fails because QC2-010 is not PASS; no authenticated Alpaca evidence or capability manifest is available. See docs/reference/QC2-011_BLOCKED_REPORT.md.
+**Blockers:** None recorded.
 **Acceptance receipt:** Not recorded.
 
 ---

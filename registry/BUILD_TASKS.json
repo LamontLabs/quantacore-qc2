@@ -979,10 +979,8 @@
         "REAL_MARKET_DATA"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "BLOCKED",
-      "blockers": [
-        "Preflight fails because QC2-010 is not PASS; no authenticated Alpaca evidence or capability manifest is available. See docs/reference/QC2-011_BLOCKED_REPORT.md."
-      ],
+      "status": "TODO",
+      "blockers": [],
       "acceptance_receipt": null
     },
     {

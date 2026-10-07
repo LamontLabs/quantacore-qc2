@@ -1,0 +1,39 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a1177a-7f61-7c29-ad7e-3df0ef788bf7",
+  "created_at": "2026-10-07T17:47:46Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "8f98aae0a19718ea98cbe95038388c27ff978e03a3b313e6305466c2d744d06f",
+  "task_id": "qc2-007",
+  "task_name": "Configuration Authority",
+  "objective": "Create one versioned source of truth for each setting and a fail-closed unknown ledger.",
+  "dependency_task_ids": [
+    "QC2-002",
+    "QC2-003",
+    "QC2-005",
+    "QC2-006"
+  ],
+  "authorized_legacy_refs": [
+    "QuantraCore Gen 1 configuration",
+    "ApexLab Gen 1 configuration"
+  ],
+  "deliverable_refs": [
+    "Secret references, system/epoch/strategy/research/deployment configuration contracts.",
+    "Typed unresolved decisions, fixture-policy tagging, resource/budget gates.",
+    "Change classification and effective-boundary validation."
+  ],
+  "required_test_refs": [
+    "Reject duplicate authoritative definitions and unresolved production-required fields.",
+    "Reject fixture hashes in production manifests.",
+    "Research cannot widen owner capital/cost limits; secrets never appear in evidence/log output."
+  ],
+  "acceptance_gate": "Invalid configuration blocks only the relevant capability and has an actionable reason.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

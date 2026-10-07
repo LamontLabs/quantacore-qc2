@@ -562,7 +562,7 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
       "authorized_artifact_drift": [
         {
@@ -586,7 +586,84 @@
           "reason": "QC2-007 updates generated contract envelopes and projections for the new hash-pinned configuration contracts. QC2-004 remains historically verified at its tested source commit; QC2-007 reruns the contract and cross-language serialization checks."
         }
       ],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-07T17:47:46Z",
+        "task_spec_version": "QC2-007 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "907ca72d06bfc16b4706273cad38883e3001ce94",
+        "receipt": "docs/reference/QC2-007_ACCEPTANCE_RECEIPT.md",
+        "contract_receipt": "docs/reference/QC2-007_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-007_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/contracts",
+          "tests/contracts",
+          "tools/generate_contract_package.py",
+          "docs/reference/QC2-003_CONTRACT_CATALOG.md",
+          "packages/configuration_authority",
+          "tests/configuration_authority",
+          "docs/GEN2_MASTER_SPEC.md",
+          "tools/task_workflow.py",
+          "tools/generate_task_docs.py",
+          "tests/policy/test_task_workflow.py"
+        ],
+        "executed_commands": [
+          "python3 tools/generate_contract_package.py --check — PASS, 124 contracts and 132 artifacts",
+          "python3 -m pytest -q tests/configuration_authority tests/contracts/test_contract_package.py — PASS, 34 tests",
+          "python3 -m pytest -q tests/policy/test_task_workflow.py — PASS, 7 tests",
+          "python3 tools/task_workflow.py preflight QC2-007 — PASS",
+          "pnpm run verify — PASS, lint, formatting, typecheck, 81 Python tests, 7 database guards, 2 smoke tests, and task workflow validation"
+        ],
+        "test_counts": [
+          {
+            "test_id": "qc2_007_targeted",
+            "passed": 34,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "qc2_007_task_workflow",
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "qc2_007_full_python_suite",
+            "passed": 81,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "qc2_007_database_guards",
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "qc2_007_smoke",
+            "passed": 2,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/contracts": "43e92bda700fe545b02ce02bd46381c2b38ce84efe6ff9d4505e18947145d83d",
+          "tests/contracts": "9684aad3263f18792da3c200553e84eae2127023a6701cf506a8f337d8697092",
+          "tools/generate_contract_package.py": "fe0e56c081014293eebfb2633578dc18a05d82743d5046e836b0cfa9d48b134f",
+          "docs/reference/QC2-003_CONTRACT_CATALOG.md": "5fd141317cf98088f7c9fac597bf75f3573dcaee4e72a4cb7ed212307c6d1988",
+          "packages/configuration_authority": "83185c114e90ece43d735ca6f9a38a71a2f88d245c0699912b24aae3b28c5b50",
+          "tests/configuration_authority": "71bdace2ab7b91b2aa37cdad18c6a43ea5e97be0346b34e97c90436ef14cf49d",
+          "docs/GEN2_MASTER_SPEC.md": "4c88d457f10bae4f94efe9689aab9c45372ded10b43f88ad6d40e25584a12aab",
+          "tools/task_workflow.py": "df81893653f75000130836ffe07e2653b7d36c56ac5a75976ea690f99136b720",
+          "tools/generate_task_docs.py": "939d1f2fc653fb1d21740af62123e2810a603a8ead86fcb874c7d39b9e8f8410",
+          "tests/policy/test_task_workflow.py": "68b4f6d981a952de3a688e13b1a7f99d4bd1c8957a287c459498030c8da60a53"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "Fresh acceptance against integrated source commit 907ca72d06bfc16b4706273cad38883e3001ce94. Shared contract artifacts were explicitly authorized and revalidated by QC2-007; generated contracts, focused tests, task preflight, and full verification passed.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-008",

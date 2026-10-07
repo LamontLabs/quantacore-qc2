@@ -2,3 +2,4 @@
 - [PostgreSQL role-boundary testing](postgresql-role-boundary-testing.md) — use real session authorization; account for CREATEROLE's implicit role membership.
 - [PostgreSQL acceptance session state](postgresql-acceptance-session-state.md) — sequential rollback-only suites share transaction-local settings; reset test-only GUCs before later RLS checks.
 - [Contract validation JSON types](contract-validation-json-types.md) — thaw immutable mappings and tuples to dicts and lists before JSON Schema validation.
+- [QC2 task progression](qc2-task-progression.md) — handle task completion and advance through eligible QC2 work without asking the owner to mark each task complete.

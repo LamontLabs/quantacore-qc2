@@ -1,0 +1,37 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a11755-dc1c-77bf-ad50-2996d312cf9d",
+  "created_at": "2026-10-07T17:07:45Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "development",
+  "source_refs": [],
+  "content_hash": "cc82e7ff1cd154428221ee78c695bfe3902322d00a360ee4264bbb3daffc6d51",
+  "task_id": "qc2-006",
+  "task_name": "Evidence Authority",
+  "objective": "Make authoritative state changes atomic with restart-safe tamper-evident evidence.",
+  "dependency_task_ids": [
+    "QC2-004",
+    "QC2-005"
+  ],
+  "authorized_legacy_refs": [
+    "Gen 1 audit hash chain and tests",
+    "ApexLab hashing defects/source"
+  ],
+  "deliverable_refs": [
+    "Append/mutation API, transactional stream heads, verifier, checkpoint and independent-anchor interfaces.",
+    "FULL/PARTIAL/FAILED verification results and complete artifact inventory checks.",
+    "Threat model and explicit local-versus-independent proof levels."
+  ],
+  "required_test_refs": [
+    "Concurrent append, transaction rollback, edit/delete/reorder/truncation and corrupt object tests.",
+    "Fault between domain write/evidence/outbox cannot commit partial authority.",
+    "Independent-checkpoint fixture detects coordinated local rollback; incomplete scan never passes."
+  ],
+  "acceptance_gate": "All defined attacker/fault cases yield the specified verdict; real anchoring remains an activation dependency.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

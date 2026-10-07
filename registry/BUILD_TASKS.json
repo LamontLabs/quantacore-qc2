@@ -452,9 +452,79 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "TODO",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-07T17:07:45Z",
+        "task_spec_version": "QC2-006 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "a432fcf1a6f7a7be448abc30a38b9288c417e980",
+        "receipt": "docs/reference/QC2-006_ACCEPTANCE_RECEIPT.md",
+        "contract_receipt": "docs/reference/QC2-006_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-006_TASK_RECORD.json",
+        "changed_paths": [
+          "migrations/0002_evidence_authority.sql",
+          "packages/integrity_build",
+          "tests/integrity_build",
+          "tests/database/qc2_006_postgres_acceptance.sql",
+          "lib/db/test/run-qc2-006-postgres-integration.mjs",
+          "tests/database/README.md",
+          "threat_model.md"
+        ],
+        "executed_commands": [
+          "pnpm run verify — PASS at tested source commit; lint, formatting, typecheck, 65 Python tests, 7 database guards, smoke, generated docs, workflow validation",
+          "python3 -m pytest -q tests/integrity_build — PASS, 26 tests",
+          "Replit executeSql development: BEGIN ISOLATION LEVEL SERIALIZABLE; QC2-005 migration and acceptance SQL; QC2-006 migration and acceptance SQL; ROLLBACK — success, exit 0",
+          "Read-only post-rollback query — no QC2 schemas or authority roles persisted"
+        ],
+        "test_counts": [
+          {
+            "test_id": "qc2_006_full_verify_pytest",
+            "passed": 65,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "qc2_006_runtime_guards",
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "qc2_006_smoke",
+            "passed": 2,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "qc2_006_integrity_tests",
+            "passed": 26,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "qc2_006_postgresql_transaction",
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "migrations/0002_evidence_authority.sql": "fa331f591b9680c12862528c60a782ff2722ff919dc8a7f32873b2817c84b4c4",
+          "packages/integrity_build": "ec5f8243290609155c25b9dd86e7c2139ca4c27a1916d017664e675964f3e501",
+          "tests/integrity_build": "55b31b5e35c510124cdc2502f02c927fc4ca250b5b1ea8682af4e366ed988e6a",
+          "tests/database/qc2_006_postgres_acceptance.sql": "38d48866658413abe1520b00b48a54503c7611080d0889507c9f236a9764cd84",
+          "lib/db/test/run-qc2-006-postgres-integration.mjs": "415a4665a553d5ab217d52375e5bc498ddcb48c0425ac3a44c4cd267e39ab6de",
+          "tests/database/README.md": "0b2aac65315970631b1422ca8e86eb21404e9ab3abc8c3bebb9ddfe937d432a9",
+          "threat_model.md": "9f8c488e9c720fe71498ba65f1981ee640d2866ec90546ab0d351a54e405d0eb"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "development",
+        "verification_reason": "QC2-006 had no canonical acceptance receipt; its tests and rollback-only PostgreSQL suite were freshly run against the integrated implementation commit.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-007",

@@ -220,7 +220,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-006 — Evidence Authority
 
-**Current status:** TODO
+**Current status:** PASS
 **Objective:** Make authoritative state changes atomic with restart-safe tamper-evident evidence.
 **Dependencies:** QC2-004, QC2-005
 **Authorized legacy references:** Gen 1 audit hash chain and tests, ApexLab hashing defects/source
@@ -246,7 +246,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-07T17:07:45Z: `docs/reference/QC2-006_ACCEPTANCE_RECEIPT.md`, `docs/reference/QC2-006_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-006_TASK_RECORD.json`
 
 ---
 

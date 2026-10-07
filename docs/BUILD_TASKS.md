@@ -350,7 +350,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-010 — Real Account Capability Probe
 
-**Current status:** IN_PROGRESS
+**Current status:** BLOCKED
 **Objective:** Measure the actual account and deployment capabilities needed for the intended F0 regime.
 **Dependencies:** QC2-008, QC2-009
 **Authorized legacy references:** None.
@@ -375,7 +375,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Acceptance gate:** Measured capabilities support a declared feasible regime or produce a concrete BLOCKED report.
 **Required evidence/environment:** ALPACA_CREDENTIALS, REAL_MARKET_DATA
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
-**Blockers:** None recorded.
+**Blockers:** Authenticated read-only requests to the configured Alpaca paper-account and market-data endpoints returned HTTP 401; no account identity or feed capability could be established. See docs/reference/QC2-010_BLOCKED_REPORT.md.
 **Acceptance receipt:** Not recorded.
 
 ---

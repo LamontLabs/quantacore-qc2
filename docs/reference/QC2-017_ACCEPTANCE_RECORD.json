@@ -1,0 +1,60 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a11968-5aed-7526-af61-31de92d63c2a",
+  "created_at": "2026-10-08T02:47:11Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "33bfcb46c7513c5011e234eaff69656f5a2d2ccb8b4883c1efa74bac85828f26",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a11968-5ae7-749e-9056-4f26914334fb",
+    "content_hash": "124321d812bf8777f2f3032555bb4dd4358087ed3ce5e85bab87eed286f26334"
+  },
+  "task_spec_version": "QC2-017 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "5d516f8e09e787c02e412b6e83dd39130d60b4ca",
+  "changed_paths": [
+    "packages/science",
+    "tests/science",
+    "docs/reference/QC2-017_BLOCKED_REPORT.md",
+    "docs/reference/QC2-017_DECISION.md",
+    "docs/reference/QC2-017_REFERENCE_INTAKE.md"
+  ],
+  "executed_commands": [
+    "uv run pytest tests/science -q",
+    "uv run pytest tests/contracts -q",
+    "uv run ruff check packages/science/src/qc2_science tests/science",
+    "python3 tools/generate_contract_package.py --check",
+    "python3 tools/task_workflow.py preflight QC2-017",
+    "python3 tools/task_workflow.py validate"
+  ],
+  "test_counts": [
+    {
+      "test_id": "qc2_017_science",
+      "passed": 51,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "qc2_017_contracts",
+      "passed": 19,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "91e467de7ef3eaf63a1cb8d969588c98af698a50f3622ee301ae57bd27932b29",
+    "681c03ba003a64ea7f888f3b22a168e276e5ee629718351f9c8ff2519f7c384f",
+    "f0da3fb986064b358183080c710bf0054bea5cc2a841d9bfdefe9365ac83af52",
+    "d8e99121cbb2a7e90d1232d827ddb15fcc12353dd492e54d9c4b118a577c5862",
+    "9dc995fb846bf6ea7384a4eea1344beb28928588969282ad6156d1def4e6553a"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-08T02:47:11Z"
+}

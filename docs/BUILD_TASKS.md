@@ -582,7 +582,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-017 — Runner Protocol Framework
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Create a pure, isolated and resource-bounded structural-hypothesis API.
 **Dependencies:** QC2-003, QC2-013, QC2-014, QC2-016
 **Authorized legacy references:** Original protocol framework
@@ -611,7 +611,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-08T02:47:11Z: `docs/reference/QC2-017_ACCEPTANCE_RECEIPT.md`, `docs/reference/QC2-017_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-017_TASK_RECORD.json`
 
 ---
 

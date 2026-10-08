@@ -1,0 +1,39 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a1194d-ea2f-7da9-8dac-3f22cb787a14",
+  "created_at": "2026-10-08T02:18:19Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "c2cb368a849081ca0e55d31946d7f196ed76857ff6d1adec4fdd83f91c0e15e3",
+  "task_id": "qc2-016",
+  "task_name": "Ground Truth Authority",
+  "objective": "Resolve future outcomes independently from predictions, ranks, and model opinions.",
+  "dependency_task_ids": [
+    "QC2-006",
+    "QC2-009",
+    "QC2-012",
+    "QC2-013",
+    "QC2-015"
+  ],
+  "authorized_legacy_refs": [
+    "Gen 1 ForwardValidator"
+  ],
+  "deliverable_refs": [
+    "Outcome/revision resolver, action-review queue, terminal-event handling and evidence.",
+    "Full eligible-row resolution and independent RunnerEvent primitives.",
+    "Frozen correction and learning-release interfaces."
+  ],
+  "required_test_refs": [
+    "Run without importing model/score/strategy packages.",
+    "Resolve split/rename fixtures; retain unresolved halt/delisting/action cases.",
+    "Rerun is idempotent; corrections append versions and cannot alter sealed predictions."
+  ],
+  "acceptance_gate": "Known synthetic outcomes are exact, unknown outcomes remain explicit, and dependencies are scientifically independent.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

@@ -1625,9 +1625,50 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-08T02:18:19Z",
+        "task_spec_version": "QC2-016 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "358e45c0439f54be1a56a04d11190837b9e58495",
+        "receipt": "docs/reference/QC2-016_ACCEPTANCE_RECEIPT.md",
+        "contract_receipt": "docs/reference/QC2-016_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-016_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/science",
+          "tests/science",
+          "docs/reference/QC2-016_DECISION.md",
+          "docs/reference/QC2-016_REFERENCE_INTAKE.md"
+        ],
+        "executed_commands": [
+          "python3 -m pytest -q",
+          "uv run ruff check",
+          "python3 tools/generate_contract_package.py --check",
+          "python3 tools/task_workflow.py preflight QC2-016",
+          "python3 tools/task_workflow.py validate"
+        ],
+        "test_counts": [
+          {
+            "test_id": "python_tests",
+            "passed": 181,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/science": "26f9cee185afdd56941dde63d996f33bc1fea406c03c67e2584df3ec9fedc34c",
+          "tests/science": "e4bf9bd1f4f0a14065b1e9bccd7fc6c4e20e9d26ad65d193cd93a05fcf4a2d7f",
+          "docs/reference/QC2-016_DECISION.md": "98a468b837ac53fb2c55d2e6c748e0d10fec26aa1a53200922c8ea04eac5989a",
+          "docs/reference/QC2-016_REFERENCE_INTAKE.md": "3e0c4633878262edc22dc91e9e4c014f288770bbca7a29856d6dd126c1b02bc2"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "All acceptance checks were re-executed against the integrated implementation commit.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-017",

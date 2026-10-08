@@ -548,7 +548,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-016 — Ground Truth Authority
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Resolve future outcomes independently from predictions, ranks, and model opinions.
 **Dependencies:** QC2-006, QC2-009, QC2-012, QC2-013, QC2-015
 **Authorized legacy references:** Gen 1 ForwardValidator
@@ -576,7 +576,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-08T02:18:19Z: `docs/reference/QC2-016_ACCEPTANCE_RECEIPT.md`, `docs/reference/QC2-016_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-016_TASK_RECORD.json`
 
 ---
 

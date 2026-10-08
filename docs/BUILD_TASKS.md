@@ -1392,7 +1392,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-040 — Promotion Bundle
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Package final immutable candidate evidence with complete signed dependency inventory.
 **Dependencies:** QC2-004, QC2-006, QC2-026, QC2-034, QC2-036, QC2-037, QC2-038, QC2-039
 **Authorized legacy references:** Gen 1 G2 promotion artifacts, ApexLab promotion packaging
@@ -1419,7 +1419,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-08T21:51:13Z: `docs/reference/QC2-040_ACCEPTANCE_RECEIPT.md`, `docs/reference/QC2-040_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-040_TASK_RECORD.json`
 
 ---
 

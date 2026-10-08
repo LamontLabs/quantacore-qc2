@@ -1,0 +1,54 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a11d7f-bd2c-7df4-9a2d-e032aa611008",
+  "created_at": "2026-10-08T21:51:13Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "a74d5d81e6e3eed4c21a19b3d74be2556fee3c0498676e528e11fcb8f2976825",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a11d7f-bd23-79b5-bebb-cfd273681e02",
+    "content_hash": "e6ae16b827e0101f8c32b05675cee7d4a44420bff027724dc4791a63ee3da038"
+  },
+  "task_spec_version": "QC2-040 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "37f43655487c5d601f84fb0e86e452ac75d5ffdf",
+  "changed_paths": [
+    "packages/promotion",
+    "tests/promotion",
+    "pyproject.toml",
+    "uv.lock",
+    ".replit"
+  ],
+  "executed_commands": [
+    "python3 -m pytest tests/promotion -q",
+    "ruff check packages/promotion/src/qc2_promotion tests/promotion",
+    "uv lock --check",
+    "python3 -m compileall -q packages/promotion/src/qc2_promotion tests/promotion",
+    "python3 tools/task_workflow.py preflight QC2-040",
+    "python3 tools/task_workflow.py validate"
+  ],
+  "test_counts": [
+    {
+      "test_id": "promotion_bundle",
+      "passed": 11,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "8b74e9f308a2c50dd6411fca78f9b83bb821745dc5a28ca9160f2aac03bfc861",
+    "aee5d9b8da3630951f69e2b1b3e92a661fd4247415a05030e94ad6ff25801e73",
+    "3b24aa7a37ea7d0e7dc637af12260a89bd4635a9132d76e55ba3de0919b5c867",
+    "14a0767402dc144db55be5c19a37dc579fcb2fbd821e86691b5159ac4c7749e0",
+    "918321199d5f56edf566ad4d4d1952dbb5ea0be0d05bcb91c303b6744dcf439d"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-08T21:51:13Z"
+}

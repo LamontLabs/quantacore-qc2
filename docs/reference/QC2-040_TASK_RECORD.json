@@ -1,0 +1,43 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a11d7f-bd23-79b5-bebb-cfd273681e02",
+  "created_at": "2026-10-08T21:51:13Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "e6ae16b827e0101f8c32b05675cee7d4a44420bff027724dc4791a63ee3da038",
+  "task_id": "qc2-040",
+  "task_name": "Promotion Bundle",
+  "objective": "Package final immutable candidate evidence with complete signed dependency inventory.",
+  "dependency_task_ids": [
+    "QC2-004",
+    "QC2-006",
+    "QC2-026",
+    "QC2-034",
+    "QC2-036",
+    "QC2-037",
+    "QC2-038",
+    "QC2-039"
+  ],
+  "authorized_legacy_refs": [
+    "Gen 1 G2 promotion artifacts",
+    "ApexLab promotion packaging"
+  ],
+  "deliverable_refs": [
+    "PromotionBundleManifest, detached backend signature, archive restrictions and expiry.",
+    "Dataset/holdout/Shadow/replay/policy/environment report references.",
+    "Separate artifact, evaluator and owner identity bindings."
+  ],
+  "required_test_refs": [
+    "Any file/content/path/size mutation after signing invalidates the package.",
+    "Missing report, changed gate policy and archive traversal/bomb fixtures rejected.",
+    "Manifest hashing has no self-referential signature field."
+  ],
+  "acceptance_gate": "A bundle is fully verifiable from immutable dependencies and contains no unlisted executable payload.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

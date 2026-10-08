@@ -1082,6 +1082,9 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Objective:** Generate reproducible false-negative cases across rank, eligibility and availability failures.
 **Dependencies:** QC2-025, QC2-026, QC2-027, QC2-028, QC2-030
 **Authorized legacy references:** None.
+**Authorized artifact drift:** QC2-028 — QC2-031 adds deterministic missed-monster review generation to the accepted ApexLab package and regression-test trees, revalidating RunnerGenome behavior. QC2-028 remains historically valid at its tested source commit. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-029 — QC2-031 adds research-only review cases to the accepted ApexLab package and regression-test trees, revalidating FailureGenome behavior. QC2-029 remains historically valid at its tested source commit. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-030 — QC2-031 adds review queue generation to the accepted ApexLab package and regression-test trees, revalidating matched-decoy lineage. QC2-030 remains historically valid at its tested source commit. Paths: `packages/apexlab`, `tests/apexlab`
 **Required reference intake:** None. Do not inspect or copy legacy code for this task without a scoped amendment.
 
 **Required deliverables:**

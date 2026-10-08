@@ -1,25 +1,16 @@
-# QC2-018 — Historical Protocol Lineage Registry: BLOCKED
+# QC2-018 — Historical dependency blocker (resolved)
 
-## Blocker assessment
+This report preserves the earlier blocked attempt; it is not the current task status.
 
-- **Checked at:** 2026-10-07T20:55:07Z (UTC)
-- **Canonical status:** BLOCKED; no acceptance receipt is recorded.
-- **Satisfied dependency:** QC2-001 is PASS with a receipt.
-- **Unmet dependency:** QC2-017 is canonically BLOCKED.
-- **Preflight evidence:** `python3 tools/task_workflow.py preflight QC2-018` failed with `preflight failed: QC2-017 is not PASS`.
+## Earlier blocker
 
-## Work status and scope boundary
+- QC2-001 had passed, but QC2-017 had not yet passed.
+- `python3 tools/task_workflow.py preflight QC2-018` correctly refused to start while the QC2-017 acceptance receipt was absent.
+- The authorized original protocol sources had not yet been inspected, and no inventory or source meaning was inferred.
 
-- The historical protocol inventory, source hashes, hypotheses, data needs, dispositions, compatibility map, and migration acceptance criteria have not been produced.
-- T24/T25 and T34 meanings remain unverified for this task; no source semantics or protocol paths were inferred.
-- The authorized Original QuantraCore Protocol project was not inspected. No QC2-018 legacy reference intake is claimed.
-- No files were mapped to dispositions, and no protocol was considered for ACTIVE_F0.
-- No QC2-018 source-dependent tests were run, and no downstream task was started.
+## Resolution and current boundary
 
-## Resume conditions
-
-1. Resolve QC2-013, QC2-014, and QC2-016 with their required evidence and PASS receipts.
-2. Complete QC2-017 and obtain its PASS receipt.
-3. Re-run QC2-018 preflight. Only after it passes, inspect the authorized source read-only and record the required intake for every referenced repository/file actually inspected.
-
-Until QC2-017 passes, QC2-018 remains BLOCKED. No source inventory or semantic equivalence has been fabricated, and unresolved source meanings cannot be activated.
+- QC2-017 now has a PASS receipt, and its receipt, acceptance record, task record, registry, and generated docs are integrated.
+- `python3 tools/task_workflow.py preflight QC2-018` now passes.
+- The task status has been reconciled to TODO so the canonical start command can move it to IN_PROGRESS.
+- QC2-018 source inspection has not yet begun. No protocol is considered eligible for `ACTIVE_F0`, and unresolved meanings remain explicit.

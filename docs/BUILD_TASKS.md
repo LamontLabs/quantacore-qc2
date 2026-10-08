@@ -722,7 +722,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-021 — Runtime Safety Protocol Framework
 
-**Current status:** BLOCKED
+**Current status:** TODO
 **Objective:** Implement non-predictive action-specific safety gates.
 **Dependencies:** QC2-006, QC2-007, QC2-008, QC2-013, QC2-017, QC2-020
 **Authorized legacy references:** Gen 1 QC-T01–T65 safety lineage, verify exact namespace
@@ -747,7 +747,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Acceptance gate:** Safety classification and authority separation hold under hostile fixtures.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
-**Blockers:** Required dependencies QC2-013, QC2-017, and QC2-020 are not PASS. `python3 tools/task_workflow.py preflight QC2-021` fails because all three are not PASS. The authorized Gen 1 QC-T01–T65 safety lineage has not been inspected and its namespace has not been verified; see docs/reference/QC2-013_BLOCKED_REPORT.md, docs/reference/QC2-017_BLOCKED_REPORT.md, docs/reference/QC2-020_BLOCKED_REPORT.md, and docs/reference/QC2-021_BLOCKED_REPORT.md.
+**Blockers:** None recorded.
 **Acceptance receipt:** Not recorded.
 
 ---

@@ -3821,7 +3821,7 @@
           "reason": "QC2-034 adds experiment and trial-ledger behavior to the shared ApexLab source and regression-test trees; acceptance reruns the complete ApexLab suite."
         }
       ],
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "blockers": [],
       "acceptance_receipt": null
     },

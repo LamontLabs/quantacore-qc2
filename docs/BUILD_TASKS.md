@@ -1186,7 +1186,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-034 — ApexLab Experiment Ledger
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Account for the entire model-search process and qualification-data consumption.
 **Dependencies:** QC2-006, QC2-007, QC2-033
 **Authorized legacy references:** None.

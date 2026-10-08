@@ -76,6 +76,19 @@ from .decoy_engine import (
     require_original_distribution_calibration,
 )
 from .store import RunnerGenomeStore
+from .experiment_ledger import ExperimentLedger
+from .experiment_models import (
+    ComparisonRegistration,
+    ExperimentLedgerError,
+    HoldoutAccessAttempt,
+    HoldoutConsumptionState,
+    RegisteredBudget,
+    RegisteredExperiment,
+    ResourceReport,
+    ResourceUsage,
+    TrialEvent,
+    TrialState,
+)
 
 __all__ = [
     "CaliperRule",
@@ -142,4 +155,15 @@ __all__ = [
     "match_pre_outcome",
     "require_original_distribution_calibration",
     "verify_research_annotation_chain",
+    "ComparisonRegistration",
+    "ExperimentLedger",
+    "ExperimentLedgerError",
+    "HoldoutAccessAttempt",
+    "HoldoutConsumptionState",
+    "RegisteredBudget",
+    "RegisteredExperiment",
+    "ResourceReport",
+    "ResourceUsage",
+    "TrialEvent",
+    "TrialState",
 ]

@@ -653,6 +653,8 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Objective:** Rewrite the verified daily-compatible inspection queue as research protocols.
 **Dependencies:** QC2-014, QC2-017, QC2-018
 **Authorized legacy references:** Verified original P55/T34/T37/T38/T41/T42/T44/T57/T77/T78/T92/T102/T103/T104/T108/T109/T110 sources
+**Authorized artifact drift:** QC2-014 — QC2-019 adds declarative, inactive research protocol definitions and isolated tests over the QC2-014 registered daily features. Its acceptance reruns full science and repository verification and records exact tree hashes; QC2-014 remains bound to its tested source commit. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-017 — QC2-019 adds three inactive hypothesis specifications and tests through the existing isolated Runner Protocol evaluator; it does not change runner architecture. Its acceptance reruns full science and repository verification and records exact tree hashes; QC2-017 remains bound to its tested source commit. Paths: `packages/science`, `tests/science`
 **Required reference intake:** Mandatory for each referenced repository/file actually inspected; record revision, path/hash, source-supported meaning, tests, conflicts, license, and disposition.
 
 **Required deliverables:**

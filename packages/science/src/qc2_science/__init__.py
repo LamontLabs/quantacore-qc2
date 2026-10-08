@@ -86,6 +86,7 @@ from .runner_protocol_models import (
     parameter_value,
     protocol_operation,
 )
+from .runner_protocol_research import research_wave1_protocols
 
 __all__ = [
     "ContractRef",
@@ -155,6 +156,7 @@ __all__ = [
     "materialize_runner_protocol_registry",
     "parameter_value",
     "protocol_operation",
+    "research_wave1_protocols",
     "require_probability_target",
     "record_action_review_decision",
     "resolve_eligible_rows",

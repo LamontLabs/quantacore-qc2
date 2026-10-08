@@ -1,0 +1,386 @@
+{
+  "task_id": "QC2-019",
+  "source_inventory": "docs/reference/QC2-018_PROTOCOL_INVENTORY.json",
+  "scope_note": "This ledger resolves the QC2-019 inspection queue only. The QC2-018 inventory remains the historical snapshot of its 139 path-qualified protocol files. Unmapped here does not mean absent repository-wide.",
+  "inspection_reason": "Resolve the canonical QC2-019 candidate inspection queue using revision-pinned source evidence before deciding whether each item can be represented safely by the existing daily-feature Runner Protocol contract.",
+  "candidate_ids": [
+    "P55",
+    "T34",
+    "T37",
+    "T38",
+    "T41",
+    "T42",
+    "T44",
+    "T57",
+    "T77",
+    "T78",
+    "T92",
+    "T102",
+    "T103",
+    "T104",
+    "T108",
+    "T109",
+    "T110"
+  ],
+  "shared_apex_reference": {
+    "repository": "Lamont-Labs/QuantraCore-Apex",
+    "revision": "d65ad25b813977b1087b94db5f88a32963426477",
+    "license_path": "LICENSE",
+    "license_sha256": "9c6c3d40f38847fd60c7b354473e5320228bfcebe3fdebb1914b347317b204c9",
+    "license_summary": "Demo-only/Evaluation license; no production or live trading without written consent. No production authorization is inferred.",
+    "candidate_test_path": "src/quantracore_apex/tests/test_all_tier_protocols.py",
+    "candidate_test_sha256": "d39b49f869617ddfc713ec3521957ce3aefa9147b2ab7cc988cdbb7c29124e58",
+    "candidate_entrypoint_inspected": "run(window, microtraits)",
+    "candidate_test_summary": "Import-presence loop covers T01-T80 with missing modules skipped. Execution loop covers only T01-T20 and searches for run_Txx; it does not assert candidate-specific behavior for the reviewed T34/T37/T38/T41/T42/T44/T57/T77/T78 run(window, microtraits) functions. Not executed."
+  },
+  "decisions": [
+    {
+      "candidate_id": "P55",
+      "source_resolution": "UNMAPPED_IN_SCOPED_INVENTORY",
+      "source": null,
+      "source_supported_meaning": "UNKNOWN",
+      "useful_concepts": [],
+      "source_tests": "NOT_INSPECTED",
+      "conflicts": [],
+      "license": "UNKNOWN_NOT_ATTRIBUTABLE",
+      "disposition": "IGNORE",
+      "regime_status": "SOURCE_UNRESOLVED",
+      "research_protocol_ids": [],
+      "exclusion_reason": "No path-qualified P55 source was mapped in the inspected QC2-018 scope. Meaning, inputs, tests, and license cannot be attributed. This is not a claim that P55 is absent elsewhere."
+    },
+    {
+      "candidate_id": "T34",
+      "source_resolution": "PINNED_SOURCE_RETRIEVED",
+      "source": {
+        "repository": "Lamont-Labs/QuantraCore-Apex",
+        "revision": "d65ad25b813977b1087b94db5f88a32963426477",
+        "path": "src/quantracore_apex/protocols/tier/T34.py",
+        "git_blob_sha1": "6bdd284ae92a233627a495cbde31f13055687125",
+        "sha256": "51a2cfaee7de0c15d8cdf43af0ccd099b66a4fcc46891290fe36e23c0f103c32"
+      },
+      "source_supported_meaning": "Pinned code computes 10-, 5-, and 1-session rate of change, a 10-session ROC z-score, and ROC acceleration; branches at absolute z-scores 2.5/1.5 and compares absolute acceleration with twice the absolute mean. Source comments call it momentum analysis.",
+      "useful_concepts": [
+        "No concept is adopted while the T34 historical identity conflict remains unresolved and no matching registered ROC-z-score feature exists."
+      ],
+      "source_tests": "Shared Apex candidate test only; no candidate behavior asserted; NOT_RUN.",
+      "conflicts": [
+        "QC2-001 records that the tier document labels T34 Strength zone mapping while the pinned implementation is rate-of-change momentum.",
+        "The proposed historical trap-evader identity remains unresolved."
+      ],
+      "license": "Apex demo/evaluation only; no production/live use without written consent.",
+      "disposition": "IGNORE",
+      "regime_status": "SOURCE_UNRESOLVED",
+      "research_protocol_ids": [],
+      "exclusion_reason": "The historical identity conflict is unresolved; the inspected z-score implementation uses NumPy/binary floats and has no directly corresponding registered daily feature. No source thresholds or float behavior are carried over."
+    },
+    {
+      "candidate_id": "T37",
+      "source_resolution": "PINNED_SOURCE_RETRIEVED",
+      "source": {
+        "repository": "Lamont-Labs/QuantraCore-Apex",
+        "revision": "d65ad25b813977b1087b94db5f88a32963426477",
+        "path": "src/quantracore_apex/protocols/tier/T37.py",
+        "git_blob_sha1": "7a9321ef737f21273fa6b4619a5bf17ae6067537",
+        "sha256": "386e4af59d104003d3718d9e9c628a83025a860cbe0b8573d55d2e933f4e28a5"
+      },
+      "source_supported_meaning": "14-bar Williams %R; overbought above -20, oversold below -80, and a momentum-shift branch when absolute five-observation trend change exceeds 20.",
+      "useful_concepts": [
+        "Oscillator saturation and reversal may inform a future feature review, but Williams %R is not available as a registered F0 feature."
+      ],
+      "source_tests": "Shared Apex candidate test only; no candidate behavior asserted; NOT_RUN.",
+      "conflicts": [
+        "The pinned implementation uses NumPy/binary floats and source thresholds.",
+        "No Williams %R feature is registered in the QC2-014 daily feature set."
+      ],
+      "license": "Apex demo/evaluation only; no production/live use without written consent.",
+      "disposition": "IGNORE",
+      "regime_status": "UNAVAILABLE_IN_F0",
+      "research_protocol_ids": [],
+      "exclusion_reason": "The existing declarative runner consumes registered scalar features and cannot compute the required rolling high/low oscillator without broadening the feature/runtime architecture. No equivalent registered feature exists."
+    },
+    {
+      "candidate_id": "T38",
+      "source_resolution": "PINNED_SOURCE_RETRIEVED",
+      "source": {
+        "repository": "Lamont-Labs/QuantraCore-Apex",
+        "revision": "d65ad25b813977b1087b94db5f88a32963426477",
+        "path": "src/quantracore_apex/protocols/tier/T38.py",
+        "git_blob_sha1": "06d07bc56dc24ec29543e99202fb300f4b0d3e8a",
+        "sha256": "4ff7347f8a161a04a7d9e237dd93aee6143130163268067edf3228a42562053b"
+      },
+      "source_supported_meaning": "20-session CCI over typical price and mean absolute deviation; branches at +200/+100/-200/-100 and when absolute five-observation CCI trend exceeds 100.",
+      "useful_concepts": [
+        "CCI extremes may inform a future feature review, but the required rolling typical-price and deviation calculation is not registered."
+      ],
+      "source_tests": "Shared Apex candidate test only; no candidate behavior asserted; NOT_RUN.",
+      "conflicts": [
+        "The pinned implementation uses NumPy/binary floats and source thresholds.",
+        "No CCI or typical-price mean-deviation feature is registered in the QC2-014 daily feature set."
+      ],
+      "license": "Apex demo/evaluation only; no production/live use without written consent.",
+      "disposition": "IGNORE",
+      "regime_status": "UNAVAILABLE_IN_F0",
+      "research_protocol_ids": [],
+      "exclusion_reason": "No exact registered daily feature supports the source calculation, and implementing its rolling statistic in the protocol runner would broaden the authorized architecture."
+    },
+    {
+      "candidate_id": "T41",
+      "source_resolution": "PINNED_SOURCE_RETRIEVED",
+      "source": {
+        "repository": "Lamont-Labs/QuantraCore-Apex",
+        "revision": "d65ad25b813977b1087b94db5f88a32963426477",
+        "path": "src/quantracore_apex/protocols/tier/T41.py",
+        "git_blob_sha1": "c2447feb0073b113149861ec13a30f8494cfa4d6",
+        "sha256": "f173bbe53c1e56e5135f57c089306287787b8aa0a9d0b03b28be669452a97a23"
+      },
+      "source_supported_meaning": "Daily volume spike/dry-up classification from current volume divided by a 20-bar mean and a volume z-score: ratio >3 with z-score >2.5, ratio >2, ratio >1.5, or ratio <0.5. Price change is calculated for output details but does not affect the branch decision.",
+      "useful_concepts": [
+        "Compare current volume with a prior-only baseline using registered relative_volume; source z-scores and legacy threshold branches are not transferred."
+      ],
+      "source_tests": "Shared Apex candidate test only; no candidate behavior asserted; NOT_RUN.",
+      "conflicts": [
+        "The pinned denominator includes the current bar; QC2-014 relative_volume uses the preceding 20 sessions.",
+        "The source's 1.5/2.0/3.0 ratio and z-score thresholds are not calibrated for QC2 and are not reused.",
+        "The pinned implementation uses NumPy/binary floats."
+      ],
+      "license": "Apex demo/evaluation only; no production/live use without written consent.",
+      "disposition": "REWRITE",
+      "regime_status": "RESEARCH",
+      "research_protocol_ids": [
+        "research:t41-volume-expansion:v1"
+      ],
+      "exclusion_reason": null,
+      "semantics_difference": "The research-only rewrite asks only whether exact registered relative_volume exceeds 1.000000000000, meaning today's volume is above the prior-20-session arithmetic mean. It omits source z-scores, source thresholds, price-change detail, and any calibrated confidence. The original T41 behavior is not reproduced."
+    },
+    {
+      "candidate_id": "T42",
+      "source_resolution": "PINNED_SOURCE_RETRIEVED",
+      "source": {
+        "repository": "Lamont-Labs/QuantraCore-Apex",
+        "revision": "d65ad25b813977b1087b94db5f88a32963426477",
+        "path": "src/quantracore_apex/protocols/tier/T42.py",
+        "git_blob_sha1": "a2e78510ad6fec8412c873f76b383ef7044ff0cd",
+        "sha256": "ace3cf5474137e52b066510f031efd6478e6c8e8145fdc38c9385bf705ffa197"
+      },
+      "source_supported_meaning": "Cumulative On-Balance Volume with divergence, current-vs-20-bar-mean comparisons at 1.2/0.8, and a normalized-slope branch above 0.5.",
+      "useful_concepts": [
+        "Volume direction can be considered alongside price trend in principle, but no registered OBV feature supports this source behavior."
+      ],
+      "source_tests": "Shared Apex candidate test only; no candidate behavior asserted; NOT_RUN.",
+      "conflicts": [
+        "The pinned implementation uses NumPy/binary floats and source thresholds.",
+        "QC2-014 has no OBV feature; the registered accumulation feature is not OBV and is not treated as equivalent."
+      ],
+      "license": "Apex demo/evaluation only; no production/live use without written consent.",
+      "disposition": "IGNORE",
+      "regime_status": "UNAVAILABLE_IN_F0",
+      "research_protocol_ids": [],
+      "exclusion_reason": "There is no registered exact OBV feature or pointwise equivalent. Replacing OBV with a different accumulation feature would misstate source semantics."
+    },
+    {
+      "candidate_id": "T44",
+      "source_resolution": "PINNED_SOURCE_RETRIEVED",
+      "source": {
+        "repository": "Lamont-Labs/QuantraCore-Apex",
+        "revision": "d65ad25b813977b1087b94db5f88a32963426477",
+        "path": "src/quantracore_apex/protocols/tier/T44.py",
+        "git_blob_sha1": "9e539d69914eafdea477dbf1aa9900b9cc1ab07a",
+        "sha256": "dd065a33f2d6f7c681f4ef4de30cc93a37e32d6cf5b84637f227c0bbca3f6ffb"
+      },
+      "source_supported_meaning": "Cumulative Accumulation/Distribution line using close-location multiplier times volume, with 10/20-bar moving-average comparisons at 1.1/0.9 and 10-bar price-divergence branches.",
+      "useful_concepts": [
+        "Close-location weighting by volume is relevant to the registered finite accumulation feature, but that feature is not the source's cumulative A/D line."
+      ],
+      "source_tests": "Shared Apex candidate test only; no candidate behavior asserted; NOT_RUN.",
+      "conflicts": [
+        "The pinned implementation uses NumPy/binary floats and source thresholds.",
+        "QC2-014 accumulation is a finite 20-session volume-weighted close-location fraction, not the source's cumulative A/D line or its moving-average comparison."
+      ],
+      "license": "Apex demo/evaluation only; no production/live use without written consent.",
+      "disposition": "REWRITE",
+      "regime_status": "RESEARCH",
+      "research_protocol_ids": [
+        "research:t44-positive-money-flow:v1"
+      ],
+      "exclusion_reason": null,
+      "semantics_difference": "The research-only rewrite tests whether the exact registered 20-session normalized accumulation feature is positive. It does not reproduce a cumulative line, source moving averages, divergence, thresholds, or confidence."
+    },
+    {
+      "candidate_id": "T57",
+      "source_resolution": "PINNED_SOURCE_RETRIEVED",
+      "source": {
+        "repository": "Lamont-Labs/QuantraCore-Apex",
+        "revision": "d65ad25b813977b1087b94db5f88a32963426477",
+        "path": "src/quantracore_apex/protocols/tier/T57.py",
+        "git_blob_sha1": "582156eaf7194b2db5e20760e08a30a22569ba48",
+        "sha256": "425153d69a09d20aebf5111b678fd77b0e7dbad8a810f253db30fca1f7ca0b0a"
+      },
+      "source_supported_meaning": "Cup-and-handle pattern over 50 closes; rim similarity <5%, cup depth 10–35%, handle pullback 5–15%, and a potential-cup branch.",
+      "useful_concepts": [
+        "The source expresses a staged price-shape hypothesis, but no exact registered daily shape feature supports it."
+      ],
+      "source_tests": "Shared Apex candidate test only; no candidate behavior asserted; NOT_RUN.",
+      "conflicts": [
+        "The pinned implementation uses NumPy/binary floats and source pattern thresholds.",
+        "The registered feature set has no exact cup/handle shape feature."
+      ],
+      "license": "Apex demo/evaluation only; no production/live use without written consent.",
+      "disposition": "IGNORE",
+      "regime_status": "UNAVAILABLE_IN_F0",
+      "research_protocol_ids": [],
+      "exclusion_reason": "The pattern's rolling extrema and staged shape comparisons are not represented by registered scalar daily features. Adding a pattern evaluator would broaden the protocol architecture."
+    },
+    {
+      "candidate_id": "T77",
+      "source_resolution": "PINNED_SOURCE_RETRIEVED",
+      "source": {
+        "repository": "Lamont-Labs/QuantraCore-Apex",
+        "revision": "d65ad25b813977b1087b94db5f88a32963426477",
+        "path": "src/quantracore_apex/protocols/tier/T77.py",
+        "git_blob_sha1": "e97d1b115ea5a2cf20ec087b2c2e8583531a4bbd",
+        "sha256": "fab1f080bd16938adc01718e348a5f5e113080d86c941e6693527645e2a7ac05"
+      },
+      "source_supported_meaning": "Mean-reversion score combines current deviation/volatility with a historical reversion rate; the top branch requires absolute z-score >2.5 and reversion rate >0.5, with lesser branches above 2 and 1.5.",
+      "useful_concepts": [
+        "No concept is adopted because the historical rate uses future closes and the required current-window z-score is not a registered feature."
+      ],
+      "source_tests": "Shared Apex candidate test only; no candidate behavior asserted; NOT_RUN.",
+      "conflicts": [
+        "The historical-rate loop reads closes[i+5] to calculate a future five-session return.",
+        "The implementation uses NumPy/binary floats and has no matching registered mean-reversion z-score feature."
+      ],
+      "license": "Apex demo/evaluation only; no production/live use without written consent.",
+      "disposition": "IGNORE",
+      "regime_status": "UNAVAILABLE_IN_F0",
+      "research_protocol_ids": [],
+      "exclusion_reason": "Its historical-reversion component contains future-memory/lookahead and cannot be used for a point-in-time Runner Protocol. The remaining current-window statistic is not available as a registered feature."
+    },
+    {
+      "candidate_id": "T78",
+      "source_resolution": "PINNED_SOURCE_RETRIEVED",
+      "source": {
+        "repository": "Lamont-Labs/QuantraCore-Apex",
+        "revision": "d65ad25b813977b1087b94db5f88a32963426477",
+        "path": "src/quantracore_apex/protocols/tier/T78.py",
+        "git_blob_sha1": "0b7f2dc42404eb84ca45d09ae09c3788154dcf42",
+        "sha256": "3b839ee6689c461b94ed842be282a992c0b4a774a31021ecee6f17a29a672b43"
+      },
+      "source_supported_meaning": "Trend-continuation score uses 10/20-session return-sign alignment, recent/prior volume support, pullback <3%, and weighted components 0.3/0.25/0.25/0.2 with branches above 0.7 and 0.5.",
+      "useful_concepts": [
+        "Multi-horizon return-sign alignment is independently testable from registered return_10 and return_20; other source score components are omitted."
+      ],
+      "source_tests": "Shared Apex candidate test only; no candidate behavior asserted; NOT_RUN.",
+      "conflicts": [
+        "The source's volume windows and pullback measurement do not match an exact registered feature contract.",
+        "The source's 3% and weighted-score thresholds are not calibrated for QC2 and are not reused.",
+        "The pinned implementation uses NumPy/binary floats."
+      ],
+      "license": "Apex demo/evaluation only; no production/live use without written consent.",
+      "disposition": "REWRITE",
+      "regime_status": "RESEARCH",
+      "research_protocol_ids": [
+        "research:t78-return-sign-alignment:v1"
+      ],
+      "exclusion_reason": null,
+      "semantics_difference": "The research-only rewrite tests only whether registered 10- and 20-session returns share a sign, including both being exactly zero. It omits volume support, pullback depth, weighted score, source thresholds, and confidence; it is not equivalent to T78."
+    },
+    {
+      "candidate_id": "T92",
+      "source_resolution": "UNMAPPED_IN_SCOPED_INVENTORY",
+      "source": null,
+      "source_supported_meaning": "UNKNOWN",
+      "useful_concepts": [],
+      "source_tests": "NOT_INSPECTED",
+      "conflicts": [],
+      "license": "UNKNOWN_NOT_ATTRIBUTABLE",
+      "disposition": "IGNORE",
+      "regime_status": "SOURCE_UNRESOLVED",
+      "research_protocol_ids": [],
+      "exclusion_reason": "No path-qualified T92 source was mapped in the inspected QC2-018 scope. Meaning, inputs, tests, and license cannot be attributed. This is not a claim that T92 is absent elsewhere."
+    },
+    {
+      "candidate_id": "T102",
+      "source_resolution": "UNMAPPED_IN_SCOPED_INVENTORY",
+      "source": null,
+      "source_supported_meaning": "UNKNOWN",
+      "useful_concepts": [],
+      "source_tests": "NOT_INSPECTED",
+      "conflicts": [],
+      "license": "UNKNOWN_NOT_ATTRIBUTABLE",
+      "disposition": "IGNORE",
+      "regime_status": "SOURCE_UNRESOLVED",
+      "research_protocol_ids": [],
+      "exclusion_reason": "No path-qualified T102 source was mapped in the inspected QC2-018 scope. Meaning, inputs, tests, and license cannot be attributed. This is not a claim that T102 is absent elsewhere."
+    },
+    {
+      "candidate_id": "T103",
+      "source_resolution": "UNMAPPED_IN_SCOPED_INVENTORY",
+      "source": null,
+      "source_supported_meaning": "UNKNOWN",
+      "useful_concepts": [],
+      "source_tests": "NOT_INSPECTED",
+      "conflicts": [],
+      "license": "UNKNOWN_NOT_ATTRIBUTABLE",
+      "disposition": "IGNORE",
+      "regime_status": "SOURCE_UNRESOLVED",
+      "research_protocol_ids": [],
+      "exclusion_reason": "No path-qualified T103 source was mapped in the inspected QC2-018 scope. Meaning, inputs, tests, and license cannot be attributed. This is not a claim that T103 is absent elsewhere."
+    },
+    {
+      "candidate_id": "T104",
+      "source_resolution": "UNMAPPED_IN_SCOPED_INVENTORY",
+      "source": null,
+      "source_supported_meaning": "UNKNOWN",
+      "useful_concepts": [],
+      "source_tests": "NOT_INSPECTED",
+      "conflicts": [],
+      "license": "UNKNOWN_NOT_ATTRIBUTABLE",
+      "disposition": "IGNORE",
+      "regime_status": "SOURCE_UNRESOLVED",
+      "research_protocol_ids": [],
+      "exclusion_reason": "No path-qualified T104 source was mapped in the inspected QC2-018 scope. Meaning, inputs, tests, and license cannot be attributed. This is not a claim that T104 is absent elsewhere."
+    },
+    {
+      "candidate_id": "T108",
+      "source_resolution": "UNMAPPED_IN_SCOPED_INVENTORY",
+      "source": null,
+      "source_supported_meaning": "UNKNOWN",
+      "useful_concepts": [],
+      "source_tests": "NOT_INSPECTED",
+      "conflicts": [],
+      "license": "UNKNOWN_NOT_ATTRIBUTABLE",
+      "disposition": "IGNORE",
+      "regime_status": "SOURCE_UNRESOLVED",
+      "research_protocol_ids": [],
+      "exclusion_reason": "No path-qualified T108 source was mapped in the inspected QC2-018 scope. Meaning, inputs, tests, and license cannot be attributed. This is not a claim that T108 is absent elsewhere."
+    },
+    {
+      "candidate_id": "T109",
+      "source_resolution": "UNMAPPED_IN_SCOPED_INVENTORY",
+      "source": null,
+      "source_supported_meaning": "UNKNOWN",
+      "useful_concepts": [],
+      "source_tests": "NOT_INSPECTED",
+      "conflicts": [],
+      "license": "UNKNOWN_NOT_ATTRIBUTABLE",
+      "disposition": "IGNORE",
+      "regime_status": "SOURCE_UNRESOLVED",
+      "research_protocol_ids": [],
+      "exclusion_reason": "No path-qualified T109 source was mapped in the inspected QC2-018 scope. Meaning, inputs, tests, and license cannot be attributed. This is not a claim that T109 is absent elsewhere."
+    },
+    {
+      "candidate_id": "T110",
+      "source_resolution": "UNMAPPED_IN_SCOPED_INVENTORY",
+      "source": null,
+      "source_supported_meaning": "UNKNOWN",
+      "useful_concepts": [],
+      "source_tests": "NOT_INSPECTED",
+      "conflicts": [],
+      "license": "UNKNOWN_NOT_ATTRIBUTABLE",
+      "disposition": "IGNORE",
+      "regime_status": "SOURCE_UNRESOLVED",
+      "research_protocol_ids": [],
+      "exclusion_reason": "No path-qualified T110 source was mapped in the inspected QC2-018 scope. Meaning, inputs, tests, and license cannot be attributed. This is not a claim that T110 is absent elsewhere."
+    }
+  ]
+}

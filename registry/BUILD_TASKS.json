@@ -1886,6 +1886,24 @@
         "No hidden future-memory, quote, float, or live data requirement.",
         "Exact replay and side-effect tests for each migrated protocol."
       ],
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-014",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-019 adds declarative, inactive research protocol definitions and isolated tests over the QC2-014 registered daily features. Its acceptance reruns full science and repository verification and records exact tree hashes; QC2-014 remains bound to its tested source commit."
+        },
+        {
+          "prior_task_id": "QC2-017",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-019 adds three inactive hypothesis specifications and tests through the existing isolated Runner Protocol evaluator; it does not change runner architecture. Its acceptance reruns full science and repository verification and records exact tree hashes; QC2-017 remains bound to its tested source commit."
+        }
+      ],
       "forbidden_actions": [
         "Do not activate candidates or preserve a legacy threshold merely because it exists.",
         "Implement live trading or allow runtime provider/feed fallback.",

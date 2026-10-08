@@ -1296,7 +1296,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-037 — Model Registry
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Store immutable model artifacts and enforce lifecycle/pointer uniqueness.
 **Dependencies:** QC2-005, QC2-006, QC2-023, QC2-034, QC2-036
 **Authorized legacy references:** Gen 1 active-model/source-lock mechanisms

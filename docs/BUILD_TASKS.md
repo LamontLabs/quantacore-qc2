@@ -582,10 +582,13 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-017 — Runner Protocol Framework
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Create a pure, isolated and resource-bounded structural-hypothesis API.
 **Dependencies:** QC2-003, QC2-013, QC2-014, QC2-016
 **Authorized legacy references:** Original protocol framework
+**Authorized artifact drift:** QC2-014 — QC2-017 adds the isolated Runner Protocol evaluator alongside the accepted science authorities. Its acceptance reruns complete science and contract verification and records exact changed hashes; QC2-014 remains bound to its tested source commit. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-015 — QC2-017 adds a separate structural-hypothesis API beside the label authority. Its acceptance reruns complete science and contract verification and records exact changed hashes; QC2-015 remains bound to its tested source commit. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-016 — QC2-017 extends the shared science package with a separate, fail-closed Runner Protocol authority. Its acceptance reruns complete science and contract verification and records exact changed hashes; QC2-016 remains bound to its tested source commit. Paths: `packages/science`, `tests/science`
 **Required reference intake:** Mandatory for each referenced repository/file actually inspected; record revision, path/hash, source-supported meaning, tests, conflicts, license, and disposition.
 
 **Required deliverables:**

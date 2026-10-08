@@ -1,0 +1,170 @@
+{
+  "schema_name": "qc2.research.RunnerProtocolDependencyGraph.v1",
+  "schema_version": "1.0",
+  "task_id": "QC2-020",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "research",
+  "active_protocol_keys": [],
+  "graph_scope": "Feature-to-feature dependency edges declared by the QC2-014 registered daily feature definitions. DailyBar fields and units remain defined by each FeatureDefinition contract.",
+  "protocols": [
+    {
+      "protocol_id": "daily-breakout-confluence",
+      "direct_features": [
+        "breakout_proximity",
+        "relative_volume",
+        "return_1"
+      ],
+      "feature_dependencies": {
+        "breakout_proximity": [
+          "rolling_high_distance"
+        ],
+        "relative_volume": [],
+        "return_1": [],
+        "rolling_high_distance": []
+      }
+    },
+    {
+      "protocol_id": "daily-exhaustion-pressure-observation",
+      "direct_features": [
+        "exhaustion_pressure"
+      ],
+      "feature_dependencies": {
+        "atr": [
+          "true_range"
+        ],
+        "close_location_value": [],
+        "exhaustion_pressure": [
+          "atr",
+          "close_location_value",
+          "trend_slope",
+          "true_range"
+        ],
+        "trend_slope": [],
+        "true_range": []
+      }
+    },
+    {
+      "protocol_id": "daily-failed-breakout-observation",
+      "direct_features": [
+        "breakout_attempt_count",
+        "breakout_failure_count"
+      ],
+      "feature_dependencies": {
+        "breakout_attempt_count": [
+          "rolling_high_distance"
+        ],
+        "breakout_failure_count": [
+          "rolling_high_distance"
+        ],
+        "rolling_high_distance": []
+      }
+    },
+    {
+      "protocol_id": "daily-price-volume-divergence-observation",
+      "direct_features": [
+        "price_volume_divergence"
+      ],
+      "feature_dependencies": {
+        "accumulation": [
+          "close_location_value"
+        ],
+        "close_location_value": [],
+        "price_volume_divergence": [
+          "accumulation",
+          "return_20"
+        ],
+        "return_20": []
+      }
+    },
+    {
+      "protocol_id": "daily-reversal-location",
+      "direct_features": [
+        "close_location_value",
+        "return_1",
+        "reversal_score"
+      ],
+      "feature_dependencies": {
+        "close_location_value": [],
+        "return_1": [],
+        "reversal_score": []
+      }
+    },
+    {
+      "protocol_id": "historical-similarity-interface-observation",
+      "direct_features": [
+        "failure_similarity",
+        "runner_similarity"
+      ],
+      "feature_dependencies": {
+        "atr": [
+          "true_range"
+        ],
+        "close_location_value": [],
+        "exhaustion_pressure": [
+          "atr",
+          "close_location_value",
+          "trend_slope",
+          "true_range"
+        ],
+        "failure_similarity": [
+          "exhaustion_pressure",
+          "momentum_slope",
+          "relative_volume",
+          "return_1",
+          "return_20",
+          "return_3",
+          "return_5",
+          "trend_slope",
+          "volatility_expansion"
+        ],
+        "momentum_slope": [
+          "return_1"
+        ],
+        "relative_volume": [],
+        "return_1": [],
+        "return_20": [],
+        "return_3": [],
+        "return_5": [],
+        "runner_similarity": [
+          "exhaustion_pressure",
+          "momentum_slope",
+          "relative_volume",
+          "return_1",
+          "return_20",
+          "return_3",
+          "return_5",
+          "trend_slope",
+          "volatility_expansion"
+        ],
+        "trend_slope": [],
+        "true_range": [],
+        "volatility_expansion": [
+          "atr"
+        ]
+      },
+      "external_temporal_gate": {
+        "artifact_types": [
+          "qc2.outcomes_research.RunnerGenome.v1",
+          "qc2.outcomes_research.FailureGenome.v1",
+          "qc2.scientific_definitions.FeatureSnapshot.v1"
+        ],
+        "requirements": [
+          "typed TemporalAccessEvidence uses READ_HISTORICAL_FEATURE_VECTOR and STRICT_POINT_IN_TIME",
+          "event_session is strictly earlier than target_session",
+          "feature_snapshot_session equals event_session",
+          "artifact availability and access authorization are no later than decision_cutoff",
+          "access receipt is bound to the same decision_cutoff and artifact availability",
+          "feature registry hash and exact registered similarity vector match",
+          "duplicate prototype kind/source references are rejected"
+        ],
+        "missingness": {
+          "MISSING": "UNAVAILABLE",
+          "NOT_APPLICABLE": "UNAVAILABLE",
+          "UNKNOWN": "UNKNOWN"
+        },
+        "protocol_result_when_inputs_are_present": "OBSERVE_ONLY",
+        "receipt_scope_note": "Local typed evidence checks bind hash-shaped source/snapshot references and cutoff fields; this wave does not independently authenticate an external authority signature."
+      }
+    }
+  ]
+}

@@ -87,6 +87,10 @@ from .runner_protocol_models import (
     protocol_operation,
 )
 from .runner_protocol_research import research_wave1_protocols
+from .runner_protocol_research_wave2 import (
+    research_wave2_dependency_graphs,
+    research_wave2_protocols,
+)
 
 __all__ = [
     "ContractRef",
@@ -157,6 +161,8 @@ __all__ = [
     "parameter_value",
     "protocol_operation",
     "research_wave1_protocols",
+    "research_wave2_dependency_graphs",
+    "research_wave2_protocols",
     "require_probability_target",
     "record_action_review_decision",
     "resolve_eligible_rows",

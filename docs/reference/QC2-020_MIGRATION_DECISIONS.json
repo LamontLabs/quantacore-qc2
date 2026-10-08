@@ -1,0 +1,184 @@
+{
+  "task_id": "QC2-020",
+  "schema_name": "qc2.research.RunnerProtocolMigrationDecisions.v1",
+  "schema_version": "1.0",
+  "status": "RESEARCH_ONLY",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "research",
+  "active_protocol_keys": [],
+  "source_intake": "docs/reference/QC2-020_REFERENCE_INTAKE.md",
+  "dependency_graph": "docs/reference/QC2-020_DEPENDENCY_GRAPH.json",
+  "feature_authority": "QC2-014 registered daily FeatureDefinition contracts",
+  "protocols": [
+    {
+      "protocol_key": "research:daily-breakout-confluence:v1",
+      "direct_features": [
+        "breakout_proximity",
+        "relative_volume",
+        "return_1"
+      ],
+      "decision": "IMPLEMENT_AS_INACTIVE_RESEARCH_HYPOTHESIS",
+      "match": "breakout_proximity <= 0 AND relative_volume > 1 AND return_1 > 0",
+      "result_policy": {
+        "match": "PASS",
+        "non_match": "OBSERVE",
+        "meaning": "Research hypothesis match only; not an order or permission."
+      },
+      "legacy_equivalence": "NONE",
+      "notes": "Independent daily composition; it is not a T24 ATR breakout or T25 Keltner port."
+    },
+    {
+      "protocol_key": "research:daily-reversal-location:v1",
+      "direct_features": [
+        "reversal_score",
+        "return_1",
+        "close_location_value"
+      ],
+      "decision": "IMPLEMENT_AS_INACTIVE_RESEARCH_HYPOTHESIS",
+      "match": "(reversal_score < 0 AND return_1 > 0 AND close_location_value > 0) OR (reversal_score > 0 AND return_1 < 0 AND close_location_value < 0)",
+      "result_policy": {
+        "match": "PASS",
+        "non_match": "OBSERVE",
+        "meaning": "Daily feature confluence only."
+      },
+      "legacy_equivalence": "NONE",
+      "notes": "Uses the registered prior-direction reversal score; no legacy flag or score change is imported."
+    },
+    {
+      "protocol_key": "research:daily-failed-breakout-observation:v1",
+      "direct_features": [
+        "breakout_attempt_count",
+        "breakout_failure_count"
+      ],
+      "decision": "IMPLEMENT_AS_INACTIVE_RESEARCH_OBSERVATION",
+      "match": "breakout_attempt_count > 0 AND breakout_failure_count > 0",
+      "result_policy": {
+        "match": "OBSERVE",
+        "non_match": "OBSERVE",
+        "meaning": "Counts only; not a trap probability or blocker."
+      },
+      "legacy_equivalence": "NONE",
+      "notes": "Does not adopt the uncalibrated legacy probability threshold."
+    },
+    {
+      "protocol_key": "research:daily-price-volume-divergence-observation:v1",
+      "direct_features": [
+        "price_volume_divergence"
+      ],
+      "decision": "IMPLEMENT_AS_INACTIVE_RESEARCH_OBSERVATION",
+      "match": "price_volume_divergence != 0",
+      "result_policy": {
+        "match": "OBSERVE",
+        "non_match": "OBSERVE",
+        "meaning": "Feature presence observation only."
+      },
+      "legacy_equivalence": "NONE"
+    },
+    {
+      "protocol_key": "research:daily-exhaustion-pressure-observation:v1",
+      "direct_features": [
+        "exhaustion_pressure"
+      ],
+      "decision": "IMPLEMENT_AS_INACTIVE_RESEARCH_OBSERVATION",
+      "match": "exhaustion_pressure != 0",
+      "result_policy": {
+        "match": "OBSERVE",
+        "non_match": "OBSERVE",
+        "meaning": "Feature presence observation only; not a blocker."
+      },
+      "legacy_equivalence": "NONE"
+    },
+    {
+      "protocol_key": "research:historical-similarity-interface-observation:v1",
+      "direct_features": [
+        "runner_similarity",
+        "failure_similarity"
+      ],
+      "decision": "IMPLEMENT_AS_GATED_INTERFACE_OBSERVATION",
+      "match": "both values are present and in [-1, 1]",
+      "result_policy": {
+        "match": "OBSERVE",
+        "non_match": "OBSERVE",
+        "missing": "UNAVAILABLE",
+        "unknown": "UNKNOWN",
+        "meaning": "Readiness check only; no memory-based decision."
+      },
+      "legacy_equivalence": "NONE",
+      "temporal_gate": "Existing FeatureInput validation requires strictly historical, receipted, registry-matched prototypes available by decision_cutoff.",
+      "receipt_scope": "The local typed evidence model binds hash-shaped source and feature-snapshot references and cutoff fields; this wave does not independently authenticate an external authority signature."
+    }
+  ],
+  "exclusions": [
+    {
+      "concept": "Apex T24/T25 source-equivalent breakout or channel protocol",
+      "decision": "EXCLUDE_LEGACY_PORT",
+      "availability": "UNAVAILABLE_AS_A_LEGACY_EQUIVALENT",
+      "reasons": [
+        "source labels conflict with the inspected implementations",
+        "daily F0 equivalence, deterministic numeric behavior, and calibration are unverified",
+        "original protocol lineage is unverified",
+        "pinned Apex license reserves production and live-trading use absent written consent"
+      ],
+      "references": [
+        "docs/reference/QC2-020_REFERENCE_INTAKE.md"
+      ]
+    },
+    {
+      "concept": "Engine T07/T08/T12 source-equivalent exhaustion blocker, trap probability, or failed-breakdown reversal",
+      "decision": "EXCLUDE_LEGACY_PORT",
+      "availability": "UNAVAILABLE_AS_A_LEGACY_EQUIVALENT",
+      "reasons": [
+        "inputs are mutable and untyped",
+        "horizon, provenance, cutoff, calibration, and missingness semantics are not defined",
+        "observed score changes do not establish an execution or safety boundary",
+        "pinned Engine tree has no test tree, recognized root license, or verified original lineage"
+      ],
+      "references": [
+        "docs/reference/QC2-020_REFERENCE_INTAKE.md"
+      ]
+    },
+    {
+      "concept": "Intraday stall or path-dependent microstructure signal",
+      "decision": "EXCLUDE_FROM_F0",
+      "availability": "UNAVAILABLE",
+      "reasons": [
+        "no verified original stall source was inspected for this wave",
+        "the registered daily feature set has no validated stall definition",
+        "daily OHLCV cannot establish intraday time-at-level or tick-path semantics"
+      ],
+      "no_proxy": true
+    },
+    {
+      "concept": "Memory-informed pass/block policy or calibrated failure-memory threshold",
+      "decision": "DEFER",
+      "availability": "UNAVAILABLE_FOR_DECISION",
+      "reasons": [
+        "similarity is only an interface dependency here",
+        "no source-backed calibrated decision threshold is established",
+        "point-in-time access receipts remain mandatory"
+      ]
+    },
+    {
+      "concept": "Production activation, live trading, or runtime provider/feed fallback",
+      "decision": "NOT_IMPLEMENTED",
+      "availability": "DENIED_BY_SCOPE",
+      "reasons": [
+        "QC2-020 acceptance requires reproducible research assets with active-set choice deferred to calibration"
+      ]
+    }
+  ],
+  "double_counting_policy": {
+    "protocol_ids_must_be_unique": true,
+    "duplicate_registry_key_behavior": "REJECT",
+    "cross_protocol_score_summing": "NOT_IMPLEMENTED",
+    "each_research_result_is_separate": true
+  },
+  "source_handling": {
+    "legacy_files_copied": false,
+    "legacy_files_imported": false,
+    "legacy_files_modified": false,
+    "legacy_files_executed": false,
+    "legacy_tests_run": false,
+    "runtime_provider_fallback_added": false
+  }
+}

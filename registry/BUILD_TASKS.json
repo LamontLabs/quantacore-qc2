@@ -4130,9 +4130,71 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-08T20:26:32Z",
+        "task_spec_version": "QC2-037 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "88a92c27028e8506ce9199dad1907db205af70aa",
+        "receipt": "docs/reference/QC2-037_ACCEPTANCE_RECEIPT.md",
+        "contract_receipt": "docs/reference/QC2-037_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-037_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/model_registry",
+          "migrations/0006_model_registry.sql",
+          "tests/model_registry/test_model_registry.py",
+          "tests/database/qc2_037_postgres_acceptance.sql",
+          "lib/db/test/run-qc2-037-postgres-integration.mjs"
+        ],
+        "executed_commands": [
+          "python3 -m pytest -q tests/model_registry/test_model_registry.py",
+          "pnpm run test",
+          "pnpm run lint",
+          "pnpm run typecheck",
+          "pnpm exec prettier --check lib/db/test/run-qc2-037-postgres-integration.mjs",
+          "set -euo pipefail; PGBIN=\"$(dirname \"$(command -v initdb)\")\"; TEMP_PG=\"$(mktemp -d /tmp/qc2-037-acceptance-XXXXXX)\"; PORT=58603; DATABASE=qc2_test_model_registry; mkdir -p \"$TEMP_PG/socket\"; cleanup() { \"$PGBIN/pg_ctl\" -D \"$TEMP_PG/data\" -m immediate stop >/dev/null 2>&1 || true; rm -rf \"$TEMP_PG\"; }; trap cleanup EXIT; \"$PGBIN/initdb\" -D \"$TEMP_PG/data\" --encoding=UTF8 --no-locale -A trust -U postgres >/dev/null; \"$PGBIN/pg_ctl\" -D \"$TEMP_PG/data\" -o \"-h 127.0.0.1 -k $TEMP_PG/socket -p $PORT\" -l \"$TEMP_PG/server.log\" start >/dev/null; \"$PGBIN/createdb\" -h \"$TEMP_PG/socket\" -p \"$PORT\" -U postgres \"$DATABASE\"; QC2_ENV=test QC2_EXPECTED_DATABASE_TEST=\"$DATABASE\" QC2_POSTGRES_TEST_URL=\"postgresql://postgres@127.0.0.1:$PORT/$DATABASE\" node ./lib/db/test/run-qc2-037-postgres-integration.mjs"
+        ],
+        "test_counts": [
+          {
+            "test_id": "qc2_037_unit",
+            "passed": 6,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "repository_pytest",
+            "passed": 377,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "db_environment_guards",
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "qc2_037_postgres_acceptance",
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/model_registry": "6d6466a9bcb1aed9d71fa10c730b818d08b50349120eb39550b64fc76f5aacab",
+          "migrations/0006_model_registry.sql": "d82a0b68a2edcfc0fdbc33b55584549a173b4bfb9a06319e98cbcfaca5288b8d",
+          "tests/model_registry/test_model_registry.py": "3bc193a09353ed1b447152a168159415c5220c5edd62def981e7dad63445f576",
+          "tests/database/qc2_037_postgres_acceptance.sql": "2e89c12159c2ed4cd10ec6490b32e28d482c7bedb0af300bd415f84533934401",
+          "lib/db/test/run-qc2-037-postgres-integration.mjs": "1a48b5e3ca0a8ab45fe367594975e7828fa6261dbcd5beb41781279cb3668294"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "Fresh local acceptance was performed for QC2-037 with synthetic fixtures only.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-038",

@@ -1,0 +1,39 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a11d32-34dd-7b8d-8fff-0307365340de",
+  "created_at": "2026-10-08T20:26:32Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "968d98a0bced8d3b80843551ce10b6d6fee2e02555330a9059899fbb4ad64767",
+  "task_id": "qc2-037",
+  "task_name": "Model Registry",
+  "objective": "Store immutable model artifacts and enforce lifecycle/pointer uniqueness.",
+  "dependency_task_ids": [
+    "QC2-005",
+    "QC2-006",
+    "QC2-023",
+    "QC2-034",
+    "QC2-036"
+  ],
+  "authorized_legacy_refs": [
+    "Gen 1 active-model/source-lock mechanisms"
+  ],
+  "deliverable_refs": [
+    "Content-addressed registry, lifecycle transitions and dependency retention links.",
+    "Single operating-pointer schema and immutable Reference role.",
+    "Safe staging/verification API; explicit no-Champion bootstrap state."
+  ],
+  "required_test_refs": [
+    "Duplicate/conflicting Champion pointers and artifact overwrite fail.",
+    "Retired models remain available for retained predictions.",
+    "Unqualified/corrupt/unsafe artifact cannot become a loadable production candidate."
+  ],
+  "acceptance_gate": "Registry/lifecycle invariants pass with fixtures; actual bootstrap remains gated by QC2-083–084.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

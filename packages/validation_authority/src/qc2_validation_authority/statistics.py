@@ -7,10 +7,23 @@ from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Protocol
 
-from .models import SHA256_PATTERN, ValidationAuthorityError, exact_decimal, utc_instant
+from .models import (
+    SHA256_PATTERN,
+    ValidationAuthorityError,
+    exact_decimal,
+    utc_instant,
+)
 
 MINIMUM_INITIAL_RESAMPLES = 10_000
 PUBLIC_VERDICTS = {"PASS", "FAIL", "INSUFFICIENT_EVIDENCE"}
+SUPPORTED_DEPENDENCE_METHODS = frozenset(
+    {
+        "contiguous_block_bootstrap_v1",
+        "moving_block_bootstrap_v1",
+        "stationary_block_bootstrap_v1",
+        "event_cluster_bootstrap_v1",
+    }
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -29,6 +42,8 @@ class FrozenAnalysisPlan:
     frozen_at: str | None = None
 
     def __post_init__(self) -> None:
+        if self.interval_method is not None and not isinstance(self.interval_method, str):
+            raise ValidationAuthorityError("interval_method must be text or unknown")
         if self.alpha is not None and not Decimal(0) < exact_decimal(self.alpha, "alpha") < Decimal(1):
             raise ValidationAuthorityError("alpha must be between zero and one")
         if self.practical_minimum_effect is not None:
@@ -60,6 +75,26 @@ class DependenceEstimate:
     resample_count: int | None
     coverage_gate_passed: bool | None
     deterministic_seed_hash: str | None
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.method_id, str) or not self.method_id:
+            raise ValidationAuthorityError("dependence estimate requires a method ID")
+        for name, value in (
+            ("effective_blocks", self.effective_blocks),
+            ("event_clusters", self.event_clusters),
+            ("resample_count", self.resample_count),
+        ):
+            if value is not None and (
+                isinstance(value, bool) or not isinstance(value, int) or value < 0
+            ):
+                raise ValidationAuthorityError(f"{name} must be a nonnegative integer or unknown")
+        if self.coverage_gate_passed not in {True, False, None}:
+            raise ValidationAuthorityError("coverage_gate_passed must be boolean or unknown")
+        if self.deterministic_seed_hash is not None and (
+            not isinstance(self.deterministic_seed_hash, str)
+            or not SHA256_PATTERN.fullmatch(self.deterministic_seed_hash)
+        ):
+            raise ValidationAuthorityError("deterministic seed commitment must be lowercase SHA-256")
 
 
 class DependenceMethod(Protocol):
@@ -103,19 +138,32 @@ def assess_dependence_readiness(
     )
     if any(item is None for item in required) or plan.calibration_status != "CALIBRATED_AND_FROZEN":
         reasons.append("calibration_gates_unevaluated")
+    if (
+        plan.interval_method is not None
+        and plan.interval_method.strip().lower() not in SUPPORTED_DEPENDENCE_METHODS
+    ):
+        reasons.append("dependence_method_unregistered")
     if estimate is None:
         reasons.append("dependence_estimate_unavailable")
         return DependenceReadiness(False, tuple(reasons))
 
-    method = estimate.method_id.strip().lower()
+    if not isinstance(estimate.method_id, str):
+        reasons.append("iid_or_unspecified_interval_method_forbidden")
+        method = ""
+    else:
+        method = estimate.method_id.strip().lower()
     if not method or "iid" in method or "independent_observation" in method:
         reasons.append("iid_or_unspecified_interval_method_forbidden")
+    elif method not in SUPPORTED_DEPENDENCE_METHODS:
+        reasons.append("dependence_method_unregistered")
     if plan.interval_method is not None and estimate.method_id != plan.interval_method:
         reasons.append("dependence_method_does_not_match_frozen_plan")
     if estimate.lower_confidence_bound is None or estimate.upper_confidence_bound is None:
         reasons.append("confidence_interval_unavailable")
     elif (
-        not estimate.lower_confidence_bound.is_finite()
+        not isinstance(estimate.lower_confidence_bound, Decimal)
+        or not isinstance(estimate.upper_confidence_bound, Decimal)
+        or not estimate.lower_confidence_bound.is_finite()
         or not estimate.upper_confidence_bound.is_finite()
         or estimate.lower_confidence_bound > estimate.upper_confidence_bound
     ):
@@ -161,6 +209,41 @@ class ClosureEvidence:
     operational_gates: Mapping[str, bool | None] = field(default_factory=dict)
     calibration_gates: Mapping[str, bool | None] = field(default_factory=dict)
 
+    def __post_init__(self) -> None:
+        allowed_integrity = {
+            None,
+            "VALID",
+            "FULL_VERIFIED",
+            "PARTIAL_SCAN",
+            "FAILED",
+            "INVALID",
+            "UNAVAILABLE",
+        }
+        if self.integrity_status not in allowed_integrity:
+            raise ValidationAuthorityError("integrity_status is not a supported gate state")
+        if self.scheduled_opportunities_reconciled not in {True, False, None}:
+            raise ValidationAuthorityError("scheduled opportunity gate must be boolean or unknown")
+        if self.required_outcomes_matured not in {True, False, None}:
+            raise ValidationAuthorityError("outcome maturity gate must be boolean or unknown")
+        if self.adverse_missingness_lower_bound is not None:
+            exact_decimal(
+                self.adverse_missingness_lower_bound,
+                "adverse_missingness_lower_bound",
+            )
+        for label, gates in (
+            ("operational_gates", self.operational_gates),
+            ("calibration_gates", self.calibration_gates),
+        ):
+            if not isinstance(gates, Mapping):
+                raise ValidationAuthorityError(f"{label} must be a mapping")
+            if any(
+                not isinstance(name, str)
+                or not name
+                or result not in {True, False, None}
+                for name, result in gates.items()
+            ):
+                raise ValidationAuthorityError(f"{label} requires named boolean or unknown gates")
+
 
 @dataclass(frozen=True, slots=True)
 class ClosureDecision:
@@ -201,6 +284,10 @@ def decide_closure(
             return ClosureDecision("FAIL", (f"calibration_gate_failed:{name}",))
         if result is not True:
             reasons.append(f"calibration_gate_unevaluated:{name}")
+    if not evidence.operational_gates:
+        reasons.append("operational_gates_not_declared")
+    if not evidence.calibration_gates:
+        reasons.append("calibration_gates_not_declared")
 
     if evidence.scheduled_opportunities_reconciled is not True:
         reasons.append("scheduled_opportunities_not_fully_reconciled")

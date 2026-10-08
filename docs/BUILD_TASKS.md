@@ -907,6 +907,8 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Objective:** Implement independent metrics, prospective qualification, and three-state closure mechanics.
 **Dependencies:** QC2-006, QC2-015, QC2-016, QC2-022, QC2-025
 **Authorized legacy references:** Gen 1 ForwardValidator, ApexLab evaluator
+**Authorized artifact drift:** QC2-005 — QC2-026 adds its isolated PostgreSQL acceptance command and includes the runner in repository verification. Paths: `package.json`, `lib/db/package.json`
+**Authorized artifact drift:** QC2-025 — QC2-026 requires fixed, expired schedule deadlines so holdout access can verify schedule closure deterministically. Paths: `tests/database/qc2_025_postgres_acceptance.sql`
 **Required reference intake:** Mandatory for each referenced repository/file actually inspected; record revision, path/hash, source-supported meaning, tests, conflicts, license, and disposition.
 
 **Required deliverables:**

@@ -2804,6 +2804,23 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-005",
+          "artifact_paths": [
+            "package.json",
+            "lib/db/package.json"
+          ],
+          "reason": "QC2-026 adds its isolated PostgreSQL acceptance command and includes the runner in repository verification."
+        },
+        {
+          "prior_task_id": "QC2-025",
+          "artifact_paths": [
+            "tests/database/qc2_025_postgres_acceptance.sql"
+          ],
+          "reason": "QC2-026 requires fixed, expired schedule deadlines so holdout access can verify schedule closure deterministically."
+        }
+      ],
       "status": "IN_PROGRESS",
       "blockers": [],
       "acceptance_receipt": null

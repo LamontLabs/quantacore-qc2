@@ -20,6 +20,16 @@ from .models import (
 
 PRIMARY_K = 10
 PRIMARY_LABEL = "five-session Expansion Runner"
+METRIC_DEFINITION_IDS = {
+    "operating_expansion_runner_precision_at_10": "018f0000-0000-7000-8000-000000002001",
+    "comparator_expansion_runner_precision_at_10": "018f0000-0000-7000-8000-000000002002",
+    "operating_expansion_runner_recall_at_10": "018f0000-0000-7000-8000-000000002003",
+    "comparator_expansion_runner_recall_at_10": "018f0000-0000-7000-8000-000000002004",
+    "operating_eligible_prediction_coverage": "018f0000-0000-7000-8000-000000002005",
+    "comparator_eligible_prediction_coverage": "018f0000-0000-7000-8000-000000002006",
+    "paired_precision_difference_at_10": "018f0000-0000-7000-8000-000000002007",
+    "expansion_runner_precision_lift_at_10": "018f0000-0000-7000-8000-000000002008",
+}
 
 
 @dataclass(frozen=True, slots=True)
@@ -133,6 +143,11 @@ def _estimate(
             raise ValidationAuthorityError(f"{label} must be finite")
     if lower is not None and upper is not None and lower > upper:
         raise ValidationAuthorityError("metric lower bound cannot exceed upper bound")
+    if value is not None and (
+        (lower is not None and value < lower)
+        or (upper is not None and value > upper)
+    ):
+        raise ValidationAuthorityError("metric point estimate must lie within its bounds")
     if denominator < 0 or missing < 0 or missing > denominator:
         raise ValidationAuthorityError("metric denominator and missing count are inconsistent")
     return MetricEstimate(
@@ -293,7 +308,8 @@ def _paired_difference(
             None,
             None,
             2 * PRIMARY_K,
-            0,
+            (PRIMARY_K - len(operating_selected))
+            + (PRIMARY_K - len(comparator_selected)),
             "fewer_than_ten_scoreable_predictions",
         )
     operating_ids = set(operating_selected)

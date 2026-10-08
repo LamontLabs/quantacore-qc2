@@ -10,7 +10,6 @@ from typing import Any, Callable
 
 from qc2_contracts.runtime import (
     ContractValidationError,
-    assert_immutable_update,
     canonical_content_hash,
     canonical_json_bytes,
     domain_separated_sha256,
@@ -19,20 +18,29 @@ from qc2_contracts.runtime import (
     verify_content_hash,
 )
 
-from .metrics import METRIC_SPECIFICATIONS, compute_session_metrics, normalized_metric_value
+from .metrics import (
+    METRIC_DEFINITION_IDS,
+    METRIC_SPECIFICATIONS,
+    compute_session_metrics,
+    normalized_metric_value,
+)
 from .models import (
     IntegrityFinding,
     QualificationAssessment,
     QualificationEvidence,
-    SHA256_PATTERN,
     SLUG_PATTERN,
     ValidationAuthorityError,
     reference,
     session_date,
     unique_session_ids,
     utc_instant,
+    utc_text,
 )
-from .statistics import FrozenAnalysisPlan
+from .statistics import (
+    ClosureDecision,
+    FrozenAnalysisPlan,
+    SUPPORTED_DEPENDENCE_METHODS,
+)
 
 EPOCH_SCHEMA = "qc2.validation.ValidationEpoch.v1"
 SCHEDULE_SCHEMA = "qc2.validation.ScheduledAttempt.v1"
@@ -142,8 +150,16 @@ class ValidationAuthority:
 
     def _initialize_metric_definitions(self) -> None:
         for spec in METRIC_SPECIFICATIONS:
+            definition_envelope = self._envelope(
+                METRIC_DEFINITION_SCHEMA,
+                "2026-10-08T00:00:00Z",
+                METRIC_DEFINITION_IDS[spec.metric_key],
+            )
+            # Definitions are fixed test-policy fixtures, not evidence from an evaluation.
+            definition_envelope["evidence_class"] = "SYNTHETIC_FIXTURE"
+            definition_envelope["environment_namespace"] = "test"
             payload = {
-                **self._envelope(METRIC_DEFINITION_SCHEMA, "2026-10-08T00:00:00Z", self._new_id()),
+                **definition_envelope,
                 "metric_key": spec.metric_key,
                 "version": 1,
                 "estimand": spec.estimand,
@@ -270,8 +286,30 @@ class ValidationAuthority:
                 updated["run_ref"] = reference(run_ref, RUN_SCHEMA, "run_ref")
             updated["missed_reason"] = missed_reason
             try:
-                assert_immutable_update("ScheduledAttempt", current, updated)
+                validate_contract("ScheduledAttempt", current)
                 validate_contract("ScheduledAttempt", updated)
+                immutable_fields = set(current) - {
+                    "attempt_state",
+                    "run_ref",
+                    "missed_reason",
+                }
+                if any(current[field] != updated[field] for field in immutable_fields):
+                    raise ContractValidationError(
+                        "ScheduledAttempt identity and deadline fields are immutable"
+                    )
+                legal_transitions = {
+                    ("SCHEDULED", "STARTED"),
+                    ("SCHEDULED", "MISSED_START"),
+                    ("STARTED", "SEALED"),
+                    ("STARTED", "FAILED"),
+                    ("STARTED", "NONQUALIFYING"),
+                }
+                if (current["attempt_state"], new_state) not in legal_transitions:
+                    raise ContractValidationError(
+                        "ScheduledAttempt transition is not permitted"
+                    )
+                if current["run_ref"] is not None and current["run_ref"] != updated["run_ref"]:
+                    raise ContractValidationError("ScheduledAttempt run binding cannot be replaced")
             except ContractValidationError as exc:
                 raise ValidationAuthorityError(str(exc)) from exc
             self._scheduled[session_id] = updated
@@ -320,35 +358,75 @@ class ValidationAuthority:
                 raise ValidationAuthorityError("a session qualification receipt is immutable")
 
             deadline = utc_instant(schedule["expected_deadline"], "expected_deadline")
-            prediction_sealed_at = utc_instant(
-                evidence.prediction_sealed_at, "prediction_sealed_at"
+            schedule_created = utc_instant(
+                schedule["schedule_created_at"], "schedule_created_at"
             )
-            anchor_at = utc_instant(evidence.anchor_created_at, "anchor_created_at")
             receipt_sealed_at = utc_instant(evidence.receipt_sealed_at, "receipt_sealed_at")
-            if prediction_sealed_at > anchor_at or anchor_at > receipt_sealed_at:
-                raise ValidationAuthorityError(
-                    "prediction seal, anchor, and qualification receipt must be chronological"
-                )
-
+            receipt_sealed_at_text = utc_text(receipt_sealed_at)
+            prediction_seal_contract = copy.deepcopy(dict(evidence.prediction_seal_contract))
+            checkpoint_contract = copy.deepcopy(dict(evidence.checkpoint_contract))
+            try:
+                validate_contract("PredictionSeal", prediction_seal_contract)
+                verify_content_hash("PredictionSeal", prediction_seal_contract)
+                validate_contract("Checkpoint", checkpoint_contract)
+                verify_content_hash("Checkpoint", checkpoint_contract)
+            except ContractValidationError as exc:
+                raise ValidationAuthorityError(str(exc)) from exc
             prediction_seal_ref = reference(
-                evidence.prediction_seal_ref,
+                {
+                    "target_schema_name": prediction_seal_contract["schema_name"],
+                    "target_id": prediction_seal_contract["id"],
+                    "content_hash": prediction_seal_contract["content_hash"],
+                },
                 "qc2.models_prediction.PredictionSeal.v1",
                 "prediction_seal_ref",
                 require_content_hash=True,
             )
+            prediction_run_ref = reference(
+                prediction_seal_contract["run_ref"], RUN_SCHEMA, "prediction_run_ref"
+            )
+            if prediction_run_ref["target_id"] != _reference_id(schedule, "run_ref"):
+                raise ValidationAuthorityError(
+                    "qualification seal must belong to the scheduled prediction run"
+                )
+            if (
+                prediction_seal_contract["session_id"] != session_id
+                or prediction_seal_contract["role"] != "OPERATING"
+            ):
+                raise ValidationAuthorityError(
+                    "qualification requires the operating seal for the scheduled session"
+                )
+            prediction_sealed_at = utc_instant(
+                prediction_seal_contract["sealed_at"], "prediction_sealed_at"
+            )
+            seal_deadline = utc_instant(
+                prediction_seal_contract["deadline"], "prediction_seal.deadline"
+            )
             checkpoint_ref = reference(
-                evidence.checkpoint_ref,
+                {
+                    "target_schema_name": checkpoint_contract["schema_name"],
+                    "target_id": checkpoint_contract["id"],
+                    "content_hash": checkpoint_contract["content_hash"],
+                },
                 CHECKPOINT_SCHEMA,
                 "checkpoint_ref",
                 require_content_hash=True,
             )
-            on_time_seal = prediction_sealed_at <= deadline
+            anchor_at = utc_instant(checkpoint_contract["created_at"], "anchor_created_at")
+            if (
+                not schedule_created <= prediction_sealed_at <= anchor_at <= receipt_sealed_at
+                or seal_deadline > deadline
+            ):
+                raise ValidationAuthorityError(
+                    "schedule, sealed operating run, checkpoint anchor, and receipt must be chronological"
+                )
+            on_time_seal = prediction_sealed_at <= min(deadline, seal_deadline)
             on_time_anchor = anchor_at <= deadline
             on_time_receipt = receipt_sealed_at <= deadline
             payload = {
                 **self._envelope(
                     QUALIFICATION_SCHEMA,
-                    evidence.receipt_sealed_at,
+                    receipt_sealed_at_text,
                     self._new_id(),
                 ),
                 "epoch_ref": copy.deepcopy(self._epoch_ref),
@@ -360,7 +438,7 @@ class ValidationAuthority:
                 "on_time_anchor": on_time_anchor,
                 "comparator_available": evidence.comparator_available,
                 "protocol_conformity": evidence.protocol_conformity,
-                "sealed_at": evidence.receipt_sealed_at,
+                "sealed_at": receipt_sealed_at_text,
                 "checkpoint_ref": checkpoint_ref,
                 "content_hash": "0" * 64,
             }
@@ -458,8 +536,50 @@ class ValidationAuthority:
         granted = utc_instant(granted_at, "granted_at")
         if granted < requested:
             raise ValidationAuthorityError("holdout access cannot be granted before it is requested")
-        if any(not isinstance(item, str) or not item for item in (*consumed_fields, *released_metrics)):
-            raise ValidationAuthorityError("holdout field and metric names must be non-empty strings")
+        allowed_consumed_fields = {
+            "eligible_instrument_ids",
+            "sealed_rank",
+            "matured_binary_event",
+            "feed_snapshot_hash",
+            "label_registry_hash",
+            "session_id",
+        }
+        ordered_consumed_fields = (
+            "eligible_instrument_ids",
+            "sealed_rank",
+            "matured_binary_event",
+            "feed_snapshot_hash",
+            "label_registry_hash",
+            "session_id",
+        )
+        allowed_metrics = {spec.metric_key for spec in METRIC_SPECIFICATIONS}
+        if (
+            isinstance(consumed_fields, (str, bytes))
+            or isinstance(released_metrics, (str, bytes))
+            or not isinstance(consumed_fields, Sequence)
+            or not isinstance(released_metrics, Sequence)
+            or any(not isinstance(item, str) for item in consumed_fields)
+            or any(not isinstance(item, str) for item in released_metrics)
+        ):
+            raise ValidationAuthorityError("holdout fields and metrics must be ordered string lists")
+        if (
+            len(consumed_fields) != len(set(consumed_fields))
+            or set(consumed_fields) != allowed_consumed_fields
+            or any(
+                item not in allowed_consumed_fields for item in consumed_fields
+            )
+        ):
+            raise ValidationAuthorityError("holdout inputs exceed the approved metric-only field set")
+        if (
+            len(released_metrics) != len(set(released_metrics))
+            or set(released_metrics) != allowed_metrics
+            or any(item not in allowed_metrics for item in released_metrics)
+        ):
+            raise ValidationAuthorityError(
+                "the single qualification evaluation must release the complete frozen metric set"
+            )
+        consumed_fields = ordered_consumed_fields
+        released_metrics = tuple(spec.metric_key for spec in METRIC_SPECIFICATIONS)
         payload: dict[str, Any] = {
             **self._envelope(HOLDOUT_ACCESS_SCHEMA, granted_at, self._new_id()),
             "dataset_ref": dict(dataset_ref),
@@ -471,6 +591,7 @@ class ValidationAuthority:
             "released_metrics": list(released_metrics),
             "receipt_hash": "0" * 64,
         }
+        payload["source_refs"] = [copy.deepcopy(self._epoch_ref)]
         payload["receipt_hash"] = domain_separated_sha256(
             HOLDOUT_HASH_DOMAIN,
             canonical_json_bytes({key_name: value for key_name, value in payload.items()
@@ -481,6 +602,38 @@ class ValidationAuthority:
         except ContractValidationError as exc:
             raise ValidationAuthorityError(str(exc)) from exc
         with self._lock:
+            if not self._scheduled:
+                raise ValidationAuthorityError(
+                    "the complete prospective schedule must exist before holdout access"
+                )
+            latest_deadline = max(
+                utc_instant(attempt["expected_deadline"], "expected_deadline")
+                for attempt in self._scheduled.values()
+            )
+            if granted < latest_deadline:
+                raise ValidationAuthorityError(
+                    "holdout access cannot precede the latest scheduled opportunity deadline"
+                )
+            unfinished_sessions = [
+                session_id
+                for session_id, attempt in self._scheduled.items()
+                if attempt["attempt_state"]
+                not in {"SEALED", "MISSED_START", "FAILED", "NONQUALIFYING"}
+            ]
+            if unfinished_sessions:
+                raise ValidationAuthorityError(
+                    "all scheduled opportunities must be terminal before holdout access"
+                )
+            unqualified_sealed_sessions = [
+                session_id
+                for session_id, attempt in self._scheduled.items()
+                if attempt["attempt_state"] == "SEALED"
+                and session_id not in self._qualifications
+            ]
+            if unqualified_sealed_sessions:
+                raise ValidationAuthorityError(
+                    "every sealed prediction run must have its prospective qualification receipt before holdout access"
+                )
             if key in self._holdouts:
                 raise ValidationAuthorityError("qualification holdout access has already been consumed")
             self._holdouts[key] = copy.deepcopy(payload)
@@ -529,6 +682,11 @@ class ValidationAuthority:
             key = _holdout_key(holdout["dataset_ref"])
             if holdout_reference.get("content_hash") not in (None, holdout["receipt_hash"]):
                 raise ValidationAuthorityError("holdout access receipt hash does not match")
+            required_metrics = {spec.metric_key for spec in METRIC_SPECIFICATIONS}
+            if set(holdout["released_metrics"]) != required_metrics:
+                raise ValidationAuthorityError(
+                    "holdout receipt does not authorize the complete frozen metric set"
+                )
             if key in self._evaluated_holdouts:
                 raise ValidationAuthorityError("qualification holdout has already been evaluated")
             all_qualifying_sessions = {
@@ -609,13 +767,47 @@ class ValidationAuthority:
         payload = copy.deepcopy(dict(plan))
         if payload.get("epoch_ref") != self._epoch_ref:
             raise ValidationAuthorityError("analysis plan must pin this epoch")
-        if payload.get("resample_count", 0) < 10_000:
+        resample_count = payload.get("resample_count")
+        if (
+            isinstance(resample_count, bool)
+            or not isinstance(resample_count, int)
+            or resample_count < 10_000
+        ):
             raise ValidationAuthorityError(
                 "the governing specification requires at least 10,000 initial resamples"
             )
-        method = str(payload.get("interval_method", "")).lower()
-        if not method or "iid" in method or "independent_observation" in method:
-            raise ValidationAuthorityError("analysis plans must name a dependence-aware method")
+        method = payload.get("interval_method")
+        if (
+            not isinstance(method, str)
+            or method.strip().lower() not in SUPPORTED_DEPENDENCE_METHODS
+        ):
+            raise ValidationAuthorityError(
+                "analysis plans must name a registered dependence-aware method"
+            )
+        primary_ref = reference(
+            payload.get("primary_metric_ref"),
+            METRIC_DEFINITION_SCHEMA,
+            "primary_metric_ref",
+        )
+        if primary_ref["target_id"] != METRIC_DEFINITION_IDS[
+            "paired_precision_difference_at_10"
+        ]:
+            raise ValidationAuthorityError(
+                "the analysis plan must freeze paired Precision@10 as the primary metric"
+            )
+        comparator_ref = reference(
+            payload.get("comparator_ref"),
+            "qc2.scientific_definitions.BaselineManifest.v1",
+            "comparator_ref",
+            require_content_hash=True,
+        )
+        payload["primary_metric_ref"] = primary_ref
+        payload["comparator_ref"] = comparator_ref
+        for field_name in ("created_at", "frozen_at"):
+            if field_name in payload:
+                payload[field_name] = utc_text(
+                    utc_instant(payload[field_name], field_name)
+                )
         with self._lock:
             if self._analysis_plan is not None:
                 raise ValidationAuthorityError("the statistical analysis plan is immutable")
@@ -660,10 +852,10 @@ class ValidationAuthority:
     ) -> dict[str, Any]:
         """Create one immutable report using only the required three public states."""
         self._assert_nonproduction()
-        utc_instant(sealed_at, "sealed_at")
+        sealed_at = utc_text(utc_instant(sealed_at, "sealed_at"))
         verdict = getattr(decision, "verdict", None)
         reasons = getattr(decision, "reason_codes", None)
-        if not isinstance(verdict, str) or not isinstance(reasons, tuple):
+        if not isinstance(decision, ClosureDecision):
             raise ValidationAuthorityError("decision must be a ClosureDecision")
         if verdict == "NOT_INTERPRETABLE":
             verdict = "INSUFFICIENT_EVIDENCE"
@@ -729,11 +921,14 @@ class ValidationAuthority:
                 "metric_refs": metric_refs,
                 "missingness_bounds": missingness_bounds,
                 "limitation_codes": sorted(set(limitation_codes)),
+                "content_hash": "0" * 64,
                 "report_hash": "0" * 64,
                 "sealed_at": sealed_at,
             }
             hash_payload = {
-                key: value for key, value in payload.items() if key != "report_hash"
+                key: value
+                for key, value in payload.items()
+                if key not in {"content_hash", "report_hash"}
             }
             payload["report_hash"] = domain_separated_sha256(
                 REPORT_HASH_DOMAIN,
@@ -741,6 +936,10 @@ class ValidationAuthority:
             )
             try:
                 validate_contract("ValidationReport", payload)
+                payload["content_hash"] = canonical_content_hash(
+                    "ValidationReport", payload
+                )
+                verify_content_hash("ValidationReport", payload)
             except ContractValidationError as exc:
                 raise ValidationAuthorityError(str(exc)) from exc
             self._report = copy.deepcopy(payload)

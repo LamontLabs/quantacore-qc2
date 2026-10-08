@@ -124,15 +124,13 @@ def unique_session_ids(
 class QualificationEvidence:
     """Inputs sealed before outcome inspection; no performance or broker fields exist."""
 
-    prediction_seal_ref: Mapping[str, Any]
+    prediction_seal_contract: Mapping[str, Any]
     prediction_integrity: str
     denominator_status: str
-    prediction_sealed_at: str
-    anchor_created_at: str
     receipt_sealed_at: str
     comparator_available: bool
     protocol_conformity: bool
-    checkpoint_ref: Mapping[str, Any]
+    checkpoint_contract: Mapping[str, Any]
 
     def __post_init__(self) -> None:
         if self.prediction_integrity not in {
@@ -150,8 +148,10 @@ class QualificationEvidence:
             raise ValidationAuthorityError("comparator_available must be boolean")
         if not isinstance(self.protocol_conformity, bool):
             raise ValidationAuthorityError("protocol_conformity must be boolean")
-        utc_instant(self.prediction_sealed_at, "prediction_sealed_at")
-        utc_instant(self.anchor_created_at, "anchor_created_at")
+        if not isinstance(self.prediction_seal_contract, Mapping):
+            raise ValidationAuthorityError("prediction_seal_contract must be a sealed contract")
+        if not isinstance(self.checkpoint_contract, Mapping):
+            raise ValidationAuthorityError("checkpoint_contract must be a sealed contract")
         utc_instant(self.receipt_sealed_at, "receipt_sealed_at")
 
 

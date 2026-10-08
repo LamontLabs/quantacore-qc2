@@ -1264,7 +1264,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-036 — Independent Candidate Evaluation
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Separate training from qualification and ensure every reported test metric is genuinely held out.
 **Dependencies:** QC2-023, QC2-026, QC2-033, QC2-034, QC2-035
 **Authorized legacy references:** None.

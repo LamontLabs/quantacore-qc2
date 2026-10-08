@@ -1117,6 +1117,10 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Objective:** Generate reproducible false-positive cases without conflating prediction, execution and data errors.
 **Dependencies:** QC2-025, QC2-026, QC2-027, QC2-029, QC2-030, QC2-031
 **Authorized legacy references:** None.
+**Authorized artifact drift:** QC2-028 — QC2-032 adds deterministic false-monster review generation over immutable RunnerEvent and RunnerGenome lineage in the shared ApexLab package and tests. QC2-028 remains historically valid at its tested source commit. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-029 — QC2-032 adds non-event, downside, timing-miss and data-error review rules while preserving the existing FailureGenome training-category boundary; the shared ApexLab package and tests revalidate that taxonomy. QC2-029 remains historically valid at its tested source commit. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-030 — QC2-032 adds false-monster review behavior in the shared ApexLab package and regression-test tree, retaining immutable matched-decoy contracts. QC2-030 remains historically valid at its tested source commit. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-031 — QC2-032 adds a separate false-monster review kind alongside the accepted missed-monster review, revalidating strict ReviewCase serialization and immutable references. QC2-031 remains historically valid at its tested source commit. Paths: `packages/apexlab`, `tests/apexlab`
 **Required reference intake:** None. Do not inspect or copy legacy code for this task without a scoped amendment.
 
 **Required deliverables:**

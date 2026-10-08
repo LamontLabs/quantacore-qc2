@@ -3491,6 +3491,40 @@
         "QC2-030",
         "QC2-031"
       ],
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-028",
+          "artifact_paths": [
+            "packages/apexlab",
+            "tests/apexlab"
+          ],
+          "reason": "QC2-032 adds deterministic false-monster review generation over immutable RunnerEvent and RunnerGenome lineage in the shared ApexLab package and tests. QC2-028 remains historically valid at its tested source commit."
+        },
+        {
+          "prior_task_id": "QC2-029",
+          "artifact_paths": [
+            "packages/apexlab",
+            "tests/apexlab"
+          ],
+          "reason": "QC2-032 adds non-event, downside, timing-miss and data-error review rules while preserving the existing FailureGenome training-category boundary; the shared ApexLab package and tests revalidate that taxonomy. QC2-029 remains historically valid at its tested source commit."
+        },
+        {
+          "prior_task_id": "QC2-030",
+          "artifact_paths": [
+            "packages/apexlab",
+            "tests/apexlab"
+          ],
+          "reason": "QC2-032 adds false-monster review behavior in the shared ApexLab package and regression-test tree, retaining immutable matched-decoy contracts. QC2-030 remains historically valid at its tested source commit."
+        },
+        {
+          "prior_task_id": "QC2-031",
+          "artifact_paths": [
+            "packages/apexlab",
+            "tests/apexlab"
+          ],
+          "reason": "QC2-032 adds a separate false-monster review kind alongside the accepted missed-monster review, revalidating strict ReviewCase serialization and immutable references. QC2-031 remains historically valid at its tested source commit."
+        }
+      ],
       "authorized_legacy_references": [],
       "required_reference_intake": "None. Do not inspect or copy legacy code for this task without a scoped amendment.",
       "required_deliverables": [

@@ -28,3 +28,7 @@
 3. Re-run QC2-016 preflight before beginning Ground Truth implementation and any required reference intake.
 
 Until those gates pass, QC2-016 remains BLOCKED. Unknown outcomes must remain explicit; no synthetic evidence was substituted for the unmet dependencies.
+
+## Superseding status reconciliation
+
+The blocker above is historical. QC2-012, QC2-013, and QC2-015 now have PASS acceptance receipts, and `python3 tools/task_workflow.py preflight QC2-016` confirms all declared dependencies and evidence are available. QC2-016 has been reopened for its own implementation; this reconciliation does not claim that Ground Truth work is accepted or authorize production activation.

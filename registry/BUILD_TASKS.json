@@ -1582,6 +1582,24 @@
         "QC2-013",
         "QC2-015"
       ],
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-014",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-016 extends the shared science authority with Ground Truth resolution and versioned outcomes. Its acceptance reruns the complete science and contract suites; earlier feature and label receipts remain bound to their tested source commits."
+        },
+        {
+          "prior_task_id": "QC2-015",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-016 adds an independent Ground Truth resolver beside the QC2-015 label authority. Its acceptance reruns the full science and contract verification while preserving the QC2-015 tested source commit and label contract."
+        }
+      ],
       "authorized_legacy_references": [
         "Gen 1 ForwardValidator"
       ],
@@ -1607,10 +1625,8 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "BLOCKED",
-      "blockers": [
-        "Required dependencies QC2-012, QC2-013, and QC2-015 are not PASS. `python3 tools/task_workflow.py preflight QC2-016` fails because all three are not PASS. See docs/reference/QC2-012_BLOCKED_REPORT.md, docs/reference/QC2-013_BLOCKED_REPORT.md, and docs/reference/QC2-015_BLOCKED_REPORT.md."
-      ],
+      "status": "TODO",
+      "blockers": [],
       "acceptance_receipt": null
     },
     {

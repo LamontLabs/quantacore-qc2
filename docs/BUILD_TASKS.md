@@ -1011,10 +1011,11 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-029 — Failure Genome System
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Preserve negative structural memories with the same temporal rigor as winners.
 **Dependencies:** QC2-013, QC2-016, QC2-025, QC2-028
 **Authorized legacy references:** None.
+**Authorized artifact drift:** QC2-028 — QC2-029 extends the accepted ApexLab implementation and regression-test trees with append-only FailureGenome and failure-index support, then revalidates RunnerGenome behavior. QC2-028 remains historically valid at its tested source commit. Paths: `packages/apexlab`, `tests/apexlab`
 **Required reference intake:** None. Do not inspect or copy legacy code for this task without a scoped amendment.
 
 **Required deliverables:**

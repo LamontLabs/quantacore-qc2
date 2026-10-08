@@ -149,9 +149,16 @@ def contract_artifact(
         validate_contract(contract_name, payload)
         if contract_name in CONTENT_ADDRESSED:
             verify_content_hash(contract_name, payload)
+        learning_available_at = None
+        if contract_name == "OutcomeRevision":
+            learning_available_at = _max_timestamp(
+                [known_at, payload["discovered_at"]],
+                "OutcomeRevision learning availability",
+            )
         artifact = TemporalArtifact.from_contract(
             payload,
             known_at=known_at,
+            available_for_learning_at=learning_available_at,
             historical_assumed_available_at=historical_assumed_available_at,
             historical_assumed_available_for_learning_at=(
                 historical_assumed_available_for_learning_at

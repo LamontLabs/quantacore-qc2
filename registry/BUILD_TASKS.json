@@ -3425,9 +3425,59 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-08T16:06:50Z",
+        "task_spec_version": "QC2-031 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "e380c637993f1cbed34648625a036ab10843c3f1",
+        "receipt": "docs/reference/QC2-031_ACCEPTANCE_ASSESSMENT.md",
+        "contract_receipt": "docs/reference/QC2-031_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-031_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/apexlab",
+          "tests/apexlab"
+        ],
+        "executed_commands": [
+          "python3 -m pytest -q tests/apexlab/test_missed_monster_review.py",
+          "python3 -m pytest -q tests/apexlab",
+          "python3 -m pytest -q",
+          "python3 -m compileall -q packages/apexlab/src/qc2_apexlab tests/apexlab/test_missed_monster_review.py",
+          "python3 -m ruff check packages/apexlab/src/qc2_apexlab/missed_monster_review.py packages/apexlab/src/qc2_apexlab/__init__.py tests/apexlab/test_missed_monster_review.py",
+          "python3 tools/task_workflow.py preflight QC2-031"
+        ],
+        "test_counts": [
+          {
+            "test_id": "missed_monster",
+            "passed": 4,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "apexlab",
+            "passed": 23,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "full_python",
+            "passed": 338,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/apexlab": "1123193fcfddd9c1050d2235d8431ec1bb5a29c4634529bce3cc419b05da36d0",
+          "tests/apexlab": "dc4ffa424a0e3b1268b6b75f3eb44c1a1d63bbce9e863103827f1e0141d0e747"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "Acceptance was verified against the committed source with local fixture and code evidence.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-032",

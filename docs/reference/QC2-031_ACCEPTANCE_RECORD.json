@@ -1,0 +1,60 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a11c44-7410-7f56-8a18-cdf67e304ba6",
+  "created_at": "2026-10-08T16:06:50Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "3222fabbb7d01e9bc5a2c05b7906ebc59617bcf97b53cdedd474ef8998e28098",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a11c44-7406-7f48-815d-c07c30fdfb54",
+    "content_hash": "c9b98a9804dd9a673ebfd6b57477928d4a17b53591f87825dce93a666818de1c"
+  },
+  "task_spec_version": "QC2-031 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "e380c637993f1cbed34648625a036ab10843c3f1",
+  "changed_paths": [
+    "packages/apexlab",
+    "tests/apexlab"
+  ],
+  "executed_commands": [
+    "python3 -m pytest -q tests/apexlab/test_missed_monster_review.py",
+    "python3 -m pytest -q tests/apexlab",
+    "python3 -m pytest -q",
+    "python3 -m compileall -q packages/apexlab/src/qc2_apexlab tests/apexlab/test_missed_monster_review.py",
+    "python3 -m ruff check packages/apexlab/src/qc2_apexlab/missed_monster_review.py packages/apexlab/src/qc2_apexlab/__init__.py tests/apexlab/test_missed_monster_review.py",
+    "python3 tools/task_workflow.py preflight QC2-031"
+  ],
+  "test_counts": [
+    {
+      "test_id": "missed_monster",
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "apexlab",
+      "passed": 23,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "full_python",
+      "passed": 338,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "1123193fcfddd9c1050d2235d8431ec1bb5a29c4634529bce3cc419b05da36d0",
+    "dc4ffa424a0e3b1268b6b75f3eb44c1a1d63bbce9e863103827f1e0141d0e747"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-08T16:06:50Z"
+}

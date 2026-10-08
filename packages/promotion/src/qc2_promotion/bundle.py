@@ -44,6 +44,8 @@ SAFE_ARTIFACT_SCHEMAS = frozenset(
         "qc2.apexlab.SafeModelArtifact.v1",
         "qc2.apexlab.TrainingEnvironment.v1",
         "qc2.apexlab.FrozenHyperparameterSpace.v1",
+        "qc2.promotion.CandidateEvaluationReport.v1",
+        "qc2.promotion.CandidateEvaluationAttestation.v1",
     }
 )
 EXPECTED_REGISTRY_CONTRACTS = frozenset(
@@ -365,7 +367,9 @@ def _verify_dependency_graph(
                 f"bundle is missing immutable dependency {schema_name} {target_id}"
             )
         contract_name = SCHEMA_TO_CONTRACT[schema_name]
-        expected_hash = payload.get("content_hash", payload.get("report_hash"))
+        expected_hash = payload.get(
+            "content_hash", payload.get("report_hash", payload.get("receipt_hash"))
+        )
         referenced_hash = reference.get("content_hash")
         if contract_name in CONTENT_ADDRESSED and referenced_hash != payload.get("content_hash"):
             raise PromotionBundleError(f"dependency content hash differs for {schema_name}")

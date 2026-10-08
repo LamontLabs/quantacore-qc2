@@ -1425,10 +1425,11 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-041 — Promotion Verification
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Verify bundles independently before model loading or owner decision.
 **Dependencies:** QC2-023, QC2-036, QC2-037, QC2-039, QC2-040
 **Authorized legacy references:** None.
+**Authorized artifact drift:** QC2-040 — QC2-041 extends the accepted promotion package and its tests with independent key-role verification, signed evaluator evidence, recomputed gates, compatibility and temporal checks, and isolated safe-model probes. Its canonical start and acceptance receipt also update the task registry. QC2-040 remains historically verified at its tested source commit; QC2-041 revalidates the expanded verifier against the updated bytes. Paths: packages/promotion, tests/promotion, registry/BUILD_TASKS.json. Paths: `packages/promotion`, `tests/promotion`, `registry/BUILD_TASKS.json`
 **Required reference intake:** None. Do not inspect or copy legacy code for this task without a scoped amendment.
 
 **Required deliverables:**

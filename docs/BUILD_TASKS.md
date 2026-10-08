@@ -1396,6 +1396,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Objective:** Package final immutable candidate evidence with complete signed dependency inventory.
 **Dependencies:** QC2-004, QC2-006, QC2-026, QC2-034, QC2-036, QC2-037, QC2-038, QC2-039
 **Authorized legacy references:** Gen 1 G2 promotion artifacts, ApexLab promotion packaging
+**Authorized artifact drift:** QC2-035 — QC2-040 adds the pinned backend Ed25519 dependency required for detached promotion-bundle signatures. QC2-035 remains historically verified at its tested source commit; QC2-040 revalidates the new lock with bundle tests and lock consistency checks. Paths: `pyproject.toml`, `uv.lock`
 **Required reference intake:** Mandatory for each referenced repository/file actually inspected; record revision, path/hash, source-supported meaning, tests, conflicts, license, and disposition.
 
 **Required deliverables:**

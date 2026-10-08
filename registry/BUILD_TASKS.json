@@ -4395,6 +4395,16 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-035",
+          "artifact_paths": [
+            "pyproject.toml",
+            "uv.lock"
+          ],
+          "reason": "QC2-040 adds the pinned backend Ed25519 dependency required for detached promotion-bundle signatures. QC2-035 remains historically verified at its tested source commit; QC2-040 revalidates the new lock with bundle tests and lock consistency checks."
+        }
+      ],
       "status": "TODO",
       "blockers": [],
       "acceptance_receipt": null

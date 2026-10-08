@@ -1224,7 +1224,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-035 — Model Factory
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Train required model families under identical governed data/split/budget contracts.
 **Dependencies:** QC2-023, QC2-033, QC2-034
 **Authorized legacy references:** ApexLab deterministic training utilities
@@ -1258,7 +1258,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-08T18:53:27Z: `docs/reference/QC2-035_ACCEPTANCE_EVIDENCE.md`, `docs/reference/QC2-035_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-035_TASK_RECORD.json`
 
 ---
 

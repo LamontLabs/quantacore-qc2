@@ -3970,9 +3970,48 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-08T18:53:27Z",
+        "task_spec_version": "QC2-035 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "a9a963f9fafffe251a20876981c3841e9ff4f5d4",
+        "receipt": "docs/reference/QC2-035_ACCEPTANCE_EVIDENCE.md",
+        "contract_receipt": "docs/reference/QC2-035_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-035_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/apexlab",
+          "tests/apexlab",
+          "pyproject.toml",
+          "uv.lock"
+        ],
+        "executed_commands": [
+          "uv run pytest tests/apexlab -q",
+          "uv run ruff check packages/apexlab/src/qc2_apexlab tests/apexlab",
+          "python3 tools/task_workflow.py validate"
+        ],
+        "test_counts": [
+          {
+            "test_id": "apexlab_suite",
+            "passed": 49,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/apexlab": "2c425ead246e2ca26ed6b870ca0c342ad7eda3b8f6fb74701944f23d88b170dd",
+          "tests/apexlab": "fa2710dde7f97c747176fb6a445e1eb9a73da5759aad169ebfda4cd11678e2f7",
+          "pyproject.toml": "a08b898849e4fb596f60832102e5bb07d62d10c4e0c2de33b6488dbbf78c5bac",
+          "uv.lock": "e0a0045742006cf3f9b877cc766ae0d7b54e5bd89c7c7d0496906808318aa41d"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "Acceptance was rerun on the committed QC2-035 source with synthetic fixtures and an isolated trainer.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-036",

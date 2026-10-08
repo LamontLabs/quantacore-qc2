@@ -4465,6 +4465,17 @@
         "QC2-040"
       ],
       "authorized_legacy_references": [],
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-040",
+          "artifact_paths": [
+            "packages/promotion",
+            "tests/promotion",
+            "registry/BUILD_TASKS.json"
+          ],
+          "reason": "QC2-041 extends the accepted promotion package and its tests with independent key-role verification, signed evaluator evidence, recomputed gates, compatibility and temporal checks, and isolated safe-model probes. Its canonical start and acceptance receipt also update the task registry. QC2-040 remains historically verified at its tested source commit; QC2-041 revalidates the expanded verifier against the updated bytes. Paths: packages/promotion, tests/promotion, registry/BUILD_TASKS.json."
+        }
+      ],
       "required_reference_intake": "None. Do not inspect or copy legacy code for this task without a scoped amendment.",
       "required_deliverables": [
         "Strict verifier, key-role/revocation registry and recomputed gate receipts.",

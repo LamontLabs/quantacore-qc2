@@ -2819,6 +2819,13 @@
             "tests/database/qc2_025_postgres_acceptance.sql"
           ],
           "reason": "QC2-026 requires fixed, expired schedule deadlines so holdout access can verify schedule closure deterministically."
+        },
+        {
+          "prior_task_id": "QC2-000",
+          "artifact_paths": [
+            "package.json"
+          ],
+          "reason": "QC2-026 records the current package.json after adding its PostgreSQL acceptance runner. The earlier bootstrap receipt remains bound to its tested commit; the QC2-026 PASS receipt hashes this exact package.json."
         }
       ],
       "status": "PASS",
@@ -2930,7 +2937,81 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "TODO",
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-014",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-027 adds the census-scoped Runner Observatory implementation and acceptance tests to the shared science trees. Its acceptance revalidates both full trees and binds their exact new hashes; earlier receipts remain bound to their tested commits."
+        },
+        {
+          "prior_task_id": "QC2-015",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-027 adds the census-scoped Runner Observatory implementation and acceptance tests to the shared science trees. Its acceptance revalidates both full trees and binds their exact new hashes; earlier receipts remain bound to their tested commits."
+        },
+        {
+          "prior_task_id": "QC2-016",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-027 adds the census-scoped Runner Observatory implementation and acceptance tests to the shared science trees. Its acceptance revalidates both full trees and binds their exact new hashes; earlier receipts remain bound to their tested commits."
+        },
+        {
+          "prior_task_id": "QC2-017",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-027 adds the census-scoped Runner Observatory implementation and acceptance tests to the shared science trees. Its acceptance revalidates both full trees and binds their exact new hashes; earlier receipts remain bound to their tested commits."
+        },
+        {
+          "prior_task_id": "QC2-019",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-027 adds the census-scoped Runner Observatory implementation and acceptance tests to the shared science trees. Its acceptance revalidates both full trees and binds their exact new hashes; earlier receipts remain bound to their tested commits."
+        },
+        {
+          "prior_task_id": "QC2-020",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-027 adds the census-scoped Runner Observatory implementation and acceptance tests to the shared science trees. Its acceptance revalidates both full trees and binds their exact new hashes; earlier receipts remain bound to their tested commits."
+        },
+        {
+          "prior_task_id": "QC2-022",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-027 adds the census-scoped Runner Observatory implementation and acceptance tests to the shared science trees. Its acceptance revalidates both full trees and binds their exact new hashes; earlier receipts remain bound to their tested commits."
+        },
+        {
+          "prior_task_id": "QC2-023",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-027 adds the census-scoped Runner Observatory implementation and acceptance tests to the shared science trees. Its acceptance revalidates both full trees and binds their exact new hashes; earlier receipts remain bound to their tested commits."
+        },
+        {
+          "prior_task_id": "QC2-024",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-027 adds the census-scoped Runner Observatory implementation and acceptance tests to the shared science trees. Its acceptance revalidates both full trees and binds their exact new hashes; earlier receipts remain bound to their tested commits."
+        }
+      ],
+      "status": "IN_PROGRESS",
       "blockers": [],
       "acceptance_receipt": null
     },

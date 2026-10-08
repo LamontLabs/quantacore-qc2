@@ -909,6 +909,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Authorized legacy references:** Gen 1 ForwardValidator, ApexLab evaluator
 **Authorized artifact drift:** QC2-005 — QC2-026 adds its isolated PostgreSQL acceptance command and includes the runner in repository verification. Paths: `package.json`, `lib/db/package.json`
 **Authorized artifact drift:** QC2-025 — QC2-026 requires fixed, expired schedule deadlines so holdout access can verify schedule closure deterministically. Paths: `tests/database/qc2_025_postgres_acceptance.sql`
+**Authorized artifact drift:** QC2-000 — QC2-026 records the current package.json after adding its PostgreSQL acceptance runner. The earlier bootstrap receipt remains bound to its tested commit; the QC2-026 PASS receipt hashes this exact package.json. Paths: `package.json`
 **Required reference intake:** Mandatory for each referenced repository/file actually inspected; record revision, path/hash, source-supported meaning, tests, conflicts, license, and disposition.
 
 **Required deliverables:**
@@ -937,10 +938,19 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-027 — Runner Observatory
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Detect real outcome events independently of model-selected symbols.
 **Dependencies:** QC2-012, QC2-015, QC2-016, QC2-026
 **Authorized legacy references:** None.
+**Authorized artifact drift:** QC2-014 — QC2-027 adds the census-scoped Runner Observatory implementation and acceptance tests to the shared science trees. Its acceptance revalidates both full trees and binds their exact new hashes; earlier receipts remain bound to their tested commits. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-015 — QC2-027 adds the census-scoped Runner Observatory implementation and acceptance tests to the shared science trees. Its acceptance revalidates both full trees and binds their exact new hashes; earlier receipts remain bound to their tested commits. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-016 — QC2-027 adds the census-scoped Runner Observatory implementation and acceptance tests to the shared science trees. Its acceptance revalidates both full trees and binds their exact new hashes; earlier receipts remain bound to their tested commits. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-017 — QC2-027 adds the census-scoped Runner Observatory implementation and acceptance tests to the shared science trees. Its acceptance revalidates both full trees and binds their exact new hashes; earlier receipts remain bound to their tested commits. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-019 — QC2-027 adds the census-scoped Runner Observatory implementation and acceptance tests to the shared science trees. Its acceptance revalidates both full trees and binds their exact new hashes; earlier receipts remain bound to their tested commits. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-020 — QC2-027 adds the census-scoped Runner Observatory implementation and acceptance tests to the shared science trees. Its acceptance revalidates both full trees and binds their exact new hashes; earlier receipts remain bound to their tested commits. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-022 — QC2-027 adds the census-scoped Runner Observatory implementation and acceptance tests to the shared science trees. Its acceptance revalidates both full trees and binds their exact new hashes; earlier receipts remain bound to their tested commits. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-023 — QC2-027 adds the census-scoped Runner Observatory implementation and acceptance tests to the shared science trees. Its acceptance revalidates both full trees and binds their exact new hashes; earlier receipts remain bound to their tested commits. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-024 — QC2-027 adds the census-scoped Runner Observatory implementation and acceptance tests to the shared science trees. Its acceptance revalidates both full trees and binds their exact new hashes; earlier receipts remain bound to their tested commits. Paths: `packages/science`, `tests/science`
 **Required reference intake:** None. Do not inspect or copy legacy code for this task without a scoped amendment.
 
 **Required deliverables:**

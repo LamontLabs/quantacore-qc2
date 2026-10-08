@@ -1818,9 +1818,50 @@
         "LEGACY_READ_ACCESS"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-08T05:16:24Z",
+        "task_spec_version": "QC2-018 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "748a2fd1b94fe86cb780cb8441f0baefe38734ef",
+        "receipt": "docs/reference/QC2-018_ACCEPTANCE.md",
+        "contract_receipt": "docs/reference/QC2-018_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-018_TASK_RECORD.json",
+        "changed_paths": [
+          "docs/reference/QC2-018_PROTOCOL_INVENTORY.json",
+          "docs/reference/QC2-018_REFERENCE_INTAKE.md",
+          "tests/reference/test_qc2_018_inventory.py",
+          "tools/validate_qc2_018_inventory.py"
+        ],
+        "executed_commands": [
+          "python3 tools/validate_qc2_018_inventory.py",
+          "pytest -q tests/reference/test_qc2_018_inventory.py",
+          "ruff check tests/reference/test_qc2_018_inventory.py tools/validate_qc2_018_inventory.py",
+          "python3 tools/task_workflow.py preflight QC2-018",
+          "pytest -q"
+        ],
+        "test_counts": [
+          {
+            "test_id": "qc2_018_inventory",
+            "passed": 5,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "docs/reference/QC2-018_PROTOCOL_INVENTORY.json": "f373f6b19a18eaa7af193a05faed1af4d8278283a40fa24ef68400a7ecfe1665",
+          "docs/reference/QC2-018_REFERENCE_INTAKE.md": "5dbb8f42de60fd666883ff1904e60cd102c0a8b2bdfcd3966eb5a01ac96beaf5",
+          "tests/reference/test_qc2_018_inventory.py": "f99bf19c8953036dee637eb825c1356354b780f908ad8f8503d23a54710bbbca",
+          "tools/validate_qc2_018_inventory.py": "8a76c66590c5ad6f0c358aa154c8e1a051750f8d45d136486eb24ee76068a58b"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "Pinned source inventory and local acceptance controls were verified read-only; no legacy source was executed or adopted.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-019",

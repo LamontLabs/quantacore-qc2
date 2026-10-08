@@ -1,0 +1,51 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a119f0-f7cb-7f1f-80ed-0e5c80bc2c09",
+  "created_at": "2026-10-08T05:16:24Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "2211cf3056b32ffc24fa3ed2103a66edc60d8e81f96bdf54187ac538e9605505",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a119f0-f7c4-7dbc-988f-097329c66701",
+    "content_hash": "5f65e78c4ec1ef54f840665119e4537f9d4aab6eb889a8ca0e63a6c42a821405"
+  },
+  "task_spec_version": "QC2-018 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "748a2fd1b94fe86cb780cb8441f0baefe38734ef",
+  "changed_paths": [
+    "docs/reference/QC2-018_PROTOCOL_INVENTORY.json",
+    "docs/reference/QC2-018_REFERENCE_INTAKE.md",
+    "tests/reference/test_qc2_018_inventory.py",
+    "tools/validate_qc2_018_inventory.py"
+  ],
+  "executed_commands": [
+    "python3 tools/validate_qc2_018_inventory.py",
+    "pytest -q tests/reference/test_qc2_018_inventory.py",
+    "ruff check tests/reference/test_qc2_018_inventory.py tools/validate_qc2_018_inventory.py",
+    "python3 tools/task_workflow.py preflight QC2-018",
+    "pytest -q"
+  ],
+  "test_counts": [
+    {
+      "test_id": "qc2_018_inventory",
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "f373f6b19a18eaa7af193a05faed1af4d8278283a40fa24ef68400a7ecfe1665",
+    "5dbb8f42de60fd666883ff1904e60cd102c0a8b2bdfcd3966eb5a01ac96beaf5",
+    "f99bf19c8953036dee637eb825c1356354b780f908ad8f8503d23a54710bbbca",
+    "8a76c66590c5ad6f0c358aa154c8e1a051750f8d45d136486eb24ee76068a58b"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-08T05:16:24Z"
+}

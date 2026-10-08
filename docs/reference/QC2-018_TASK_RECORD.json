@@ -1,0 +1,36 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a119f0-f7c4-7dbc-988f-097329c66701",
+  "created_at": "2026-10-08T05:16:24Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "5f65e78c4ec1ef54f840665119e4537f9d4aab6eb889a8ca0e63a6c42a821405",
+  "task_id": "qc2-018",
+  "task_name": "Historical Protocol Lineage Registry",
+  "objective": "Account for original concepts without assuming all are valid or daily-compatible.",
+  "dependency_task_ids": [
+    "QC2-001",
+    "QC2-017"
+  ],
+  "authorized_legacy_refs": [
+    "Original QuantraCore Protocol project"
+  ],
+  "deliverable_refs": [
+    "Complete discovered protocol inventory with source hash, hypothesis, data need and disposition.",
+    "Verified or unresolved T24/T25 and T34 records; compatibility map.",
+    "Migration acceptance criteria and no-unresolved-active-dependency rule."
+  ],
+  "required_test_refs": [
+    "Every discovered original file maps to one disposition.",
+    "ID collisions and unavailable source meanings remain explicit.",
+    "Intraday/float-only dependencies cannot become ACTIVE_F0."
+  ],
+  "acceptance_gate": "Inventory is complete for verified sources; unresolved items are excluded from activation or block a required dependency.",
+  "evidence_requirement": "legacy_read_access",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

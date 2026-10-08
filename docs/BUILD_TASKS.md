@@ -617,7 +617,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-018 — Historical Protocol Lineage Registry
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Account for original concepts without assuming all are valid or daily-compatible.
 **Dependencies:** QC2-001, QC2-017
 **Authorized legacy references:** Original QuantraCore Protocol project
@@ -643,7 +643,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LEGACY_READ_ACCESS
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-08T05:16:24Z: `docs/reference/QC2-018_ACCEPTANCE.md`, `docs/reference/QC2-018_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-018_TASK_RECORD.json`
 
 ---
 

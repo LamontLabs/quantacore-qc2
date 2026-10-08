@@ -754,7 +754,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-022 — Baseline Engines
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Implement all mandatory reproducible comparator rankings.
 **Dependencies:** QC2-012, QC2-013, QC2-014, QC2-015, QC2-021
 **Authorized legacy references:** None.

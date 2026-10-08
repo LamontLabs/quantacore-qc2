@@ -1,0 +1,41 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a11adb-a957-7035-a3b4-6071f48d7c72",
+  "created_at": "2026-10-08T09:32:45Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "2fd798f09b89066d2d1a3da4b3e39194ba8b6ce52c0bbc03a6f30298daebfbe9",
+  "task_id": "qc2-025",
+  "task_name": "Prediction Authority",
+  "objective": "Implement the single canonical run, complete ranking, and irreversible seal.",
+  "dependency_task_ids": [
+    "QC2-006",
+    "QC2-008",
+    "QC2-012",
+    "QC2-013",
+    "QC2-014",
+    "QC2-017",
+    "QC2-022",
+    "QC2-023",
+    "QC2-024"
+  ],
+  "authorized_legacy_refs": [],
+  "deliverable_refs": [
+    "ScheduledAttempt binding, run/row state machines, immutable scientific payload and seals.",
+    "Early Champion/registry pinning and unique official seal constraints.",
+    "Bounded deterministic retries, late-run diagnostics and anchor integration port."
+  ],
+  "required_test_refs": [
+    "Concurrent run creation/Champion change cannot produce mixed generations.",
+    "All eligible symbols appear ranked or unscorable; tie order is deterministic.",
+    "Mutation after seal, favorable retry replacement, late qualification and fixture activation are rejected."
+  ],
+  "acceptance_gate": "One fixture session produces a complete immutable scientifically bound ranking with explicit failure dispositions.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

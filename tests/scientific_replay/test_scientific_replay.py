@@ -23,6 +23,7 @@ from qc2_scientific_replay import (
     ReplayRunner,
     StageExecutor,
     build_environment_profile,
+    capture_package_lock_hash,
     capture_runtime_environment,
 )
 from qc2_scientific_replay.runner import (
@@ -344,7 +345,7 @@ def _fixture_documents(
     }
     runtime = capture_runtime_environment()
     profile = build_environment_profile(
-        package_lock_hash=_sha256(b"qc2-scientific-replay-fixture-lock-v1"),
+        package_lock_hash=capture_package_lock_hash(),
         executor_hashes=executor_hashes,
         runtime=runtime,
     )
@@ -771,6 +772,25 @@ def test_environment_mismatch_blocks_before_any_stage_runs(tmp_path: Path) -> No
     )
     assert result.receipt["verdict"] == "BLOCKED"
     assert "runtime environment does not match" in result.receipt["first_mismatch"]
+    assert result.stage_comparisons == ()
+
+
+def test_package_lock_mismatch_blocks_before_any_stage_runs(tmp_path: Path) -> None:
+    contents, request, seal, manifest, executors, fixture = _fixture_documents()
+    bundle = _write_bundle(tmp_path, contents)
+    result = ReplayRunner(
+        limits=ReplayLimits(256, 2_000_000, 20_000_000, 64),
+        environment_provider=lambda: copy.deepcopy(fixture["runtime"]),
+        package_lock_hash_provider=lambda: "0" * 64,
+    ).run(
+        bundle,
+        replay_request=request,
+        source_seal=seal,
+        artifact_manifest=manifest,
+        executors=executors,
+    )
+    assert result.receipt["verdict"] == "BLOCKED"
+    assert "package lock hash does not match" in result.receipt["first_mismatch"]
     assert result.stage_comparisons == ()
 
 

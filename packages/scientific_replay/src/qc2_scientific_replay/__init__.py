@@ -2,6 +2,7 @@
 
 from .environment import (
     build_environment_profile,
+    capture_package_lock_hash,
     capture_runtime_environment,
     environment_fingerprint,
 )
@@ -22,6 +23,7 @@ __all__ = [
     "ReplayRunner",
     "StageExecutor",
     "build_environment_profile",
+    "capture_package_lock_hash",
     "capture_runtime_environment",
     "environment_fingerprint",
     "resolve_dependency_closure",

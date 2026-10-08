@@ -6,10 +6,12 @@ import decimal
 import hashlib
 import locale
 import platform
+import stat
 import sys
 import time
 from collections.abc import Mapping
 from datetime import datetime
+from pathlib import Path
 from typing import Any
 
 from qc2_contracts.runtime import canonical_json_bytes
@@ -47,6 +49,22 @@ def capture_runtime_environment() -> dict[str, Any]:
         "decimal_clamp": context.clamp,
         "monotonic_clock_implementation": time.get_clock_info("monotonic").implementation,
     }
+
+
+def capture_package_lock_hash(lock_path: Path | None = None) -> str:
+    """Hash the local uv lockfile that qualifies this runner's dependencies."""
+    if lock_path is None:
+        lock_path = Path(__file__).resolve().parents[4] / "uv.lock"
+    try:
+        info = lock_path.lstat()
+        if stat.S_ISLNK(info.st_mode) or not stat.S_ISREG(info.st_mode):
+            raise ValueError("local uv.lock must be a regular, non-symlink file")
+        lock_bytes = lock_path.read_bytes()
+    except OSError as exc:
+        raise ValueError(f"local uv.lock is unavailable: {exc}") from exc
+    if not lock_bytes:
+        raise ValueError("local uv.lock must not be empty")
+    return hashlib.sha256(lock_bytes).hexdigest()
 
 
 def environment_fingerprint(profile_body: Mapping[str, Any]) -> str:

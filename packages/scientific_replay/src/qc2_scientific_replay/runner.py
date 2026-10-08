@@ -30,7 +30,12 @@ from qc2_contracts.runtime import (
 )
 
 from .dependencies import resolve_dependency_closure
-from .environment import PROFILE_SCHEMA, capture_runtime_environment, environment_fingerprint
+from .environment import (
+    PROFILE_SCHEMA,
+    capture_package_lock_hash,
+    capture_runtime_environment,
+    environment_fingerprint,
+)
 from .models import ReplayError, ReplayInputError, ReplayLimits, ReplayRunResult, StageExecutor
 
 
@@ -482,10 +487,12 @@ class ReplayRunner:
         *,
         limits: ReplayLimits,
         environment_provider=capture_runtime_environment,
+        package_lock_hash_provider=capture_package_lock_hash,
         clock=time.perf_counter,
     ) -> None:
         self._limits = limits
         self._environment_provider = environment_provider
+        self._package_lock_hash_provider = package_lock_hash_provider
         self._clock = clock
 
     def run(
@@ -808,12 +815,19 @@ class ReplayRunner:
             profile.get("schema_name") != PROFILE_SCHEMA
             or profile.get("schema_version") != "1.0"
             or not _is_sha256(fingerprint)
+            or not _is_sha256(profile.get("package_lock_hash"))
             or environment_fingerprint(profile_body) != fingerprint
             or request["environment_fingerprint"] != fingerprint
         ):
             raise _BlockedReplay("ReplayRequest and qualified environment profile do not match")
         if dict(profile.get("runtime", {})) != self._environment_provider():
             raise _BlockedReplay("runtime environment does not match the qualified profile")
+        try:
+            local_package_lock_hash = self._package_lock_hash_provider()
+        except Exception as exc:
+            raise _BlockedReplay(f"cannot verify local package lock: {exc}") from exc
+        if local_package_lock_hash != profile["package_lock_hash"]:
+            raise _BlockedReplay("local package lock hash does not match qualified environment profile")
 
         executor_hashes: dict[str, str] = {}
         prior_outputs: set[str] = set()

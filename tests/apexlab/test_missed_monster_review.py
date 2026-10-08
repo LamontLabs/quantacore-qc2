@@ -179,6 +179,12 @@ def test_all_five_categories_are_evidence_linked_and_deterministic() -> None:
             ref["target_id"] in case.explanation
             for ref in payload["evidence_refs"]
         )
+        assert all(
+            ref["target_id"] in case.explanation for ref in payload["source_refs"]
+        )
+        research_record = case.research_record
+        assert research_record["review_case"] == payload
+        assert research_record["category"] == case.category.value
 
     excluded = next(
         case for case in queue.cases if case.category is MissedMonsterCategory.EXCLUDED

@@ -416,6 +416,18 @@ class MissedMonsterReviewCase:
     def case_id(self) -> str:
         return str(self.contract["id"])
 
+    @property
+    def research_record(self) -> dict[str, object]:
+        """Return the validated contract together with its non-authoritative review notes."""
+        return {
+            "review_case": self.contract,
+            "category": self.category.value,
+            "trigger_policy_hash": self.trigger_policy_hash,
+            "explanation_template": self.explanation_template,
+            "explanation": self.explanation,
+            "research_annotations": list(self.research_annotations),
+        }
+
 
 @dataclass(frozen=True, slots=True)
 class MissedMonsterReviewQueue:
@@ -437,9 +449,10 @@ class MissedMonsterReviewQueue:
 
 
 _EXPLANATION_TEMPLATE = (
-    "RunnerEvent {event_id} matched frozen event definition {event_definition_id}. "
-    "The frozen trigger policy classified this event/session as {category}; "
+    "RunnerEvent {event_id} for session {session_id} matched frozen event definition "
+    "{event_definition_id}. Trigger policy {policy_hash} classified it as {category}; "
     "recorded rank: {rank}. Evidence references: {evidence_ids}. "
+    "Supporting source references: {source_ids}. "
     "This is a research-only explanation and does not revise outcomes, predictions, "
     "ranks, or official denominators."
 )
@@ -577,10 +590,13 @@ def build_missed_monster_review_queue(
 
         explanation = _EXPLANATION_TEMPLATE.format(
             event_id=candidate.event_ref.target_id,
+            session_id=candidate.session_id,
             event_definition_id=policy.event_definition_ref.target_id,
+            policy_hash=policy.policy_hash,
             category=category.value,
             rank=(str(candidate.rank) if candidate.rank is not None else "not available"),
             evidence_ids=", ".join(ref.target_id for ref in evidence_refs),
+            source_ids=", ".join(ref.target_id for ref in candidate_sources),
         )
         annotations = (
             "RESEARCH_ONLY",

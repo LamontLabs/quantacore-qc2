@@ -1,0 +1,48 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a11d48-0c45-772b-89c0-829d8ae9c92d",
+  "created_at": "2026-10-08T20:50:23Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "7068614a6f5bd1e0c1f181c592b4b1e3d54b7fdc32dd36e5ea82d0908e5ca14b",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a11d48-0c41-763e-98f4-4f074b0aa78c",
+    "content_hash": "ea0a289ae15099299bafdf9b3e3587c3a2ef37fe0c5fca251f8752a40e28c33e"
+  },
+  "task_spec_version": "QC2-038 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "8e01494ccc9455e1682bb7fd35310797924a3555",
+  "changed_paths": [
+    "packages/prediction_authority/src/qc2_prediction_authority/shadow.py",
+    "tests/prediction_authority/test_shadow_engine.py"
+  ],
+  "executed_commands": [
+    "uv run --no-sync pytest -q tests/prediction_authority",
+    "uv run --no-sync pytest -q tests/prediction_authority/test_shadow_engine.py",
+    "uv run --no-sync ruff check packages/prediction_authority/src/qc2_prediction_authority tests/prediction_authority",
+    "python3 -m compileall -q packages/prediction_authority/src/qc2_prediction_authority tests/prediction_authority",
+    "python3 tools/task_workflow.py preflight QC2-038",
+    "python3 tools/task_workflow.py validate"
+  ],
+  "test_counts": [
+    {
+      "test_id": "prediction_authority",
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "2d8f612fcf54730a66d51c1b8ee0d2f182dfe28f612e3b45a4aa6fda3319abf4",
+    "164ce6c95dd304ac7419371094e253b286441d034a8150c4867ce08773e7531d"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-08T20:50:23Z"
+}

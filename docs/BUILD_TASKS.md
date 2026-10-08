@@ -1328,7 +1328,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-038 — Shadow Engine
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Collect prospective candidate evidence without influencing production decisions.
 **Dependencies:** QC2-025, QC2-026, QC2-033, QC2-036, QC2-037
 **Authorized legacy references:** None.
@@ -1354,7 +1354,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-08T20:50:23Z: `docs/reference/QC2-038_ACCEPTANCE_ASSESSMENT.md`, `docs/reference/QC2-038_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-038_TASK_RECORD.json`
 
 ---
 

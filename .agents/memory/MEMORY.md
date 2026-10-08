@@ -1,6 +1,7 @@
 - [pnpm Node version reporting](pnpm-node-version-reporting.md) — pnpm may report a different Node patch from the shell; enforce exact patches separately from the package engine range.
 - [PostgreSQL role-boundary testing](postgresql-role-boundary-testing.md) — use real session authorization; account for CREATEROLE's implicit role membership.
 - [PostgreSQL acceptance session state](postgresql-acceptance-session-state.md) — sequential rollback-only suites share transaction-local settings; reset test-only GUCs before later RLS checks.
+- [QC2 PostgreSQL test encoding](qc2-postgresql-test-encoding.md) — local acceptance databases must use UTF8 for PostgreSQL Unicode normalization in canonical hashing.
 - [Contract validation JSON types](contract-validation-json-types.md) — thaw immutable mappings and tuples to dicts and lists before JSON Schema validation.
 - [QC2 task progression](qc2-task-progression.md) — handle task completion and advance through eligible QC2 work without asking the owner to mark each task complete.
 - [Alpaca calendar time semantics](alpaca-calendar-time-semantics.md) — calendar open/close values may be exchange-local `HH:MM`; combine with the session date and exchange timezone before UTC comparisons.

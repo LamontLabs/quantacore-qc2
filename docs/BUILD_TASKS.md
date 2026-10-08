@@ -871,7 +871,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-025 — Prediction Authority
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Implement the single canonical run, complete ranking, and irreversible seal.
 **Dependencies:** QC2-006, QC2-008, QC2-012, QC2-013, QC2-014, QC2-017, QC2-022, QC2-023, QC2-024
 **Authorized legacy references:** None.

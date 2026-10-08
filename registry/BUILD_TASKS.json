@@ -2300,9 +2300,53 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-08T07:32:44Z",
+        "task_spec_version": "QC2-022 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "80b95204969a6240dddbf3386e7549eb60020473",
+        "receipt": "docs/reference/QC2-022_ACCEPTANCE_ASSESSMENT.md",
+        "contract_receipt": "docs/reference/QC2-022_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-022_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/science",
+          "tests/science"
+        ],
+        "executed_commands": [
+          "uv run pytest -q tests/science/test_baseline_engines.py",
+          "uv run pytest -q",
+          "uv run ruff check",
+          "uv run python -m compileall -q packages tests",
+          "git diff --check",
+          "python3 tools/task_workflow.py preflight QC2-022"
+        ],
+        "test_counts": [
+          {
+            "test_id": "baseline_engines",
+            "passed": 8,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "full_project",
+            "passed": 246,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/science": "6a408f3095a1782cf03811e4156812a064ef588dec5f5f05b6adaf42ff9df058",
+          "tests/science": "1fccb14c075ac85e904326307e8b097178a6cd5689ed3bb40938c944bd5021b4"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "Deterministic local fixtures, full suite, static checks, and canonical dependency preflight passed. No empirical ranking performance, production activation, reference Champion registration, provider access, or live trading is claimed.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-023",

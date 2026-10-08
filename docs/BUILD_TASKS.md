@@ -754,10 +754,16 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-022 — Baseline Engines
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Implement all mandatory reproducible comparator rankings.
 **Dependencies:** QC2-012, QC2-013, QC2-014, QC2-015, QC2-021
 **Authorized legacy references:** None.
+**Authorized artifact drift:** QC2-014 — QC2-022 extends these shared trees with deterministic baseline engines and fixture tests. It reruns the full project suite, static checks, and canonical task validation, and records exact tree hashes in its acceptance receipt. Feature equations and fixture activation policy remain unchanged. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-015 — QC2-022 adds outcome-blind comparator ranking only; it does not change label definitions, label maturity, or outcome access. Full project tests and static checks are rerun, with exact shared-tree hashes recorded in QC2-022's receipt. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-016 — QC2-022 adds deterministic comparator ranking beside the Ground Truth authority without changing outcome resolution or correction behavior. It reruns the full project suite and static checks, recording exact shared-tree hashes in its acceptance receipt. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-017 — QC2-022 adds deterministic comparator ranking beside the Runner Protocol framework without changing protocol evaluation. It reruns the full project suite and static checks, recording exact shared-tree hashes in its acceptance receipt. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-019 — QC2-022 adds outcome-blind comparator engines without changing the inactive wave-one research protocols. It reruns the full project suite and static checks, recording exact shared-tree hashes in its acceptance receipt. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-020 — QC2-022 adds outcome-blind comparator engines without changing the inactive wave-two research protocols. It reruns the full project suite and static checks, recording exact shared-tree hashes in its acceptance receipt. Paths: `packages/science`, `tests/science`
 **Required reference intake:** None. Do not inspect or copy legacy code for this task without a scoped amendment.
 
 **Required deliverables:**
@@ -780,7 +786,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-08T07:32:44Z: `docs/reference/QC2-022_ACCEPTANCE_ASSESSMENT.md`, `docs/reference/QC2-022_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-022_TASK_RECORD.json`
 
 ---
 

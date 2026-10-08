@@ -4405,7 +4405,7 @@
           "reason": "QC2-040 adds the pinned backend Ed25519 dependency required for detached promotion-bundle signatures. QC2-035 remains historically verified at its tested source commit; QC2-040 revalidates the new lock with bundle tests and lock consistency checks."
         }
       ],
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "blockers": [],
       "acceptance_receipt": null
     },

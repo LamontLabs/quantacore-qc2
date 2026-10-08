@@ -1224,7 +1224,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-035 — Model Factory
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Train required model families under identical governed data/split/budget contracts.
 **Dependencies:** QC2-023, QC2-033, QC2-034
 **Authorized legacy references:** ApexLab deterministic training utilities

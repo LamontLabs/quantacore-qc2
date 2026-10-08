@@ -1328,7 +1328,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-038 — Shadow Engine
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Collect prospective candidate evidence without influencing production decisions.
 **Dependencies:** QC2-025, QC2-026, QC2-033, QC2-036, QC2-037
 **Authorized legacy references:** None.

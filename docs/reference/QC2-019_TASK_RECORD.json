@@ -1,0 +1,37 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a11a0a-19a6-7280-82b0-c0de2d165a6b",
+  "created_at": "2026-10-08T05:43:51Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "research",
+  "source_refs": [],
+  "content_hash": "9558c1964966e3d77d48a31e4e78b2e03e57bff9dbae51f9ead52868c2a42218",
+  "task_id": "qc2-019",
+  "task_name": "F0 Runner Protocol Migration Wave 1",
+  "objective": "Rewrite the verified daily-compatible inspection queue as research protocols.",
+  "dependency_task_ids": [
+    "QC2-014",
+    "QC2-017",
+    "QC2-018"
+  ],
+  "authorized_legacy_refs": [
+    "Verified original P55/T34/T37/T38/T41/T42/T44/T57/T77/T78/T92/T102/T103/T104/T108/T109/T110 sources"
+  ],
+  "deliverable_refs": [
+    "Source-backed implementation or explicit exclusion for each requested candidate.",
+    "RESEARCH registry entries, parameter contracts, evidence fields and isolated tests.",
+    "Semantics-difference notes where Gen 2 adapts legacy behavior."
+  ],
+  "required_test_refs": [
+    "Positive/negative/unknown fixtures per implemented hypothesis.",
+    "No hidden future-memory, quote, float, or live data requirement.",
+    "Exact replay and side-effect tests for each migrated protocol."
+  ],
+  "acceptance_gate": "Every queue item is either independently tested research code or an evidence-backed exclusion.",
+  "evidence_requirement": "legacy_read_access",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

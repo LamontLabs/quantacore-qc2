@@ -1,0 +1,63 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a11a0a-19ad-773d-9857-dbef9336757e",
+  "created_at": "2026-10-08T05:43:51Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "research",
+  "source_refs": [],
+  "content_hash": "c3a21dd8dec6f41ee1f0305617d671807010acd847d519bd7a4199903b263788",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a11a0a-19a6-7280-82b0-c0de2d165a6b",
+    "content_hash": "9558c1964966e3d77d48a31e4e78b2e03e57bff9dbae51f9ead52868c2a42218"
+  },
+  "task_spec_version": "QC2-019 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "d014bf282940bf1a6a8e8470c09276f998781675",
+  "changed_paths": [
+    "packages/science",
+    "tests/science",
+    "docs/reference/QC2-019_MIGRATION_DECISIONS.json",
+    "docs/reference/QC2-019_REFERENCE_INTAKE.md",
+    "docs/reference/QC2-019_DECISION.md"
+  ],
+  "executed_commands": [
+    "uv run --frozen pytest -q tests/science/test_runner_protocol_research.py",
+    "uv run --frozen pytest -q",
+    "uv run --frozen ruff check .",
+    "python3 tools/validate_qc2_018_inventory.py",
+    "python3 tools/generate_task_docs.py --check",
+    "python3 -m json.tool docs/reference/QC2-019_MIGRATION_DECISIONS.json",
+    "python3 tools/task_workflow.py preflight QC2-019",
+    "python3 tools/task_workflow.py validate",
+    "git diff --check"
+  ],
+  "test_counts": [
+    {
+      "test_id": "qc2_019_research",
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "qc2_full_suite",
+      "passed": 216,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "d4cfafb069a81b32ebe874525201ef67c935b75b50626a0e65036d9006e05ff3",
+    "22f79c8e9a7e48f318804a0643578b1addca09fb3e43adf88842b999d3c11a10",
+    "bd6be62524a1be4f00f5661bd188236ba7e06ea8fac8f331e886c13221445891",
+    "62e8936132fca12c786b0fdf47bf0cdba0585c441e3052f008e59b1dd4e5fd11",
+    "f37ab4a3a28c52ea443f632dd551d6c3cee70c92ee34fd6f6ff6e705ef352952"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-08T05:43:51Z"
+}

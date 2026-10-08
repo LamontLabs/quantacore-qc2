@@ -792,7 +792,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-023 — Model Inference Contract
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Build safe exact-artifact inference with logical head semantics.
 **Dependencies:** QC2-003, QC2-013, QC2-014, QC2-015, QC2-017, QC2-022
 **Authorized legacy references:** Gen 1 ApexCore V2/V3, ApexLab model utilities

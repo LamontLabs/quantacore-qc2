@@ -2386,7 +2386,41 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "TODO",
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-014",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-023 adds exact-artifact inference alongside the feature authority without changing FeatureDefinition semantics or feature equations. It reruns the full project suite and records both shared-tree hashes in its acceptance receipt; QC2-014 remains verified at its original tested source commit."
+        },
+        {
+          "prior_task_id": "QC2-015",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-023 adds model inference without changing LabelDefinition, label maturity, or outcome access. It reruns the full project suite and records both shared-tree hashes in its acceptance receipt; QC2-015 remains verified at its original tested source commit."
+        },
+        {
+          "prior_task_id": "QC2-017",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-023 adds exact model inference without changing Runner Protocol definitions or evaluation. It reruns the full project suite and records both shared-tree hashes in its acceptance receipt; QC2-017 remains verified at its original tested source commit."
+        },
+        {
+          "prior_task_id": "QC2-022",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-023 adds model inference beside baseline comparator engines without changing their equations, tie rules, or ranking behavior. It reruns the full project suite and records both shared-tree hashes in its acceptance receipt; QC2-022 remains verified at its original tested source commit."
+        }
+      ],
+      "status": "IN_PROGRESS",
       "blockers": [],
       "acceptance_receipt": null
     },

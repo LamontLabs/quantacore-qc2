@@ -1,0 +1,61 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a11c89-b3d0-78af-b827-a14eaea0bed5",
+  "created_at": "2026-10-08T17:22:28Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "ff8cb3f19b7d3308305735025153b0197f4befb5d72ee83e96f64e03d6751dd9",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a11c89-b3ca-73b7-84de-f54c6b73ad53",
+    "content_hash": "146a0540a7aa27c8e704fede725332c2746507b548c4b85929e87773a1716dd3"
+  },
+  "task_spec_version": "QC2-033 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "60924f854986ccb885825e849b99a4f75aa64337",
+  "changed_paths": [
+    "packages/apexlab",
+    "tests/apexlab",
+    "docs/reference/QC2-033_REFERENCE_INTAKE.md"
+  ],
+  "executed_commands": [
+    "python3 -m pytest tests/apexlab/test_dataset_builder.py -q",
+    "python3 -m pytest tests/apexlab -q",
+    "python3 -m pytest -q",
+    "python3 -m ruff check packages/apexlab/src/qc2_apexlab tests/apexlab && python3 -m compileall -q packages/apexlab/src/qc2_apexlab tests/apexlab",
+    "python3 tools/generate_task_docs.py --check && python3 tools/task_workflow.py validate && python3 tools/task_workflow.py preflight QC2-033"
+  ],
+  "test_counts": [
+    {
+      "test_id": "dataset_builder",
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "apexlab",
+      "passed": 34,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "full_python",
+      "passed": 349,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "acca581b90edaf354aa4161d8c3c6c1e32bdd20fab742b6f814cce660256e98b",
+    "5e414e2df85473ac36b0295a20878b3928f61256b10ae402c4b29605c8325706",
+    "d27a8394d6a36fc1ba71725a1c4d143bbc4d3a91dcb6c91019aba995ab845257"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-08T17:22:28Z"
+}

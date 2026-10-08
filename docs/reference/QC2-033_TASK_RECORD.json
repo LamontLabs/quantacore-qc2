@@ -1,0 +1,42 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a11c89-b3ca-73b7-84de-f54c6b73ad53",
+  "created_at": "2026-10-08T17:22:28Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "146a0540a7aa27c8e704fede725332c2746507b548c4b85929e87773a1716dd3",
+  "task_id": "qc2-033",
+  "task_name": "ApexLab Dataset Builder",
+  "objective": "Replace unsafe data assembly with fully traceable chronological learning datasets.",
+  "dependency_task_ids": [
+    "QC2-013",
+    "QC2-014",
+    "QC2-015",
+    "QC2-016",
+    "QC2-028",
+    "QC2-029",
+    "QC2-030",
+    "QC2-032"
+  ],
+  "authorized_legacy_refs": [
+    "Current ApexLab dataset/split/evaluation implementation"
+  ],
+  "deliverable_refs": [
+    "DatasetManifest/row lineage, SplitManifest, cutoff-scoped export and deduplication.",
+    "Walk-forward train/development/qualification, purge and embargo implementation.",
+    "Per-fold transforms/index construction and sample-weight handling."
+  ],
+  "required_test_refs": [
+    "Label dependency intervals crossing folds are removed; all same-session rows stay together.",
+    "Training-only fit and mature-only release tested through actual pipeline integration.",
+    "Survivorship-limited inputs cannot claim PIT_VERIFIED."
+  ],
+  "acceptance_gate": "Each dataset row and learned dependency can be traced to legal inputs and a verified fold assignment.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

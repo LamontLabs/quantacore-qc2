@@ -1149,7 +1149,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-033 — ApexLab Dataset Builder
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Replace unsafe data assembly with fully traceable chronological learning datasets.
 **Dependencies:** QC2-013, QC2-014, QC2-015, QC2-016, QC2-028, QC2-029, QC2-030, QC2-032
 **Authorized legacy references:** Current ApexLab dataset/split/evaluation implementation
@@ -1180,7 +1180,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-08T17:22:28Z: `docs/reference/QC2-033_ACCEPTANCE_ASSESSMENT.md`, `docs/reference/QC2-033_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-033_TASK_RECORD.json`
 
 ---
 

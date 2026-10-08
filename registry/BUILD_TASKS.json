@@ -2024,7 +2024,7 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
       "authorized_artifact_drift": [
         {
@@ -2068,7 +2068,69 @@
           "reason": "QC2-020 adds only source-supported, inactive wave-two research protocols and isolated tests within the existing science package. The QC2-020 acceptance receipt records exact resulting tree hashes; QC2-019 remains bound to its tested source commit."
         }
       ],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-08T06:21:07Z",
+        "task_spec_version": "QC2-020 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "b5781bfb431c4386d00a8c477af446fdeef5aaaa",
+        "receipt": "docs/reference/QC2-020_ACCEPTANCE.md",
+        "contract_receipt": "docs/reference/QC2-020_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-020_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/science",
+          "tests/science",
+          "docs/reference/QC2-020_DECISION.md",
+          "docs/reference/QC2-020_DEPENDENCY_GRAPH.json",
+          "docs/reference/QC2-020_MIGRATION_DECISIONS.json",
+          "docs/reference/QC2-020_REFERENCE_INTAKE.md"
+        ],
+        "executed_commands": [
+          "uv run --frozen pytest -q tests/science/test_runner_protocol_research_wave2.py tests/science/test_feature_authority.py::test_similarity_uses_only_historical_registry_matched_receipted_prototypes",
+          "uv run --frozen pytest -q",
+          "uv run --frozen ruff check .",
+          "python3 tools/validate_qc2_018_inventory.py",
+          "python3 tools/generate_task_docs.py --check",
+          "python3 -m json.tool docs/reference/QC2-020_MIGRATION_DECISIONS.json",
+          "python3 -m json.tool docs/reference/QC2-020_DEPENDENCY_GRAPH.json",
+          "python3 tools/task_workflow.py preflight QC2-020",
+          "python3 tools/task_workflow.py validate",
+          "git diff --cached --check"
+        ],
+        "test_counts": [
+          {
+            "test_id": "qc2_020_research",
+            "passed": 6,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "qc2_similarity_temporal_gate",
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "qc2_full_suite",
+            "passed": 222,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/science": "dbe7fb0f6761b638d0e10b8a0e3daeb95df91da847ab836fcfc6e57fa1c3c712",
+          "tests/science": "d5447db625e272f3c2f3ba39f8905b09baecbdb4e80f26557303fbfd9a954496",
+          "docs/reference/QC2-020_DECISION.md": "b532e64647f1277a35d88aa74d01a3556d4bdbde5b987b4e5c1c4555eccd8570",
+          "docs/reference/QC2-020_DEPENDENCY_GRAPH.json": "08fc9079564aba6c9599d9fb6cb87a11cf1638d81424efb974f8be6c0ee8aac2",
+          "docs/reference/QC2-020_MIGRATION_DECISIONS.json": "c012fe3098f9a649bc7ba8b07eba2576d1b10c7e8b11afbae51d0346b29c7fa8",
+          "docs/reference/QC2-020_REFERENCE_INTAKE.md": "864c280c81b131d96f3e172442498c802c532afbf53b87581dfca1b25bb9f8b0"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "research",
+        "verification_reason": "Pinned-source intake and license review; six inactive synthetic daily hypotheses; temporal similarity gate; full test suite and graph, registry, and documentation validation.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-021",

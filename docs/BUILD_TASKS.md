@@ -685,7 +685,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-020 — F0 Runner Protocol Migration Wave 2
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Support more complex daily hypotheses without creating a second intelligence authority.
 **Dependencies:** QC2-013, QC2-014, QC2-017, QC2-018, QC2-019
 **Authorized legacy references:** Verified original breakout/divergence/stall/confluence/reversal/memory/trap/exhaustion sources
@@ -716,7 +716,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-08T06:21:07Z: `docs/reference/QC2-020_ACCEPTANCE.md`, `docs/reference/QC2-020_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-020_TASK_RECORD.json`
 
 ---
 

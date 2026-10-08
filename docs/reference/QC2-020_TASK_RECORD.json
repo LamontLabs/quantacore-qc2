@@ -1,0 +1,39 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a11a2c-36c4-755b-9253-84d6bda9ceb8",
+  "created_at": "2026-10-08T06:21:07Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "research",
+  "source_refs": [],
+  "content_hash": "1460d607dec22dfd455895b9feafa70cc9ac9192ec69db7c92a17af1f5f97457",
+  "task_id": "qc2-020",
+  "task_name": "F0 Runner Protocol Migration Wave 2",
+  "objective": "Support more complex daily hypotheses without creating a second intelligence authority.",
+  "dependency_task_ids": [
+    "QC2-013",
+    "QC2-014",
+    "QC2-017",
+    "QC2-018",
+    "QC2-019"
+  ],
+  "authorized_legacy_refs": [
+    "Verified original breakout/divergence/stall/confluence/reversal/memory/trap/exhaustion sources"
+  ],
+  "deliverable_refs": [
+    "Research implementations for supported structural concepts with dependency graphs.",
+    "Failure-memory and similarity interface dependencies explicitly gated.",
+    "Exclusion records for concepts impossible in F0."
+  ],
+  "required_test_refs": [
+    "Multi-leg and temporal-boundary fixtures; no future member in memory lookup.",
+    "No composite double-counting hidden behind duplicate protocol IDs.",
+    "Unavailable ingredients produce UNAVAILABLE rather than invented evidence."
+  ],
+  "acceptance_gate": "Complex protocols remain reproducible research assets; active-set choice is deferred to calibration.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

@@ -722,7 +722,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-021 — Runtime Safety Protocol Framework
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Implement non-predictive action-specific safety gates.
 **Dependencies:** QC2-006, QC2-007, QC2-008, QC2-013, QC2-017, QC2-020
 **Authorized legacy references:** Gen 1 QC-T01–T65 safety lineage, verify exact namespace

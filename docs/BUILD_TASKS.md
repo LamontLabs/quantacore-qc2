@@ -1360,7 +1360,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-039 — Full Scientific Replay
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Reconstruct every scientific stage from sealed retained dependencies without network access.
 **Dependencies:** QC2-004, QC2-006, QC2-012, QC2-013, QC2-014, QC2-017, QC2-023, QC2-024, QC2-025, QC2-037, QC2-038
 **Authorized legacy references:** Gen 1 replay mechanisms, ApexLab replay mechanisms

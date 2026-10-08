@@ -1078,7 +1078,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-031 — Missed Monster Review
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Generate reproducible false-negative cases across rank, eligibility and availability failures.
 **Dependencies:** QC2-025, QC2-026, QC2-027, QC2-028, QC2-030
 **Authorized legacy references:** None.

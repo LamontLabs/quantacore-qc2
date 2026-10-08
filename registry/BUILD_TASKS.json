@@ -1818,10 +1818,8 @@
         "LEGACY_READ_ACCESS"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "BLOCKED",
-      "blockers": [
-        "The exact pinned private source Lamont-Labs/QuantraCore-Engine@67597a2a63fd3957e6ec50e270dba8e3df1d3757 is not readable in this environment: public GitHub commit lookup returns 404, and the configured GitHub reader exposed no usable connection. Do not infer Engine protocol meanings or claim a complete inventory; resume only after read-only access to this exact revision is available."
-      ],
+      "status": "IN_PROGRESS",
+      "blockers": [],
       "acceptance_receipt": null
     },
     {

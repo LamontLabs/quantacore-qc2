@@ -548,7 +548,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-016 — Ground Truth Authority
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Resolve future outcomes independently from predictions, ranks, and model opinions.
 **Dependencies:** QC2-006, QC2-009, QC2-012, QC2-013, QC2-015
 **Authorized legacy references:** Gen 1 ForwardValidator

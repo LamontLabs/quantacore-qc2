@@ -1,6 +1,26 @@
 """Deterministic offline feature authority for QC2."""
 
 from .engine import compute_feature_snapshot
+from .ground_truth import record_action_review_decision, resolve_eligible_rows
+from .ground_truth_ledger import (
+    LearningReleaseBatch,
+    LearningReleaseRequest,
+    OutcomeCorrectionRequest,
+    OutcomeLedger,
+    append_learning_release,
+    append_outcome_revision,
+)
+from .ground_truth_models import (
+    ActionReviewCase,
+    ActionReviewDecision,
+    FrozenContractRecord,
+    GroundTruthBatchResult,
+    GroundTruthEligibleRow,
+    GroundTruthError,
+    GroundTruthRowResolution,
+    SymbolAssignmentEvidence,
+    TerminalEventEvidence,
+)
 from .label_models import (
     DailyLabelBar,
     FieldValidity,
@@ -45,6 +65,8 @@ from .registry import (
 
 __all__ = [
     "ContractRef",
+    "ActionReviewCase",
+    "ActionReviewDecision",
     "DailyFeatureBar",
     "DailyLabelBar",
     "FeatureDefinitionSpec",
@@ -52,13 +74,22 @@ __all__ = [
     "FeatureInputError",
     "FeatureProfile",
     "FeatureRegistryBundle",
+    "FrozenContractRecord",
     "FieldValidity",
+    "GroundTruthBatchResult",
+    "GroundTruthEligibleRow",
+    "GroundTruthError",
+    "GroundTruthRowResolution",
     "LabelDefinitionSpec",
     "LabelInput",
     "LabelInputError",
     "LabelOutcome",
     "LabelProductionActivationGrant",
     "LabelRegistryBundle",
+    "LearningReleaseBatch",
+    "LearningReleaseRequest",
+    "OutcomeCorrectionRequest",
+    "OutcomeLedger",
     "ProductionActivationDenied",
     "ProductionActivationGrant",
     "PRIMARY_LABEL_KEY",
@@ -66,10 +97,14 @@ __all__ = [
     "SUPPORTED_HORIZONS",
     "SessionMonsterMeasurement",
     "SimilarityPrototype",
+    "SymbolAssignmentEvidence",
+    "TerminalEventEvidence",
     "TemporalAccessEvidence",
     "TemporalLeakageError",
     "assert_profile_activation",
     "assert_label_registry_registrable",
+    "append_learning_release",
+    "append_outcome_revision",
     "build_feature_specs",
     "build_label_definition_specs",
     "compute_feature_snapshot",
@@ -77,5 +112,7 @@ __all__ = [
     "materialize_label_registry",
     "materialize_feature_registry",
     "require_probability_target",
+    "record_action_review_decision",
+    "resolve_eligible_rows",
     "resolve_label_outcome",
 ]

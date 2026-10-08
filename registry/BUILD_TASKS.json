@@ -2169,9 +2169,52 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-08T06:58:03Z",
+        "task_spec_version": "QC2-021 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "f31810ed35c6144342acfbb4e45bab159b4d998c",
+        "receipt": "docs/reference/QC2-021_ACCEPTANCE_ASSESSMENT.md",
+        "contract_receipt": "docs/reference/QC2-021_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-021_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/core/src/qc2_core/safety",
+          "tests/core"
+        ],
+        "executed_commands": [
+          "python3 -m pytest -q tests/core",
+          "python3 -m pytest -q",
+          "ruff check packages/core/src/qc2_core/safety tests/core",
+          "python3 -m compileall -q packages/core/src/qc2_core/safety tests/core",
+          "python3 tools/task_workflow.py validate"
+        ],
+        "test_counts": [
+          {
+            "test_id": "core_safety",
+            "passed": 16,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "full_project",
+            "passed": 238,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/core/src/qc2_core/safety": "962acd6436ffeeef266ebd12fbf7429c0d8d7f00e1e8fd4cae996429358422e5",
+          "tests/core": "49e08f18bd75fc352e62d9db7f888d4a912cbc468dd9d1b83dcc2fb2d5ba9255"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "Action-scoped synthetic fixtures, strict contract checks, and full project tests passed; no live capability or broker behavior is claimed.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-022",

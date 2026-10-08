@@ -17,4 +17,4 @@ Record the requested legacy lineage as `IGNORE` + `SOURCE_UNRESOLVED`. Do not ma
 
 ## Current task state
 
-All QC2-021 dependencies pass and its preflight passes. The former BLOCKED status and blocker text were stale. The corrected registry and reference intake are integrated, and QC2-021 is IN_PROGRESS through the canonical workflow. The action-scoped implementation, hostile fixtures, contract checks, and full test suite have passed. No live capability behavior is claimed; canonical acceptance is being recorded through the task workflow.
+All QC2-021 dependencies pass and its preflight passes. The former BLOCKED status and blocker text were stale. The corrected registry and reference intake are integrated. The action-scoped implementation, hostile fixtures, contract checks, and full test suite passed, and QC2-021 now has a canonical PASS acceptance receipt. No live capability behavior is claimed.

@@ -1,0 +1,40 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a11a4e-070a-7a26-9bc3-07aface47cd7",
+  "created_at": "2026-10-08T06:58:03Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "7ebcf91dc849fbecc63810b80b7a7d4cdf25ef6a7b9adae7cf03a832efb8fb83",
+  "task_id": "qc2-021",
+  "task_name": "Runtime Safety Protocol Framework",
+  "objective": "Implement non-predictive action-specific safety gates.",
+  "dependency_task_ids": [
+    "QC2-006",
+    "QC2-007",
+    "QC2-008",
+    "QC2-013",
+    "QC2-017",
+    "QC2-020"
+  ],
+  "authorized_legacy_refs": [
+    "Gen 1 QC-T01–T65 safety lineage, verify exact namespace"
+  ],
+  "deliverable_refs": [
+    "Time/data/model/registry/config/evidence/broker/reconciliation/idempotency safety contracts.",
+    "PREDICT/NEW_ENTRY/EXIT/CANCEL/PROMOTE action policies and freshness rules.",
+    "Stubbed capability ports with explicit unavailable results."
+  ],
+  "required_test_refs": [
+    "Required UNKNOWN blocks the scoped action; optional warnings follow policy.",
+    "Safety output cannot enter score/model feature APIs.",
+    "New-entry failure does not automatically suppress otherwise authorized exit."
+  ],
+  "acceptance_gate": "Safety classification and authority separation hold under hostile fixtures.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

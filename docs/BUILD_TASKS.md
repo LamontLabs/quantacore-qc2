@@ -1228,6 +1228,14 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Objective:** Train required model families under identical governed data/split/budget contracts.
 **Dependencies:** QC2-023, QC2-033, QC2-034
 **Authorized legacy references:** ApexLab deterministic training utilities
+**Authorized artifact drift:** QC2-000 — QC2-035 pins the model-training libraries required by the research-only factory; acceptance verifies the locked bootstrap and local ApexLab suite. Paths: `pyproject.toml`, `uv.lock`
+**Authorized artifact drift:** QC2-028 — QC2-035 adds model adapters and regression tests to the shared ApexLab trees; acceptance reruns the complete ApexLab suite. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-029 — QC2-035 adds model adapters and regression tests to the shared ApexLab trees; acceptance reruns the complete ApexLab suite. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-030 — QC2-035 adds model adapters and regression tests to the shared ApexLab trees; acceptance reruns the complete ApexLab suite. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-031 — QC2-035 adds model adapters and regression tests to the shared ApexLab trees; acceptance reruns the complete ApexLab suite. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-032 — QC2-035 adds model adapters and regression tests to the shared ApexLab trees; acceptance reruns the complete ApexLab suite. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-033 — QC2-035 adds model adapters and regression tests to the shared ApexLab trees; acceptance reruns the complete ApexLab suite. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-034 — QC2-035 adds model adapters and regression tests to the shared ApexLab trees; acceptance reruns the complete ApexLab suite. Paths: `packages/apexlab`, `tests/apexlab`
 **Required reference intake:** Mandatory for each referenced repository/file actually inspected; record revision, path/hash, source-supported meaning, tests, conflicts, license, and disposition.
 
 **Required deliverables:**

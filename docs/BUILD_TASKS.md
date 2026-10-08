@@ -1048,6 +1048,8 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Objective:** Build difficult negatives without selecting similarities using future outcomes.
 **Dependencies:** QC2-012, QC2-013, QC2-016, QC2-027, QC2-028, QC2-029
 **Authorized legacy references:** None.
+**Authorized artifact drift:** QC2-028 — QC2-030 adds cutoff-safe matched-decoy selection to the ApexLab package and regression-test trees, revalidating RunnerGenome behavior. QC2-028 remains historically valid at its tested source commit. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-029 — QC2-030 adds matched-decoy and sampling lineage to the accepted ApexLab package and regression-test trees, revalidating FailureGenome behavior. QC2-029 remains historically valid at its tested source commit. Paths: `packages/apexlab`, `tests/apexlab`
 **Required reference intake:** None. Do not inspect or copy legacy code for this task without a scoped amendment.
 
 **Required deliverables:**

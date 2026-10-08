@@ -3278,6 +3278,24 @@
         "QC2-028",
         "QC2-029"
       ],
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-028",
+          "artifact_paths": [
+            "packages/apexlab",
+            "tests/apexlab"
+          ],
+          "reason": "QC2-030 adds cutoff-safe matched-decoy selection to the ApexLab package and regression-test trees, revalidating RunnerGenome behavior. QC2-028 remains historically valid at its tested source commit."
+        },
+        {
+          "prior_task_id": "QC2-029",
+          "artifact_paths": [
+            "packages/apexlab",
+            "tests/apexlab"
+          ],
+          "reason": "QC2-030 adds matched-decoy and sampling lineage to the accepted ApexLab package and regression-test trees, revalidating FailureGenome behavior. QC2-029 remains historically valid at its tested source commit."
+        }
+      ],
       "authorized_legacy_references": [],
       "required_reference_intake": "None. Do not inspect or copy legacy code for this task without a scoped amendment.",
       "required_deliverables": [

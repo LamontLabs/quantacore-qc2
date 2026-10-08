@@ -1113,7 +1113,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-032 — False Monster Review
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Generate reproducible false-positive cases without conflating prediction, execution and data errors.
 **Dependencies:** QC2-025, QC2-026, QC2-027, QC2-029, QC2-030, QC2-031
 **Authorized legacy references:** None.

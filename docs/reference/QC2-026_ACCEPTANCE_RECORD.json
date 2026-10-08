@@ -1,0 +1,82 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a11bb9-7925-7698-a6b0-538c0844a63c",
+  "created_at": "2026-10-08T13:35:02Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "cd228196e254c8721f40e30e9ad0e52ec69679eee7fc9ac53643a2dbde3be0e2",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a11bb9-791f-7432-86b3-08c228b7360c",
+    "content_hash": "c831d5906ff3337d1a907b5319f469c333083806cdf72d35c293dccf413e6337"
+  },
+  "task_spec_version": "QC2-026 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "b66814647b788456aea87dd722a065cdf5561396",
+  "changed_paths": [
+    "packages/validation_authority/src/qc2_validation_authority",
+    "tests/validation_authority",
+    "migrations/0004_validation_authority.sql",
+    "tests/database/qc2_026_postgres_acceptance.sql",
+    "lib/db/test/run-qc2-026-postgres-integration.mjs",
+    "lib/db/package.json",
+    "package.json",
+    "tests/database/qc2_025_postgres_acceptance.sql"
+  ],
+  "executed_commands": [
+    "pnpm run verify",
+    "pnpm --filter @workspace/db run test:postgres:qc2-026",
+    "python3 -m pytest -q tests/validation_authority",
+    "python3 -m ruff check packages/validation_authority/src tests/validation_authority"
+  ],
+  "test_counts": [
+    {
+      "test_id": "validation_authority",
+      "passed": 24,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "qc2_026_postgres",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "workspace_pytest",
+      "passed": 308,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "database_guards",
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "environment_smoke",
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "03516e9fb9b3dc1b779028a42ca95105a0dd96d51ee1487aa0bc969261d199fc",
+    "e5b92aa0676992afdc1352bca2fed022794c34830472c999df726ad0063d3932",
+    "b0ecd607970dd06599e290a350d90f3541355a696b4d0303d343f66102229085",
+    "effb3a74e9d1f4fc82013a97597112da9725eb29a7edf9a898614c026370962d",
+    "c50c82323e7cc165dd1b6a40f638ba1dd200510f080965c9be45fec4ab52cad3",
+    "5e03ea3d17c88b52698c7be6b7e03c00e1fb7324ca75e3079231956745e3b2dd",
+    "fa1e45b06eca608face3a696979c7dc4750f305e3940fcda426913bd357c7773",
+    "b018da623c68f428ece379edb91d09f5c6a9045ee0cab55346013fa4d01c15ec"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-08T13:35:02Z"
+}

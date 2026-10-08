@@ -1,0 +1,46 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a11d66-47ca-7f16-8706-ded3043048a0",
+  "created_at": "2026-10-08T21:23:24Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "25886c7086e306f3b7bbe7d5356a8bf33ff642890f0b50d0fb072649b1265798",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a11d66-47c3-724d-bae5-f8d34ad32621",
+    "content_hash": "fa690f0022f734df610ed0b28df94110aee0131f1cce47ac086ee148d6b61024"
+  },
+  "task_spec_version": "QC2-039 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "ee21bee2fbc0b04a43823dab27f7291a19c7686b",
+  "changed_paths": [
+    "packages/scientific_replay",
+    "tests/scientific_replay"
+  ],
+  "executed_commands": [
+    "PYTHONPATH=\"$(find packages -mindepth 2 -maxdepth 2 -type d -name src -print | paste -sd:):${PYTHONPATH}\" python3 -m pytest -q tests/scientific_replay tests/prediction_authority",
+    "ruff check packages/scientific_replay/src/qc2_scientific_replay tests/scientific_replay",
+    "python3 -m compileall -q packages/scientific_replay/src/qc2_scientific_replay tests/scientific_replay",
+    "python3 tools/task_workflow.py preflight QC2-039"
+  ],
+  "test_counts": [
+    {
+      "test_id": "scientific_replay",
+      "passed": 27,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "6770e020ab3cfbf554ab42886d87903d6a242bb7ecef14528b8b38fbfbfa6bc6",
+    "b37ccb7d2a59af7157e46a6866ae73fafbaefc175328b874ff247a0d9f96ac6d"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-08T21:23:24Z"
+}

@@ -4315,9 +4315,45 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-08T21:23:24Z",
+        "task_spec_version": "QC2-039 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "ee21bee2fbc0b04a43823dab27f7291a19c7686b",
+        "receipt": "docs/reference/QC2-039_ACCEPTANCE_RECEIPT.md",
+        "contract_receipt": "docs/reference/QC2-039_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-039_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/scientific_replay",
+          "tests/scientific_replay"
+        ],
+        "executed_commands": [
+          "PYTHONPATH=\"$(find packages -mindepth 2 -maxdepth 2 -type d -name src -print | paste -sd:):${PYTHONPATH}\" python3 -m pytest -q tests/scientific_replay tests/prediction_authority",
+          "ruff check packages/scientific_replay/src/qc2_scientific_replay tests/scientific_replay",
+          "python3 -m compileall -q packages/scientific_replay/src/qc2_scientific_replay tests/scientific_replay",
+          "python3 tools/task_workflow.py preflight QC2-039"
+        ],
+        "test_counts": [
+          {
+            "test_id": "scientific_replay",
+            "passed": 27,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/scientific_replay": "6770e020ab3cfbf554ab42886d87903d6a242bb7ecef14528b8b38fbfbfa6bc6",
+          "tests/scientific_replay": "b37ccb7d2a59af7157e46a6866ae73fafbaefc175328b874ff247a0d9f96ac6d"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "The exact source commit was verified with 27 focused tests, lint, compile checks, and task preflight; the profile lock hash was recomputed from local uv.lock.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-040",

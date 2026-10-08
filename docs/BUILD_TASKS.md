@@ -1360,7 +1360,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-039 — Full Scientific Replay
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Reconstruct every scientific stage from sealed retained dependencies without network access.
 **Dependencies:** QC2-004, QC2-006, QC2-012, QC2-013, QC2-014, QC2-017, QC2-023, QC2-024, QC2-025, QC2-037, QC2-038
 **Authorized legacy references:** Gen 1 replay mechanisms, ApexLab replay mechanisms
@@ -1386,7 +1386,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-08T21:23:24Z: `docs/reference/QC2-039_ACCEPTANCE_RECEIPT.md`, `docs/reference/QC2-039_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-039_TASK_RECORD.json`
 
 ---
 

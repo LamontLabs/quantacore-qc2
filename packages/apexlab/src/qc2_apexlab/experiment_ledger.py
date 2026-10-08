@@ -280,6 +280,11 @@ class ExperimentLedger:
                         "qc2.models_prediction.ModelManifest.v1",
                         content_hash_required=True,
                     )
+                    prior_ref = candidates.get(ref["target_id"])
+                    if prior_ref is not None and prior_ref != ref:
+                        raise ExperimentLedgerError(
+                            "a candidate identity cannot refer to conflicting content"
+                        )
                     candidates[ref["target_id"]] = ref
             if len(candidates) < 2:
                 raise ExperimentLedgerError("comparison requires at least two distinct candidates")
@@ -550,6 +555,12 @@ class ExperimentLedger:
                     "holdout access requires a preregistered comparison"
                 )
             attempts = self._holdout_attempts.setdefault(key, [])
+            if attempts:
+                _timestamp_order(
+                    attempts[-1].payload["requested_at"],
+                    at,
+                    "holdout access attempt time cannot move backward",
+                )
             prior_grant = next(
                 (item for item in attempts if item.disposition == "GRANTED"), None
             )
@@ -811,6 +822,12 @@ class ExperimentLedger:
         extra: Mapping[str, Any],
     ) -> TrialEvent:
         events = self._events[experiment.experiment_id]
+        if events:
+            _timestamp_order(
+                events[-1].recorded_at,
+                recorded_at,
+                "trial event time cannot move backward",
+            )
         budget = self._budget_for(experiment.budget_id)
         overruns = self._resource_overruns(experiment, usage)
         previous_hash = events[-1].event_hash if events else None

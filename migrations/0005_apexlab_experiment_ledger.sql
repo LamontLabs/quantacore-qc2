@@ -3,19 +3,21 @@
 
 SET ROLE qc2_migrator;
 
-GRANT USAGE ON SCHEMA qc2_config, qc2_outcomes_research TO
+GRANT USAGE ON SCHEMA qc2_integrity_build, qc2_outcomes_research TO
   qc2_runtime_configuration, qc2_runtime_apexlab, qc2_runtime_validation;
 GRANT EXECUTE ON FUNCTION qc2_control.assert_runtime_authority(text),
   qc2_control.current_runtime_authority(),
-  qc2_integrity_build.hash_json(text, jsonb)
+  qc2_integrity_build.hash_json(text, jsonb),
+  qc2_integrity_build.canonical_jsonb_text(jsonb),
+  qc2_integrity_build.digest(bytea, text)
 TO qc2_runtime_configuration, qc2_runtime_apexlab, qc2_runtime_validation;
 
-ALTER DEFAULT PRIVILEGES FOR ROLE qc2_migrator IN SCHEMA qc2_config
+ALTER DEFAULT PRIVILEGES FOR ROLE qc2_migrator IN SCHEMA qc2_integrity_build
   REVOKE ALL ON TABLES FROM PUBLIC;
 ALTER DEFAULT PRIVILEGES FOR ROLE qc2_migrator IN SCHEMA qc2_outcomes_research
   REVOKE ALL ON TABLES FROM PUBLIC;
 
-CREATE TABLE qc2_config.research_resource_budget (
+CREATE TABLE qc2_integrity_build.research_resource_budget (
   id uuid PRIMARY KEY CHECK (
     id::text ~ '^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
   ),
@@ -73,7 +75,7 @@ CREATE TABLE qc2_outcomes_research.experiment (
     id::text ~ '^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
   ),
   budget_id uuid NOT NULL
-    REFERENCES qc2_config.research_resource_budget(id) ON DELETE RESTRICT,
+    REFERENCES qc2_integrity_build.research_resource_budget(id) ON DELETE RESTRICT,
   content_hash text NOT NULL CHECK (content_hash ~ '^[0-9a-f]{64}$'),
   environment_namespace text NOT NULL CHECK (
     environment_namespace IN ('development','test','research')
@@ -193,6 +195,11 @@ CREATE TABLE qc2_outcomes_research.experiment_evaluation_access_attempt (
     AND access_record->'dataset_ref'->>'target_id' = dataset_id::text
     AND access_record->'dataset_ref'->>'content_hash' = dataset_content_hash
     AND access_record->>'reason_code' IS NOT DISTINCT FROM reason_code
+    AND (
+      receipt_id IS NULL
+      OR access_record->'receipt_ref'->>'target_schema_name'
+        = 'qc2.outcomes_research.HoldoutAccessReceipt.v1'
+    )
     AND access_record->'receipt_ref'->>'target_id'
       IS NOT DISTINCT FROM receipt_id::text
   ),
@@ -211,10 +218,10 @@ BEGIN
 END
 $function$;
 
-CREATE FUNCTION qc2_config.guard_research_budget_insert()
+CREATE FUNCTION qc2_integrity_build.guard_research_budget_insert()
 RETURNS trigger
 LANGUAGE plpgsql
-SET search_path = pg_catalog, qc2_control, qc2_integrity_build, qc2_config
+SET search_path = pg_catalog, qc2_control, qc2_integrity_build
 AS $function$
 DECLARE
   expected_hash text;
@@ -247,7 +254,7 @@ $function$;
 CREATE FUNCTION qc2_outcomes_research.guard_experiment_insert()
 RETURNS trigger
 LANGUAGE plpgsql
-SET search_path = pg_catalog, qc2_control, qc2_integrity_build, qc2_config,
+SET search_path = pg_catalog, qc2_control, qc2_integrity_build,
   qc2_outcomes_research
 AS $function$
 DECLARE
@@ -272,10 +279,9 @@ BEGIN
   );
   SELECT budget.budget_contract
     INTO budget_contract
-    FROM qc2_config.research_resource_budget AS budget
+    FROM qc2_integrity_build.research_resource_budget AS budget
     WHERE budget.id = NEW.budget_id
-      AND budget.content_hash = NEW.experiment_contract->'budget_ref'->>'content_hash'
-    FOR SHARE;
+      AND budget.content_hash = NEW.experiment_contract->'budget_ref'->>'content_hash';
   IF budget_contract IS NULL THEN
     RAISE EXCEPTION 'experiment resource budget reference is missing or stale'
       USING ERRCODE = '23503';
@@ -309,7 +315,7 @@ $function$;
 CREATE FUNCTION qc2_outcomes_research.guard_trial_event_insert()
 RETURNS trigger
 LANGUAGE plpgsql
-SET search_path = pg_catalog, qc2_control, qc2_integrity_build, qc2_config,
+SET search_path = pg_catalog, qc2_control, qc2_integrity_build,
   qc2_outcomes_research
 AS $function$
 DECLARE
@@ -359,15 +365,14 @@ BEGIN
   SELECT experiment.*
     INTO experiment_row
     FROM qc2_outcomes_research.experiment AS experiment
-    WHERE experiment.id = NEW.experiment_id
-    FOR UPDATE;
+    WHERE experiment.id = NEW.experiment_id;
   IF experiment_row.id IS NULL THEN
     RAISE EXCEPTION 'trial event experiment does not exist'
       USING ERRCODE = '23503';
   END IF;
   SELECT budget.budget_contract
     INTO budget_contract
-    FROM qc2_config.research_resource_budget AS budget
+    FROM qc2_integrity_build.research_resource_budget AS budget
     WHERE budget.id = experiment_row.budget_id;
   IF budget_contract IS NULL THEN
     RAISE EXCEPTION 'trial event budget no longer resolves'
@@ -442,7 +447,7 @@ BEGIN
     END IF;
   ELSIF NEW.event_type = 'TRIAL_INTERRUPTED' THEN
     IF prior_lifecycle_type NOT IN ('TRIAL_STARTED','TRIAL_RESUMED')
-       OR NEW.attempt_number <> expected_attempt
+       OR NEW.attempt_number <> expected_attempt - 1
        OR NEW.event_record->'checkpoint_ref'->>'target_schema_name'
          <> 'qc2.integrity_build.ArtifactManifest.v1' THEN
       RAISE EXCEPTION 'interruption requires an active attempt and checkpoint artifact'
@@ -450,7 +455,7 @@ BEGIN
     END IF;
   ELSIF NEW.event_type IN ('TRIAL_FAILED','TRIAL_COMPLETED') THEN
     IF prior_lifecycle_type NOT IN ('TRIAL_STARTED','TRIAL_RESUMED')
-       OR NEW.attempt_number <> expected_attempt THEN
+       OR NEW.attempt_number <> expected_attempt - 1 THEN
       RAISE EXCEPTION 'trial terminal event requires an active attempt'
         USING ERRCODE = '23514';
     END IF;
@@ -490,7 +495,10 @@ BEGIN
   END IF;
 
   usage_record := NEW.event_record->'usage';
-  IF pg_catalog.jsonb_object_length(usage_record) <> 6
+  IF (
+       SELECT pg_catalog.count(*)
+       FROM pg_catalog.jsonb_object_keys(usage_record)
+     ) <> 6
      OR EXISTS (
        SELECT 1
        FROM pg_catalog.unnest(ARRAY[
@@ -534,7 +542,7 @@ BEGIN
        > (budget_contract->>'max_cpu_seconds')::bigint THEN
     expected_overruns := expected_overruns || 'MAX_CPU_SECONDS';
   END IF;
-  IF pg_catalog.greatest(
+  IF GREATEST(
        prior_memory,
        (usage_record->>'peak_memory_bytes')::bigint
      ) > (budget_contract->>'max_memory_bytes')::bigint THEN
@@ -600,6 +608,8 @@ DECLARE
   expected_candidates jsonb;
   expected_dataset jsonb;
   expected_split jsonb;
+  expected_budget_id uuid;
+  expected_environment text;
   experiment_item qc2_outcomes_research.experiment%ROWTYPE;
   member_id uuid;
 BEGIN
@@ -613,18 +623,26 @@ BEGIN
      OR pg_catalog.cardinality(NEW.experiment_ids) <> (
        SELECT pg_catalog.count(DISTINCT member)::integer
        FROM pg_catalog.unnest(NEW.experiment_ids) AS member
-     ) THEN
+      )
+     OR NEW.experiment_ids IS DISTINCT FROM (
+        SELECT pg_catalog.array_agg(member ORDER BY member)
+        FROM pg_catalog.unnest(NEW.experiment_ids) AS member
+      ) THEN
     RAISE EXCEPTION 'comparison registration hash or members are invalid'
       USING ERRCODE = '23514';
   END IF;
   FOR member_id IN
-    SELECT member FROM pg_catalog.unnest(NEW.experiment_ids) AS member
+    SELECT member
+    FROM pg_catalog.unnest(NEW.experiment_ids) AS member
+    ORDER BY member
   LOOP
+    PERFORM pg_catalog.pg_advisory_xact_lock(
+      pg_catalog.hashtextextended('experiment:' || member_id::text, 0)
+    );
     SELECT experiment.*
       INTO experiment_item
       FROM qc2_outcomes_research.experiment AS experiment
-      WHERE experiment.id = member_id
-      FOR UPDATE;
+      WHERE experiment.id = member_id;
     IF experiment_item.id IS NULL THEN
       RAISE EXCEPTION 'comparison references an unregistered experiment'
         USING ERRCODE = '23503';
@@ -640,14 +658,35 @@ BEGIN
     IF expected_dataset IS NULL THEN
       expected_dataset := experiment_item.experiment_contract->'dataset_ref';
       expected_split := experiment_item.experiment_contract->'split_ref';
+      expected_budget_id := experiment_item.budget_id;
+      expected_environment := experiment_item.environment_namespace;
     ELSIF expected_dataset IS DISTINCT FROM
             experiment_item.experiment_contract->'dataset_ref'
        OR expected_split IS DISTINCT FROM
-            experiment_item.experiment_contract->'split_ref' THEN
-      RAISE EXCEPTION 'comparison experiments must use the same dataset and split'
+            experiment_item.experiment_contract->'split_ref'
+       OR expected_budget_id IS DISTINCT FROM experiment_item.budget_id
+       OR expected_environment IS DISTINCT FROM experiment_item.environment_namespace THEN
+      RAISE EXCEPTION 'comparison experiments must share a budget, environment, dataset, and split'
+        USING ERRCODE = '23514';
+    END IF;
+    IF experiment_item.created_at > NEW.registered_at THEN
+      RAISE EXCEPTION 'comparison predates a preregistered experiment'
         USING ERRCODE = '23514';
     END IF;
   END LOOP;
+  IF EXISTS (
+    SELECT candidate_ref->>'target_id'
+    FROM qc2_outcomes_research.experiment AS experiment
+    CROSS JOIN LATERAL pg_catalog.jsonb_array_elements(
+      experiment.experiment_contract->'candidate_refs'
+    ) AS candidate(candidate_ref)
+    WHERE experiment.id = ANY(NEW.experiment_ids)
+    GROUP BY candidate_ref->>'target_id'
+    HAVING pg_catalog.count(DISTINCT candidate_ref->>'content_hash') > 1
+  ) THEN
+    RAISE EXCEPTION 'candidate identity is bound to conflicting content'
+      USING ERRCODE = '23514';
+  END IF;
   SELECT pg_catalog.jsonb_agg(
       pg_catalog.jsonb_build_object(
         'target_schema_name', 'qc2.outcomes_research.Experiment.v1',
@@ -686,15 +725,21 @@ $function$;
 CREATE FUNCTION qc2_outcomes_research.guard_evaluation_access_attempt_insert()
 RETURNS trigger
 LANGUAGE plpgsql
+SECURITY DEFINER
 SET search_path = pg_catalog, qc2_control, qc2_integrity_build,
   qc2_outcomes_research
 AS $function$
 DECLARE
   expected_hash text;
   prior_hash text;
-  prior_receipt_id uuid;
-  comparison_exists boolean;
+  prior_grant_receipt_id uuid;
+  prior_recorded_at timestamptz;
   receipt_contract jsonb;
+  allowed_keys text[] := ARRAY[
+    'id','experiment_ref','dataset_ref','sequence','disposition',
+    'requested_at','reason_code','denial_reason','receipt_ref',
+    'presented_receipt_id','previous_event_hash','event_hash'
+  ];
 BEGIN
   PERFORM qc2_control.assert_runtime_authority('validation');
   PERFORM pg_catalog.pg_advisory_xact_lock(
@@ -708,6 +753,7 @@ BEGIN
   );
   IF NEW.event_hash IS DISTINCT FROM expected_hash
      OR NEW.access_record->>'event_hash' IS DISTINCT FROM expected_hash
+     OR (NEW.access_record - allowed_keys) <> '{}'::jsonb
      OR NEW.access_record->'experiment_ref'->>'content_hash'
        IS DISTINCT FROM (
          SELECT experiment.content_hash
@@ -725,11 +771,32 @@ BEGIN
     RAISE EXCEPTION 'evaluation access requires a preregistered comparison'
       USING ERRCODE = '23514';
   END IF;
-  SELECT attempt.event_hash, attempt.receipt_id
-    INTO prior_hash, prior_receipt_id
+  IF NEW.access_record->'dataset_ref'->>'target_id' IS DISTINCT FROM (
+       SELECT experiment.experiment_contract->'dataset_ref'->>'target_id'
+       FROM qc2_outcomes_research.experiment AS experiment
+       WHERE experiment.id = NEW.experiment_id
+     )
+     OR NEW.access_record->'dataset_ref'->>'content_hash' IS DISTINCT FROM (
+       SELECT experiment.experiment_contract->'dataset_ref'->>'content_hash'
+       FROM qc2_outcomes_research.experiment AS experiment
+       WHERE experiment.id = NEW.experiment_id
+     ) THEN
+    RAISE EXCEPTION 'evaluation access must use the preregistered experiment dataset'
+      USING ERRCODE = '23514';
+  END IF;
+  SELECT attempt.event_hash, attempt.requested_at
+    INTO prior_hash, prior_recorded_at
     FROM qc2_outcomes_research.experiment_evaluation_access_attempt AS attempt
     WHERE attempt.dataset_id = NEW.dataset_id
       AND attempt.dataset_content_hash = NEW.dataset_content_hash
+    ORDER BY attempt.sequence_no DESC
+    LIMIT 1;
+  SELECT attempt.receipt_id
+    INTO prior_grant_receipt_id
+    FROM qc2_outcomes_research.experiment_evaluation_access_attempt AS attempt
+    WHERE attempt.dataset_id = NEW.dataset_id
+      AND attempt.dataset_content_hash = NEW.dataset_content_hash
+      AND attempt.disposition = 'GRANTED'
     ORDER BY attempt.sequence_no DESC
     LIMIT 1;
   IF NEW.sequence_no <> COALESCE((
@@ -743,8 +810,15 @@ BEGIN
     RAISE EXCEPTION 'evaluation access sequence or hash chain is invalid'
       USING ERRCODE = '23514';
   END IF;
+  IF prior_recorded_at > NEW.requested_at THEN
+    RAISE EXCEPTION 'evaluation access time cannot move backward'
+      USING ERRCODE = '23514';
+  END IF;
   IF NEW.disposition = 'GRANTED' THEN
     IF NEW.receipt_id IS NULL
+       OR NEW.reason_code IS NOT NULL
+       OR NEW.access_record->>'denial_reason' IS NOT NULL
+       OR NEW.access_record->>'presented_receipt_id' IS DISTINCT FROM NEW.receipt_id::text
        OR EXISTS (
          SELECT 1
          FROM qc2_outcomes_research.experiment_evaluation_access_attempt AS attempt
@@ -768,14 +842,17 @@ BEGIN
         USING ERRCODE = '23514';
     END IF;
   ELSIF NEW.disposition = 'REPEAT_BLOCKED' THEN
-    IF prior_receipt_id IS NULL
-       OR NEW.receipt_id IS DISTINCT FROM prior_receipt_id
-       OR NEW.reason_code IS DISTINCT FROM 'HOLDOUT_ALREADY_CONSUMED' THEN
+    IF prior_grant_receipt_id IS NULL
+       OR NEW.receipt_id IS DISTINCT FROM prior_grant_receipt_id
+       OR NEW.reason_code IS DISTINCT FROM 'HOLDOUT_ALREADY_CONSUMED'
+       OR NEW.access_record->>'denial_reason' IS NOT NULL THEN
       RAISE EXCEPTION 'repeat access must retain the consumed receipt and be blocked'
         USING ERRCODE = '23514';
     END IF;
   ELSIF NEW.disposition = 'DENIED' THEN
     IF NEW.receipt_id IS NOT NULL
+       OR NEW.reason_code IS DISTINCT FROM 'ACCESS_REFUSED'
+       OR NEW.access_record->>'presented_receipt_id' IS NOT NULL
        OR pg_catalog.length(pg_catalog.btrim(NEW.access_record->>'denial_reason')) = 0 THEN
       RAISE EXCEPTION 'denied evaluation access requires a reason and no receipt'
         USING ERRCODE = '23514';
@@ -786,8 +863,8 @@ END
 $function$;
 
 CREATE TRIGGER research_budget_content_hash
-BEFORE INSERT ON qc2_config.research_resource_budget
-FOR EACH ROW EXECUTE FUNCTION qc2_config.guard_research_budget_insert();
+BEFORE INSERT ON qc2_integrity_build.research_resource_budget
+FOR EACH ROW EXECUTE FUNCTION qc2_integrity_build.guard_research_budget_insert();
 CREATE TRIGGER experiment_content_hash_and_budget
 BEFORE INSERT ON qc2_outcomes_research.experiment
 FOR EACH ROW EXECUTE FUNCTION qc2_outcomes_research.guard_experiment_insert();
@@ -802,7 +879,7 @@ BEFORE INSERT ON qc2_outcomes_research.experiment_evaluation_access_attempt
 FOR EACH ROW EXECUTE FUNCTION qc2_outcomes_research.guard_evaluation_access_attempt_insert();
 
 CREATE TRIGGER research_budget_append_only
-BEFORE UPDATE OR DELETE ON qc2_config.research_resource_budget
+BEFORE UPDATE OR DELETE ON qc2_integrity_build.research_resource_budget
 FOR EACH ROW EXECUTE FUNCTION qc2_outcomes_research.prevent_experiment_ledger_mutation(
   'configuration'
 );
@@ -827,8 +904,8 @@ FOR EACH ROW EXECUTE FUNCTION qc2_outcomes_research.prevent_experiment_ledger_mu
   'validation'
 );
 
-ALTER TABLE qc2_config.research_resource_budget ENABLE ROW LEVEL SECURITY;
-ALTER TABLE qc2_config.research_resource_budget FORCE ROW LEVEL SECURITY;
+ALTER TABLE qc2_integrity_build.research_resource_budget ENABLE ROW LEVEL SECURITY;
+ALTER TABLE qc2_integrity_build.research_resource_budget FORCE ROW LEVEL SECURITY;
 ALTER TABLE qc2_outcomes_research.experiment ENABLE ROW LEVEL SECURITY;
 ALTER TABLE qc2_outcomes_research.experiment FORCE ROW LEVEL SECURITY;
 ALTER TABLE qc2_outcomes_research.experiment_trial_event ENABLE ROW LEVEL SECURITY;
@@ -843,16 +920,16 @@ ALTER TABLE qc2_outcomes_research.experiment_evaluation_access_attempt
   FORCE ROW LEVEL SECURITY;
 
 CREATE POLICY research_budget_migrator_all
-  ON qc2_config.research_resource_budget FOR ALL TO qc2_migrator
+  ON qc2_integrity_build.research_resource_budget FOR ALL TO qc2_migrator
   USING (true) WITH CHECK (true);
 CREATE POLICY research_budget_configuration_read
-  ON qc2_config.research_resource_budget FOR SELECT TO qc2_runtime_configuration
+  ON qc2_integrity_build.research_resource_budget FOR SELECT TO qc2_runtime_configuration
   USING (qc2_control.current_runtime_authority() = 'configuration');
 CREATE POLICY research_budget_configuration_insert
-  ON qc2_config.research_resource_budget FOR INSERT TO qc2_runtime_configuration
+  ON qc2_integrity_build.research_resource_budget FOR INSERT TO qc2_runtime_configuration
   WITH CHECK (qc2_control.current_runtime_authority() = 'configuration');
 CREATE POLICY research_budget_apexlab_read
-  ON qc2_config.research_resource_budget FOR SELECT TO qc2_runtime_apexlab
+  ON qc2_integrity_build.research_resource_budget FOR SELECT TO qc2_runtime_apexlab
   USING (qc2_control.current_runtime_authority() = 'apexlab');
 
 CREATE POLICY experiment_migrator_all
@@ -933,7 +1010,7 @@ SELECT
     ), 0)
   )::bigint AS remaining_cost_minor_units
 FROM qc2_outcomes_research.experiment AS experiment
-JOIN qc2_config.research_resource_budget AS budget
+JOIN qc2_integrity_build.research_resource_budget AS budget
   ON budget.id = experiment.budget_id
 LEFT JOIN qc2_outcomes_research.experiment_trial_event AS event
   ON event.experiment_id = experiment.id
@@ -1019,7 +1096,7 @@ SELECT
     0,
     budget.authorized_cost_minor_units - COALESCE(usage.spent_minor_units, 0)
   )::bigint AS remaining_cost_minor_units
-FROM qc2_config.research_resource_budget AS budget
+FROM qc2_integrity_build.research_resource_budget AS budget
 LEFT JOIN lifecycle ON lifecycle.budget_id = budget.id
 LEFT JOIN usage ON usage.budget_id = budget.id
 GROUP BY budget.id, budget.currency, budget.max_experiments,
@@ -1047,7 +1124,7 @@ SELECT
 FROM qc2_outcomes_research.experiment_evaluation_access_attempt AS attempt
 GROUP BY attempt.dataset_id, attempt.dataset_content_hash;
 
-ALTER TABLE qc2_config.research_resource_budget OWNER TO qc2_migrator;
+ALTER TABLE qc2_integrity_build.research_resource_budget OWNER TO qc2_migrator;
 ALTER TABLE qc2_outcomes_research.experiment OWNER TO qc2_migrator;
 ALTER TABLE qc2_outcomes_research.experiment_trial_event OWNER TO qc2_migrator;
 ALTER TABLE qc2_outcomes_research.experiment_comparison_registration
@@ -1056,7 +1133,7 @@ ALTER TABLE qc2_outcomes_research.experiment_evaluation_access_attempt
   OWNER TO qc2_migrator;
 
 REVOKE ALL ON
-  qc2_config.research_resource_budget,
+  qc2_integrity_build.research_resource_budget,
   qc2_outcomes_research.experiment,
   qc2_outcomes_research.experiment_trial_event,
   qc2_outcomes_research.experiment_comparison_registration,
@@ -1068,9 +1145,9 @@ REVOKE ALL ON
   qc2_outcomes_research.holdout_consumption_state
 FROM PUBLIC;
 
-GRANT SELECT, INSERT ON qc2_config.research_resource_budget
+GRANT SELECT, INSERT ON qc2_integrity_build.research_resource_budget
   TO qc2_runtime_configuration;
-GRANT SELECT ON qc2_config.research_resource_budget TO qc2_runtime_apexlab;
+GRANT SELECT ON qc2_integrity_build.research_resource_budget TO qc2_runtime_apexlab;
 GRANT SELECT, INSERT ON
   qc2_outcomes_research.experiment,
   qc2_outcomes_research.experiment_trial_event,
@@ -1085,7 +1162,7 @@ GRANT SELECT, INSERT ON
   qc2_outcomes_research.experiment_evaluation_access_attempt
 TO qc2_runtime_validation;
 
-GRANT EXECUTE ON FUNCTION qc2_config.guard_research_budget_insert()
+GRANT EXECUTE ON FUNCTION qc2_integrity_build.guard_research_budget_insert()
   TO qc2_runtime_configuration;
 GRANT EXECUTE ON FUNCTION qc2_outcomes_research.guard_experiment_insert()
   TO qc2_runtime_apexlab;

@@ -372,3 +372,74 @@ def test_holdout_receipt_cannot_release_row_level_data() -> None:
             requested_at="2026-10-08T12:03:00Z",
             receipt_contract=receipt,
         )
+
+
+def test_trial_events_cannot_move_backward_in_time() -> None:
+    ledger, _, _, experiment = _setup_two_experiments()
+    ledger.start_trial(experiment["id"], recorded_at="2026-10-08T12:03:00Z")
+
+    with pytest.raises(ExperimentLedgerError, match="trial event time cannot move backward"):
+        ledger.interrupt_trial(
+            experiment["id"],
+            reason="worker was interrupted",
+            checkpoint_ref=_artifact("backwards-time-checkpoint"),
+            recorded_at="2026-10-08T12:02:00Z",
+            usage=ResourceUsage(),
+        )
+
+    assert [item.event_type for item in ledger.trial_events(experiment["id"])] == [
+        "TRIAL_STARTED"
+    ]
+
+
+def test_holdout_attempts_cannot_move_backward_in_time() -> None:
+    ledger, _, first, second = _setup_two_experiments()
+    dataset_ref = first["dataset_ref"]
+    receipt = _holdout_receipt(dataset_ref)
+    ledger.record_holdout_access_attempt(
+        first["id"],
+        dataset_ref,
+        requested_at="2026-10-08T12:03:00Z",
+        receipt_contract=receipt,
+    )
+
+    with pytest.raises(
+        ExperimentLedgerError, match="holdout access attempt time cannot move backward"
+    ):
+        ledger.record_holdout_access_attempt(
+            second["id"],
+            dataset_ref,
+            requested_at="2026-10-08T12:02:00Z",
+            denial_reason="repeat attempt",
+        )
+
+    assert len(ledger.holdout_access_attempts(dataset_ref)) == 1
+
+
+def test_comparison_rejects_conflicting_candidate_content() -> None:
+    ledger = ExperimentLedger()
+    budget = _budget()
+    first = _experiment(
+        budget,
+        experiment_id="candidate-conflict-a",
+        candidate_id="same-candidate",
+    )
+    second = _experiment(
+        budget,
+        experiment_id="candidate-conflict-b",
+        candidate_id="same-candidate",
+    )
+    second["candidate_refs"][0]["content_hash"] = "0" * 64
+    second = _seal("Experiment", second)
+    ledger.register_budget(budget)
+    ledger.register_experiment(first)
+    ledger.register_experiment(second)
+
+    with pytest.raises(
+        ExperimentLedgerError,
+        match="candidate identity cannot refer to conflicting content",
+    ):
+        ledger.register_comparison(
+            [first["id"], second["id"]],
+            registered_at="2026-10-08T12:02:00Z",
+        )

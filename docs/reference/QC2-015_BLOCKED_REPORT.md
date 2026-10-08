@@ -27,3 +27,7 @@
 3. Re-run QC2-015 preflight before beginning label implementation and required reference intake.
 
 Until those gates pass, QC2-015 remains BLOCKED. No live trading, provider/feed fallback, fabricated evidence, or fixture/uncalibrated activation occurred.
+
+## Superseding status reconciliation
+
+The blocker above is historical. QC2-013 and QC2-014 now have PASS acceptance receipts, and `python3 tools/task_workflow.py preflight QC2-015` confirms all declared dependencies and evidence are available. QC2-015 implementation has started; this reconciliation does not accept QC2-015 or authorize production activation.

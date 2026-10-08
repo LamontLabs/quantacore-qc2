@@ -1485,6 +1485,16 @@
         "QC2-013",
         "QC2-014"
       ],
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-014",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-015 adds the versioned label registry and mature-only outcome calculator to the shared science package. Its acceptance reruns the full science and contract verification; the QC2-014 receipt remains bound to its tested source commit."
+        }
+      ],
       "authorized_legacy_references": [
         "ApexLab label implementation as a hypothesis/anti-pattern to verify"
       ],
@@ -1510,7 +1520,7 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "blockers": [],
       "acceptance_receipt": null
     },

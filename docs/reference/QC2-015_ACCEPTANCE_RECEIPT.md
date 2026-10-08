@@ -1,0 +1,39 @@
+# QC2-015 — Label Authority acceptance
+
+## Acceptance assessment
+
+- **Result:** PASS
+- **Evidence class:** SYNTHETIC_FIXTURE; the threshold-bearing inputs are test fixtures, not calibration results.
+- **Environment:** test; no live provider access, persistence, live trading, or production activation is included.
+- **Scope:** canonical LabelDefinition/LabelRegistry materialization and deterministic, mature-only in-memory label outcomes.
+- **Contract boundary:** the implementation uses the existing LabelDefinition, LabelRegistry, and Outcome contracts. The resolver is not an Outcome writer; Ground Truth remains the persisted Outcome authority.
+
+## Acceptance checklist
+
+- [x] DELIVERABLE: Label Registry, primary/secondary horizons, reference-price definitions and formulas. | evidence: `packages/science/src/qc2_science/label_registry.py`; `docs/reference/QC2-015_DECISION.md`; `tests/science/test_label_authority.py::test_label_registry_has_primary_and_secondary_horizons_and_valid_contracts`
+- [x] DELIVERABLE: Expansion/Monster family parameterization, failure/continuation unavailable states. | evidence: `packages/science/src/qc2_science/label_registry.py`; `packages/science/src/qc2_science/label_outcomes.py`; `tests/science/test_label_authority.py::test_undefined_target_semantics_cannot_produce_probability_labels`
+- [x] DELIVERABLE: Maturity and field-validity state machine. | evidence: `packages/science/src/qc2_science/label_models.py`; `packages/science/src/qc2_science/label_outcomes.py`; `docs/reference/QC2-015_DECISION.md`
+- [x] TEST: Missing fifth-session bar does not extend horizon; early winner cannot release full label. | evidence: `tests/science/test_label_authority.py::test_missing_fifth_session_does_not_extend_horizon_to_a_later_bar`; `::test_early_threshold_hit_does_not_release_a_full_horizon_label`
+- [x] TEST: Signed MAE, unclamped extrema, split basis, tie peaks and zero-event cases. | evidence: `tests/science/test_label_authority.py::test_signed_mae_unclamped_extrema_split_basis_and_earliest_tie_peak`; `::test_zero_event_is_negative_only_when_the_threshold_is_defined`
+- [x] TEST: Undefined target semantics cannot produce a probability label. | evidence: `tests/science/test_label_authority.py::test_undefined_target_semantics_cannot_produce_probability_labels`; `::test_missing_event_threshold_is_not_encoded_as_zero_or_negative`; `::test_unresolved_thresholds_block_production_registration`
+
+## Implementation summary
+
+The registry defines Expansion Runner and Session Monster at 1-, 3-, 5-, and 10-session horizons. The primary target is the five-session Expansion Runner, with no numeric threshold selected. Continuation, Failure, and Time-to-Expansion remain explicit unavailable definitions. Production registration rejects unresolved thresholds; a production calculation also requires a registry-bound activation grant.
+
+Outcome calculations use the frozen `t+1 ... t+h` calendar sessions, split-consistent prices, exact fractional-return equations, twelve-place `ROUND_HALF_EVEN` output precision, raw-price extrema selection, and earliest-session tie-breaking. Next-open proxy measurements are separate from prediction-close outcomes and are not actual paper fills. A missing bar, early event, unfinalized corporate-action state, incomplete data-finalization gate, or incomplete release transaction cannot release a full-horizon target. Terminal events without verified consideration are censored.
+
+The output carries field-level validity/reason codes and label/registry/source references. The resolver is offline and in-memory; it does not persist an Outcome, choose empirical thresholds, or provide a runtime feed fallback.
+
+## Reference-source disposition
+
+`docs/reference/QC2-015_REFERENCE_INTAKE.md` records the inspected Apex revision, file hashes, source-supported meanings, upstream test coverage, license, conflicts, and disposition. Inspection was read-only; no Apex source was copied, imported, modified, or executed. No upstream tests were run. The demo/evaluation license does not grant production or live-trading permission.
+
+## Verification
+
+- `pnpm test` — 172 Python tests and 7 database guard tests passed.
+- `ruff check packages/science/src/qc2_science tests/science` — passed.
+- `python3 tools/generate_contract_package.py --check` — 124 contracts and 132 generated artifacts checked.
+- `python3 tools/task_workflow.py preflight QC2-015` — dependencies and acceptance evidence available.
+
+No production qualification, calibration result, owner approval, production activation, live trading authorization, or provider accuracy is claimed.

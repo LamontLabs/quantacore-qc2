@@ -1,6 +1,27 @@
 """Deterministic offline feature authority for QC2."""
 
 from .engine import compute_feature_snapshot
+from .label_models import (
+    DailyLabelBar,
+    FieldValidity,
+    LabelDefinitionSpec,
+    LabelInput,
+    LabelInputError,
+    LabelOutcome,
+    ProbabilityTargetUnavailable,
+    SessionMonsterMeasurement,
+    require_probability_target,
+)
+from .label_outcomes import resolve_label_outcome
+from .label_registry import (
+    PRIMARY_LABEL_KEY,
+    SUPPORTED_HORIZONS,
+    LabelProductionActivationGrant,
+    LabelRegistryBundle,
+    assert_label_registry_registrable,
+    build_label_definition_specs,
+    materialize_label_registry,
+)
 from .models import (
     ContractRef,
     DailyFeatureBar,
@@ -25,19 +46,36 @@ from .registry import (
 __all__ = [
     "ContractRef",
     "DailyFeatureBar",
+    "DailyLabelBar",
     "FeatureDefinitionSpec",
     "FeatureInput",
     "FeatureInputError",
     "FeatureProfile",
     "FeatureRegistryBundle",
+    "FieldValidity",
+    "LabelDefinitionSpec",
+    "LabelInput",
+    "LabelInputError",
+    "LabelOutcome",
+    "LabelProductionActivationGrant",
+    "LabelRegistryBundle",
     "ProductionActivationDenied",
     "ProductionActivationGrant",
+    "PRIMARY_LABEL_KEY",
+    "ProbabilityTargetUnavailable",
+    "SUPPORTED_HORIZONS",
+    "SessionMonsterMeasurement",
     "SimilarityPrototype",
     "TemporalAccessEvidence",
     "TemporalLeakageError",
     "assert_profile_activation",
+    "assert_label_registry_registrable",
     "build_feature_specs",
+    "build_label_definition_specs",
     "compute_feature_snapshot",
     "fixture_daily_profile",
+    "materialize_label_registry",
     "materialize_feature_registry",
+    "require_probability_target",
+    "resolve_label_outcome",
 ]

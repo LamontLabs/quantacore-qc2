@@ -515,10 +515,11 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-015 — Label Authority
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Define exact target semantics and enforce mature-only learning release.
 **Dependencies:** QC2-003, QC2-008, QC2-013, QC2-014
 **Authorized legacy references:** ApexLab label implementation as a hypothesis/anti-pattern to verify
+**Authorized artifact drift:** QC2-014 — QC2-015 adds the versioned label registry and mature-only outcome calculator to the shared science package. Its acceptance reruns the full science and contract verification; the QC2-014 receipt remains bound to its tested source commit. Paths: `packages/science`, `tests/science`
 **Required reference intake:** Mandatory for each referenced repository/file actually inspected; record revision, path/hash, source-supported meaning, tests, conflicts, license, and disposition.
 
 **Required deliverables:**

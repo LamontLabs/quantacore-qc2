@@ -14,3 +14,9 @@ Content-addressed fixture contracts used as adapter inputs must carry hashes com
 **Why:** Structural schema validity does not establish content integrity; reference-closure validation verifies the exact target content hash.
 
 **How to apply:** Finish a dependency contract first, compute and verify its canonical content hash, then construct any references to it.
+
+`TemporalArtifact.content_hash` and a content-addressed contract's `content_hash` are separate digests. The former hashes the canonical serialized full contract; the latter follows the contract-specific canonical payload rules.
+
+**Why:** Comparing these digest fields directly rejects valid references because they cover different bytes and use different hash domains.
+
+**How to apply:** Verify a typed reference against the payload's contract `content_hash`, then validate `TemporalArtifact.content_hash` independently against the canonical serialized payload.

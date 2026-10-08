@@ -3642,7 +3642,49 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "TODO",
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-028",
+          "artifact_paths": [
+            "packages/apexlab",
+            "tests/apexlab"
+          ],
+          "reason": "QC2-033 adds cutoff-scoped dataset assembly and walk-forward fold processing in the shared ApexLab source and regression-test trees; the full ApexLab suite revalidates earlier behavior."
+        },
+        {
+          "prior_task_id": "QC2-029",
+          "artifact_paths": [
+            "packages/apexlab",
+            "tests/apexlab"
+          ],
+          "reason": "QC2-033 adds chronological dataset construction in the shared ApexLab source and regression-test trees; the full ApexLab suite revalidates the accepted failure taxonomy."
+        },
+        {
+          "prior_task_id": "QC2-030",
+          "artifact_paths": [
+            "packages/apexlab",
+            "tests/apexlab"
+          ],
+          "reason": "QC2-033 adds cutoff exports, row lineage, and fold-local data preparation in the shared ApexLab source and regression-test trees; the full ApexLab suite revalidates matched-decoy behavior."
+        },
+        {
+          "prior_task_id": "QC2-031",
+          "artifact_paths": [
+            "packages/apexlab",
+            "tests/apexlab"
+          ],
+          "reason": "QC2-033 changes the shared ApexLab source and regression-test trees to build auditable chronological datasets; the full ApexLab suite revalidates review-case behavior."
+        },
+        {
+          "prior_task_id": "QC2-032",
+          "artifact_paths": [
+            "packages/apexlab",
+            "tests/apexlab"
+          ],
+          "reason": "QC2-033 changes the shared ApexLab source and regression-test trees to prepare fold-local learning datasets; the full ApexLab suite revalidates false-monster review behavior."
+        }
+      ],
+      "status": "IN_PROGRESS",
       "blockers": [],
       "acceptance_receipt": null
     },

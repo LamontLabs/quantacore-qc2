@@ -1149,10 +1149,15 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-033 — ApexLab Dataset Builder
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Replace unsafe data assembly with fully traceable chronological learning datasets.
 **Dependencies:** QC2-013, QC2-014, QC2-015, QC2-016, QC2-028, QC2-029, QC2-030, QC2-032
 **Authorized legacy references:** Current ApexLab dataset/split/evaluation implementation
+**Authorized artifact drift:** QC2-028 — QC2-033 adds cutoff-scoped dataset assembly and walk-forward fold processing in the shared ApexLab source and regression-test trees; the full ApexLab suite revalidates earlier behavior. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-029 — QC2-033 adds chronological dataset construction in the shared ApexLab source and regression-test trees; the full ApexLab suite revalidates the accepted failure taxonomy. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-030 — QC2-033 adds cutoff exports, row lineage, and fold-local data preparation in the shared ApexLab source and regression-test trees; the full ApexLab suite revalidates matched-decoy behavior. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-031 — QC2-033 changes the shared ApexLab source and regression-test trees to build auditable chronological datasets; the full ApexLab suite revalidates review-case behavior. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-032 — QC2-033 changes the shared ApexLab source and regression-test trees to prepare fold-local learning datasets; the full ApexLab suite revalidates false-monster review behavior. Paths: `packages/apexlab`, `tests/apexlab`
 **Required reference intake:** Mandatory for each referenced repository/file actually inspected; record revision, path/hash, source-supported meaning, tests, conflicts, license, and disposition.
 
 **Required deliverables:**

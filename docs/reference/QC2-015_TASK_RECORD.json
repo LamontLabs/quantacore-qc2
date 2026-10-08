@@ -1,0 +1,38 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a1192d-0942-79bf-a371-d3219f6e2a44",
+  "created_at": "2026-10-08T01:42:24Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "999bf98972e5693c34ae6c91ec1947cb7ded31f32395cdccaef959fccd471165",
+  "task_id": "qc2-015",
+  "task_name": "Label Authority",
+  "objective": "Define exact target semantics and enforce mature-only learning release.",
+  "dependency_task_ids": [
+    "QC2-003",
+    "QC2-008",
+    "QC2-013",
+    "QC2-014"
+  ],
+  "authorized_legacy_refs": [
+    "ApexLab label implementation as a hypothesis/anti-pattern to verify"
+  ],
+  "deliverable_refs": [
+    "Label Registry, primary/secondary horizons, reference-price definitions and formulas.",
+    "Expansion/Monster family parameterization, failure/continuation unavailable states.",
+    "Maturity and field-validity state machine."
+  ],
+  "required_test_refs": [
+    "Missing fifth-session bar does not extend horizon; early winner cannot release full label.",
+    "Signed MAE, unclamped extrema, split basis, tie peaks and zero-event cases.",
+    "Undefined target semantics cannot produce a probability label."
+  ],
+  "acceptance_gate": "Labels have precise equations and release conditions; unresolved thresholds block production registration.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

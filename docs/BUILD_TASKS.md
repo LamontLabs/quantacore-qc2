@@ -515,7 +515,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-015 — Label Authority
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Define exact target semantics and enforce mature-only learning release.
 **Dependencies:** QC2-003, QC2-008, QC2-013, QC2-014
 **Authorized legacy references:** ApexLab label implementation as a hypothesis/anti-pattern to verify
@@ -542,7 +542,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-08T01:42:24Z: `docs/reference/QC2-015_ACCEPTANCE_RECEIPT.md`, `docs/reference/QC2-015_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-015_TASK_RECORD.json`
 
 ---
 

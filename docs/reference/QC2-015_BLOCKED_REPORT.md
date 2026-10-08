@@ -31,3 +31,5 @@ Until those gates pass, QC2-015 remains BLOCKED. No live trading, provider/feed 
 ## Superseding status reconciliation
 
 The blocker above is historical. QC2-013 and QC2-014 now have PASS acceptance receipts, and `python3 tools/task_workflow.py preflight QC2-015` confirms all declared dependencies and evidence are available. QC2-015 implementation has started; this reconciliation does not accept QC2-015 or authorize production activation.
+
+QC2-015 has since been accepted with a PASS receipt. The task's code, reference intake, decision record, and tests are listed in `docs/reference/QC2-015_ACCEPTANCE_RECEIPT.md`. The original blocker details remain historical; no production activation, provider fallback, or live-trading permission is implied.

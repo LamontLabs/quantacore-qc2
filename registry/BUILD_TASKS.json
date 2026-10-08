@@ -3548,9 +3548,60 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-08T16:32:29Z",
+        "task_spec_version": "QC2-032 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "983310bede3fdc981879b8cb5673019d9e47b21d",
+        "receipt": "docs/reference/QC2-032_ACCEPTANCE_ASSESSMENT.md",
+        "contract_receipt": "docs/reference/QC2-032_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-032_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/apexlab",
+          "tests/apexlab"
+        ],
+        "executed_commands": [
+          "pytest -q tests/apexlab/test_false_monster_review.py",
+          "python3 -m pytest -q tests/apexlab",
+          "python3 -m pytest -q",
+          "python3 -m ruff check",
+          "python3 -m compileall -q packages tests tools",
+          "python3 tools/generate_task_docs.py --check && python3 tools/task_workflow.py validate",
+          "python3 tools/task_workflow.py preflight QC2-032"
+        ],
+        "test_counts": [
+          {
+            "test_id": "false_monster",
+            "passed": 8,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "apexlab",
+            "passed": 31,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "full_python",
+            "passed": 346,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/apexlab": "98f69d5bd2131eb4d090343ad152aacbad4d8f2f832c3632139867a882bec472",
+          "tests/apexlab": "30ebe38a3aedd43e37c2c451b3d068fd1699481cd85541019dde7fa440c565e1"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "Acceptance was verified against the committed source using local fixture and code evidence.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-033",

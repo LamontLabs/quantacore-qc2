@@ -1,0 +1,38 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a11c5b-ed7a-729f-81f0-45c5398e053a",
+  "created_at": "2026-10-08T16:32:29Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "b02f9c7aa8c8a3d0a39e8b1d513355b0c43f27b2b82e961182b7fdf692fd02dd",
+  "task_id": "qc2-032",
+  "task_name": "False Monster Review",
+  "objective": "Generate reproducible false-positive cases without conflating prediction, execution and data errors.",
+  "dependency_task_ids": [
+    "QC2-025",
+    "QC2-026",
+    "QC2-027",
+    "QC2-029",
+    "QC2-030",
+    "QC2-031"
+  ],
+  "authorized_legacy_refs": [],
+  "deliverable_refs": [
+    "High-confidence non-event/downside/timing/data-error case rules.",
+    "Contemporaneous score/head evidence and resolved outcome links.",
+    "Annotation audit trail for proposed research hypotheses."
+  ],
+  "required_test_refs": [
+    "Unfilled scientific success is not relabeled a prediction failure.",
+    "Unresolved label remains unresolved instead of a false-positive training row.",
+    "Case annotations cannot rewrite authoritative evidence."
+  ],
+  "acceptance_gate": "Fixture failures and uncertainty cases are correctly separated with immutable source references.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

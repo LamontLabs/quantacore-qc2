@@ -1,0 +1,61 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a11c5b-ed80-7ab7-b710-e4fcf2d700ed",
+  "created_at": "2026-10-08T16:32:29Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "1c021dd01c124879a3410765ffda2fb1e2edef80af3d70983d947c3d68324239",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a11c5b-ed7a-729f-81f0-45c5398e053a",
+    "content_hash": "b02f9c7aa8c8a3d0a39e8b1d513355b0c43f27b2b82e961182b7fdf692fd02dd"
+  },
+  "task_spec_version": "QC2-032 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "983310bede3fdc981879b8cb5673019d9e47b21d",
+  "changed_paths": [
+    "packages/apexlab",
+    "tests/apexlab"
+  ],
+  "executed_commands": [
+    "pytest -q tests/apexlab/test_false_monster_review.py",
+    "python3 -m pytest -q tests/apexlab",
+    "python3 -m pytest -q",
+    "python3 -m ruff check",
+    "python3 -m compileall -q packages tests tools",
+    "python3 tools/generate_task_docs.py --check && python3 tools/task_workflow.py validate",
+    "python3 tools/task_workflow.py preflight QC2-032"
+  ],
+  "test_counts": [
+    {
+      "test_id": "false_monster",
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "apexlab",
+      "passed": 31,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "full_python",
+      "passed": 346,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "98f69d5bd2131eb4d090343ad152aacbad4d8f2f832c3632139867a882bec472",
+    "30ebe38a3aedd43e37c2c451b3d068fd1699481cd85541019dde7fa440c565e1"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-08T16:32:29Z"
+}

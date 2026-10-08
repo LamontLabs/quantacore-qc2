@@ -1,0 +1,62 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a11910-6335-7b75-a7fc-d1637fcd6236",
+  "created_at": "2026-10-08T01:11:06Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "362137863ab89d7781748a4f92e80fb65be454d4f39a34f9027f92ef2bc21ae4",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a11910-6331-7439-94c3-98a721883550",
+    "content_hash": "cc1955c3c221295e12488064a670ab417b022786a11c5ee7545a6a328606f9f0"
+  },
+  "task_spec_version": "QC2-014 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "f65c1f2cf6e757dd0824e652ced6646fe7edcb5b",
+  "changed_paths": [
+    "packages/contracts",
+    "tools/generate_contract_package.py",
+    "docs/reference/QC2-003_CONTRACT_CATALOG.md",
+    "packages/science",
+    "tests/science",
+    "docs/reference/QC2-014_DECISION.md",
+    "docs/reference/QC2-014_REFERENCE_INTAKE.md"
+  ],
+  "executed_commands": [
+    "python3 tools/generate_contract_package.py --check",
+    "pnpm test",
+    "python3 -m ruff check packages/science/src/qc2_science tests/science packages/contracts/src/qc2_contracts/catalog.py tools/generate_contract_package.py",
+    "python3 tools/task_workflow.py preflight QC2-014"
+  ],
+  "test_counts": [
+    {
+      "test_id": "qc2_014_full_test_suite",
+      "passed": 158,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "database_environment_guards",
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "35339cd1e1af34a8ecbb6523958fa3a8fb58fce1927290dfbce852aeb1516d67",
+    "6a33fccccb55dfd2069e0ee826fc04f942f103765b8cf161257077b8ffde2f1f",
+    "677333ac37b22a54747f84b471ba97419a68409f20fdbcd83a1ead514567ef9f",
+    "71bd4c21d6d8b483cac79d12627f157407d0a3c58e0250e2d26cdc7a7d550596",
+    "b86e0383a27679fe2d1c6cd60e768b99dbd4b4a66c33bb9860c74e75fc343d9c",
+    "85762d6fb52a969f54ee81da03717a18bb0c587db00d7ebb288ff32ec775841e",
+    "3f9cf99967e10dfb4845b10d46db4043e4de8e321f592b36dda8e80b5c523eac"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-08T01:11:06Z"
+}

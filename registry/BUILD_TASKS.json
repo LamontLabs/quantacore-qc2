@@ -1365,6 +1365,15 @@
       ],
       "authorized_artifact_drift": [
         {
+          "prior_task_id": "QC2-003",
+          "artifact_paths": [
+            "packages/contracts",
+            "tools/generate_contract_package.py",
+            "docs/reference/QC2-003_CONTRACT_CATALOG.md"
+          ],
+          "reason": "QC2-014 adds explicit feature metadata to the shared generated contract package and catalog. Its acceptance reruns the complete contract suite, cross-language projections, and generator check; the earlier QC2-003 receipt remains bound to its tested source commit."
+        },
+        {
           "prior_task_id": "QC2-004",
           "artifact_paths": [
             "packages/contracts",
@@ -1372,6 +1381,15 @@
             "docs/reference/QC2-003_CONTRACT_CATALOG.md"
           ],
           "reason": "QC2-014 adds the feature-family, unit, dtype, split, precision, normalization, and fixture-profile fields required before feature definitions are persisted. It regenerates the shared contract projections and reruns contract and cross-language checks; no deployed or persisted FeatureDefinition v1 records are claimed."
+        },
+        {
+          "prior_task_id": "QC2-007",
+          "artifact_paths": [
+            "packages/contracts",
+            "tools/generate_contract_package.py",
+            "docs/reference/QC2-003_CONTRACT_CATALOG.md"
+          ],
+          "reason": "QC2-014 changes only feature-definition and feature-snapshot schema records in the shared package. Its acceptance reruns the configuration-authority and complete contract suites plus generated projections; the earlier QC2-007 receipt remains bound to its tested source commit."
         }
       ],
       "authorized_legacy_references": [
@@ -1401,9 +1419,61 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-08T01:11:06Z",
+        "task_spec_version": "QC2-014 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "f65c1f2cf6e757dd0824e652ced6646fe7edcb5b",
+        "receipt": "docs/reference/QC2-014_ACCEPTANCE_RECEIPT.md",
+        "contract_receipt": "docs/reference/QC2-014_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-014_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/contracts",
+          "tools/generate_contract_package.py",
+          "docs/reference/QC2-003_CONTRACT_CATALOG.md",
+          "packages/science",
+          "tests/science",
+          "docs/reference/QC2-014_DECISION.md",
+          "docs/reference/QC2-014_REFERENCE_INTAKE.md"
+        ],
+        "executed_commands": [
+          "python3 tools/generate_contract_package.py --check",
+          "pnpm test",
+          "python3 -m ruff check packages/science/src/qc2_science tests/science packages/contracts/src/qc2_contracts/catalog.py tools/generate_contract_package.py",
+          "python3 tools/task_workflow.py preflight QC2-014"
+        ],
+        "test_counts": [
+          {
+            "test_id": "qc2_014_full_test_suite",
+            "passed": 158,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "database_environment_guards",
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/contracts": "35339cd1e1af34a8ecbb6523958fa3a8fb58fce1927290dfbce852aeb1516d67",
+          "tools/generate_contract_package.py": "6a33fccccb55dfd2069e0ee826fc04f942f103765b8cf161257077b8ffde2f1f",
+          "docs/reference/QC2-003_CONTRACT_CATALOG.md": "677333ac37b22a54747f84b471ba97419a68409f20fdbcd83a1ead514567ef9f",
+          "packages/science": "71bd4c21d6d8b483cac79d12627f157407d0a3c58e0250e2d26cdc7a7d550596",
+          "tests/science": "b86e0383a27679fe2d1c6cd60e768b99dbd4b4a66c33bb9860c74e75fc343d9c",
+          "docs/reference/QC2-014_DECISION.md": "85762d6fb52a969f54ee81da03717a18bb0c587db00d7ebb288ff32ec775841e",
+          "docs/reference/QC2-014_REFERENCE_INTAKE.md": "3f9cf99967e10dfb4845b10d46db4043e4de8e321f592b36dda8e80b5c523eac"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "Local synthetic-fixture and code verification; no production deployment or activation is claimed.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-015",

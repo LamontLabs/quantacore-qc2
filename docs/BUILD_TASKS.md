@@ -480,11 +480,13 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-014 — Feature Authority
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Implement deterministic feature definitions and snapshots with explicit missingness.
 **Dependencies:** QC2-004, QC2-012, QC2-013
 **Authorized legacy references:** Gen 1 feature logic, ApexLab feature logic, Original protocol concepts
+**Authorized artifact drift:** QC2-003 — QC2-014 adds explicit feature metadata to the shared generated contract package and catalog. Its acceptance reruns the complete contract suite, cross-language projections, and generator check; the earlier QC2-003 receipt remains bound to its tested source commit. Paths: `packages/contracts`, `tools/generate_contract_package.py`, `docs/reference/QC2-003_CONTRACT_CATALOG.md`
 **Authorized artifact drift:** QC2-004 — QC2-014 adds the feature-family, unit, dtype, split, precision, normalization, and fixture-profile fields required before feature definitions are persisted. It regenerates the shared contract projections and reruns contract and cross-language checks; no deployed or persisted FeatureDefinition v1 records are claimed. Paths: `packages/contracts`, `tools/generate_contract_package.py`, `docs/reference/QC2-003_CONTRACT_CATALOG.md`
+**Authorized artifact drift:** QC2-007 — QC2-014 changes only feature-definition and feature-snapshot schema records in the shared package. Its acceptance reruns the configuration-authority and complete contract suites plus generated projections; the earlier QC2-007 receipt remains bound to its tested source commit. Paths: `packages/contracts`, `tools/generate_contract_package.py`, `docs/reference/QC2-003_CONTRACT_CATALOG.md`
 **Required reference intake:** Mandatory for each referenced repository/file actually inspected; record revision, path/hash, source-supported meaning, tests, conflicts, license, and disposition.
 
 **Required deliverables:**
@@ -507,7 +509,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-08T01:11:06Z: `docs/reference/QC2-014_ACCEPTANCE_RECEIPT.md`, `docs/reference/QC2-014_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-014_TASK_RECORD.json`
 
 ---
 

@@ -3011,9 +3011,62 @@
           "reason": "QC2-027 adds the census-scoped Runner Observatory implementation and acceptance tests to the shared science trees. Its acceptance revalidates both full trees and binds their exact new hashes; earlier receipts remain bound to their tested commits."
         }
       ],
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-08T14:04:25Z",
+        "task_spec_version": "QC2-027 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "307b4bbd11bd03737e72a9dbe0884c4b718a8283",
+        "receipt": "docs/reference/QC2-027_ACCEPTANCE_ASSESSMENT.md",
+        "contract_receipt": "docs/reference/QC2-027_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-027_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/science",
+          "tests/science"
+        ],
+        "executed_commands": [
+          "pnpm run verify",
+          "uv run pytest -q tests/science tests/instrument_universe",
+          "python3 tools/task_workflow.py preflight QC2-027"
+        ],
+        "test_counts": [
+          {
+            "test_id": "python_suite",
+            "passed": 315,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "database_guards",
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "bootstrap_smoke",
+            "passed": 2,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "science_instrument_focus",
+            "passed": 125,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/science": "a68019a822472ff79e869e0c4412a00a5c7ab9a0cb98d46d32c8d78463cee03f",
+          "tests/science": "993be7f3489e32e19677ffbae930a91f0d9726bb5938bab51d53a91696166f51"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "Fresh full-repository verification passed; fixture tests assert exact event records, unscorable retention, and census-bounded coverage.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-028",

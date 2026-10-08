@@ -1897,10 +1897,8 @@
         "LEGACY_READ_ACCESS"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "BLOCKED",
-      "blockers": [
-        "Required dependencies QC2-014, QC2-017, and QC2-018 are not PASS. `python3 tools/task_workflow.py preflight QC2-019` fails because all three are not PASS. No authorized protocol source has been inspected; see docs/reference/QC2-014_BLOCKED_REPORT.md, docs/reference/QC2-017_BLOCKED_REPORT.md, and docs/reference/QC2-018_BLOCKED_REPORT.md."
-      ],
+      "status": "TODO",
+      "blockers": [],
       "acceptance_receipt": null
     },
     {

@@ -1,22 +1,24 @@
-# QC2-019 — F0 Runner Protocol Migration Wave 1: BLOCKED
+# QC2-019 — F0 Runner Protocol Migration Wave 1: dependency blocker cleared
 
-## Blocker assessment
+## Previous blocker record
 
-- **Checked at:** 2026-10-07T20:57:29Z (UTC)
-- **Canonical status:** BLOCKED; no acceptance receipt is recorded.
-- **Unmet dependencies:** QC2-014, QC2-017, and QC2-018 are canonically BLOCKED.
-- **Preflight evidence:** `python3 tools/task_workflow.py preflight QC2-019` failed with `preflight failed: QC2-014 is not PASS; QC2-017 is not PASS; QC2-018 is not PASS`.
+- **Checked at:** 2026-10-07T20:57:29Z (UTC).
+- **Previous status:** BLOCKED because QC2-014, QC2-017, and QC2-018 were not PASS.
+- **Previous preflight:** Failed because all three dependencies were not PASS.
 
-## Work status and scope boundary
+## Current state
 
-- No requested candidate was implemented or excluded, and no RESEARCH registry entry, parameter contract, evidence field, or semantics-difference note was created.
-- The authorized P55/T34/T37/T38/T41/T42/T44/T57/T77/T78/T92/T102/T103/T104/T108/T109/T110 sources were not inspected. No revision, source path/hash, source meaning, test result, conflict, license, or disposition is claimed.
-- No migration tests were run; no candidate was activated and no downstream task was started.
+- **Checked at:** 2026-10-07.
+- **Status:** TODO; the dependency blocker is cleared and the task is eligible to start.
+- **Dependency evidence:** QC2-014, QC2-017, and QC2-018 have PASS receipts; `python3 tools/task_workflow.py preflight QC2-019` passes.
+- **Scope boundary:** QC2-018's pinned inventory records verified source paths and hashes without asserting that every requested candidate is a verified original. Candidate-specific source meaning, tests, conflicts, licensing, and disposition must be established in QC2-019 before implementation or exclusion.
+- No migration implementation, exclusion, RESEARCH entry, parameter contract, evidence field, or migration test has been created yet.
 
-## Resume conditions
+## Start conditions
 
-1. Complete QC2-014, QC2-017, and QC2-018 with their required evidence and PASS receipts.
-2. Re-run QC2-019 preflight.
-3. Only after preflight passes, inspect the authorized legacy sources read-only and record reference intake for every repository/file actually inspected before making source-backed migration or exclusion decisions.
+1. Start QC2-019 only after confirming the integrated TODO registry and generated documents.
+2. Inspect only source files whose repository, pinned revision, and path are authorized and accessible.
+3. Record source hash, source-supported meaning, tests, conflicts, license, and disposition for every file actually inspected; keep missing lineage/meaning unresolved.
+4. Complete tests for every migrated candidate or document an evidence-backed exclusion for each unavailable or incompatible item.
 
-Until those dependencies pass, the migration queue remains unexamined and no legacy behavior or threshold is carried into Gen 2.
+No candidate is active, and no legacy behavior or threshold has been carried into Gen 2.

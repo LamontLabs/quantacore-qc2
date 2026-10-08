@@ -1011,7 +1011,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-029 — Failure Genome System
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Preserve negative structural memories with the same temporal rigor as winners.
 **Dependencies:** QC2-013, QC2-016, QC2-025, QC2-028
 **Authorized legacy references:** None.
@@ -1038,7 +1038,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-08T15:16:35Z: `docs/reference/QC2-029_ACCEPTANCE_ASSESSMENT.md`, `docs/reference/QC2-029_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-029_TASK_RECORD.json`
 
 ---
 

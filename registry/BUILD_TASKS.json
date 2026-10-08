@@ -3207,9 +3207,64 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-08T15:16:35Z",
+        "task_spec_version": "QC2-029 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "a293c1928596d963df1d81f981095a1bf1fb62be",
+        "receipt": "docs/reference/QC2-029_ACCEPTANCE_ASSESSMENT.md",
+        "contract_receipt": "docs/reference/QC2-029_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-029_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/apexlab",
+          "tests/apexlab"
+        ],
+        "executed_commands": [
+          "pnpm run verify",
+          "uv run pytest tests/apexlab -q",
+          "python3 -m ruff check packages/apexlab/src/qc2_apexlab tests/apexlab",
+          "python3 -m compileall -q packages/apexlab/src/qc2_apexlab",
+          "python3 tools/task_workflow.py preflight QC2-029"
+        ],
+        "test_counts": [
+          {
+            "test_id": "python_suite",
+            "passed": 329,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "database_guards",
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "bootstrap_smoke",
+            "passed": 2,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "apexlab_focus",
+            "passed": 14,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/apexlab": "b15e1fd405d3e30d95f443741932d9e3cf7323cfb1aead4c6b44ba0aa7824444",
+          "tests/apexlab": "3937007f8c8bd4f4bb5189e1b946d2952153705c2976a4cee0da6e48603e5b18"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "Fresh full repository verification passed after implementation; the append-only taxonomy, temporal firewall, cutoff-bound index lineage, maturity gating, and correction behavior all passed focused and repository checks.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-030",

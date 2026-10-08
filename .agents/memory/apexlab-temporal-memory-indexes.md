@@ -14,3 +14,15 @@ Keep actual creation, known, and learning times separate from historical reconst
 **Why:** Reconstructed history is an explicit research assumption, not evidence that the artifact actually existed or was learnable then.
 
 **How to apply:** Use actual timestamps for forward eligibility and creation ordering. Use historical assumptions only in reconstructed-mode cutoff checks, and require each genome/index assumption to be no earlier than its relevant event, sources, and members.
+
+For `OutcomeRevision`, actual learning availability is the later of its
+`discovered_at` and installation `known_at`; its contract has no
+`available_for_learning_at` field.
+
+**Why:** The temporal firewall learning-gates OutcomeRevision even as a
+transitive query dependency. Leaving availability unset blocks lookups, while
+using discovery alone could predate actual receipt.
+
+**How to apply:** Derive this actual learning time when converting an
+OutcomeRevision contract to a temporal artifact. Keep reconstructed availability
+assumptions separate and explicit.

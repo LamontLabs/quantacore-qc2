@@ -1,0 +1,36 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a11c16-715e-7281-9fa5-61b5ef0709d2",
+  "created_at": "2026-10-08T15:16:35Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "23eeb66b2448de3b2fbbaf3074ecd76d4c653876e7282f33fb4bca93950f8312",
+  "task_id": "qc2-029",
+  "task_name": "Failure Genome System",
+  "objective": "Preserve negative structural memories with the same temporal rigor as winners.",
+  "dependency_task_ids": [
+    "QC2-013",
+    "QC2-016",
+    "QC2-025",
+    "QC2-028"
+  ],
+  "authorized_legacy_refs": [],
+  "deliverable_refs": [
+    "FailureGenome store, failure taxonomy and index lineage.",
+    "Distinct non-event, downside, data-error and timing-miss categories.",
+    "Maturity-gated release and versioned corrections."
+  ],
+  "required_test_refs": [
+    "Unresolved data cannot create a negative training example.",
+    "Future failed outcomes/index memberships are blocked.",
+    "Corrections append rather than edit previously used memories."
+  ],
+  "acceptance_gate": "Negative memories are independently labeled, temporally eligible and replayable.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

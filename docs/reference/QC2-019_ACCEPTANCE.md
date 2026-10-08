@@ -2,7 +2,7 @@
 
 ## Acceptance assessment
 
-**Result:** PASS
+- **Result:** PASS
 
 The inspected QC2-019 queue has 17 explicit, source-backed dispositions. Nine Apex candidate files were retrieved read-only at the exact revision and matched to the QC2-018 Git blob hashes. The Apex source test and LICENSE were also inspected at that revision. No legacy source or test was copied, imported, executed, edited, or run. The pinned Apex license does not authorize production/live use without written consent; none is inferred. Unmapped IDs remain unresolved only within the QC2-018 inspection scope.
 

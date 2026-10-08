@@ -792,10 +792,17 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-023 — Model Inference Contract
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Build safe exact-artifact inference with logical head semantics.
 **Dependencies:** QC2-003, QC2-013, QC2-014, QC2-015, QC2-017, QC2-022
 **Authorized legacy references:** Gen 1 ApexCore V2/V3, ApexLab model utilities
+**Authorized artifact drift:** QC2-014 — QC2-023 adds exact-artifact inference alongside the feature authority without changing FeatureDefinition semantics or feature equations. It reruns the full project suite and records both shared-tree hashes in its acceptance receipt; QC2-014 remains verified at its original tested source commit. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-015 — QC2-023 adds model inference without changing LabelDefinition, label maturity, or outcome access. It reruns the full project suite and records both shared-tree hashes in its acceptance receipt; QC2-015 remains verified at its original tested source commit. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-016 — QC2-023 adds safe model inference beside the Ground Truth authority without changing outcome resolution, correction rules, or canonical labels. It reruns the full project suite and records both shared-tree hashes in its acceptance receipt; QC2-016 remains verified at its original tested source commit. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-017 — QC2-023 adds exact model inference without changing Runner Protocol definitions or evaluation. It reruns the full project suite and records both shared-tree hashes in its acceptance receipt; QC2-017 remains verified at its original tested source commit. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-019 — QC2-023 adds model inference without changing the inactive wave-one research protocols or their activation policy. It reruns the full project suite and records both shared-tree hashes in its acceptance receipt; QC2-019 remains verified at its original tested source commit. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-020 — QC2-023 adds model inference without changing the inactive wave-two research protocols or their activation policy. It reruns the full project suite and records both shared-tree hashes in its acceptance receipt; QC2-020 remains verified at its original tested source commit. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-022 — QC2-023 adds model inference beside baseline comparator engines without changing their equations, tie rules, or ranking behavior. It reruns the full project suite and records both shared-tree hashes in its acceptance receipt; QC2-022 remains verified at its original tested source commit. Paths: `packages/science`, `tests/science`
 **Required reference intake:** Mandatory for each referenced repository/file actually inspected; record revision, path/hash, source-supported meaning, tests, conflicts, license, and disposition.
 
 **Required deliverables:**
@@ -818,7 +825,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-08T08:02:17Z: `docs/reference/QC2-023_ACCEPTANCE_ASSESSMENT.md`, `docs/reference/QC2-023_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-023_TASK_RECORD.json`
 
 ---
 

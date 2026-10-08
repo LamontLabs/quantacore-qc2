@@ -4047,9 +4047,52 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-08T19:28:50Z",
+        "task_spec_version": "QC2-036 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "adaa5b10b43b90b8c73deed00029c29d98c50e0f",
+        "receipt": "docs/reference/QC2-036_ACCEPTANCE_EVIDENCE.md",
+        "contract_receipt": "docs/reference/QC2-036_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-036_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/candidate_evaluator",
+          "tests/candidate_evaluator"
+        ],
+        "executed_commands": [
+          "uv run python -m pytest -q tests/candidate_evaluator",
+          "uv run ruff check packages/candidate_evaluator/src tests/candidate_evaluator",
+          "uv run pytest -q",
+          "uv run python tools/task_workflow.py preflight QC2-036",
+          "uv run python tools/task_workflow.py validate"
+        ],
+        "test_counts": [
+          {
+            "test_id": "candidate_evaluator",
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "full_suite",
+            "passed": 371,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/candidate_evaluator": "99c3eba1c58f0a7e543fcc996986691e5d19b9dd23aa894520f9c1efdb94e453",
+          "tests/candidate_evaluator": "d53abfbe1f12a7b34b273c8082cecc87169b3395d8e3f0acbaeefdb0a09c4b1f"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "Acceptance rerun on committed QC2-036 source using deterministic local fixtures; no legacy or live data accessed.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-037",

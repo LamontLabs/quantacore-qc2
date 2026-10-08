@@ -1264,7 +1264,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-036 — Independent Candidate Evaluation
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Separate training from qualification and ensure every reported test metric is genuinely held out.
 **Dependencies:** QC2-023, QC2-026, QC2-033, QC2-034, QC2-035
 **Authorized legacy references:** None.
@@ -1290,7 +1290,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-08T19:28:50Z: `docs/reference/QC2-036_ACCEPTANCE_EVIDENCE.md`, `docs/reference/QC2-036_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-036_TASK_RECORD.json`
 
 ---
 

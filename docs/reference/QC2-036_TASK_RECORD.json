@@ -1,0 +1,37 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a11cfd-6390-70a1-8483-4e896cb3107e",
+  "created_at": "2026-10-08T19:28:50Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "ad97cfc58c18a6a5b006015f0e231c8e2335088278cb8cabd7e1408ff98f3e23",
+  "task_id": "qc2-036",
+  "task_name": "Independent Candidate Evaluation",
+  "objective": "Separate training from qualification and ensure every reported test metric is genuinely held out.",
+  "dependency_task_ids": [
+    "QC2-023",
+    "QC2-026",
+    "QC2-033",
+    "QC2-034",
+    "QC2-035"
+  ],
+  "authorized_legacy_refs": [],
+  "deliverable_refs": [
+    "Isolated evaluator role/service, evaluation receipts and gate engine.",
+    "Calibration, regression, leakage, resource and deterministic-inference checks.",
+    "Candidate nomination and holdout consumption enforcement."
+  ],
+  "required_test_refs": [
+    "Trainer cannot fetch held-out labels or change evaluator policy.",
+    "All-row fake test metrics and reused holdout nomination are rejected.",
+    "Independent fixture computations match metrics and gate results."
+  ],
+  "acceptance_gate": "Evaluation is independently reproducible and information release is logged with correct holdout status.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

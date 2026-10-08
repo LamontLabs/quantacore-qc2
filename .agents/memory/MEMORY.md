@@ -7,3 +7,4 @@
 - [Alpaca calendar time semantics](alpaca-calendar-time-semantics.md) — calendar open/close values may be exchange-local `HH:MM`; combine with the session date and exchange timezone before UTC comparisons.
 - [QC2 label precision](qc2-label-decimal-precision.md) — fractional-return values and event comparisons use 12 places with `ROUND_HALF_EVEN`; extrema ties use raw observed prices.
 - [Private GitHub source access](private-github-source-access.md) — confirm a live read of each pinned private revision; installed integration metadata and prior manifests are not current access proof.
+- [ApexLab temporal memory indexes](apexlab-temporal-memory-indexes.md) — keep replay proofs scoped to the cutoff-eligible dependency closure and preserve actual versus reconstructed availability.

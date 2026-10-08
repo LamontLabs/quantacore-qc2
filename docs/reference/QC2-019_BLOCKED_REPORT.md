@@ -9,16 +9,15 @@
 ## Current state
 
 - **Checked at:** 2026-10-07.
-- **Status:** TODO; the dependency blocker is cleared and the task is eligible to start.
+- **Status:** IN_PROGRESS; the dependency blocker is cleared and task start followed passing preflight.
 - **Dependency evidence:** QC2-014, QC2-017, and QC2-018 have PASS receipts; `python3 tools/task_workflow.py preflight QC2-019` passes.
 - **Scope boundary:** QC2-018's pinned inventory records verified source paths and hashes without asserting that every requested candidate is a verified original. Candidate-specific source meaning, tests, conflicts, licensing, and disposition must be established in QC2-019 before implementation or exclusion.
 - No migration implementation, exclusion, RESEARCH entry, parameter contract, evidence field, or migration test has been created yet.
 
-## Start conditions
+## Start record
 
-1. Start QC2-019 only after confirming the integrated TODO registry and generated documents.
-2. Inspect only source files whose repository, pinned revision, and path are authorized and accessible.
-3. Record source hash, source-supported meaning, tests, conflicts, license, and disposition for every file actually inspected; keep missing lineage/meaning unresolved.
-4. Complete tests for every migrated candidate or document an evidence-backed exclusion for each unavailable or incompatible item.
+1. The integrated TODO registry and generated task documents were verified.
+2. `python3 tools/task_workflow.py preflight QC2-019` passed against integrated dependency receipts.
+3. Candidate source inspection and migration decisions remain in scope; no candidate is claimed as implemented or excluded by this start record.
 
 No candidate is active, and no legacy behavior or threshold has been carried into Gen 2.

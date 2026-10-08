@@ -649,7 +649,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-019 — F0 Runner Protocol Migration Wave 1
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Rewrite the verified daily-compatible inspection queue as research protocols.
 **Dependencies:** QC2-014, QC2-017, QC2-018
 **Authorized legacy references:** Verified original P55/T34/T37/T38/T41/T42/T44/T57/T77/T78/T92/T102/T103/T104/T108/T109/T110 sources

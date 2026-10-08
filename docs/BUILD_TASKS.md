@@ -480,7 +480,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-014 — Feature Authority
 
-**Current status:** BLOCKED
+**Current status:** TODO
 **Objective:** Implement deterministic feature definitions and snapshots with explicit missingness.
 **Dependencies:** QC2-004, QC2-012, QC2-013
 **Authorized legacy references:** Gen 1 feature logic, ApexLab feature logic, Original protocol concepts
@@ -505,7 +505,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Acceptance gate:** Feature outputs are exact/reason-coded under registered definitions and are reproducible offline.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
-**Blockers:** Required dependencies QC2-012 and QC2-013 are not PASS. `python3 tools/task_workflow.py preflight QC2-014` fails because both dependencies are not PASS. See docs/reference/QC2-012_BLOCKED_REPORT.md and docs/reference/QC2-013_BLOCKED_REPORT.md.
+**Blockers:** None recorded.
 **Acceptance receipt:** Not recorded.
 
 ---

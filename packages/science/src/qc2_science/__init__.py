@@ -1,5 +1,21 @@
 """Deterministic offline feature authority for QC2."""
 
+from .baselines import (
+    BaselineDisposition,
+    BaselineError,
+    BaselineExecution,
+    BaselineKind,
+    BaselineRun,
+    BaselineRunRow,
+    InsufficientScoreableRows,
+    PRIMARY_REPORTING_K,
+    SECONDARY_REPORTING_K,
+    evaluate_baseline_manifest,
+    materialize_baseline_manifest,
+    scoreable_intersection,
+    select_top_k,
+    select_top_percentile,
+)
 from .engine import compute_feature_snapshot
 from .ground_truth import record_action_review_decision, resolve_eligible_rows
 from .ground_truth_ledger import (
@@ -93,6 +109,15 @@ from .runner_protocol_research_wave2 import (
 )
 
 __all__ = [
+    "BaselineDisposition",
+    "BaselineError",
+    "BaselineExecution",
+    "BaselineKind",
+    "BaselineRun",
+    "BaselineRunRow",
+    "InsufficientScoreableRows",
+    "PRIMARY_REPORTING_K",
+    "SECONDARY_REPORTING_K",
     "ContractRef",
     "ActionReviewCase",
     "ActionReviewDecision",
@@ -151,6 +176,7 @@ __all__ = [
     "compute_feature_snapshot",
     "decimal_value",
     "evaluate_runner_protocol",
+    "evaluate_baseline_manifest",
     "fixture_daily_profile",
     "fixture_structural_protocols",
     "input_value",
@@ -158,6 +184,7 @@ __all__ = [
     "materialize_feature_registry",
     "materialize_runner_protocol_definition",
     "materialize_runner_protocol_registry",
+    "materialize_baseline_manifest",
     "parameter_value",
     "protocol_operation",
     "research_wave1_protocols",
@@ -167,4 +194,7 @@ __all__ = [
     "record_action_review_decision",
     "resolve_eligible_rows",
     "resolve_label_outcome",
+    "scoreable_intersection",
+    "select_top_k",
+    "select_top_percentile",
 ]

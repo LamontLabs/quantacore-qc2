@@ -1,5 +1,9 @@
 # QC2-022 — Baseline Engines eligibility reconciliation
 
+> Historical pre-implementation reconciliation. The status and scope statements
+> below describe the state before `task_workflow.py start QC2-022` and are
+> superseded by `QC2-022_ACCEPTANCE_ASSESSMENT.md`.
+
 ## Eligibility
 
 - **Checked at:** 2026-10-08 (UTC).

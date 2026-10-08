@@ -2227,6 +2227,56 @@
         "QC2-015",
         "QC2-021"
       ],
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-014",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-022 extends these shared trees with deterministic baseline engines and fixture tests. It reruns the full project suite, static checks, and canonical task validation, and records exact tree hashes in its acceptance receipt. Feature equations and fixture activation policy remain unchanged."
+        },
+        {
+          "prior_task_id": "QC2-015",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-022 adds outcome-blind comparator ranking only; it does not change label definitions, label maturity, or outcome access. Full project tests and static checks are rerun, with exact shared-tree hashes recorded in QC2-022's receipt."
+        },
+        {
+          "prior_task_id": "QC2-016",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-022 adds deterministic comparator ranking beside the Ground Truth authority without changing outcome resolution or correction behavior. It reruns the full project suite and static checks, recording exact shared-tree hashes in its acceptance receipt."
+        },
+        {
+          "prior_task_id": "QC2-017",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-022 adds deterministic comparator ranking beside the Runner Protocol framework without changing protocol evaluation. It reruns the full project suite and static checks, recording exact shared-tree hashes in its acceptance receipt."
+        },
+        {
+          "prior_task_id": "QC2-019",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-022 adds outcome-blind comparator engines without changing the inactive wave-one research protocols. It reruns the full project suite and static checks, recording exact shared-tree hashes in its acceptance receipt."
+        },
+        {
+          "prior_task_id": "QC2-020",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-022 adds outcome-blind comparator engines without changing the inactive wave-two research protocols. It reruns the full project suite and static checks, recording exact shared-tree hashes in its acceptance receipt."
+        }
+      ],
       "authorized_legacy_references": [],
       "required_reference_intake": "None. Do not inspect or copy legacy code for this task without a scoped amendment.",
       "required_deliverables": [

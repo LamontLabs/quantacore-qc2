@@ -17,3 +17,12 @@ activated in production; only windows explicitly fixed by the master
 specification are non-parameterized. See
 `docs/reference/QC2-014_DECISION.md` for formulas and constraints and
 `docs/reference/QC2-014_REFERENCE_INTAKE.md` for legacy-source limits.
+
+Deterministic comparator rankings live in `src/qc2_science/baselines.py`.
+They consume validated `UniverseManifest` and `FeatureSnapshot` records without
+reading labels or outcomes. Calibration windows are explicit in each baseline
+manifest and require a `ConfigurationManifest` reference; synthetic parameters
+are limited to the test environment, and these rankers have no production
+activation path. Midrank percentiles, stable-instrument-ID score ties, and
+reporting K conventions are shared through the science package API. See
+`docs/reference/QC2-022_ACCEPTANCE_ASSESSMENT.md` for the equations and limits.

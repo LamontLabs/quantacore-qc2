@@ -685,10 +685,15 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-020 — F0 Runner Protocol Migration Wave 2
 
-**Current status:** BLOCKED
+**Current status:** TODO
 **Objective:** Support more complex daily hypotheses without creating a second intelligence authority.
 **Dependencies:** QC2-013, QC2-014, QC2-017, QC2-018, QC2-019
 **Authorized legacy references:** Verified original breakout/divergence/stall/confluence/reversal/memory/trap/exhaustion sources
+**Authorized artifact drift:** QC2-014 — QC2-020 adds only source-supported, inactive wave-two research protocols and isolated tests within the existing science package. The QC2-020 acceptance receipt records exact resulting tree hashes; QC2-014 remains bound to its tested source commit. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-015 — QC2-020 adds only source-supported, inactive wave-two research protocols and isolated tests within the existing science package. The QC2-020 acceptance receipt records exact resulting tree hashes; QC2-015 remains bound to its tested source commit. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-016 — QC2-020 adds only source-supported, inactive wave-two research protocols and isolated tests within the existing science package. The QC2-020 acceptance receipt records exact resulting tree hashes; QC2-016 remains bound to its tested source commit. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-017 — QC2-020 adds only source-supported, inactive wave-two research protocols and isolated tests within the existing science package. The QC2-020 acceptance receipt records exact resulting tree hashes; QC2-017 remains bound to its tested source commit. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-019 — QC2-020 adds only source-supported, inactive wave-two research protocols and isolated tests within the existing science package. The QC2-020 acceptance receipt records exact resulting tree hashes; QC2-019 remains bound to its tested source commit. Paths: `packages/science`, `tests/science`
 **Required reference intake:** Mandatory for each referenced repository/file actually inspected; record revision, path/hash, source-supported meaning, tests, conflicts, license, and disposition.
 
 **Required deliverables:**
@@ -710,7 +715,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Acceptance gate:** Complex protocols remain reproducible research assets; active-set choice is deferred to calibration.
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
-**Blockers:** Required dependencies QC2-013, QC2-014, QC2-017, QC2-018, and QC2-019 are not PASS. `python3 tools/task_workflow.py preflight QC2-020` fails because all five are not PASS. No authorized breakout/divergence/stall/confluence/reversal/memory/trap/exhaustion source was inspected; see the dependency blocker reports and docs/reference/QC2-020_BLOCKED_REPORT.md.
+**Blockers:** None recorded.
 **Acceptance receipt:** Not recorded.
 
 ---

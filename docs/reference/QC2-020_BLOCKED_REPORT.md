@@ -1,9 +1,9 @@
-# QC2-020 — F0 Runner Protocol Migration Wave 2: BLOCKED
+# QC2-020 — F0 Runner Protocol Migration Wave 2: Prior blocker report
 
-## Blocker assessment
+## Initial blocker assessment
 
 - **Checked at:** 2026-10-07T20:58:31Z (UTC)
-- **Canonical status:** BLOCKED; no acceptance receipt is recorded.
+- **Canonical status at that time:** BLOCKED; no acceptance receipt was recorded.
 - **Unmet dependencies:** QC2-013, QC2-014, QC2-017, QC2-018, and QC2-019 are canonically BLOCKED.
 - **Preflight evidence:** `python3 tools/task_workflow.py preflight QC2-020` failed with `preflight failed: QC2-013 is not PASS; QC2-014 is not PASS; QC2-017 is not PASS; QC2-018 is not PASS; QC2-019 is not PASS`.
 
@@ -20,4 +20,12 @@
 2. Re-run QC2-020 preflight.
 3. Only after preflight passes, inspect authorized sources read-only and record reference intake for each repository/file actually inspected before making source-backed implementation or exclusion decisions.
 
-Until those dependencies pass, the complex protocol concepts remain unexamined, and F0 feasibility or legacy semantics are not asserted.
+At the time of this report, the complex protocol concepts remained unexamined; no F0 feasibility or legacy semantics were asserted.
+
+## Resolution
+
+- **Checked at:** 2026-10-08 (UTC)
+- QC2-013, QC2-014, QC2-017, QC2-018, and QC2-019 now have canonical PASS receipts.
+- `python3 tools/task_workflow.py preflight QC2-020` now passes.
+- The prior dependency blocker is cleared. No source intake or implementation is claimed by this status update.
+- Resume by inspecting authorized sources read-only and recording intake before making source-backed implementation or exclusion decisions.

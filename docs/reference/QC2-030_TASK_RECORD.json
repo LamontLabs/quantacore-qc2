@@ -1,0 +1,38 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a11c31-b26d-7e48-a50b-dc756be0b8a8",
+  "created_at": "2026-10-08T15:46:21Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "310ca6a88c9205a9ca707824e82ba191e827f0506b830a373f9168800db94e37",
+  "task_id": "qc2-030",
+  "task_name": "Matched Decoy Engine",
+  "objective": "Build difficult negatives without selecting similarities using future outcomes.",
+  "dependency_task_ids": [
+    "QC2-012",
+    "QC2-013",
+    "QC2-016",
+    "QC2-027",
+    "QC2-028",
+    "QC2-029"
+  ],
+  "authorized_legacy_refs": [],
+  "deliverable_refs": [
+    "Date/regime risk-set matcher, frozen caliper/distance policy and MatchedDecoySet.",
+    "Reuse/unmatched accounting, training sample weights and original-population references.",
+    "Cutoff-safe matching feature extraction."
+  ],
+  "required_test_refs": [
+    "No outcome variable enters distance or caliper selection.",
+    "Same-date candidates and repeated decoy reuse are recorded.",
+    "Case-control sampling cannot be mistaken for natural-prevalence calibration."
+  ],
+  "acceptance_gate": "Every match has explainable pre-outcome lineage and downstream sampling effects are explicit.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

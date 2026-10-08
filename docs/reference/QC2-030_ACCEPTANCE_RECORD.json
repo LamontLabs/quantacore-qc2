@@ -1,0 +1,52 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a11c31-b274-7cc5-8853-1e16b142cf86",
+  "created_at": "2026-10-08T15:46:21Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "b1f700117fcd7425446ff7f19823ed40b6c4a1d274dcfc470d617f9d773a83c5",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a11c31-b26d-7e48-a50b-dc756be0b8a8",
+    "content_hash": "310ca6a88c9205a9ca707824e82ba191e827f0506b830a373f9168800db94e37"
+  },
+  "task_spec_version": "QC2-030 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "869d41499c0325be3008dd48e131b977dd0a65d6",
+  "changed_paths": [
+    "packages/apexlab",
+    "tests/apexlab"
+  ],
+  "executed_commands": [
+    "python3 -m pytest -q tests/apexlab/test_matched_decoys.py",
+    "python3 -m pytest -q",
+    "ruff check packages/apexlab/src/qc2_apexlab/decoy_models.py packages/apexlab/src/qc2_apexlab/decoy_engine.py packages/apexlab/src/qc2_apexlab/__init__.py tests/apexlab/test_matched_decoys.py",
+    "python3 tools/task_workflow.py preflight QC2-030"
+  ],
+  "test_counts": [
+    {
+      "test_id": "matched_decoy",
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "full_python",
+      "passed": 334,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "7a1cb1360b269f113f651e7715610d98943601a6642918a4070ee0aaba70f5cd",
+    "49e43590e1987cda4fe54d08fc814b9b6814386334c863b394086ea9f22937ae"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-08T15:46:21Z"
+}

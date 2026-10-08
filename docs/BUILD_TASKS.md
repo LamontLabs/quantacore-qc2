@@ -1044,7 +1044,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-030 — Matched Decoy Engine
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Build difficult negatives without selecting similarities using future outcomes.
 **Dependencies:** QC2-012, QC2-013, QC2-016, QC2-027, QC2-028, QC2-029
 **Authorized legacy references:** None.
@@ -1072,7 +1072,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-08T15:46:21Z: `docs/reference/QC2-030_ACCEPTANCE_ASSESSMENT.md`, `docs/reference/QC2-030_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-030_TASK_RECORD.json`
 
 ---
 

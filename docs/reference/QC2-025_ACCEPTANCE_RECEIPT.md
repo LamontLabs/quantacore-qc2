@@ -21,5 +21,5 @@
 
 - `pnpm test` — 284 Python tests passed; database environment guards passed (7 tests).
 - `pnpm run lint` — Ruff and Prettier checks passed.
-- `QC2_ENV=test QC2_POSTGRES_TEST_URL=postgresql://postgres@127.0.0.1:55439/qc2_test_qc225 QC2_EXPECTED_DATABASE_TEST=qc2_test_qc225 pnpm test:postgres` — QC2-005, QC2-006, and QC2-025 PostgreSQL acceptance passed; all DDL and fixtures rolled back.
+- `QC2_ENV=test QC2_POSTGRES_TEST_URL=postgresql://postgres@127.0.0.1:55439/qc2_test_qc225 QC2_EXPECTED_DATABASE_TEST=qc2_test_qc225 pnpm exec node lib/db/test/run-qc2-025-postgres-integration.mjs` — QC2-005, QC2-006, and QC2-025 PostgreSQL acceptance passed; all DDL and fixtures rolled back.
 - `python3 tools/task_workflow.py preflight QC2-025` — passed.

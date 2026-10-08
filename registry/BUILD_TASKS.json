@@ -2687,9 +2687,8 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
-      "blockers": [],
-      "acceptance_receipt": null
+      "status": "TODO",
+      "blockers": []
     },
     {
       "task_id": "QC2-026",

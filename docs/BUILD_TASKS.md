@@ -831,10 +831,18 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-024 — QuantraScore Framework
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Implement the versioned deterministic synthesis interface without choosing empirical weights.
 **Dependencies:** QC2-014, QC2-017, QC2-021, QC2-023
 **Authorized legacy references:** Gen 1 QuantraScore, Gen 1 ZDE ranker
+**Authorized artifact drift:** QC2-014 — QC2-024 adds the deterministic QuantraScore framework and its focused fixtures in the shared science and test trees. It preserves prior task behavior, reruns the complete science suite, and records the exact resulting tree hashes; earlier receipts remain bound to their tested source commits. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-015 — QC2-024 adds the deterministic QuantraScore framework and its focused fixtures in the shared science and test trees. It preserves prior task behavior, reruns the complete science suite, and records the exact resulting tree hashes; earlier receipts remain bound to their tested source commits. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-016 — QC2-024 adds the deterministic QuantraScore framework and its focused fixtures in the shared science and test trees. It preserves prior task behavior, reruns the complete science suite, and records the exact resulting tree hashes; earlier receipts remain bound to their tested source commits. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-017 — QC2-024 adds the deterministic QuantraScore framework and its focused fixtures in the shared science and test trees. It preserves prior task behavior, reruns the complete science suite, and records the exact resulting tree hashes; earlier receipts remain bound to their tested source commits. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-019 — QC2-024 adds the deterministic QuantraScore framework and its focused fixtures in the shared science and test trees. It preserves prior task behavior, reruns the complete science suite, and records the exact resulting tree hashes; earlier receipts remain bound to their tested source commits. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-020 — QC2-024 adds the deterministic QuantraScore framework and its focused fixtures in the shared science and test trees. It preserves prior task behavior, reruns the complete science suite, and records the exact resulting tree hashes; earlier receipts remain bound to their tested source commits. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-022 — QC2-024 adds the deterministic QuantraScore framework and its focused fixtures in the shared science and test trees. It preserves prior task behavior, reruns the complete science suite, and records the exact resulting tree hashes; earlier receipts remain bound to their tested source commits. Paths: `packages/science`, `tests/science`
+**Authorized artifact drift:** QC2-023 — QC2-024 adds the deterministic QuantraScore framework and its focused fixtures in the shared science and test trees. It preserves prior task behavior, reruns the complete science suite, and records the exact resulting tree hashes; earlier receipts remain bound to their tested source commits. Paths: `packages/science`, `tests/science`
 **Required reference intake:** Mandatory for each referenced repository/file actually inspected; record revision, path/hash, source-supported meaning, tests, conflicts, license, and disposition.
 
 **Required deliverables:**
@@ -857,7 +865,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-08T08:39:14Z: `docs/reference/QC2-024_ACCEPTANCE_ASSESSMENT.md`, `docs/reference/QC2-024_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-024_TASK_RECORD.json`
 
 ---
 

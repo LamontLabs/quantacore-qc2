@@ -1,0 +1,39 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a11aaa-aa9f-7ac8-a3a6-e8d8107a38ce",
+  "created_at": "2026-10-08T08:39:14Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "cf6109360777da84e3e34650f5f1009fb7aabc5447a798db2dc5af05e06fd749",
+  "task_id": "qc2-024",
+  "task_name": "QuantraScore Framework",
+  "objective": "Implement the versioned deterministic synthesis interface without choosing empirical weights.",
+  "dependency_task_ids": [
+    "QC2-014",
+    "QC2-017",
+    "QC2-021",
+    "QC2-023"
+  ],
+  "authorized_legacy_refs": [
+    "Gen 1 QuantraScore",
+    "Gen 1 ZDE ranker"
+  ],
+  "deliverable_refs": [
+    "ScoreManifest with inputs, transformations, missingness/penalty and tie rules.",
+    "Primary probability distinct from score/confidence/readiness.",
+    "Calibratable parameter schema with fixture-only examples."
+  ],
+  "required_test_refs": [
+    "No safety input changes score; missing required head cannot silently score.",
+    "Canonical quantization and ranking tie cases reproduce exactly.",
+    "Uncalibrated/fixture score cannot enter production epoch."
+  ],
+  "acceptance_gate": "Score behavior is fully specified by one immutable manifest and cannot hide missing empirical decisions.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

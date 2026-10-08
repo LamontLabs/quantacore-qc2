@@ -2594,9 +2594,60 @@
           "reason": "QC2-024 adds the deterministic QuantraScore framework and its focused fixtures in the shared science and test trees. It preserves prior task behavior, reruns the complete science suite, and records the exact resulting tree hashes; earlier receipts remain bound to their tested source commits."
         }
       ],
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-08T08:39:14Z",
+        "task_spec_version": "QC2-024 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "c50962b83d89eafe402a6d1552fbf52926a9431b",
+        "receipt": "docs/reference/QC2-024_ACCEPTANCE_ASSESSMENT.md",
+        "contract_receipt": "docs/reference/QC2-024_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-024_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/science",
+          "tests/science"
+        ],
+        "executed_commands": [
+          "python3 -m pytest -q",
+          "python3 -m pytest tests/science -q",
+          "python3 -m pytest tests/science/test_quantscore.py -q",
+          "python3 -m ruff check tests/science/test_quantscore.py packages/science/src/qc2_science/quantscore.py packages/science/src/qc2_science/__init__.py",
+          "python3 -m py_compile packages/science/src/qc2_science/quantscore.py packages/science/src/qc2_science/__init__.py tests/science/test_quantscore.py",
+          "python3 -m json.tool registry/BUILD_TASKS.json",
+          "python3 tools/task_workflow.py preflight QC2-024"
+        ],
+        "test_counts": [
+          {
+            "test_id": "repo_suite",
+            "passed": 277,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "science_suite",
+            "passed": 110,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "quantscore_suite",
+            "passed": 17,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/science": "98560f6d7357bcc38f3273f43d61cffb356666eec7d2a9d49c1732da1985af90",
+          "tests/science": "22b42a07976879d10f5346e7a3430940f90b30c5d249ea732c079d424aefcdaf"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "Acceptance verified after implementing the deterministic framework; full repository and science suites passed. No Gen 1 sources were inspected or used.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-025",

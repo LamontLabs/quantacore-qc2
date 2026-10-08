@@ -2528,7 +2528,73 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "TODO",
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-014",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-024 adds the deterministic QuantraScore framework and its focused fixtures in the shared science and test trees. It preserves prior task behavior, reruns the complete science suite, and records the exact resulting tree hashes; earlier receipts remain bound to their tested source commits."
+        },
+        {
+          "prior_task_id": "QC2-015",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-024 adds the deterministic QuantraScore framework and its focused fixtures in the shared science and test trees. It preserves prior task behavior, reruns the complete science suite, and records the exact resulting tree hashes; earlier receipts remain bound to their tested source commits."
+        },
+        {
+          "prior_task_id": "QC2-016",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-024 adds the deterministic QuantraScore framework and its focused fixtures in the shared science and test trees. It preserves prior task behavior, reruns the complete science suite, and records the exact resulting tree hashes; earlier receipts remain bound to their tested source commits."
+        },
+        {
+          "prior_task_id": "QC2-017",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-024 adds the deterministic QuantraScore framework and its focused fixtures in the shared science and test trees. It preserves prior task behavior, reruns the complete science suite, and records the exact resulting tree hashes; earlier receipts remain bound to their tested source commits."
+        },
+        {
+          "prior_task_id": "QC2-019",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-024 adds the deterministic QuantraScore framework and its focused fixtures in the shared science and test trees. It preserves prior task behavior, reruns the complete science suite, and records the exact resulting tree hashes; earlier receipts remain bound to their tested source commits."
+        },
+        {
+          "prior_task_id": "QC2-020",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-024 adds the deterministic QuantraScore framework and its focused fixtures in the shared science and test trees. It preserves prior task behavior, reruns the complete science suite, and records the exact resulting tree hashes; earlier receipts remain bound to their tested source commits."
+        },
+        {
+          "prior_task_id": "QC2-022",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-024 adds the deterministic QuantraScore framework and its focused fixtures in the shared science and test trees. It preserves prior task behavior, reruns the complete science suite, and records the exact resulting tree hashes; earlier receipts remain bound to their tested source commits."
+        },
+        {
+          "prior_task_id": "QC2-023",
+          "artifact_paths": [
+            "packages/science",
+            "tests/science"
+          ],
+          "reason": "QC2-024 adds the deterministic QuantraScore framework and its focused fixtures in the shared science and test trees. It preserves prior task behavior, reruns the complete science suite, and records the exact resulting tree hashes; earlier receipts remain bound to their tested source commits."
+        }
+      ],
+      "status": "IN_PROGRESS",
       "blockers": [],
       "acceptance_receipt": null
     },

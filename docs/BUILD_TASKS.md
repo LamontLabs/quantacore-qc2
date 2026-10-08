@@ -831,7 +831,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-024 — QuantraScore Framework
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Implement the versioned deterministic synthesis interface without choosing empirical weights.
 **Dependencies:** QC2-014, QC2-017, QC2-021, QC2-023
 **Authorized legacy references:** Gen 1 QuantraScore, Gen 1 ZDE ranker

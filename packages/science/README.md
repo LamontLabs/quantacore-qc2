@@ -26,3 +26,16 @@ are limited to the test environment, and these rankers have no production
 activation path. Midrank percentiles, stable-instrument-ID score ties, and
 reporting K conventions are shared through the science package API. See
 `docs/reference/QC2-022_ACCEPTANCE_ASSESSMENT.md` for the equations and limits.
+
+QuantraScore synthesis lives in `src/qc2_science/quantscore.py`. A content-
+addressed `ScoreManifest` pins the immutable `ScoreDefinition`; its ordered
+coefficients, selectors, transforms, missing-value policy, clipping rule, and
+stable instrument-ID tie break fully determine the output. The score is
+`100 × Σ(coefficient × transformed input)`, quantized to six decimal places
+with round-half-even. The Expansion Runner probability is validated against
+its exact label and kept separately at twelve decimal places. Protocol evidence
+selectors pin their expected unit and direction. Uncertainty is a nonpositive
+penalty; safety protocol records cannot bind as inputs. Missing required data is
+reason-coded and cannot silently score. Fixture parameters are synthetic-only; all other parameter
+sets are uncalibrated, and neither class can enter a production epoch. These
+examples specify mechanics only and do not set empirical weights.

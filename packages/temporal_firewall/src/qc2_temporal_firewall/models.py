@@ -43,9 +43,15 @@ def parse_utc_instant(value: str, field_name: str) -> datetime:
 
 def normalize_kind(value: str) -> str:
     """Normalize a contract schema name or a short artifact kind."""
-    name = value.rsplit(".", 1)[-1]
+    if not isinstance(value, str) or not value.strip():
+        raise TemporalViolation("invalid_artifact_kind", "artifact kind must be nonblank text")
+    name = re.sub(r"(?i)\.v[0-9]+$", "", value.strip())
+    name = name.rsplit(".", 1)[-1]
     name = re.sub(r"(?i)v[0-9]+$", "", name)
-    return re.sub(r"[^A-Za-z0-9]", "", name).upper()
+    normalized = re.sub(r"[^A-Za-z0-9]", "", name).upper()
+    if not normalized:
+        raise TemporalViolation("invalid_artifact_kind", "artifact kind is not recognizable")
+    return normalized
 
 
 def parse_session_date(value: str, field_name: str) -> date:
@@ -65,7 +71,11 @@ def parse_session_date(value: str, field_name: str) -> date:
 
 def _freeze_json(value: Any) -> Any:
     if isinstance(value, Mapping):
-        return MappingProxyType({str(key): _freeze_json(item) for key, item in value.items()})
+        if any(not isinstance(key, str) for key in value):
+            raise TemporalViolation(
+                "invalid_contract_payload", "JSON object keys must be strings"
+            )
+        return MappingProxyType({key: _freeze_json(item) for key, item in value.items()})
     if isinstance(value, (list, tuple)):
         return tuple(_freeze_json(item) for item in value)
     if value is None or isinstance(value, (str, int, bool)):
@@ -231,22 +241,29 @@ class TemporalArtifact:
             )
 
         for name in ("dependency_refs", "index_member_refs"):
-            refs = tuple(getattr(self, name))
+            raw_refs = getattr(self, name)
+            if not isinstance(raw_refs, Sequence) or isinstance(raw_refs, (str, bytes)):
+                raise TemporalViolation("invalid_dependency_refs", f"{name} must be a list of IDs")
+            refs = tuple(raw_refs)
             if any(not isinstance(ref, str) or not ref for ref in refs):
                 raise TemporalViolation("invalid_dependency_refs", f"{name} must contain IDs")
             if len(refs) != len(set(refs)):
                 raise TemporalViolation("duplicate_dependency_ref", f"{name} contains duplicate IDs")
             object.__setattr__(self, name, refs)
 
-        if self.logical_key is not None and not self.logical_key.strip():
-            raise TemporalViolation("invalid_logical_key", "logical_key cannot be blank")
+        if self.logical_key is not None and (
+            not isinstance(self.logical_key, str) or not self.logical_key.strip()
+        ):
+            raise TemporalViolation("invalid_logical_key", "logical_key must be nonblank text")
         if normalize_kind(self.artifact_kind) == "METADATAALIAS":
             if not self.logical_key or not self.alias_target:
                 raise TemporalViolation(
                     "invalid_metadata_alias", "metadata aliases require a key and target ID"
                 )
-        if self.alias_target is not None and not self.alias_target.strip():
-            raise TemporalViolation("invalid_metadata_alias", "alias_target cannot be blank")
+        if self.alias_target is not None and (
+            not isinstance(self.alias_target, str) or not self.alias_target.strip()
+        ):
+            raise TemporalViolation("invalid_metadata_alias", "alias_target must be nonblank text")
         if not isinstance(self.payload, Mapping):
             raise TemporalViolation("invalid_contract_payload", "payload must be an object")
         object.__setattr__(self, "payload", _freeze_json(self.payload))
@@ -295,18 +312,55 @@ class TemporalArtifact:
             raise TemporalViolation("contract_identity_missing", "contract schema_name is required")
 
         ref_fields = (
-            "temporal_dependency_refs",
-            "learned_dependency_refs",
+            "action_refs",
+            "artifact_manifest_ref",
+            "calibration_ref",
+            "dataset_ref",
+            "definition_ref",
             "dependency_refs",
+            "embedding_artifact_ref",
+            "event_ref",
+            "feature_registry_ref",
+            "feature_snapshot_ref",
+            "head_output_refs",
+            "hyperparameter_refs",
+            "label_ref",
+            "learned_dependency_refs",
+            "learned_memory_refs",
+            "model_ref",
+            "next_open_bar_ref",
+            "normalization_ref",
+            "outcome_ref",
+            "outcome_refs",
+            "pre_event_snapshot_refs",
+            "prediction_refs",
+            "prior_outcome_ref",
+            "protocol_registry_ref",
+            "protocol_result_refs",
+            "provenance_refs",
+            "raw_receipt_refs",
+            "reference_bar_ref",
+            "registry_ref",
+            "registry_refs",
+            "replacement_outcome_ref",
+            "run_ref",
+            "snapshot_ref",
+            "snapshot_refs",
+            "source_refs",
+            "split_ref",
+            "target_label_refs",
+            "temporal_dependency_refs",
             "transform_refs",
             "revision_refs",
-            "source_refs",
         )
         extracted_refs: list[str] = []
         if dependency_refs is None:
             for name in ref_fields:
                 if name in contract:
-                    extracted_refs.extend(_ref_ids(contract[name], name))
+                    value = contract[name]
+                    if name.endswith("_ref") and value is not None:
+                        value = (value,)
+                    extracted_refs.extend(_ref_ids(value, name))
         else:
             extracted_refs.extend(_ref_ids(dependency_refs, "dependency_refs"))
 
@@ -374,7 +428,23 @@ class TemporalPermission:
     allow_historical_reconstructed: bool = False
 
     def __post_init__(self) -> None:
+        if not isinstance(self.allow_historical_reconstructed, bool):
+            raise TemporalViolation(
+                "invalid_temporal_permission",
+                "historical reconstruction permission must be an explicit boolean",
+            )
+        if isinstance(self.operations, (str, bytes)) or isinstance(
+            self.artifact_kinds, (str, bytes)
+        ):
+            raise TemporalViolation(
+                "invalid_temporal_permission",
+                "operations and artifact kinds must be explicit collections",
+            )
         operations = frozenset(TemporalOperation(value) for value in self.operations)
+        if any(not isinstance(value, str) for value in self.artifact_kinds):
+            raise TemporalViolation(
+                "invalid_temporal_permission", "artifact kinds must be strings"
+            )
         kinds = frozenset(normalize_kind(value) for value in self.artifact_kinds)
         if not operations or not kinds or "" in kinds or "*" in kinds:
             raise TemporalViolation(
@@ -429,7 +499,13 @@ class TemporalQuery:
                 "unbounded_temporal_query", "a temporal query requires IDs or logical keys"
             )
         for field_name in ("artifact_ids", "logical_keys"):
-            values = tuple(getattr(self, field_name))
+            raw_values = getattr(self, field_name)
+            if not isinstance(raw_values, Sequence) or isinstance(raw_values, (str, bytes)):
+                raise TemporalViolation(
+                    "invalid_query_selector",
+                    f"{field_name} must be a list or tuple of strings",
+                )
+            values = tuple(raw_values)
             if any(not isinstance(value, str) or not value for value in values):
                 raise TemporalViolation("invalid_query_selector", f"{field_name} must contain strings")
             if len(values) != len(set(values)):
@@ -452,11 +528,17 @@ class TemporalView:
     catalog_revision: str
     artifacts: tuple[TemporalArtifact, ...]
     resolved_aliases: Mapping[str, str] = field(default_factory=dict)
+    dependency_closure: Mapping[str, tuple[str, ...]] = field(default_factory=dict)
     cache_hit: bool = False
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "artifacts", tuple(self.artifacts))
         object.__setattr__(self, "resolved_aliases", MappingProxyType(dict(self.resolved_aliases)))
+        closure = {
+            artifact_id: tuple(dependencies)
+            for artifact_id, dependencies in self.dependency_closure.items()
+        }
+        object.__setattr__(self, "dependency_closure", MappingProxyType(closure))
 
 
 @dataclass(frozen=True, slots=True)

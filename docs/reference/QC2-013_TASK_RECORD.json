@@ -1,0 +1,37 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a118f4-2e2d-720d-b76b-5179054fa469",
+  "created_at": "2026-10-08T00:40:18Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "e71de05b90fd8d304e0068a508b168421f41743d260e3d2d3c3bbd48805e1301",
+  "task_id": "qc2-013",
+  "task_name": "Temporal Firewall",
+  "objective": "Enforce recursive information and learning availability for forward and reconstructed modes.",
+  "dependency_task_ids": [
+    "QC2-003",
+    "QC2-007",
+    "QC2-012"
+  ],
+  "authorized_legacy_refs": [
+    "ApexLab temporal audit findings and supporting source"
+  ],
+  "deliverable_refs": [
+    "Cutoff-scoped query/export APIs and permissions; transitive learned-dependency validator.",
+    "Actual versus simulated availability fields and mode guards.",
+    "Index/cache/revision-aware temporal access tests."
+  ],
+  "required_test_refs": [
+    "Block future bars, labels, genomes, embeddings, normalizers, calibrators, and metadata aliases.",
+    "Historical replay retains actual download/creation timestamps.",
+    "Indirect caches and globally fitted state cannot bypass the cutoff."
+  ],
+  "acceptance_gate": "Every dependency path either proves legal availability or blocks the consuming operation.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

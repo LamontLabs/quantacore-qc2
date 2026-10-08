@@ -448,7 +448,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-013 — Temporal Firewall
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Enforce recursive information and learning availability for forward and reconstructed modes.
 **Dependencies:** QC2-003, QC2-007, QC2-012
 **Authorized legacy references:** ApexLab temporal audit findings and supporting source
@@ -474,7 +474,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-08T00:40:18Z: `docs/reference/QC2-013_ACCEPTANCE_RECEIPT.md`, `docs/reference/QC2-013_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-013_TASK_RECORD.json`
 
 ---
 

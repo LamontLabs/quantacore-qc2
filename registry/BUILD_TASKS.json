@@ -1274,9 +1274,85 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-08T00:40:18Z",
+        "task_spec_version": "QC2-013 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "8f105d66bf4dc41b62fa87ef889a39418b97abbe",
+        "receipt": "docs/reference/QC2-013_ACCEPTANCE_RECEIPT.md",
+        "contract_receipt": "docs/reference/QC2-013_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-013_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/temporal_firewall/README.md",
+          "packages/temporal_firewall/src/qc2_temporal_firewall/__init__.py",
+          "packages/temporal_firewall/src/qc2_temporal_firewall/authority.py",
+          "packages/temporal_firewall/src/qc2_temporal_firewall/errors.py",
+          "packages/temporal_firewall/src/qc2_temporal_firewall/models.py",
+          "tests/temporal_firewall/__init__.py",
+          "tests/temporal_firewall/conftest.py",
+          "tests/temporal_firewall/test_authority.py",
+          "tests/temporal_firewall/test_storage_privileges.py",
+          "docs/reference/QC2-013_PACKAGE_LAYOUT_DECISION.md",
+          "docs/reference/QC2-013_REFERENCE_INTAKE.md",
+          "migrations/0001_postgresql_authority_foundation.sql",
+          "migrations/0002_evidence_authority.sql"
+        ],
+        "executed_commands": [
+          "python3 -m pytest -q tests/temporal_firewall",
+          "python3 -m ruff check packages/temporal_firewall/src tests/temporal_firewall",
+          "pnpm run verify",
+          "python3 tools/task_workflow.py preflight QC2-013"
+        ],
+        "test_counts": [
+          {
+            "test_id": "qc2_013_temporal_firewall_unit",
+            "passed": 22,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "qc2_root_python_suite",
+            "passed": 146,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "qc2_database_environment_guards",
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "qc2_smoke_pytest",
+            "passed": 2,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/temporal_firewall/README.md": "f06b79f87b3487f76dd5a490fcdba0c7a522fecfda6fff376f1e1eb4d675a898",
+          "packages/temporal_firewall/src/qc2_temporal_firewall/__init__.py": "f2da5ebbf791dc1241c81264da98d9c77dd074069678e70156a4a795b250b218",
+          "packages/temporal_firewall/src/qc2_temporal_firewall/authority.py": "74ba54caae8015769abbdd45de5a147f03510aa367e2c153fd9c0be48b6d1ccd",
+          "packages/temporal_firewall/src/qc2_temporal_firewall/errors.py": "2ffc0700fb13f5c9f8ace471e41c531f568d490ef5b8a282b81f07bbbab5bac1",
+          "packages/temporal_firewall/src/qc2_temporal_firewall/models.py": "b0745a613249c3697ec7f9945db2af76577c5f6f84c88939d6e4bf721a3a4756",
+          "tests/temporal_firewall/__init__.py": "7deb10456684a05ec08eacfabbde8528a3c24b21c5e71a46f9c1b8ffb0c50392",
+          "tests/temporal_firewall/conftest.py": "e2892c7cdabbe541f91984838f685c2383a723945a270c99fa5d1654e20915b8",
+          "tests/temporal_firewall/test_authority.py": "ae6248dacc0936e8fd693b341a5fb58a10ce2851d1f70f745c9b21bb0495efcd",
+          "tests/temporal_firewall/test_storage_privileges.py": "fbc64f5e32868957107811d763ac740a7f04302b7e93bdc00237e5091dd45a26",
+          "docs/reference/QC2-013_PACKAGE_LAYOUT_DECISION.md": "a057291f6e0fe7b91ba3df4fd62ca8dfd565e04099ff93e259bc885f4ba0a0cd",
+          "docs/reference/QC2-013_REFERENCE_INTAKE.md": "9337f84afec5027a9f15fe33f58624a0d917fa40481a52a6be046bdf611bd878",
+          "migrations/0001_postgresql_authority_foundation.sql": "a705ed0b3c309172beccff373a85283aed722ac4a0163d53358e04744d7949ac",
+          "migrations/0002_evidence_authority.sql": "fa331f591b9680c12862528c60a782ff2722ff919dc8a7f32873b2817c84b4c4"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "Acceptance verified through cutoff-scoped local tests and repository checks; checked-in migrations were audited for direct outcome-table grants. No live database or production adapter is claimed.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-014",

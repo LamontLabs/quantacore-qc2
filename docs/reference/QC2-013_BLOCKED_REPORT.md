@@ -1,5 +1,11 @@
 # QC2-013 — Temporal Firewall: BLOCKED
 
+> **Historical snapshot:** The blocked/not-started state below was true at
+> `2026-10-07T20:26:12Z` and is preserved for audit. QC2-013 has since passed
+> its local-fixture and code-evidence gate. The current record is
+> [`QC2-013_ACCEPTANCE_RECEIPT.md`](QC2-013_ACCEPTANCE_RECEIPT.md); do not use
+> this earlier report as the task's current status.
+
 ## Blocker assessment
 
 - **Checked at:** 2026-10-07T20:26:12Z (UTC)

@@ -617,7 +617,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-018 — Historical Protocol Lineage Registry
 
-**Current status:** TODO
+**Current status:** BLOCKED
 **Objective:** Account for original concepts without assuming all are valid or daily-compatible.
 **Dependencies:** QC2-001, QC2-017
 **Authorized legacy references:** Original QuantraCore Protocol project
@@ -642,7 +642,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Acceptance gate:** Inventory is complete for verified sources; unresolved items are excluded from activation or block a required dependency.
 **Required evidence/environment:** LEGACY_READ_ACCESS
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
-**Blockers:** None recorded.
+**Blockers:** The exact pinned private source Lamont-Labs/QuantraCore-Engine@67597a2a63fd3957e6ec50e270dba8e3df1d3757 is not readable in this environment: public GitHub commit lookup returns 404, and the configured GitHub reader exposed no usable connection. Do not infer Engine protocol meanings or claim a complete inventory; resume only after read-only access to this exact revision is available.
 **Acceptance receipt:** Not recorded.
 
 ---

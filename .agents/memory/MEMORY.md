@@ -5,3 +5,4 @@
 - [QC2 task progression](qc2-task-progression.md) — handle task completion and advance through eligible QC2 work without asking the owner to mark each task complete.
 - [Alpaca calendar time semantics](alpaca-calendar-time-semantics.md) — calendar open/close values may be exchange-local `HH:MM`; combine with the session date and exchange timezone before UTC comparisons.
 - [QC2 label precision](qc2-label-decimal-precision.md) — fractional-return values and event comparisons use 12 places with `ROUND_HALF_EVEN`; extrema ties use raw observed prices.
+- [Private GitHub source access](private-github-source-access.md) — confirm a live read of each pinned private revision; installed integration metadata and prior manifests are not current access proof.

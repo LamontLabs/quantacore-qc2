@@ -170,7 +170,7 @@ The catalog defines contracts and boundary rules only. It does not add a persist
 | `ExecutionEpisode` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `paper_account_fingerprint`, `account_mode`, `opened_at`, `opening_cash`, `currency`, `opening_position_refs`, `opening_order_refs`, `strategy_ref`, `capital_policy_ref`, `sealed_at`, `episode_hash` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `Experiment` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `hypothesis`, `search_space_hash`, `code_hash`, `environment_fingerprint`, `dataset_ref`, `split_ref`, `candidate_refs`, `algorithm`, `seed`, `configuration_ref`, `budget_ref`, `compute_cost`, `evaluation_access`, `result_ref`, `rejection_reason`, `artifact_refs` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `FailureGenome` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `event_ref`, `failure_type`, `pre_event_snapshot_refs`, `prediction_refs`, `outcome_refs`, `provenance_refs`, `curation_version`, `event_time`, `available_for_learning_at`, `temporal_dependency_refs` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
-| `FeatureDefinition` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `stable_key`, `version`, `equation`, `input_refs`, `input_units`, `lookback_sessions`, `warmup_sessions`, `alignment`, `missingness_policy`, `zero_denominator_policy`, `supported_regime`, `dependency_refs`, `implementation_hash`, `invariance_properties` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
+| `FeatureDefinition` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `stable_key`, `version`, `research_family`, `equation`, `input_refs`, `input_units`, `output_unit`, `output_dtype`, `lookback_sessions`, `warmup_sessions`, `alignment`, `split_treatment`, `precision`, `normalization`, `parameter_profile`, `missingness_policy`, `zero_denominator_policy`, `supported_regime`, `dependency_refs`, `implementation_hash`, `invariance_properties` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `FeatureRegistry` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `registry_version`, `definition_refs`, `ordered_feature_ids`, `effective_from` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `FeatureSnapshot` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `session_id`, `instrument_ref`, `registry_ref`, `feature_values`, `input_hashes`, `transform_refs`, `decision_cutoff`, `code_hash`, `environment_fingerprint` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
 | `LabelDefinition` | `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `stable_key`, `version`, `horizon_sessions`, `price_reference`, `target_event`, `maturity_rule`, `release_policy`, `threshold`, `threshold_unit` | `schema_name`, `schema_version`, `id`, `created_at`, `content_hash` |
@@ -879,7 +879,7 @@ Identity: `id`. Immutable fields: `schema_name`, `schema_version`, `id`, `create
 
 Schema: `qc2.scientific_definitions.FeatureDefinition.v1`. Writer: `feature`. Readers: apexlab, feature, inference, label, model_registry, owner_api, prediction, quantscore, runner_protocol, safety, validation.
 
-Identity: `id`, `stable_key`, `version`. Immutable fields: `schema_name`, `schema_version`, `id`, `created_at`, `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `content_hash`, `stable_key`, `version`, `equation`, `input_refs`, `input_units`, `lookback_sessions`, `warmup_sessions`, `alignment`, `missingness_policy`, `zero_denominator_policy`, `supported_regime`, `dependency_refs`, `implementation_hash`, `invariance_properties`.
+Identity: `id`, `stable_key`, `version`. Immutable fields: `schema_name`, `schema_version`, `id`, `created_at`, `owning_authority`, `evidence_class`, `environment_namespace`, `source_refs`, `content_hash`, `stable_key`, `version`, `research_family`, `equation`, `input_refs`, `input_units`, `output_unit`, `output_dtype`, `lookback_sessions`, `warmup_sessions`, `alignment`, `split_treatment`, `precision`, `normalization`, `parameter_profile`, `missingness_policy`, `zero_denominator_policy`, `supported_regime`, `dependency_refs`, `implementation_hash`, `invariance_properties`.
 
 | Field | Required | Type | Unit | Foreign target |
 |---|---:|---|---|---|
@@ -894,12 +894,19 @@ Identity: `id`, `stable_key`, `version`. Immutable fields: `schema_name`, `schem
 | `content_hash` | yes | `sha256` | SHA-256 digest (lowercase hexadecimal) | — |
 | `stable_key` | yes | `slug` | lowercase identifier | — |
 | `version` | yes | `positive_int` | integer count (unit is named by the field) | — |
+| `research_family` | yes | `slug` | lowercase identifier | — |
 | `equation` | yes | `text` | text | — |
-| `input_refs` | yes | `refs<FeatureDefinition|DailyBar|InstrumentClassification|AdjustmentManifest>` | typed foreign reference to the listed contract | FeatureDefinition, DailyBar, InstrumentClassification, AdjustmentManifest |
+| `input_refs` | yes | `refs<FeatureDefinition|DailyBar|InstrumentClassification|AdjustmentManifest|CalendarManifest|MarketSession>` | typed foreign reference to the listed contract | FeatureDefinition, DailyBar, InstrumentClassification, AdjustmentManifest, CalendarManifest, MarketSession |
 | `input_units` | yes | `text_list` | ordered array; item unit/type is stated by the field | — |
+| `output_unit` | yes | `text` | text | — |
+| `output_dtype` | yes | `enum<FeatureDataType>` | enumerated state/dimension; see the named enum | — |
 | `lookback_sessions` | yes | `nonnegative_int` | exchange sessions | — |
 | `warmup_sessions` | yes | `nonnegative_int` | exchange sessions | — |
 | `alignment` | yes | `text` | text | — |
+| `split_treatment` | yes | `enum<FeatureSplitTreatment>` | enumerated state/dimension; see the named enum | — |
+| `precision` | yes | `nonnegative_int` | decimal places | — |
+| `normalization` | yes | `enum<FeatureNormalization>` | enumerated state/dimension; see the named enum | — |
+| `parameter_profile` | yes | `slug` | lowercase identifier | — |
 | `missingness_policy` | yes | `enum<MissingnessPolicy>` | enumerated state/dimension; see the named enum | — |
 | `zero_denominator_policy` | yes | `enum<ZeroDenominatorPolicy>` | enumerated state/dimension; see the named enum | — |
 | `supported_regime` | yes | `slug` | lowercase identifier | — |

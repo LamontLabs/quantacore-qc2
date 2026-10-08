@@ -480,10 +480,11 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-014 — Feature Authority
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Implement deterministic feature definitions and snapshots with explicit missingness.
 **Dependencies:** QC2-004, QC2-012, QC2-013
 **Authorized legacy references:** Gen 1 feature logic, ApexLab feature logic, Original protocol concepts
+**Authorized artifact drift:** QC2-004 — QC2-014 adds the feature-family, unit, dtype, split, precision, normalization, and fixture-profile fields required before feature definitions are persisted. It regenerates the shared contract projections and reruns contract and cross-language checks; no deployed or persisted FeatureDefinition v1 records are claimed. Paths: `packages/contracts`, `tools/generate_contract_package.py`, `docs/reference/QC2-003_CONTRACT_CATALOG.md`
 **Required reference intake:** Mandatory for each referenced repository/file actually inspected; record revision, path/hash, source-supported meaning, tests, conflicts, license, and disposition.
 
 **Required deliverables:**

@@ -8,7 +8,8 @@ data class WireReference(
 )
 
 data class FeatureValueRecord(
-    val feature_id: String, val unit: String, val value: String?, val missing_reason: String?,
+    val feature_id: String, val unit: String, val output_dtype: String,
+    val value: String?, val missing_reason: String?,
 )
 data class GateResultRecord(
     val gate_id: String, val status: String, val reason_codes: List<String>,

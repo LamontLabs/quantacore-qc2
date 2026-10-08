@@ -340,6 +340,13 @@
             "type": "string",
             "minLength": 1
           },
+          "output_dtype": {
+            "type": "string",
+            "enum": [
+              "DECIMAL",
+              "INTEGER"
+            ]
+          },
           "value": {
             "type": "string",
             "pattern": "^-?(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$"
@@ -358,7 +365,8 @@
         },
         "required": [
           "feature_id",
-          "unit"
+          "unit",
+          "output_dtype"
         ],
         "oneOf": [
           {

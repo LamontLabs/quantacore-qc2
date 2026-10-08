@@ -262,13 +262,17 @@ def primitive_schema(type_name: str) -> dict[str, Any]:
                 "properties": {
                     "feature_id": primitive_schema("slug"),
                     "unit": primitive_schema("text"),
+                    "output_dtype": {
+                        "type": "string",
+                        "enum": list(c.ENUMS["FeatureDataType"]),
+                    },
                     "value": primitive_schema("decimal"),
                     "missing_reason": {
                         "type": "string",
                         "enum": list(c.ENUMS["FeatureMissingReason"]),
                     },
                 },
-                "required": ["feature_id", "unit"],
+                "required": ["feature_id", "unit", "output_dtype"],
                 "oneOf": [
                     {
                         "required": ["value"],
@@ -767,6 +771,7 @@ def value_for_type(type_name: str, contract_name: str, field_name: str) -> Any:
             {
                 "feature_id": "close_return_1",
                 "unit": "fraction",
+                "output_dtype": "DECIMAL",
                 "missing_reason": "WARMUP_REQUIRED",
             }
         ]
@@ -901,6 +906,7 @@ def fixture_for(name: str) -> dict[str, Any]:
             {
                 "feature_id": "close_return_1",
                 "unit": "fraction",
+                "output_dtype": "DECIMAL",
                 "missing_reason": "WARMUP_REQUIRED",
             }
         ]
@@ -1399,6 +1405,7 @@ def kotlin_literal(type_name: str, value: Any) -> str:
                 "FeatureValueRecord("
                 f"feature_id = {json.dumps(item['feature_id'])}, "
                 f"unit = {json.dumps(item['unit'])}, "
+                f"output_dtype = {json.dumps(item['output_dtype'])}, "
                 f"value = {kotlin_literal('nullable_decimal', item.get('value'))}, "
                 f"missing_reason = {kotlin_nullable_string(item.get('missing_reason'))}"
                 ")"
@@ -1585,6 +1592,7 @@ def render_python_types() -> str:
             "class FeatureValueRecord(TypedDict):",
             "    feature_id: str",
             "    unit: str",
+            "    output_dtype: 'FeatureDataType'",
             "    value: NotRequired[DecimalString]",
             "    missing_reason: NotRequired['FeatureMissingReason']",
             "",
@@ -1701,7 +1709,7 @@ def render_typescript(valid_fixtures: dict[str, dict[str, Any]]) -> str:
             "  content_hash?: Sha256;",
             "}",
             "export interface FeatureValueRecord {",
-            "  feature_id: string; unit: string; value?: DecimalString;",
+            "  feature_id: string; unit: string; output_dtype: FeatureDataType; value?: DecimalString;",
             "  missing_reason?: FeatureMissingReason;",
             "}",
             "export interface GateResultRecord {",
@@ -1775,7 +1783,8 @@ def render_kotlin_models() -> str:
         ")",
         "",
         "data class FeatureValueRecord(",
-        "    val feature_id: String, val unit: String, val value: String?, val missing_reason: String?,",
+        "    val feature_id: String, val unit: String, val output_dtype: String,",
+        "    val value: String?, val missing_reason: String?,",
         ")",
         "data class GateResultRecord(",
         "    val gate_id: String, val status: String, val reason_codes: List<String>,",

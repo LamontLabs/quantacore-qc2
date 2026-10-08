@@ -285,6 +285,12 @@
       "description": "Unit: integer count (unit is named by the field).",
       "x-unit": "integer count (unit is named by the field)"
     },
+    "research_family": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]{0,95}$",
+      "description": "Unit: lowercase identifier.",
+      "x-unit": "lowercase identifier"
+    },
     "equation": {
       "type": "string",
       "minLength": 1,
@@ -379,6 +385,49 @@
               "target_id"
             ],
             "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "target_schema_name": {
+                "const": "qc2.time_operation.CalendarManifest.v1"
+              },
+              "target_id": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "content_hash": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            },
+            "required": [
+              "target_schema_name",
+              "target_id",
+              "content_hash"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "target_schema_name": {
+                "const": "qc2.time_operation.MarketSession.v1"
+              },
+              "target_id": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "content_hash": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            },
+            "required": [
+              "target_schema_name",
+              "target_id"
+            ],
+            "additionalProperties": false
           }
         ]
       },
@@ -393,6 +442,21 @@
       },
       "description": "Unit: ordered array; item unit/type is stated by the field.",
       "x-unit": "ordered array; item unit/type is stated by the field"
+    },
+    "output_unit": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unit: text.",
+      "x-unit": "text"
+    },
+    "output_dtype": {
+      "type": "string",
+      "enum": [
+        "DECIMAL",
+        "INTEGER"
+      ],
+      "description": "Unit: enumerated state/dimension; see the named enum.",
+      "x-unit": "enumerated state/dimension; see the named enum"
     },
     "lookback_sessions": {
       "type": "integer",
@@ -411,6 +475,42 @@
       "minLength": 1,
       "description": "Unit: text.",
       "x-unit": "text"
+    },
+    "split_treatment": {
+      "type": "string",
+      "enum": [
+        "SPLIT_ADJUSTED_COMMON_BASIS_REQUIRED",
+        "NOT_APPLICABLE"
+      ],
+      "description": "Unit: enumerated state/dimension; see the named enum.",
+      "x-unit": "enumerated state/dimension; see the named enum"
+    },
+    "precision": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Unit: decimal places.",
+      "x-unit": "decimal places"
+    },
+    "normalization": {
+      "type": "string",
+      "enum": [
+        "NONE",
+        "FRACTION",
+        "RATIO",
+        "UNIT_INTERVAL",
+        "SIGNED_UNIT",
+        "COUNT",
+        "LOG_RETURN_PER_SESSION",
+        "RELATIVE_SLOPE"
+      ],
+      "description": "Unit: enumerated state/dimension; see the named enum.",
+      "x-unit": "enumerated state/dimension; see the named enum"
+    },
+    "parameter_profile": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]{0,95}$",
+      "description": "Unit: lowercase identifier.",
+      "x-unit": "lowercase identifier"
     },
     "missingness_policy": {
       "type": "string",
@@ -499,12 +599,19 @@
     "content_hash",
     "stable_key",
     "version",
+    "research_family",
     "equation",
     "input_refs",
     "input_units",
+    "output_unit",
+    "output_dtype",
     "lookback_sessions",
     "warmup_sessions",
     "alignment",
+    "split_treatment",
+    "precision",
+    "normalization",
+    "parameter_profile",
     "missingness_policy",
     "zero_denominator_policy",
     "supported_regime",
@@ -544,12 +651,19 @@
       "source_refs",
       "stable_key",
       "version",
+      "research_family",
       "equation",
       "input_refs",
       "input_units",
+      "output_unit",
+      "output_dtype",
       "lookback_sessions",
       "warmup_sessions",
       "alignment",
+      "split_treatment",
+      "precision",
+      "normalization",
+      "parameter_profile",
       "missingness_policy",
       "zero_denominator_policy",
       "supported_regime",
@@ -582,12 +696,19 @@
       "content_hash",
       "stable_key",
       "version",
+      "research_family",
       "equation",
       "input_refs",
       "input_units",
+      "output_unit",
+      "output_dtype",
       "lookback_sessions",
       "warmup_sessions",
       "alignment",
+      "split_treatment",
+      "precision",
+      "normalization",
+      "parameter_profile",
       "missingness_policy",
       "zero_denominator_policy",
       "supported_regime",

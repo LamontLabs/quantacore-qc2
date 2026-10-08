@@ -3,3 +3,17 @@
 Reserved for deterministic scientific transformations over explicit,
 versioned inputs. Keep this boundary side-effect free and independent of
 network, persistence, and execution.
+
+QC2's feature authority lives in `src/qc2_science/`. It consumes frozen,
+content-addressed bars, calendar sessions, instrument/assignment references,
+and adjustment manifests. It does not fetch data or read labels. Historical
+similarity prototypes require caller-supplied temporal-access evidence and
+must be known by the decision cutoff. Every ordered snapshot row carries its
+unit and output data type, followed by exactly one type-conforming value or
+explicit missing reason.
+
+`fixture_daily_v1` is synthetic-only. Its empirical windows cannot be
+activated in production; only windows explicitly fixed by the master
+specification are non-parameterized. See
+`docs/reference/QC2-014_DECISION.md` for formulas and constraints and
+`docs/reference/QC2-014_REFERENCE_INTAKE.md` for legacy-source limits.

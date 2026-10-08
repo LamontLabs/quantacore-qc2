@@ -7512,12 +7512,19 @@
       "source_refs",
       "stable_key",
       "version",
+      "research_family",
       "equation",
       "input_refs",
       "input_units",
+      "output_unit",
+      "output_dtype",
       "lookback_sessions",
       "warmup_sessions",
       "alignment",
+      "split_treatment",
+      "precision",
+      "normalization",
+      "parameter_profile",
       "missingness_policy",
       "zero_denominator_policy",
       "supported_regime",
@@ -7550,12 +7557,19 @@
       "content_hash",
       "stable_key",
       "version",
+      "research_family",
       "equation",
       "input_refs",
       "input_units",
+      "output_unit",
+      "output_dtype",
       "lookback_sessions",
       "warmup_sessions",
       "alignment",
+      "split_treatment",
+      "precision",
+      "normalization",
+      "parameter_profile",
       "missingness_policy",
       "zero_denominator_policy",
       "supported_regime",
@@ -7769,6 +7783,13 @@
         "reference_targets": []
       },
       {
+        "name": "research_family",
+        "type": "slug",
+        "required": true,
+        "unit": "lowercase identifier",
+        "reference_targets": []
+      },
+      {
         "name": "equation",
         "type": "text",
         "required": true,
@@ -7777,14 +7798,16 @@
       },
       {
         "name": "input_refs",
-        "type": "refs<FeatureDefinition|DailyBar|InstrumentClassification|AdjustmentManifest>",
+        "type": "refs<FeatureDefinition|DailyBar|InstrumentClassification|AdjustmentManifest|CalendarManifest|MarketSession>",
         "required": true,
         "unit": "typed foreign reference to the listed contract",
         "reference_targets": [
           "FeatureDefinition",
           "DailyBar",
           "InstrumentClassification",
-          "AdjustmentManifest"
+          "AdjustmentManifest",
+          "CalendarManifest",
+          "MarketSession"
         ]
       },
       {
@@ -7792,6 +7815,20 @@
         "type": "text_list",
         "required": true,
         "unit": "ordered array; item unit/type is stated by the field",
+        "reference_targets": []
+      },
+      {
+        "name": "output_unit",
+        "type": "text",
+        "required": true,
+        "unit": "text",
+        "reference_targets": []
+      },
+      {
+        "name": "output_dtype",
+        "type": "enum<FeatureDataType>",
+        "required": true,
+        "unit": "enumerated state/dimension; see the named enum",
         "reference_targets": []
       },
       {
@@ -7813,6 +7850,34 @@
         "type": "text",
         "required": true,
         "unit": "text",
+        "reference_targets": []
+      },
+      {
+        "name": "split_treatment",
+        "type": "enum<FeatureSplitTreatment>",
+        "required": true,
+        "unit": "enumerated state/dimension; see the named enum",
+        "reference_targets": []
+      },
+      {
+        "name": "precision",
+        "type": "nonnegative_int",
+        "required": true,
+        "unit": "decimal places",
+        "reference_targets": []
+      },
+      {
+        "name": "normalization",
+        "type": "enum<FeatureNormalization>",
+        "required": true,
+        "unit": "enumerated state/dimension; see the named enum",
+        "reference_targets": []
+      },
+      {
+        "name": "parameter_profile",
+        "type": "slug",
+        "required": true,
+        "unit": "lowercase identifier",
         "reference_targets": []
       },
       {

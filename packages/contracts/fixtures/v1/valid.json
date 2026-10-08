@@ -709,6 +709,7 @@
       "content_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "stable_key": "fixture",
       "version": 1,
+      "research_family": "fixture",
       "equation": "fixture",
       "input_refs": [
         {
@@ -720,9 +721,15 @@
       "input_units": [
         "fixture"
       ],
+      "output_unit": "fixture",
+      "output_dtype": "DECIMAL",
       "lookback_sessions": 0,
       "warmup_sessions": 0,
       "alignment": "fixture",
+      "split_treatment": "SPLIT_ADJUSTED_COMMON_BASIS_REQUIRED",
+      "precision": 0,
+      "normalization": "NONE",
+      "parameter_profile": "fixture",
       "missingness_policy": "EXPLICIT_REASON",
       "zero_denominator_policy": "MISSING",
       "supported_regime": "fixture",
@@ -791,6 +798,7 @@
         {
           "feature_id": "close_return_1",
           "unit": "fraction",
+          "output_dtype": "DECIMAL",
           "missing_reason": "WARMUP_REQUIRED"
         }
       ],

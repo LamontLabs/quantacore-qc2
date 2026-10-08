@@ -1,0 +1,40 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a11bf8-e75b-7324-9df8-19b0093ca7dd",
+  "created_at": "2026-10-08T14:44:19Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "0e43bbddbf098bfc5eb83b3819080f4cf837033ead2817420178fa4e63f523a3",
+  "task_id": "qc2-028",
+  "task_name": "Runner Genome System",
+  "objective": "Create structural winner memories whose availability begins only after justified resolution.",
+  "dependency_task_ids": [
+    "QC2-013",
+    "QC2-014",
+    "QC2-015",
+    "QC2-016",
+    "QC2-025",
+    "QC2-027"
+  ],
+  "authorized_legacy_refs": [
+    "Original DNA/memory protocol sources"
+  ],
+  "deliverable_refs": [
+    "RunnerGenome schema/store, pre-event snapshots, resolved facts and lineage.",
+    "Versioned cutoff-filtered memory index and actual creation/learning times.",
+    "Missing-contemporaneous-prediction representation."
+  ],
+  "required_test_refs": [
+    "An April 15 success cannot be retrieved by an April 11 simulated decision.",
+    "Changing an index member changes the index hash and replay dependency.",
+    "Outcome-derived embeddings cannot enter an earlier feature view."
+  ],
+  "acceptance_gate": "Every genome/index lookup proves temporal eligibility for the consumer cutoff.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

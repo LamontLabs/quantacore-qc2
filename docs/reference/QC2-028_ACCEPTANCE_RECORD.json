@@ -1,0 +1,65 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a11bf8-e75f-77ee-bad1-dba9a4841989",
+  "created_at": "2026-10-08T14:44:19Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "650ee22046e90f9bdc3ecacdb271288019f9ab41ec0f405d2f55efb7942923cc",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a11bf8-e75b-7324-9df8-19b0093ca7dd",
+    "content_hash": "0e43bbddbf098bfc5eb83b3819080f4cf837033ead2817420178fa4e63f523a3"
+  },
+  "task_spec_version": "QC2-028 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "3563baaf2a976401aa21ef9aa8ae0a3e1c88d4df",
+  "changed_paths": [
+    "packages/apexlab",
+    "tests/apexlab"
+  ],
+  "executed_commands": [
+    "pnpm run verify",
+    "python3 -m pytest -q tests/apexlab",
+    "python3 -m ruff check packages/apexlab/src/qc2_apexlab tests/apexlab",
+    "python3 -m compileall -q packages/apexlab/src/qc2_apexlab",
+    "DANGEROUSLY_ALLOW_GIT=1 python3 tools/task_workflow.py preflight QC2-028"
+  ],
+  "test_counts": [
+    {
+      "test_id": "python_suite",
+      "passed": 318,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "database_guards",
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "bootstrap_smoke",
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "apexlab_focus",
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "53b64135fa740824f357f98a4d3db88c1f7c986b4a46e86bdc923afba655a640",
+    "3f6b1e37c0215c6687b45a94c07a9641eb8d4e1a04c6185caed4ebb45597ec1e"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-08T14:44:19Z"
+}

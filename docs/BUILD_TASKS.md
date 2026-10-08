@@ -979,7 +979,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-028 — Runner Genome System
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Create structural winner memories whose availability begins only after justified resolution.
 **Dependencies:** QC2-013, QC2-014, QC2-015, QC2-016, QC2-025, QC2-027
 **Authorized legacy references:** Original DNA/memory protocol sources
@@ -1005,7 +1005,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-08T14:44:19Z: `docs/reference/QC2-028_ACCEPTANCE_ASSESSMENT.md`, `docs/reference/QC2-028_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-028_TASK_RECORD.json`
 
 ---
 

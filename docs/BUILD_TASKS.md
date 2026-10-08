@@ -903,7 +903,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-026 — Validation Authority
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Implement independent metrics, prospective qualification, and three-state closure mechanics.
 **Dependencies:** QC2-006, QC2-015, QC2-016, QC2-022, QC2-025
 **Authorized legacy references:** Gen 1 ForwardValidator, ApexLab evaluator

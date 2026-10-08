@@ -7,10 +7,12 @@ import hashlib
 import json
 import os
 import socket
+import sqlite3
 import stat
 import time
 import unicodedata
 import urllib.request
+from contextlib import contextmanager
 from collections.abc import Mapping, Sequence
 from datetime import datetime, timezone
 from pathlib import Path, PurePosixPath
@@ -19,7 +21,6 @@ from typing import Any
 from qc2_contracts.catalog import SCIENTIFIC_PREDICTION_PAYLOAD_FIELDS
 from qc2_contracts.runtime import (
     artifact_inventory_hash,
-    canonical_content_hash,
     canonical_json_bytes,
     domain_separated_sha256,
     new_uuidv7,
@@ -34,7 +35,6 @@ from .models import ReplayError, ReplayInputError, ReplayLimits, ReplayRunResult
 
 
 PREDICTION_SCHEMA = "qc2.models_prediction.Prediction.v1"
-PAYLOAD_SCHEMA = "qc2.models_prediction.ScientificPredictionPayload.v1"
 SEAL_SCHEMA = "qc2.models_prediction.PredictionSeal.v1"
 REQUEST_SCHEMA = "qc2.models_prediction.ReplayRequest.v1"
 RECEIPT_SCHEMA = "qc2.models_prediction.ReplayReceipt.v1"
@@ -57,7 +57,6 @@ REQUIRED_ROOT_ROLES = (
     "ENVIRONMENT_PROFILE",
     "SOURCE_SEAL",
 )
-CONTROL_SCHEMA_NAMES = frozenset({GRAPH_SCHEMA, PLAN_SCHEMA, PROFILE_SCHEMA})
 _HEX = frozenset("0123456789abcdef")
 
 
@@ -102,6 +101,37 @@ def _is_sha256(value: object) -> bool:
     return isinstance(value, str) and len(value) == 64 and all(char in _HEX for char in value)
 
 
+@contextmanager
+def _offline_stage_io():
+    """Deny common network and SQLite entry points while trusted code executes."""
+    def denied(*_args: Any, **_kwargs: Any) -> Any:
+        raise _BlockedReplay("stage attempted network or mutable database access")
+
+    saved = {
+        "socket": socket.socket,
+        "create_connection": socket.create_connection,
+        "create_server": socket.create_server,
+        "getaddrinfo": socket.getaddrinfo,
+        "urlopen": urllib.request.urlopen,
+        "sqlite_connect": sqlite3.connect,
+    }
+    socket.socket = denied  # type: ignore[assignment]
+    socket.create_connection = denied  # type: ignore[assignment]
+    socket.create_server = denied  # type: ignore[assignment]
+    socket.getaddrinfo = denied  # type: ignore[assignment]
+    urllib.request.urlopen = denied  # type: ignore[assignment]
+    sqlite3.connect = denied  # type: ignore[assignment]
+    try:
+        yield
+    finally:
+        socket.socket = saved["socket"]  # type: ignore[assignment]
+        socket.create_connection = saved["create_connection"]  # type: ignore[assignment]
+        socket.create_server = saved["create_server"]  # type: ignore[assignment]
+        socket.getaddrinfo = saved["getaddrinfo"]  # type: ignore[assignment]
+        urllib.request.urlopen = saved["urlopen"]  # type: ignore[assignment]
+        sqlite3.connect = saved["sqlite_connect"]  # type: ignore[assignment]
+
+
 def _reference(schema_name: str, contract: Mapping[str, Any]) -> dict[str, Any]:
     reference: dict[str, Any] = {
         "target_schema_name": schema_name,
@@ -133,30 +163,6 @@ def _normalized_bundle_path(value: object) -> str:
     ):
         raise ReplayInputError(f"unsafe or non-normalized artifact path: {value!r}")
     return normalized
-
-
-def _read_regular_file(root: Path, relative_path: str, limits: ReplayLimits) -> bytes:
-    relative_path = _normalized_bundle_path(relative_path)
-    current = root
-    parts = PurePosixPath(relative_path).parts
-    for part in parts:
-        current = current / part
-        try:
-            info = current.lstat()
-        except FileNotFoundError as exc:
-            raise _BlockedReplay(f"missing retained dependency: {relative_path}") from exc
-        if stat.S_ISLNK(info.st_mode):
-            raise _BlockedReplay(f"symlink is forbidden in replay bundle: {relative_path}")
-    if not stat.S_ISREG(info.st_mode):
-        raise _BlockedReplay(f"non-regular replay artifact: {relative_path}")
-    if info.st_nlink != 1:
-        raise _BlockedReplay(f"hard-linked replay artifact is forbidden: {relative_path}")
-    if info.st_size > limits.max_file_bytes:
-        raise _BlockedReplay(f"artifact exceeds max_file_bytes: {relative_path}")
-    try:
-        return current.read_bytes()
-    except OSError as exc:
-        raise _BlockedReplay(f"cannot read retained dependency {relative_path}: {exc}") from exc
 
 
 def _scan_bundle(root: Path, limits: ReplayLimits) -> dict[str, bytes]:
@@ -407,16 +413,17 @@ def _stage_projection(stage_kind: str, output: Any) -> Any:
     return {"predictions": projected_predictions, "payloads": projected_payloads}
 
 
-def _prediction_inventory(output: Mapping[str, Any], seal: Mapping[str, Any]) -> tuple[list[dict[str, Any]], dict[str, bytes]]:
+def _prediction_inventory(
+    output: Mapping[str, Any],
+    seal: Mapping[str, Any],
+) -> tuple[list[dict[str, Any]], dict[str, bytes]]:
     rows = output.get("predictions")
     payloads = output.get("payloads")
     if not isinstance(rows, list) or not isinstance(payloads, list):
         raise ReplayError("PAYLOADS output must contain prediction and payload arrays")
     expected_refs = seal.get("ordered_prediction_refs")
-    if not isinstance(expected_refs, list) or len(rows) != len(expected_refs):
-        raise ReplayError(
-            f"prediction row count differs from seal: expected {len(expected_refs or [])}, got {len(rows)}"
-        )
+    if not isinstance(expected_refs, list):
+        raise ReplayError("PredictionSeal ordered_prediction_refs is malformed")
     payload_by_instrument: dict[str, dict[str, Any]] = {}
     payload_bytes: dict[str, bytes] = {}
     for payload in payloads:
@@ -431,32 +438,19 @@ def _prediction_inventory(output: Mapping[str, Any], seal: Mapping[str, Any]) ->
         payload_bytes[instrument_id] = canonical_json_bytes(_scientific_payload_projection(payload))
 
     inventory: list[dict[str, Any]] = []
-    expected_payload_ids: set[str] = set()
-    for index, row in enumerate(rows):
+    for row in rows:
         if not isinstance(row, dict):
             raise ReplayError("prediction output contains a non-object")
         validate_contract("Prediction", row)
         verify_content_hash("Prediction", row)
-        expected_ref = expected_refs[index]
-        if row["id"] != expected_ref["target_id"] or row["content_hash"] != expected_ref["content_hash"]:
-            raise ReplayError(f"prediction reference mismatch at ordered row {index}")
         instrument_id = row["instrument_ref"]["target_id"]
         disposition = row["disposition"]
         if disposition == "SCORED":
             payload = payload_by_instrument.get(instrument_id)
-            if payload is None:
-                raise ReplayError(f"scored row {instrument_id} has no scientific payload")
-            if (
-                payload["score"] != row["score"]
-                or payload["rank"] != row["rank"]
-                or payload["instrument_ref"] != row["instrument_ref"]
-            ):
-                raise ReplayError(f"payload-to-prediction linkage differs for {instrument_id}")
-            payload_hash: str | None = scientific_payload_hash(payload)
-            expected_payload_ids.add(instrument_id)
+            payload_hash: str | None = (
+                scientific_payload_hash(payload) if payload is not None else None
+            )
         else:
-            if instrument_id in payload_by_instrument:
-                raise ReplayError(f"unscorable row {instrument_id} unexpectedly has a payload")
             payload_hash = None
         inventory.append(
             {
@@ -472,8 +466,6 @@ def _prediction_inventory(output: Mapping[str, Any], seal: Mapping[str, Any]) ->
                 "scientific_payload_hash": payload_hash,
             }
         )
-    if expected_payload_ids != set(payload_by_instrument):
-        raise ReplayError("scientific payload coverage differs from scored row dispositions")
     return inventory, payload_bytes
 
 
@@ -510,11 +502,6 @@ class ReplayRunner:
         seal = copy.deepcopy(dict(source_seal))
         manifest = copy.deepcopy(dict(artifact_manifest))
         self._validate_authority_contracts(request, seal, manifest)
-        request_ref = _reference(REQUEST_SCHEMA, request)
-        source_refs = [
-            _reference(SEAL_SCHEMA, seal),
-            _reference(MANIFEST_SCHEMA, manifest),
-        ]
         fallback_environment = request["environment_fingerprint"]
 
         try:
@@ -560,7 +547,8 @@ class ReplayRunner:
                         stage_inputs[node_id] = copy.deepcopy(values[selected_id])
                     else:
                         raise _BlockedReplay(f"stage {stage['stage_id']} input is missing: {selected_id}")
-                actual_output = executor.execute(copy.deepcopy(stage_inputs))
+                with _offline_stage_io():
+                    actual_output = executor.execute(copy.deepcopy(stage_inputs))
                 actual_bytes = canonical_json_bytes(actual_output)
                 actual_output = _strict_json(actual_bytes, f"output from {stage['stage_id']}")
                 generated[stage["output_node_id"]] = actual_output
@@ -588,22 +576,20 @@ class ReplayRunner:
             actual_inventory_hash = domain_separated_sha256(
                 INVENTORY_HASH_DOMAIN, canonical_json_bytes(inventory)
             )
-            expected_payload_hashes = self._validate_expected_payloads(
+            expected_payload_mismatches = self._validate_expected_payloads(
                 stage_plan[-1]["expected_payload_node_ids"],
-                node_map,
                 values,
                 payload_bytes,
-                seal,
             )
-            if first_mismatch is None and expected_payload_hashes:
-                first_mismatch = expected_payload_hashes[0]
+            if first_mismatch is None and expected_payload_mismatches:
+                first_mismatch = expected_payload_mismatches[0]
             if actual_inventory_hash != seal["payload_inventory_hash"] and first_mismatch is None:
                 first_mismatch = "PredictionSeal.payload_inventory_hash differs"
             all_stage_matches = all(item["matches"] for item in comparisons)
             exact_match = (
                 all_stage_matches
                 and actual_inventory_hash == seal["payload_inventory_hash"]
-                and not expected_payload_hashes
+                and not expected_payload_mismatches
             )
             if request["replay_mode"] == "EXACT":
                 verdict = "MATCH" if exact_match else "MISMATCH"
@@ -669,8 +655,21 @@ class ReplayRunner:
                 verdict="BLOCKED",
             )
             return ReplayRunResult(receipt, (), (), {}, None)
-        except ReplayError:
-            raise
+        except ReplayError as exc:
+            receipt = self._receipt(
+                request=request,
+                seal=seal,
+                manifest=manifest,
+                expected_hash=seal["payload_inventory_hash"],
+                actual_hash=EMPTY_INVENTORY_HASH,
+                expected_count=len(seal["ordered_prediction_refs"]),
+                actual_count=0,
+                environment_fingerprint=fallback_environment,
+                first_mismatch=f"BLOCKED: {exc}",
+                duration_ms=max(0, int((self._clock() - started) * 1000)),
+                verdict="BLOCKED",
+            )
+            return ReplayRunResult(receipt, (), (), {}, None)
         except Exception as exc:
             receipt = self._receipt(
                 request=request,
@@ -730,6 +729,10 @@ class ReplayRunner:
         node_map = {node["node_id"]: node for node in nodes}
         if len(node_map) != len(nodes):
             raise _BlockedReplay("dependency graph repeats node IDs")
+        corrected = plan["corrected_overrides"]
+        closure_roots = list(roots)
+        if request["replay_mode"] == "CORRECTED_DATA_SENSITIVITY":
+            closure_roots.extend(corrected.values())
         for node in nodes:
             if node["role"] not in {"CONTROL", "EXPECTED_STAGE_OUTPUT", "EXPECTED_PAYLOAD"}:
                 if node["relative_path"] not in {
@@ -739,7 +742,7 @@ class ReplayRunner:
         try:
             closure = resolve_dependency_closure(
                 nodes,
-                roots,
+                closure_roots,
                 max_depth=self._limits.max_dependency_depth,
             )
         except ReplayError as exc:
@@ -814,8 +817,8 @@ class ReplayRunner:
 
         executor_hashes: dict[str, str] = {}
         prior_outputs: set[str] = set()
+        prior_output: str | None = None
         roles_by_id = {node["node_id"]: node["role"] for node in nodes}
-        corrected = plan["corrected_overrides"]
         for role, node_id in corrected.items():
             if node_id not in node_map or node_map[node_id]["role"] != f"CORRECTED_{role}":
                 raise _BlockedReplay(f"corrected override for {role} is not a retained corrected-data node")
@@ -824,8 +827,8 @@ class ReplayRunner:
                 raise _BlockedReplay("corrected-data replay requires an explicit corrected input override")
             if "MARKET_HISTORY" not in corrected:
                 raise _BlockedReplay("corrected-data replay must override retained market history")
-        elif request["replay_mode"] == "EXACT" and not corrected:
-            raise _BlockedReplay("exact replay requires a declared corrected-data comparison path")
+        elif corrected:
+            raise _BlockedReplay("corrected-data overrides are only valid in sensitivity replay mode")
         for stage in stage_plan:
             executor = executors.get(stage["executor_id"])
             if executor is None:
@@ -842,6 +845,10 @@ class ReplayRunner:
                     raise _BlockedReplay(f"{stage['stage_id']} references missing input {input_id}")
                 if input_id in node_map and input_id not in closure:
                     raise _BlockedReplay(f"{stage['stage_id']} input is outside dependency closure: {input_id}")
+            if prior_output is not None and prior_output not in stage["input_node_ids"]:
+                raise _BlockedReplay(
+                    f"{stage['stage_kind']} stage does not consume the preceding stage output"
+                )
             if stage["expected_node_id"] not in node_map:
                 raise _BlockedReplay(f"{stage['stage_id']} lacks its expected checkpoint")
             if node_map[stage["expected_node_id"]]["role"] != "EXPECTED_STAGE_OUTPUT":
@@ -849,7 +856,6 @@ class ReplayRunner:
             for payload_node_id in stage["expected_payload_node_ids"]:
                 if payload_node_id not in node_map or node_map[payload_node_id]["role"] != "EXPECTED_PAYLOAD":
                     raise _BlockedReplay(f"{stage['stage_id']} has an invalid expected payload reference")
-            prior_outputs.add(stage["output_node_id"])
             needed_roles = {
                 "UNIVERSE": {"MARKET_HISTORY", "CANDIDATE_CENSUS", "UNIVERSE_POLICY"},
                 "FEATURES": {"FEATURE_REGISTRY"},
@@ -860,15 +866,12 @@ class ReplayRunner:
                 "PAYLOADS": {"SOURCE_SEAL"},
             }[stage["stage_kind"]]
             input_roles = {roles_by_id[item] for item in stage["input_node_ids"] if item in roles_by_id}
-            selected_roles = input_roles | {
-                node_map[corrected[role]]["role"]
-                for role in corrected
-                if role in input_roles
-            }
             if not needed_roles.issubset(input_roles):
                 raise _BlockedReplay(
                     f"{stage['stage_kind']} stage omits required inputs: {sorted(needed_roles - input_roles)}"
                 )
+            prior_output = stage["output_node_id"]
+            prior_outputs.add(stage["output_node_id"])
         if dict(profile.get("executor_hashes", {})) != dict(sorted(executor_hashes.items())):
             raise _BlockedReplay("qualified environment profile does not bind the exact stage executor hashes")
         if request["replay_mode"] == "CORRECTED_DATA_SENSITIVITY":
@@ -891,10 +894,8 @@ class ReplayRunner:
     @staticmethod
     def _validate_expected_payloads(
         expected_node_ids: Sequence[str],
-        node_map: Mapping[str, Mapping[str, Any]],
         values: Mapping[str, Any],
         actual_payload_bytes: Mapping[str, bytes],
-        seal: Mapping[str, Any],
     ) -> list[str]:
         expected_by_instrument: dict[str, bytes] = {}
         for node_id in expected_node_ids:
@@ -917,10 +918,6 @@ class ReplayRunner:
             actual = actual_payload_bytes.get(instrument_id)
             if expected != actual:
                 return [f"ScientificPredictionPayload[{instrument_id}] scientific bytes differ"]
-        # Independently bind each expected payload hash into the source seal inventory.
-        seal_rows = seal.get("ordered_prediction_refs", [])
-        if not isinstance(seal_rows, list):
-            raise _BlockedReplay("PredictionSeal ordered_prediction_refs is malformed")
         return []
 
     @staticmethod

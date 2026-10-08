@@ -1,0 +1,35 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a11cb9-a37f-73f1-b536-f1a31279a3b9",
+  "created_at": "2026-10-08T18:14:50Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "cfd066cef434825c10c8fa641f033cd6087ebf8a5100003c1d2dbc0e063099a0",
+  "task_id": "qc2-034",
+  "task_name": "ApexLab Experiment Ledger",
+  "objective": "Account for the entire model-search process and qualification-data consumption.",
+  "dependency_task_ids": [
+    "QC2-006",
+    "QC2-007",
+    "QC2-033"
+  ],
+  "authorized_legacy_refs": [],
+  "deliverable_refs": [
+    "Append-only experiments/trials, budgets, failures, artifacts and comparison registration.",
+    "Holdout access receipts and consumed-state policy.",
+    "Cost/resource reports and resumable interrupted-trial records."
+  ],
+  "required_test_refs": [
+    "Rejected/interrupted trials persist and count toward budgets.",
+    "Repeated holdout access changes its consumption state.",
+    "Trainer role cannot delete unfavorable trials or alter evaluation receipts."
+  ],
+  "acceptance_gate": "A complete reconstructed search history is possible from immutable records.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

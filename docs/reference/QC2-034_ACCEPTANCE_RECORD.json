@@ -1,0 +1,55 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a11cb9-a38a-7927-b5de-398f604b0de7",
+  "created_at": "2026-10-08T18:14:50Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "a75653cae1ba45179b025292b5ae66a0e26ee48f86b415d16ff7ac1b1441a67d",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a11cb9-a37f-73f1-b536-f1a31279a3b9",
+    "content_hash": "cfd066cef434825c10c8fa641f033cd6087ebf8a5100003c1d2dbc0e063099a0"
+  },
+  "task_spec_version": "QC2-034 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "ceadf8d15c15042c56073715491a24aabc7256f0",
+  "changed_paths": [
+    "packages/apexlab",
+    "tests/apexlab",
+    "migrations/0005_apexlab_experiment_ledger.sql",
+    "tests/database/qc2_034_postgres_acceptance.sql"
+  ],
+  "executed_commands": [
+    "python3 -m pytest -q tests/apexlab",
+    "ruff check packages/apexlab tests/apexlab",
+    "Fresh PostgreSQL 16.10 UTF8 cluster; apply migrations 0001-0005; run tests/database/qc2_034_postgres_acceptance.sql with ON_ERROR_STOP"
+  ],
+  "test_counts": [
+    {
+      "test_id": "apexlab_suite",
+      "passed": 43,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "postgres_acceptance",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "d8811efe7ab42d5d558c44adfb6ae9bd09e0b6ffa251455165bab5af9d64be77",
+    "99d327e40c434119635c4712b2d28ed8740f30a3e0123ee771f9f7fe9941e55d",
+    "43b1c02ecd3c4503413e762df36d662658ec7f184be55315b09fc03446cb4fb8",
+    "18f3951c0047c3bd51c873253bfe181b789ce2010c0d5518683bbc2d74d7a802"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-08T18:14:50Z"
+}

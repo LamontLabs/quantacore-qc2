@@ -3771,6 +3771,56 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-028",
+          "artifact_paths": [
+            "packages/apexlab",
+            "tests/apexlab"
+          ],
+          "reason": "QC2-034 adds experiment and trial-ledger behavior to the shared ApexLab source and regression-test trees; acceptance reruns the complete ApexLab suite."
+        },
+        {
+          "prior_task_id": "QC2-029",
+          "artifact_paths": [
+            "packages/apexlab",
+            "tests/apexlab"
+          ],
+          "reason": "QC2-034 adds experiment and trial-ledger behavior to the shared ApexLab source and regression-test trees; acceptance reruns the complete ApexLab suite."
+        },
+        {
+          "prior_task_id": "QC2-030",
+          "artifact_paths": [
+            "packages/apexlab",
+            "tests/apexlab"
+          ],
+          "reason": "QC2-034 adds experiment and trial-ledger behavior to the shared ApexLab source and regression-test trees; acceptance reruns the complete ApexLab suite."
+        },
+        {
+          "prior_task_id": "QC2-031",
+          "artifact_paths": [
+            "packages/apexlab",
+            "tests/apexlab"
+          ],
+          "reason": "QC2-034 adds experiment and trial-ledger behavior to the shared ApexLab source and regression-test trees; acceptance reruns the complete ApexLab suite."
+        },
+        {
+          "prior_task_id": "QC2-032",
+          "artifact_paths": [
+            "packages/apexlab",
+            "tests/apexlab"
+          ],
+          "reason": "QC2-034 adds experiment and trial-ledger behavior to the shared ApexLab source and regression-test trees; acceptance reruns the complete ApexLab suite."
+        },
+        {
+          "prior_task_id": "QC2-033",
+          "artifact_paths": [
+            "packages/apexlab",
+            "tests/apexlab"
+          ],
+          "reason": "QC2-034 adds experiment and trial-ledger behavior to the shared ApexLab source and regression-test trees; acceptance reruns the complete ApexLab suite."
+        }
+      ],
       "status": "TODO",
       "blockers": [],
       "acceptance_receipt": null

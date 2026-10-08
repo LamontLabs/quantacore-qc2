@@ -1190,6 +1190,12 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Objective:** Account for the entire model-search process and qualification-data consumption.
 **Dependencies:** QC2-006, QC2-007, QC2-033
 **Authorized legacy references:** None.
+**Authorized artifact drift:** QC2-028 — QC2-034 adds experiment and trial-ledger behavior to the shared ApexLab source and regression-test trees; acceptance reruns the complete ApexLab suite. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-029 — QC2-034 adds experiment and trial-ledger behavior to the shared ApexLab source and regression-test trees; acceptance reruns the complete ApexLab suite. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-030 — QC2-034 adds experiment and trial-ledger behavior to the shared ApexLab source and regression-test trees; acceptance reruns the complete ApexLab suite. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-031 — QC2-034 adds experiment and trial-ledger behavior to the shared ApexLab source and regression-test trees; acceptance reruns the complete ApexLab suite. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-032 — QC2-034 adds experiment and trial-ledger behavior to the shared ApexLab source and regression-test trees; acceptance reruns the complete ApexLab suite. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-033 — QC2-034 adds experiment and trial-ledger behavior to the shared ApexLab source and regression-test trees; acceptance reruns the complete ApexLab suite. Paths: `packages/apexlab`, `tests/apexlab`
 **Required reference intake:** None. Do not inspect or copy legacy code for this task without a scoped amendment.
 
 **Required deliverables:**

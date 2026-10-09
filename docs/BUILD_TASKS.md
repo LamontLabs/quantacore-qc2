@@ -1658,7 +1658,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-048 — Durable Position State
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Maintain auditable order/fill/cash/position state resilient to duplicate and corrected events.
 **Dependencies:** QC2-005, QC2-006, QC2-045, QC2-046, QC2-047
 **Authorized legacy references:** None.

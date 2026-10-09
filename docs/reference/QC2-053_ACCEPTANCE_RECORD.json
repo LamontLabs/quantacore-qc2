@@ -1,0 +1,61 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a1223a-63fa-7425-96ed-94406b99e2d1",
+  "created_at": "2026-10-09T19:53:34Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "6ccdc54851a6bb561cc2d8d2dbbad7d6e1e947e3733960160bdf3742b503a432",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a1223a-63f5-799b-976f-8ebe80be6dde",
+    "content_hash": "814f90d725b570e59dcb16bf23c95120dc44cfb50bfcc23cce01f954ddfd52d5"
+  },
+  "task_spec_version": "QC2-053 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "b7bec59844c94ba023c17fb3c03542362e776193",
+  "changed_paths": [
+    ".replit",
+    "packages/owner_api",
+    "migrations/0013_owner_identity_device_enrollment.sql",
+    "tests/owner_api",
+    "docs/reference/QC2-053_OFFLINE_RECOVERY.md"
+  ],
+  "executed_commands": [
+    "python -m pytest tests/owner_api -q",
+    "python -m ruff check packages/owner_api/src/qc2_owner_api tests/owner_api",
+    "node --check tests/owner_api/run_qc2_053_postgres_integration.mjs",
+    "pnpm exec prettier --check tests/owner_api/run_qc2_053_postgres_integration.mjs",
+    "Fresh PostgreSQL 17.5 UTF8 scratch cluster; run tests/owner_api/run_qc2_053_postgres_integration.mjs with QC2_ENV=test",
+    "python3 tools/generate_task_docs.py --check",
+    "python3 tools/task_workflow.py preflight QC2-053"
+  ],
+  "test_counts": [
+    {
+      "test_id": "identity_unit",
+      "passed": 34,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "identity_postgres",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "4ad44f2dc84049d68fbb3dd8d3db04fc902f80187a714f4066f40e992f7d3d2a",
+    "79671a765fe8b2cbd111688cd59c835b72cf419ff6e5262fee402ad66da9f8f5",
+    "cabb5044c7981e5a5b3e9fe619bcfafcf9fba1d38a3ea745956b1c601d48d902",
+    "7d65d92624c9e95cf9386e1e0399f809aec55f3ef3358ac98ca85fddb27b145e",
+    "94b40165b8015bd70e263e0f368328eb8bf9787a2e86b1aad8873e89246a09b0"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-09T19:53:34Z"
+}

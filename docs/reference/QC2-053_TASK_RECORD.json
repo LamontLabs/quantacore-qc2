@@ -1,0 +1,38 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a1223a-63f5-799b-976f-8ebe80be6dde",
+  "created_at": "2026-10-09T19:53:34Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "814f90d725b570e59dcb16bf23c95120dc44cfb50bfcc23cce01f954ddfd52d5",
+  "task_id": "qc2-053",
+  "task_name": "Owner Identity and Device Enrollment",
+  "objective": "Implement one-owner trust, secure device enrollment, revocation and recovery.",
+  "dependency_task_ids": [
+    "QC2-003",
+    "QC2-005",
+    "QC2-006",
+    "QC2-007",
+    "QC2-042",
+    "QC2-052"
+  ],
+  "authorized_legacy_refs": [],
+  "deliverable_refs": [
+    "Single-use bootstrap, device public-key registry, sessions and rotating refresh credentials.",
+    "Device security-level metadata, signed command validation and revocation checks.",
+    "Offline recovery procedure and hold/re-enrollment transitions."
+  ],
+  "required_test_refs": [
+    "Enrollment replay/race, invalid key binding, lost-device recovery and post-challenge revocation.",
+    "No first-user-wins takeover or default password.",
+    "Fixture/device trust cannot cross environment namespace."
+  ],
+  "acceptance_gate": "Identity lifecycle passes backend integration; real Keystore/device validation is required with Android work.",
+  "evidence_requirement": "identity_integration",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

@@ -1828,10 +1828,11 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-053 — Owner Identity and Device Enrollment
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Implement one-owner trust, secure device enrollment, revocation and recovery.
 **Dependencies:** QC2-003, QC2-005, QC2-006, QC2-007, QC2-042, QC2-052
 **Authorized legacy references:** None.
+**Authorized artifact drift:** QC2-040 — QC2-053 adds the PostgreSQL system package needed for disposable UTF8 backend acceptance; the exact environment configuration is bound in its acceptance receipt. Paths: `.replit`
 **Authorized artifact drift:** QC2-042 — QC2-053 extends the existing owner API with identity and device lifecycle behavior and verifies it in backend integration. Its acceptance receipt will bind the updated implementation and test-tree hashes. Paths: `packages/owner_api`, `tests/owner_api`
 **Required reference intake:** None. Do not inspect or copy legacy code for this task without a scoped amendment.
 
@@ -1855,7 +1856,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** IDENTITY_INTEGRATION
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-09T19:53:34Z: `docs/reference/QC2-053_ACCEPTANCE_RECEIPT.md`, `docs/reference/QC2-053_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-053_TASK_RECORD.json`
 
 ---
 

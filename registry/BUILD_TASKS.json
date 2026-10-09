@@ -5680,6 +5680,13 @@
       "authorized_legacy_references": [],
       "authorized_artifact_drift": [
         {
+          "prior_task_id": "QC2-040",
+          "artifact_paths": [
+            ".replit"
+          ],
+          "reason": "QC2-053 adds the PostgreSQL system package needed for disposable UTF8 backend acceptance; the exact environment configuration is bound in its acceptance receipt."
+        },
+        {
           "prior_task_id": "QC2-042",
           "artifact_paths": [
             "packages/owner_api",
@@ -5710,9 +5717,60 @@
         "IDENTITY_INTEGRATION"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-09T19:53:34Z",
+        "task_spec_version": "QC2-053 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "b7bec59844c94ba023c17fb3c03542362e776193",
+        "receipt": "docs/reference/QC2-053_ACCEPTANCE_RECEIPT.md",
+        "contract_receipt": "docs/reference/QC2-053_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-053_TASK_RECORD.json",
+        "changed_paths": [
+          ".replit",
+          "packages/owner_api",
+          "migrations/0013_owner_identity_device_enrollment.sql",
+          "tests/owner_api",
+          "docs/reference/QC2-053_OFFLINE_RECOVERY.md"
+        ],
+        "executed_commands": [
+          "python -m pytest tests/owner_api -q",
+          "python -m ruff check packages/owner_api/src/qc2_owner_api tests/owner_api",
+          "node --check tests/owner_api/run_qc2_053_postgres_integration.mjs",
+          "pnpm exec prettier --check tests/owner_api/run_qc2_053_postgres_integration.mjs",
+          "Fresh PostgreSQL 17.5 UTF8 scratch cluster; run tests/owner_api/run_qc2_053_postgres_integration.mjs with QC2_ENV=test",
+          "python3 tools/generate_task_docs.py --check",
+          "python3 tools/task_workflow.py preflight QC2-053"
+        ],
+        "test_counts": [
+          {
+            "test_id": "identity_unit",
+            "passed": 34,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "identity_postgres",
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          ".replit": "4ad44f2dc84049d68fbb3dd8d3db04fc902f80187a714f4066f40e992f7d3d2a",
+          "packages/owner_api": "79671a765fe8b2cbd111688cd59c835b72cf419ff6e5262fee402ad66da9f8f5",
+          "migrations/0013_owner_identity_device_enrollment.sql": "cabb5044c7981e5a5b3e9fe619bcfafcf9fba1d38a3ea745956b1c601d48d902",
+          "tests/owner_api": "7d65d92624c9e95cf9386e1e0399f809aec55f3ef3358ac98ca85fddb27b145e",
+          "docs/reference/QC2-053_OFFLINE_RECOVERY.md": "94b40165b8015bd70e263e0f368328eb8bf9787a2e86b1aad8873e89246a09b0"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "Fresh UTF8 PostgreSQL 17.5 integration run and owner API unit suite passed; Android Keystore validation remains deferred as specified by the task gate.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-054",

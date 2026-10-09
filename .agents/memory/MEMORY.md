@@ -11,3 +11,4 @@
 - [ApexLab temporal memory indexes](apexlab-temporal-memory-indexes.md) — keep replay proofs scoped to the cutoff-eligible dependency closure and preserve actual versus reconstructed availability.
 - [Isolated PostgreSQL acceptance](isolated-postgresql-acceptance.md) — initialize, migrate, and test a fresh local cluster within one shell run; runtime cleanup stops background servers.
 - [QC2 owner approval binding](qc2-owner-approval-binding.md) — extend pinned promotion contracts through owner-API scope envelopes; bind non-content-addressed identity records by IDs and key/session hashes.
+- [PL/pgSQL name resolution](plpgsql-name-resolution.md) — prefix locals and qualify SQL columns to avoid runtime ambiguity in stored procedures.

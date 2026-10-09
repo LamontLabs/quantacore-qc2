@@ -1147,3 +1147,286 @@ export const GetOwnerReadDiagnosticsResponse = zod.object({
 })
 
 
+/**
+ * @summary Issue a fresh signature challenge for one allowlisted owner command
+ */
+export const IssueOwnerCommandChallengeParams = zod.object({
+  "kind": zod.enum(['promotion-decision', 'epoch-activation-decision', 'entry-pause', 'resume-request', 'alert-acknowledgment', 'device-management'])
+})
+
+export const issueOwnerCommandChallengeBodyIdempotencyKeyMax = 96;
+
+
+export const issueOwnerCommandChallengeBodyIdempotencyKeyRegExp = new RegExp('^[a-z][a-z0-9_-]{0,95}$');
+export const issueOwnerCommandChallengeBodyRequestBodyOnePayloadChallengeRefTargetIdRegExp = new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$');
+export const issueOwnerCommandChallengeBodyRequestBodyOnePayloadChallengeRefContentHashRegExp = new RegExp('^[0-9a-f]{64}$');
+export const issueOwnerCommandChallengeBodyRequestBodyOnePayloadRequestHashRegExp = new RegExp('^[0-9a-f]{64}$');
+export const issueOwnerCommandChallengeBodyRequestBodyTwoPayloadChallengeRefTargetIdRegExp = new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$');
+export const issueOwnerCommandChallengeBodyRequestBodyTwoPayloadChallengeRefContentHashRegExp = new RegExp('^[0-9a-f]{64}$');
+export const issueOwnerCommandChallengeBodyRequestBodyTwoPayloadEpochManifestHashRegExp = new RegExp('^[0-9a-f]{64}$');
+export const issueOwnerCommandChallengeBodyRequestBodyThreePayloadExpectedGenerationMin = 0;
+export const issueOwnerCommandChallengeBodyRequestBodyThreePayloadExpectedGenerationMax = 9007199254740991;
+
+export const issueOwnerCommandChallengeBodyRequestBodyThreePayloadReasonCodeMax = 96;
+
+
+export const issueOwnerCommandChallengeBodyRequestBodyThreePayloadReasonCodeRegExp = new RegExp('^[a-z][a-z0-9_-]{0,95}$');
+export const issueOwnerCommandChallengeBodyRequestBodyFourPayloadExpectedPauseGenerationMax = 9007199254740991;
+
+export const issueOwnerCommandChallengeBodyRequestBodyFivePayloadAlertRefTargetIdRegExp = new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$');
+export const issueOwnerCommandChallengeBodyRequestBodyFivePayloadExpectedProjectionSequenceMax = 9007199254740991;
+
+export const issueOwnerCommandChallengeBodyRequestBodySixPayloadDeviceIdRegExp = new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$');
+
+
+export const IssueOwnerCommandChallengeBody = zod.object({
+  "idempotency_key": zod.string().min(1).max(issueOwnerCommandChallengeBodyIdempotencyKeyMax).regex(issueOwnerCommandChallengeBodyIdempotencyKeyRegExp),
+  "request_body": zod.union([zod.object({
+  "schema_name": zod.literal("qc2.owner_api.OwnerCommandRequest.v1"),
+  "schema_version": zod.literal("1.0"),
+  "command_type": zod.literal("PROMOTION"),
+  "payload": zod.object({
+  "challenge_ref": zod.object({
+  "target_schema_name": zod.literal("qc2.governance_owner.PromotionChallenge.v1"),
+  "target_id": zod.string().regex(issueOwnerCommandChallengeBodyRequestBodyOnePayloadChallengeRefTargetIdRegExp),
+  "content_hash": zod.string().regex(issueOwnerCommandChallengeBodyRequestBodyOnePayloadChallengeRefContentHashRegExp)
+}),
+  "decision": zod.enum(['APPROVE', 'HOLD', 'REJECT']),
+  "request_hash": zod.string().regex(issueOwnerCommandChallengeBodyRequestBodyOnePayloadRequestHashRegExp)
+})
+}),zod.object({
+  "schema_name": zod.literal("qc2.owner_api.OwnerCommandRequest.v1"),
+  "schema_version": zod.literal("1.0"),
+  "command_type": zod.literal("EPOCH_ACTIVATION"),
+  "payload": zod.object({
+  "challenge_ref": zod.object({
+  "target_schema_name": zod.literal("qc2.governance_owner.EpochActivationChallenge.v1"),
+  "target_id": zod.string().regex(issueOwnerCommandChallengeBodyRequestBodyTwoPayloadChallengeRefTargetIdRegExp),
+  "content_hash": zod.string().regex(issueOwnerCommandChallengeBodyRequestBodyTwoPayloadChallengeRefContentHashRegExp)
+}),
+  "epoch_manifest_hash": zod.string().regex(issueOwnerCommandChallengeBodyRequestBodyTwoPayloadEpochManifestHashRegExp),
+  "decision": zod.enum(['APPROVE', 'REJECT'])
+})
+}),zod.object({
+  "schema_name": zod.literal("qc2.owner_api.OwnerCommandRequest.v1"),
+  "schema_version": zod.literal("1.0"),
+  "command_type": zod.literal("PAUSE_NEW_ENTRIES"),
+  "payload": zod.object({
+  "expected_generation": zod.number().int().min(issueOwnerCommandChallengeBodyRequestBodyThreePayloadExpectedGenerationMin).max(issueOwnerCommandChallengeBodyRequestBodyThreePayloadExpectedGenerationMax),
+  "reason_code": zod.string().min(1).max(issueOwnerCommandChallengeBodyRequestBodyThreePayloadReasonCodeMax).regex(issueOwnerCommandChallengeBodyRequestBodyThreePayloadReasonCodeRegExp)
+})
+}),zod.object({
+  "schema_name": zod.literal("qc2.owner_api.OwnerCommandRequest.v1"),
+  "schema_version": zod.literal("1.0"),
+  "command_type": zod.literal("RESUME_REQUEST"),
+  "payload": zod.object({
+  "expected_pause_generation": zod.number().int().min(1).max(issueOwnerCommandChallengeBodyRequestBodyFourPayloadExpectedPauseGenerationMax)
+})
+}),zod.object({
+  "schema_name": zod.literal("qc2.owner_api.OwnerCommandRequest.v1"),
+  "schema_version": zod.literal("1.0"),
+  "command_type": zod.literal("ACKNOWLEDGE_ALERT"),
+  "payload": zod.object({
+  "alert_ref": zod.object({
+  "target_schema_name": zod.literal("qc2.governance_owner.Alert.v1"),
+  "target_id": zod.string().regex(issueOwnerCommandChallengeBodyRequestBodyFivePayloadAlertRefTargetIdRegExp)
+}),
+  "expected_projection_sequence": zod.number().int().min(1).max(issueOwnerCommandChallengeBodyRequestBodyFivePayloadExpectedProjectionSequenceMax)
+})
+}),zod.object({
+  "schema_name": zod.literal("qc2.owner_api.OwnerCommandRequest.v1"),
+  "schema_version": zod.literal("1.0"),
+  "command_type": zod.literal("DEVICE_ACTION"),
+  "payload": zod.object({
+  "action": zod.literal("REVOKE_DEVICE"),
+  "device_id": zod.string().regex(issueOwnerCommandChallengeBodyRequestBodySixPayloadDeviceIdRegExp)
+})
+})])
+})
+
+export const issueOwnerCommandChallengeResponseChallengeIdRegExp = new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$');
+export const issueOwnerCommandChallengeResponseChallengeCommandIdRegExp = new RegExp('^cmd-[a-f0-9]{32}$');
+export const issueOwnerCommandChallengeResponseChallengeIdempotencyKeyRegExp = new RegExp('^[a-z][a-z0-9_-]{0,95}$');
+export const issueOwnerCommandChallengeResponseChallengeRequestBodyHashRegExp = new RegExp('^[0-9a-f]{64}$');
+export const issueOwnerCommandChallengeResponseChallengeDeviceRefTargetIdRegExp = new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$');
+export const issueOwnerCommandChallengeResponseChallengeSessionRefTargetIdRegExp = new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$');
+export const issueOwnerCommandChallengeResponseChallengeOwnerKeyIdMax = 96;
+
+export const issueOwnerCommandChallengeResponseChallengePublicKeyFingerprintRegExp = new RegExp('^[0-9a-f]{64}$');
+export const issueOwnerCommandChallengeResponseChallengeNonceRegExp = new RegExp('^n[0-9a-f]{64}$');
+export const issueOwnerCommandChallengeResponseSigningBytesBase64urlMax = 4096;
+
+
+export const issueOwnerCommandChallengeResponseSigningBytesBase64urlRegExp = new RegExp('^[A-Za-z0-9_-]+$');
+
+
+export const IssueOwnerCommandChallengeResponse = zod.object({
+  "challenge": zod.object({
+  "schema_name": zod.literal("qc2.owner_api.OwnerSignedCommandChallenge.v1"),
+  "schema_version": zod.literal("1.0"),
+  "environment_namespace": zod.enum(['development', 'test', 'research', 'production']),
+  "id": zod.string().regex(issueOwnerCommandChallengeResponseChallengeIdRegExp),
+  "command_id": zod.string().regex(issueOwnerCommandChallengeResponseChallengeCommandIdRegExp),
+  "command_type": zod.enum(['PROMOTION', 'EPOCH_ACTIVATION', 'PAUSE_NEW_ENTRIES', 'RESUME_REQUEST', 'ACKNOWLEDGE_ALERT', 'DEVICE_ACTION']),
+  "idempotency_key": zod.string().regex(issueOwnerCommandChallengeResponseChallengeIdempotencyKeyRegExp),
+  "request_body_hash": zod.string().regex(issueOwnerCommandChallengeResponseChallengeRequestBodyHashRegExp),
+  "device_ref": zod.object({
+  "target_schema_name": zod.literal("qc2.governance_owner.OwnerDevice.v1"),
+  "target_id": zod.string().regex(issueOwnerCommandChallengeResponseChallengeDeviceRefTargetIdRegExp)
+}),
+  "session_ref": zod.object({
+  "target_schema_name": zod.literal("qc2.governance_owner.OwnerSession.v1"),
+  "target_id": zod.string().regex(issueOwnerCommandChallengeResponseChallengeSessionRefTargetIdRegExp)
+}),
+  "owner_key_id": zod.string().min(1).max(issueOwnerCommandChallengeResponseChallengeOwnerKeyIdMax),
+  "public_key_fingerprint": zod.string().regex(issueOwnerCommandChallengeResponseChallengePublicKeyFingerprintRegExp),
+  "scope": zod.enum(['PROMOTION', 'EPOCH_ACTIVATION', 'PAUSE', 'RESUME', 'ALERT', 'DEVICE_ADMIN']),
+  "nonce": zod.string().regex(issueOwnerCommandChallengeResponseChallengeNonceRegExp),
+  "issued_at": zod.coerce.date(),
+  "expires_at": zod.coerce.date()
+}),
+  "signing_bytes_base64url": zod.string().min(1).max(issueOwnerCommandChallengeResponseSigningBytesBase64urlMax).regex(issueOwnerCommandChallengeResponseSigningBytesBase64urlRegExp)
+})
+
+
+/**
+ * HTTP success records an authorized request only; it does not complete the downstream transition.
+ * @summary Commit a signed owner command and return its stable acceptance receipt
+ */
+export const CommitOwnerCommandParams = zod.object({
+  "kind": zod.enum(['promotion-decision', 'epoch-activation-decision', 'entry-pause', 'resume-request', 'alert-acknowledgment', 'device-management'])
+})
+
+export const commitOwnerCommandBodyChallengeIdRegExp = new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$');
+export const commitOwnerCommandBodyRequestBodyOnePayloadChallengeRefTargetIdRegExp = new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$');
+export const commitOwnerCommandBodyRequestBodyOnePayloadChallengeRefContentHashRegExp = new RegExp('^[0-9a-f]{64}$');
+export const commitOwnerCommandBodyRequestBodyOnePayloadRequestHashRegExp = new RegExp('^[0-9a-f]{64}$');
+export const commitOwnerCommandBodyRequestBodyTwoPayloadChallengeRefTargetIdRegExp = new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$');
+export const commitOwnerCommandBodyRequestBodyTwoPayloadChallengeRefContentHashRegExp = new RegExp('^[0-9a-f]{64}$');
+export const commitOwnerCommandBodyRequestBodyTwoPayloadEpochManifestHashRegExp = new RegExp('^[0-9a-f]{64}$');
+export const commitOwnerCommandBodyRequestBodyThreePayloadExpectedGenerationMin = 0;
+export const commitOwnerCommandBodyRequestBodyThreePayloadExpectedGenerationMax = 9007199254740991;
+
+export const commitOwnerCommandBodyRequestBodyThreePayloadReasonCodeMax = 96;
+
+
+export const commitOwnerCommandBodyRequestBodyThreePayloadReasonCodeRegExp = new RegExp('^[a-z][a-z0-9_-]{0,95}$');
+export const commitOwnerCommandBodyRequestBodyFourPayloadExpectedPauseGenerationMax = 9007199254740991;
+
+export const commitOwnerCommandBodyRequestBodyFivePayloadAlertRefTargetIdRegExp = new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$');
+export const commitOwnerCommandBodyRequestBodyFivePayloadExpectedProjectionSequenceMax = 9007199254740991;
+
+export const commitOwnerCommandBodyRequestBodySixPayloadDeviceIdRegExp = new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$');
+export const commitOwnerCommandBodySignatureMax = 256;
+
+
+export const commitOwnerCommandBodySignatureRegExp = new RegExp('^[A-Za-z0-9_-]+$');
+
+
+export const CommitOwnerCommandBody = zod.object({
+  "challenge_id": zod.string().regex(commitOwnerCommandBodyChallengeIdRegExp),
+  "request_body": zod.union([zod.object({
+  "schema_name": zod.literal("qc2.owner_api.OwnerCommandRequest.v1"),
+  "schema_version": zod.literal("1.0"),
+  "command_type": zod.literal("PROMOTION"),
+  "payload": zod.object({
+  "challenge_ref": zod.object({
+  "target_schema_name": zod.literal("qc2.governance_owner.PromotionChallenge.v1"),
+  "target_id": zod.string().regex(commitOwnerCommandBodyRequestBodyOnePayloadChallengeRefTargetIdRegExp),
+  "content_hash": zod.string().regex(commitOwnerCommandBodyRequestBodyOnePayloadChallengeRefContentHashRegExp)
+}),
+  "decision": zod.enum(['APPROVE', 'HOLD', 'REJECT']),
+  "request_hash": zod.string().regex(commitOwnerCommandBodyRequestBodyOnePayloadRequestHashRegExp)
+})
+}),zod.object({
+  "schema_name": zod.literal("qc2.owner_api.OwnerCommandRequest.v1"),
+  "schema_version": zod.literal("1.0"),
+  "command_type": zod.literal("EPOCH_ACTIVATION"),
+  "payload": zod.object({
+  "challenge_ref": zod.object({
+  "target_schema_name": zod.literal("qc2.governance_owner.EpochActivationChallenge.v1"),
+  "target_id": zod.string().regex(commitOwnerCommandBodyRequestBodyTwoPayloadChallengeRefTargetIdRegExp),
+  "content_hash": zod.string().regex(commitOwnerCommandBodyRequestBodyTwoPayloadChallengeRefContentHashRegExp)
+}),
+  "epoch_manifest_hash": zod.string().regex(commitOwnerCommandBodyRequestBodyTwoPayloadEpochManifestHashRegExp),
+  "decision": zod.enum(['APPROVE', 'REJECT'])
+})
+}),zod.object({
+  "schema_name": zod.literal("qc2.owner_api.OwnerCommandRequest.v1"),
+  "schema_version": zod.literal("1.0"),
+  "command_type": zod.literal("PAUSE_NEW_ENTRIES"),
+  "payload": zod.object({
+  "expected_generation": zod.number().int().min(commitOwnerCommandBodyRequestBodyThreePayloadExpectedGenerationMin).max(commitOwnerCommandBodyRequestBodyThreePayloadExpectedGenerationMax),
+  "reason_code": zod.string().min(1).max(commitOwnerCommandBodyRequestBodyThreePayloadReasonCodeMax).regex(commitOwnerCommandBodyRequestBodyThreePayloadReasonCodeRegExp)
+})
+}),zod.object({
+  "schema_name": zod.literal("qc2.owner_api.OwnerCommandRequest.v1"),
+  "schema_version": zod.literal("1.0"),
+  "command_type": zod.literal("RESUME_REQUEST"),
+  "payload": zod.object({
+  "expected_pause_generation": zod.number().int().min(1).max(commitOwnerCommandBodyRequestBodyFourPayloadExpectedPauseGenerationMax)
+})
+}),zod.object({
+  "schema_name": zod.literal("qc2.owner_api.OwnerCommandRequest.v1"),
+  "schema_version": zod.literal("1.0"),
+  "command_type": zod.literal("ACKNOWLEDGE_ALERT"),
+  "payload": zod.object({
+  "alert_ref": zod.object({
+  "target_schema_name": zod.literal("qc2.governance_owner.Alert.v1"),
+  "target_id": zod.string().regex(commitOwnerCommandBodyRequestBodyFivePayloadAlertRefTargetIdRegExp)
+}),
+  "expected_projection_sequence": zod.number().int().min(1).max(commitOwnerCommandBodyRequestBodyFivePayloadExpectedProjectionSequenceMax)
+})
+}),zod.object({
+  "schema_name": zod.literal("qc2.owner_api.OwnerCommandRequest.v1"),
+  "schema_version": zod.literal("1.0"),
+  "command_type": zod.literal("DEVICE_ACTION"),
+  "payload": zod.object({
+  "action": zod.literal("REVOKE_DEVICE"),
+  "device_id": zod.string().regex(commitOwnerCommandBodyRequestBodySixPayloadDeviceIdRegExp)
+})
+})]),
+  "signature": zod.string().min(1).max(commitOwnerCommandBodySignatureMax).regex(commitOwnerCommandBodySignatureRegExp)
+})
+
+export const commitOwnerCommandResponseReceiptIdRegExp = new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$');
+export const commitOwnerCommandResponseReceiptCreatedAtRegExp = new RegExp('^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?Z$');
+export const commitOwnerCommandResponseReceiptSourceRefsMax = 0;
+
+export const commitOwnerCommandResponseReceiptCommandRefTargetIdRegExp = new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$');
+export const commitOwnerCommandResponseReceiptCommandRefContentHashRegExp = new RegExp('^[0-9a-f]{64}$');
+export const commitOwnerCommandResponseReceiptSourceSequenceMax = 9007199254740991;
+
+export const commitOwnerCommandResponseReceiptProjectionLagMsMin = 0;
+export const commitOwnerCommandResponseReceiptProjectionLagMsMax = 9007199254740991;
+
+export const commitOwnerCommandResponseReceiptReceivedAtRegExp = new RegExp('^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?Z$');
+
+
+export const CommitOwnerCommandResponse = zod.object({
+  "status": zod.literal("ACCEPTED"),
+  "receipt": zod.object({
+  "schema_name": zod.literal("qc2.governance_owner.OwnerCommandReceipt.v1"),
+  "schema_version": zod.literal("1.0"),
+  "id": zod.string().regex(commitOwnerCommandResponseReceiptIdRegExp),
+  "created_at": zod.string().regex(commitOwnerCommandResponseReceiptCreatedAtRegExp),
+  "owning_authority": zod.literal("owner_api"),
+  "evidence_class": zod.enum(['SYNTHETIC_FIXTURE', 'HISTORICAL_RECONSTRUCTED', 'FORWARD_OPERATIONAL', 'FORWARD_SEALED']),
+  "environment_namespace": zod.enum(['development', 'test', 'research', 'production']),
+  "source_refs": zod.array(zod.object({
+
+}).passthrough()).max(commitOwnerCommandResponseReceiptSourceRefsMax),
+  "command_ref": zod.object({
+  "target_schema_name": zod.literal("qc2.governance_owner.OwnerCommand.v1"),
+  "target_id": zod.string().regex(commitOwnerCommandResponseReceiptCommandRefTargetIdRegExp),
+  "content_hash": zod.string().regex(commitOwnerCommandResponseReceiptCommandRefContentHashRegExp)
+}),
+  "state": zod.literal("ACCEPTED"),
+  "resulting_evidence_ref": zod.null(),
+  "source_sequence": zod.number().int().min(1).max(commitOwnerCommandResponseReceiptSourceSequenceMax),
+  "projection_lag_ms": zod.number().int().min(commitOwnerCommandResponseReceiptProjectionLagMsMin).max(commitOwnerCommandResponseReceiptProjectionLagMsMax),
+  "received_at": zod.string().regex(commitOwnerCommandResponseReceiptReceivedAtRegExp)
+})
+})
+
+

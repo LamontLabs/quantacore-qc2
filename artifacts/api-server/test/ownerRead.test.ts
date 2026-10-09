@@ -433,3 +433,51 @@ test("PostgreSQL pages read has_more from the function envelope", async () => {
   });
   assert.equal(result?.has_more, true);
 });
+
+test("owner access checks use the separate identity-authority database", async () => {
+  const ownerApiDatabase: OwnerReadQueryPort = {
+    async query() {
+      assert.fail("owner projection database must not resolve identity");
+      return { rows: [] };
+    },
+  };
+  const identityDatabase: OwnerReadQueryPort = {
+    async query(statement, values) {
+      assert.match(statement, /identity_resolve_access/);
+      assert.deepEqual(values, [
+        "test",
+        "a".repeat(64),
+        "2026-10-09T17:00:00.000Z",
+      ]);
+      return {
+        rows: [
+          {
+            result: {
+              status: "VALID",
+              session_record: {
+                id: "018f0000-0000-7000-8000-000000000001",
+                environment_namespace: "test",
+                scope_refs: ["OWNER_READ"],
+              },
+            },
+          },
+        ],
+      };
+    },
+  };
+
+  const store = new PostgresOwnerReadStore(
+    ownerApiDatabase,
+    identityDatabase,
+  );
+  const result = await store.resolveAccess(
+    "test",
+    "a".repeat(64),
+    new Date("2026-10-09T17:00:00.000Z"),
+  );
+  assert.deepEqual(result, {
+    sessionRecordId: "018f0000-0000-7000-8000-000000000001",
+    environmentNamespace: "test",
+    scopeRefs: ["OWNER_READ"],
+  });
+});

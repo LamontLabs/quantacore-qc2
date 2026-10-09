@@ -108,14 +108,17 @@ function requiredString(record: Record<string, unknown>, key: string): string {
 }
 
 export class PostgresOwnerReadStore implements OwnerReadStore {
-  constructor(private readonly database: OwnerReadQueryPort) {}
+  constructor(
+    private readonly database: OwnerReadQueryPort,
+    private readonly identityDatabase: OwnerReadQueryPort = database,
+  ) {}
 
   async resolveAccess(
     environmentNamespace: string,
     accessTokenHash: string,
     now: Date,
   ): Promise<OwnerSessionBinding | null> {
-    const { rows } = await this.database.query(
+    const { rows } = await this.identityDatabase.query(
       `SELECT qc2_governance_owner.identity_resolve_access(
         $1::text, $2::text, $3::timestamptz
       ) AS result`,

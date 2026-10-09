@@ -14,6 +14,8 @@ const ownerPayloadSchemas = [
   "../../packages/owner_api/schemas/v1/OwnerAlertsPayload.schema.json",
   "../../packages/owner_api/schemas/v1/OwnerReportsPayload.schema.json",
   "../../packages/owner_api/schemas/v1/OwnerEvidencePayload.schema.json",
+  "../../packages/owner_api/schemas/v1/OwnerCommandRequest.schema.json",
+  "../../packages/contracts/schemas/v1/OwnerCommandReceipt.schema.json",
 ];
 
 // Our exports make assumptions about the title of the API being "Api" (i.e. generated output is `api.ts`).

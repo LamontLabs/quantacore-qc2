@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qc2.example/schemas/OwnerCommandRequest.schema.json",
+  "title": "OwnerCommandRequest",
+  "oneOf": [
+    { "$ref": "#/$defs/Promotion" },
+    { "$ref": "#/$defs/EpochActivation" },
+    { "$ref": "#/$defs/PauseEntries" },
+    { "$ref": "#/$defs/ResumeRequest" },
+    { "$ref": "#/$defs/AlertAcknowledgment" },
+    { "$ref": "#/$defs/DeviceManagement" }
+  ],
+  "$defs": {
+    "Uuid7": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "Sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "PromotionChallengeRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_schema_name", "target_id", "content_hash"],
+      "properties": {
+        "target_schema_name": {
+          "const": "qc2.governance_owner.PromotionChallenge.v1"
+        },
+        "target_id": { "$ref": "#/$defs/Uuid7" },
+        "content_hash": { "$ref": "#/$defs/Sha256" }
+      }
+    },
+    "EpochActivationChallengeRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_schema_name", "target_id", "content_hash"],
+      "properties": {
+        "target_schema_name": {
+          "const": "qc2.governance_owner.EpochActivationChallenge.v1"
+        },
+        "target_id": { "$ref": "#/$defs/Uuid7" },
+        "content_hash": { "$ref": "#/$defs/Sha256" }
+      }
+    },
+    "AlertRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_schema_name", "target_id"],
+      "properties": {
+        "target_schema_name": {
+          "const": "qc2.governance_owner.Alert.v1"
+        },
+        "target_id": { "$ref": "#/$defs/Uuid7" }
+      }
+    },
+    "Promotion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_name", "schema_version", "command_type", "payload"],
+      "properties": {
+        "schema_name": { "const": "qc2.owner_api.OwnerCommandRequest.v1" },
+        "schema_version": { "const": "1.0" },
+        "command_type": { "const": "PROMOTION" },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["challenge_ref", "decision", "request_hash"],
+          "properties": {
+            "challenge_ref": { "$ref": "#/$defs/PromotionChallengeRef" },
+            "decision": { "enum": ["APPROVE", "HOLD", "REJECT"] },
+            "request_hash": { "$ref": "#/$defs/Sha256" }
+          }
+        }
+      }
+    },
+    "EpochActivation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_name", "schema_version", "command_type", "payload"],
+      "properties": {
+        "schema_name": { "const": "qc2.owner_api.OwnerCommandRequest.v1" },
+        "schema_version": { "const": "1.0" },
+        "command_type": { "const": "EPOCH_ACTIVATION" },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["challenge_ref", "epoch_manifest_hash", "decision"],
+          "properties": {
+            "challenge_ref": { "$ref": "#/$defs/EpochActivationChallengeRef" },
+            "epoch_manifest_hash": { "$ref": "#/$defs/Sha256" },
+            "decision": { "enum": ["APPROVE", "REJECT"] }
+          }
+        }
+      }
+    },
+    "PauseEntries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_name", "schema_version", "command_type", "payload"],
+      "properties": {
+        "schema_name": { "const": "qc2.owner_api.OwnerCommandRequest.v1" },
+        "schema_version": { "const": "1.0" },
+        "command_type": { "const": "PAUSE_NEW_ENTRIES" },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["expected_generation", "reason_code"],
+          "properties": {
+            "expected_generation": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "reason_code": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 96,
+              "pattern": "^[a-z][a-z0-9_-]{0,95}$"
+            }
+          }
+        }
+      }
+    },
+    "ResumeRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_name", "schema_version", "command_type", "payload"],
+      "properties": {
+        "schema_name": { "const": "qc2.owner_api.OwnerCommandRequest.v1" },
+        "schema_version": { "const": "1.0" },
+        "command_type": { "const": "RESUME_REQUEST" },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["expected_pause_generation"],
+          "properties": {
+            "expected_pause_generation": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            }
+          }
+        }
+      }
+    },
+    "AlertAcknowledgment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_name", "schema_version", "command_type", "payload"],
+      "properties": {
+        "schema_name": { "const": "qc2.owner_api.OwnerCommandRequest.v1" },
+        "schema_version": { "const": "1.0" },
+        "command_type": { "const": "ACKNOWLEDGE_ALERT" },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["alert_ref", "expected_projection_sequence"],
+          "properties": {
+            "alert_ref": { "$ref": "#/$defs/AlertRef" },
+            "expected_projection_sequence": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            }
+          }
+        }
+      }
+    },
+    "DeviceManagement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_name", "schema_version", "command_type", "payload"],
+      "properties": {
+        "schema_name": { "const": "qc2.owner_api.OwnerCommandRequest.v1" },
+        "schema_version": { "const": "1.0" },
+        "command_type": { "const": "DEVICE_ACTION" },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["action", "device_id"],
+          "properties": {
+            "action": { "const": "REVOKE_DEVICE" },
+            "device_id": { "$ref": "#/$defs/Uuid7" }
+          }
+        }
+      }
+    }
+  }
+}

@@ -245,14 +245,24 @@ def test_signed_command_rechecks_device_state_after_challenge_issuance() -> None
     pending = authority.issue_signed_command_challenge(
         access_token=tokens.access_token,
         command_type="PAUSE_NEW_ENTRIES",
-        request_body={"reason": "test"},
+        request_body={
+            "schema_name": "qc2.owner_api.OwnerCommandRequest.v1",
+            "schema_version": "1.0",
+            "command_type": "PAUSE_NEW_ENTRIES",
+            "payload": {"expected_generation": 0, "reason_code": "test"},
+        },
         idempotency_key="pause-test",
         now=NOW + timedelta(seconds=2),
     )
     revoke = authority.issue_signed_command_challenge(
         access_token=tokens.access_token,
         command_type="DEVICE_ACTION",
-        request_body={"action": "REVOKE_DEVICE", "device_id": device_id},
+        request_body={
+            "schema_name": "qc2.owner_api.OwnerCommandRequest.v1",
+            "schema_version": "1.0",
+            "command_type": "DEVICE_ACTION",
+            "payload": {"action": "REVOKE_DEVICE", "device_id": device_id},
+        },
         idempotency_key="revoke-primary",
         now=NOW + timedelta(seconds=2),
     )
@@ -268,7 +278,12 @@ def test_signed_command_rechecks_device_state_after_challenge_issuance() -> None
         authority.submit_signed_command(
             access_token=tokens.access_token,
             challenge_id=pending.challenge["id"],
-            request_body={"reason": "test"},
+            request_body={
+                "schema_name": "qc2.owner_api.OwnerCommandRequest.v1",
+                "schema_version": "1.0",
+                "command_type": "PAUSE_NEW_ENTRIES",
+                "payload": {"expected_generation": 0, "reason_code": "test"},
+            },
             signature=_sign(owner_key, pending.signing_bytes),
             now=NOW + timedelta(seconds=4),
         )
@@ -276,6 +291,87 @@ def test_signed_command_rechecks_device_state_after_challenge_issuance() -> None
         IdentityErrorCode.INVALID_IDENTITY,
         IdentityErrorCode.IDENTITY_REVOKED,
     }
+
+
+def test_owner_command_request_bodies_are_versioned_and_allowlisted() -> None:
+    challenge_ref = {
+        "target_schema_name": "qc2.governance_owner.PromotionChallenge.v1",
+        "target_id": "00000000-0000-7000-8000-000000000001",
+        "content_hash": "a" * 64,
+    }
+    epoch_ref = {
+        "target_schema_name": "qc2.governance_owner.EpochActivationChallenge.v1",
+        "target_id": "00000000-0000-7000-8000-000000000002",
+        "content_hash": "b" * 64,
+    }
+    alert_ref = {
+        "target_schema_name": "qc2.governance_owner.Alert.v1",
+        "target_id": "00000000-0000-7000-8000-000000000003",
+    }
+    command_requests = {
+        "PROMOTION": {
+            "challenge_ref": challenge_ref,
+            "decision": "APPROVE",
+            "request_hash": "c" * 64,
+        },
+        "EPOCH_ACTIVATION": {
+            "challenge_ref": epoch_ref,
+            "epoch_manifest_hash": "d" * 64,
+            "decision": "APPROVE",
+        },
+        "PAUSE_NEW_ENTRIES": {
+            "expected_generation": 0,
+            "reason_code": "operator_request",
+        },
+        "RESUME_REQUEST": {"expected_pause_generation": 1},
+        "ACKNOWLEDGE_ALERT": {
+            "alert_ref": alert_ref,
+            "expected_projection_sequence": 12,
+        },
+        "DEVICE_ACTION": {
+            "action": "REVOKE_DEVICE",
+            "device_id": "00000000-0000-7000-8000-000000000004",
+        },
+    }
+    for command_type, payload in command_requests.items():
+        IdentityAuthority._validate_command_body(
+            command_type,
+            {
+                "schema_name": "qc2.owner_api.OwnerCommandRequest.v1",
+                "schema_version": "1.0",
+                "command_type": command_type,
+                "payload": payload,
+            },
+        )
+
+    forbidden_bodies = [
+        {
+            "schema_name": "qc2.owner_api.OwnerCommandRequest.v1",
+            "schema_version": "1.0",
+            "command_type": "PROMOTION",
+            "payload": {
+                "challenge_ref": challenge_ref,
+                "decision": "FORCE_PROMOTE",
+                "request_hash": "c" * 64,
+            },
+        },
+        {
+            "schema_name": "qc2.owner_api.OwnerCommandRequest.v1",
+            "schema_version": "1.0",
+            "command_type": "PAUSE_NEW_ENTRIES",
+            "payload": {
+                "expected_generation": 0,
+                "reason_code": "operator_request",
+                "safety_override": True,
+            },
+        },
+        {"action": "BUY", "symbol": "TEST"},
+    ]
+    command_types = ["PROMOTION", "PAUSE_NEW_ENTRIES", "DEVICE_ACTION"]
+    for command_type, body in zip(command_types, forbidden_bodies, strict=True):
+        with pytest.raises(IdentityAuthorityError) as rejected:
+            IdentityAuthority._validate_command_body(command_type, body)
+        assert rejected.value.code is IdentityErrorCode.INVALID_INPUT
 
 
 def test_recovery_revokes_prior_credentials_sets_holds_and_restricts_replacement() -> None:
@@ -315,7 +411,15 @@ def test_recovery_revokes_prior_credentials_sets_holds_and_restricts_replacement
         authority.issue_signed_command_challenge(
             access_token=replacement.access_token,
             command_type="PAUSE_NEW_ENTRIES",
-            request_body={"reason": "not available during recovery"},
+            request_body={
+                "schema_name": "qc2.owner_api.OwnerCommandRequest.v1",
+                "schema_version": "1.0",
+                "command_type": "PAUSE_NEW_ENTRIES",
+                "payload": {
+                    "expected_generation": 0,
+                    "reason_code": "recovery_pause",
+                },
+            },
             idempotency_key="recovery-pause",
             now=NOW + timedelta(seconds=4),
         )

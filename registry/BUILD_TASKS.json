@@ -5918,6 +5918,34 @@
         "Fresh challenges, body-hash/idempotency validation and commit-time identity checks.",
         "Command receipt and projection linkage; Validation alone commits a verified epoch activation."
       ],
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-042",
+          "artifact_paths": [
+            "packages/owner_api",
+            "tests/owner_api"
+          ],
+          "reason": "QC2-055 adds signed mutation request validation to the established owner API package and hostile command tests. Its acceptance receipt binds the updated owner API tree hashes."
+        },
+        {
+          "prior_task_id": "QC2-053",
+          "artifact_paths": [
+            "packages/owner_api",
+            "tests/owner_api"
+          ],
+          "reason": "QC2-055 extends the existing identity boundary with versioned command bodies and device-management signing. Its acceptance receipt binds the updated owner API tree hashes."
+        },
+        {
+          "prior_task_id": "QC2-054",
+          "artifact_paths": [
+            "packages/owner_api",
+            "tests/owner_api",
+            "artifacts/api-server/src",
+            "artifacts/api-server/test"
+          ],
+          "reason": "QC2-055 adds the authorized mutation routes, command validation and receipt projection alongside the accepted read-only owner API. Its acceptance receipt binds these updated source and test tree hashes."
+        }
+      ],
       "required_tests": [
         "Duplicate tap returns same receipt; same ID/new body rejected.",
         "Stale/expired/revoked approvals and unauthorized endpoint/action rejected.",
@@ -5934,7 +5962,7 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "blockers": [],
       "acceptance_receipt": null
     },

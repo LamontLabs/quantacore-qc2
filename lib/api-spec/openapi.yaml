@@ -12,6 +12,8 @@ tags:
     description: Health operations
   - name: ownerRead
     description: Private, bounded owner read projections
+  - name: ownerCommands
+    description: Signed, scoped owner commands with durable non-execution receipts
 paths:
   /healthz:
     get:
@@ -162,6 +164,89 @@ paths:
           $ref: "#/components/responses/OwnerReadError"
         "503":
           $ref: "#/components/responses/OwnerReadError"
+  /owner/commands/{kind}/challenges:
+    post:
+      operationId: issueOwnerCommandChallenge
+      tags: [ownerCommands]
+      summary: Issue a fresh signature challenge for one allowlisted owner command
+      security:
+        - OwnerBearerAuth: []
+      parameters:
+        - name: kind
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/OwnerCommandKind"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OwnerCommandChallengeInput"
+      responses:
+        "201":
+          description: Fresh challenge and canonical bytes to sign
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OwnerCommandChallengeResponse"
+        "400":
+          $ref: "#/components/responses/OwnerReadError"
+        "401":
+          $ref: "#/components/responses/OwnerReadError"
+        "403":
+          $ref: "#/components/responses/OwnerReadError"
+        "404":
+          $ref: "#/components/responses/OwnerReadError"
+        "409":
+          $ref: "#/components/responses/OwnerReadError"
+        "413":
+          $ref: "#/components/responses/OwnerReadError"
+        "503":
+          $ref: "#/components/responses/OwnerReadError"
+  /owner/commands/{kind}/commit:
+    post:
+      operationId: commitOwnerCommand
+      tags: [ownerCommands]
+      summary: Commit a signed owner command and return its stable acceptance receipt
+      description: HTTP success records an authorized request only; it does not complete the downstream transition.
+      security:
+        - OwnerBearerAuth: []
+      parameters:
+        - name: kind
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/OwnerCommandKind"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OwnerCommandCommitInput"
+      responses:
+        "202":
+          description: Command recorded; no downstream transition is implied
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OwnerCommandCommitResponse"
+        "400":
+          $ref: "#/components/responses/OwnerReadError"
+        "401":
+          $ref: "#/components/responses/OwnerReadError"
+        "403":
+          $ref: "#/components/responses/OwnerReadError"
+        "404":
+          $ref: "#/components/responses/OwnerReadError"
+        "409":
+          $ref: "#/components/responses/OwnerReadError"
+        "410":
+          $ref: "#/components/responses/OwnerReadError"
+        "413":
+          $ref: "#/components/responses/OwnerReadError"
+        "503":
+          $ref: "#/components/responses/OwnerReadError"
 components:
   schemas:
     HealthStatus:
@@ -183,6 +268,221 @@ components:
         - alerts
         - reports
         - evidence
+    OwnerCommandKind:
+      type: string
+      enum:
+        - promotion-decision
+        - epoch-activation-decision
+        - entry-pause
+        - resume-request
+        - alert-acknowledgment
+        - device-management
+    OwnerCommandRequest:
+      $ref: "../../packages/owner_api/schemas/v1/OwnerCommandRequest.schema.json"
+    OwnerCommandChallengeInput:
+      type: object
+      additionalProperties: false
+      required: [idempotency_key, request_body]
+      properties:
+        idempotency_key:
+          type: string
+          minLength: 1
+          maxLength: 96
+          pattern: "^[a-z][a-z0-9_-]{0,95}$"
+        request_body:
+          $ref: "#/components/schemas/OwnerCommandRequest"
+    OwnerCommandCommitInput:
+      type: object
+      additionalProperties: false
+      required: [challenge_id, request_body, signature]
+      properties:
+        challenge_id:
+          type: string
+          pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        request_body:
+          $ref: "#/components/schemas/OwnerCommandRequest"
+        signature:
+          type: string
+          minLength: 1
+          maxLength: 256
+          pattern: "^[A-Za-z0-9_-]+$"
+    OwnerSignedCommandChallenge:
+      type: object
+      additionalProperties: false
+      required:
+        - schema_name
+        - schema_version
+        - environment_namespace
+        - id
+        - command_id
+        - command_type
+        - idempotency_key
+        - request_body_hash
+        - device_ref
+        - session_ref
+        - owner_key_id
+        - public_key_fingerprint
+        - scope
+        - nonce
+        - issued_at
+        - expires_at
+      properties:
+        schema_name:
+          const: qc2.owner_api.OwnerSignedCommandChallenge.v1
+        schema_version:
+          const: "1.0"
+        environment_namespace:
+          type: string
+          enum: [development, test, research, production]
+        id:
+          type: string
+          pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        command_id:
+          type: string
+          pattern: "^cmd-[a-f0-9]{32}$"
+        command_type:
+          type: string
+          enum: [PROMOTION, EPOCH_ACTIVATION, PAUSE_NEW_ENTRIES, RESUME_REQUEST, ACKNOWLEDGE_ALERT, DEVICE_ACTION]
+        idempotency_key:
+          type: string
+          pattern: "^[a-z][a-z0-9_-]{0,95}$"
+        request_body_hash:
+          type: string
+          pattern: "^[0-9a-f]{64}$"
+        device_ref:
+          $ref: "#/components/schemas/OwnerCommandIdentityRef"
+        session_ref:
+          $ref: "#/components/schemas/OwnerCommandSessionRef"
+        owner_key_id:
+          type: string
+          minLength: 1
+          maxLength: 96
+        public_key_fingerprint:
+          type: string
+          pattern: "^[0-9a-f]{64}$"
+        scope:
+          type: string
+          enum: [PROMOTION, EPOCH_ACTIVATION, PAUSE, RESUME, ALERT, DEVICE_ADMIN]
+        nonce:
+          type: string
+          pattern: "^n[0-9a-f]{64}$"
+        issued_at:
+          type: string
+          format: date-time
+        expires_at:
+          type: string
+          format: date-time
+    OwnerCommandIdentityRef:
+      type: object
+      additionalProperties: false
+      required: [target_schema_name, target_id]
+      properties:
+        target_schema_name:
+          const: qc2.governance_owner.OwnerDevice.v1
+        target_id:
+          type: string
+          pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    OwnerCommandSessionRef:
+      type: object
+      additionalProperties: false
+      required: [target_schema_name, target_id]
+      properties:
+        target_schema_name:
+          const: qc2.governance_owner.OwnerSession.v1
+        target_id:
+          type: string
+          pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    OwnerCommandChallengeResponse:
+      type: object
+      additionalProperties: false
+      required: [challenge, signing_bytes_base64url]
+      properties:
+        challenge:
+          $ref: "#/components/schemas/OwnerSignedCommandChallenge"
+        signing_bytes_base64url:
+          type: string
+          minLength: 1
+          maxLength: 4096
+          pattern: "^[A-Za-z0-9_-]+$"
+    OwnerCommandCommitResponse:
+      type: object
+      additionalProperties: false
+      required: [status, receipt]
+      properties:
+        status:
+          const: ACCEPTED
+        receipt:
+          $ref: "#/components/schemas/OwnerCommandReceipt"
+    OwnerCommandReceipt:
+      type: object
+      additionalProperties: false
+      required:
+        - schema_name
+        - schema_version
+        - id
+        - created_at
+        - owning_authority
+        - evidence_class
+        - environment_namespace
+        - source_refs
+        - command_ref
+        - state
+        - resulting_evidence_ref
+        - source_sequence
+        - projection_lag_ms
+        - received_at
+      properties:
+        schema_name:
+          const: qc2.governance_owner.OwnerCommandReceipt.v1
+        schema_version:
+          const: "1.0"
+        id:
+          type: string
+          pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        created_at:
+          type: string
+          pattern: "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?Z$"
+        owning_authority:
+          const: owner_api
+        evidence_class:
+          type: string
+          enum: [SYNTHETIC_FIXTURE, HISTORICAL_RECONSTRUCTED, FORWARD_OPERATIONAL, FORWARD_SEALED]
+        environment_namespace:
+          type: string
+          enum: [development, test, research, production]
+        source_refs:
+          type: array
+          maxItems: 0
+          items:
+            type: object
+        command_ref:
+          type: object
+          additionalProperties: false
+          required: [target_schema_name, target_id, content_hash]
+          properties:
+            target_schema_name:
+              const: qc2.governance_owner.OwnerCommand.v1
+            target_id:
+              type: string
+              pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            content_hash:
+              type: string
+              pattern: "^[0-9a-f]{64}$"
+        state:
+          const: ACCEPTED
+        resulting_evidence_ref:
+          type: "null"
+        source_sequence:
+          type: integer
+          minimum: 1
+          maximum: 9007199254740991
+        projection_lag_ms:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+        received_at:
+          type: string
+          pattern: "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?Z$"
     OwnerReadSourceRef:
       type: object
       additionalProperties: false

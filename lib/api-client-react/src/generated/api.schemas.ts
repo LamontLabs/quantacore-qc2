@@ -24,6 +24,277 @@ export const OwnerReadView = {
   evidence: 'evidence',
 } as const;
 
+export type OwnerCommandKind = typeof OwnerCommandKind[keyof typeof OwnerCommandKind];
+
+
+export const OwnerCommandKind = {
+  'promotion-decision': 'promotion-decision',
+  'epoch-activation-decision': 'epoch-activation-decision',
+  'entry-pause': 'entry-pause',
+  'resume-request': 'resume-request',
+  'alert-acknowledgment': 'alert-acknowledgment',
+  'device-management': 'device-management',
+} as const;
+
+export type OwnerCommandRequest = {
+  schema_name: 'qc2.owner_api.OwnerCommandRequest.v1';
+  schema_version: '1.0';
+  command_type: 'PROMOTION';
+  payload: {
+  challenge_ref: {
+  target_schema_name: 'qc2.governance_owner.PromotionChallenge.v1';
+  /** @pattern ^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$ */
+  target_id: string;
+  /** @pattern ^[0-9a-f]{64}$ */
+  content_hash: string;
+};
+  decision: 'APPROVE' | 'HOLD' | 'REJECT';
+  /** @pattern ^[0-9a-f]{64}$ */
+  request_hash: string;
+};
+} | {
+  schema_name: 'qc2.owner_api.OwnerCommandRequest.v1';
+  schema_version: '1.0';
+  command_type: 'EPOCH_ACTIVATION';
+  payload: {
+  challenge_ref: {
+  target_schema_name: 'qc2.governance_owner.EpochActivationChallenge.v1';
+  /** @pattern ^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$ */
+  target_id: string;
+  /** @pattern ^[0-9a-f]{64}$ */
+  content_hash: string;
+};
+  /** @pattern ^[0-9a-f]{64}$ */
+  epoch_manifest_hash: string;
+  decision: 'APPROVE' | 'REJECT';
+};
+} | {
+  schema_name: 'qc2.owner_api.OwnerCommandRequest.v1';
+  schema_version: '1.0';
+  command_type: 'PAUSE_NEW_ENTRIES';
+  payload: {
+  /**
+     * @minimum 0
+     * @maximum 9007199254740991
+     */
+  expected_generation: number;
+  /**
+     * @minLength 1
+     * @maxLength 96
+     * @pattern ^[a-z][a-z0-9_-]{0,95}$
+     */
+  reason_code: string;
+};
+} | {
+  schema_name: 'qc2.owner_api.OwnerCommandRequest.v1';
+  schema_version: '1.0';
+  command_type: 'RESUME_REQUEST';
+  payload: {
+  /**
+     * @minimum 1
+     * @maximum 9007199254740991
+     */
+  expected_pause_generation: number;
+};
+} | {
+  schema_name: 'qc2.owner_api.OwnerCommandRequest.v1';
+  schema_version: '1.0';
+  command_type: 'ACKNOWLEDGE_ALERT';
+  payload: {
+  alert_ref: {
+  target_schema_name: 'qc2.governance_owner.Alert.v1';
+  /** @pattern ^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$ */
+  target_id: string;
+};
+  /**
+     * @minimum 1
+     * @maximum 9007199254740991
+     */
+  expected_projection_sequence: number;
+};
+} | {
+  schema_name: 'qc2.owner_api.OwnerCommandRequest.v1';
+  schema_version: '1.0';
+  command_type: 'DEVICE_ACTION';
+  payload: {
+  action: 'REVOKE_DEVICE';
+  /** @pattern ^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$ */
+  device_id: string;
+};
+};
+
+export interface OwnerCommandChallengeInput {
+  /**
+     * @minLength 1
+     * @maxLength 96
+     * @pattern ^[a-z][a-z0-9_-]{0,95}$
+     */
+  idempotency_key: string;
+  request_body: OwnerCommandRequest;
+}
+
+export interface OwnerCommandCommitInput {
+  /** @pattern ^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$ */
+  challenge_id: string;
+  request_body: OwnerCommandRequest;
+  /**
+     * @minLength 1
+     * @maxLength 256
+     * @pattern ^[A-Za-z0-9_-]+$
+     */
+  signature: string;
+}
+
+export type OwnerSignedCommandChallengeEnvironmentNamespace = typeof OwnerSignedCommandChallengeEnvironmentNamespace[keyof typeof OwnerSignedCommandChallengeEnvironmentNamespace];
+
+
+export const OwnerSignedCommandChallengeEnvironmentNamespace = {
+  development: 'development',
+  test: 'test',
+  research: 'research',
+  production: 'production',
+} as const;
+
+export type OwnerSignedCommandChallengeCommandType = typeof OwnerSignedCommandChallengeCommandType[keyof typeof OwnerSignedCommandChallengeCommandType];
+
+
+export const OwnerSignedCommandChallengeCommandType = {
+  PROMOTION: 'PROMOTION',
+  EPOCH_ACTIVATION: 'EPOCH_ACTIVATION',
+  PAUSE_NEW_ENTRIES: 'PAUSE_NEW_ENTRIES',
+  RESUME_REQUEST: 'RESUME_REQUEST',
+  ACKNOWLEDGE_ALERT: 'ACKNOWLEDGE_ALERT',
+  DEVICE_ACTION: 'DEVICE_ACTION',
+} as const;
+
+export type OwnerSignedCommandChallengeScope = typeof OwnerSignedCommandChallengeScope[keyof typeof OwnerSignedCommandChallengeScope];
+
+
+export const OwnerSignedCommandChallengeScope = {
+  PROMOTION: 'PROMOTION',
+  EPOCH_ACTIVATION: 'EPOCH_ACTIVATION',
+  PAUSE: 'PAUSE',
+  RESUME: 'RESUME',
+  ALERT: 'ALERT',
+  DEVICE_ADMIN: 'DEVICE_ADMIN',
+} as const;
+
+export interface OwnerCommandIdentityRef {
+  target_schema_name: 'qc2.governance_owner.OwnerDevice.v1';
+  /** @pattern ^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$ */
+  target_id: string;
+}
+
+export interface OwnerCommandSessionRef {
+  target_schema_name: 'qc2.governance_owner.OwnerSession.v1';
+  /** @pattern ^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$ */
+  target_id: string;
+}
+
+export interface OwnerSignedCommandChallenge {
+  schema_name: 'qc2.owner_api.OwnerSignedCommandChallenge.v1';
+  schema_version: '1.0';
+  environment_namespace: OwnerSignedCommandChallengeEnvironmentNamespace;
+  /** @pattern ^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$ */
+  id: string;
+  /** @pattern ^cmd-[a-f0-9]{32}$ */
+  command_id: string;
+  command_type: OwnerSignedCommandChallengeCommandType;
+  /** @pattern ^[a-z][a-z0-9_-]{0,95}$ */
+  idempotency_key: string;
+  /** @pattern ^[0-9a-f]{64}$ */
+  request_body_hash: string;
+  device_ref: OwnerCommandIdentityRef;
+  session_ref: OwnerCommandSessionRef;
+  /**
+     * @minLength 1
+     * @maxLength 96
+     */
+  owner_key_id: string;
+  /** @pattern ^[0-9a-f]{64}$ */
+  public_key_fingerprint: string;
+  scope: OwnerSignedCommandChallengeScope;
+  /** @pattern ^n[0-9a-f]{64}$ */
+  nonce: string;
+  issued_at: string;
+  expires_at: string;
+}
+
+export interface OwnerCommandChallengeResponse {
+  challenge: OwnerSignedCommandChallenge;
+  /**
+     * @minLength 1
+     * @maxLength 4096
+     * @pattern ^[A-Za-z0-9_-]+$
+     */
+  signing_bytes_base64url: string;
+}
+
+export type OwnerCommandReceiptEvidenceClass = typeof OwnerCommandReceiptEvidenceClass[keyof typeof OwnerCommandReceiptEvidenceClass];
+
+
+export const OwnerCommandReceiptEvidenceClass = {
+  SYNTHETIC_FIXTURE: 'SYNTHETIC_FIXTURE',
+  HISTORICAL_RECONSTRUCTED: 'HISTORICAL_RECONSTRUCTED',
+  FORWARD_OPERATIONAL: 'FORWARD_OPERATIONAL',
+  FORWARD_SEALED: 'FORWARD_SEALED',
+} as const;
+
+export type OwnerCommandReceiptEnvironmentNamespace = typeof OwnerCommandReceiptEnvironmentNamespace[keyof typeof OwnerCommandReceiptEnvironmentNamespace];
+
+
+export const OwnerCommandReceiptEnvironmentNamespace = {
+  development: 'development',
+  test: 'test',
+  research: 'research',
+  production: 'production',
+} as const;
+
+export type OwnerCommandReceiptSourceRefsItem = { [key: string]: unknown };
+
+export type OwnerCommandReceiptCommandRef = {
+  target_schema_name: 'qc2.governance_owner.OwnerCommand.v1';
+  /** @pattern ^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$ */
+  target_id: string;
+  /** @pattern ^[0-9a-f]{64}$ */
+  content_hash: string;
+};
+
+export interface OwnerCommandReceipt {
+  schema_name: 'qc2.governance_owner.OwnerCommandReceipt.v1';
+  schema_version: '1.0';
+  /** @pattern ^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$ */
+  id: string;
+  /** @pattern ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?Z$ */
+  created_at: string;
+  owning_authority: 'owner_api';
+  evidence_class: OwnerCommandReceiptEvidenceClass;
+  environment_namespace: OwnerCommandReceiptEnvironmentNamespace;
+  /** @maxItems 0 */
+  source_refs: OwnerCommandReceiptSourceRefsItem[];
+  command_ref: OwnerCommandReceiptCommandRef;
+  state: 'ACCEPTED';
+  /** @nullable */
+  resulting_evidence_ref: null;
+  /**
+     * @minimum 1
+     * @maximum 9007199254740991
+     */
+  source_sequence: number;
+  /**
+     * @minimum 0
+     * @maximum 9007199254740991
+     */
+  projection_lag_ms: number;
+  /** @pattern ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?Z$ */
+  received_at: string;
+}
+
+export interface OwnerCommandCommitResponse {
+  status: 'ACCEPTED';
+  receipt: OwnerCommandReceipt;
+}
+
 export interface OwnerReadSourceRef {
   /**
      * @minLength 1

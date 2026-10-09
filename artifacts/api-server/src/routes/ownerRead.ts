@@ -436,9 +436,12 @@ export function createOwnerReadRouter(
 let productionStore: Promise<OwnerReadStore> | undefined;
 
 async function getProductionStore(): Promise<OwnerReadStore> {
-  productionStore ??= import("@workspace/db").then(
-    ({ pool }) =>
-      new PostgresOwnerReadStore({
+  productionStore ??= Promise.all([
+    import("@workspace/db"),
+    import("../lib/identityAuthorityDatabase"),
+  ]).then(([{ pool }, { identityAuthorityDatabase }]) =>
+    new PostgresOwnerReadStore(
+      {
         query: async (statement, values) => {
           const result = await pool.query(
             statement,
@@ -448,7 +451,9 @@ async function getProductionStore(): Promise<OwnerReadStore> {
             rows: result.rows.map((row) => ({ result: row.result })),
           };
         },
-      }),
+      },
+      identityAuthorityDatabase,
+    ),
   );
   return productionStore;
 }

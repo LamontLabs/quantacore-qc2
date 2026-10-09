@@ -1627,8 +1627,9 @@ class IdentityAuthority:
         command = _contract("OwnerCommand", command)
         target_device = None
         if command["command_type"] == "DEVICE_ACTION":
-            if request_body["action"] == "REVOKE_DEVICE":
-                target_device = request_body["device_id"]
+            payload = request_body["payload"]
+            if payload["action"] == "REVOKE_DEVICE":
+                target_device = payload["device_id"]
         return self.repository.commit_owner_command(
             environment_namespace=self.environment_namespace,
             challenge_id=challenge_id,
@@ -1790,7 +1791,12 @@ class IdentityAuthority:
         return self.submit_signed_command(
             access_token=access_token,
             challenge_id=challenge_id,
-            request_body={"action": "REVOKE_DEVICE", "device_id": device_id},
+            request_body={
+                "schema_name": "qc2.owner_api.OwnerCommandRequest.v1",
+                "schema_version": "1.0",
+                "command_type": "DEVICE_ACTION",
+                "payload": {"action": "REVOKE_DEVICE", "device_id": device_id},
+            },
             signature=signature,
             now=now,
         )
@@ -1852,12 +1858,114 @@ class IdentityAuthority:
 
     @staticmethod
     def _validate_command_body(command_type: str, body: dict[str, Any]) -> None:
-        if command_type == "DEVICE_ACTION":
-            if body.get("action") == "REVOKE_DEVICE":
-                if set(body) != {"action", "device_id"} or not isinstance(body["device_id"], str):
-                    raise IdentityAuthorityError(IdentityErrorCode.INVALID_INPUT)
-                return
-            raise IdentityAuthorityError(IdentityErrorCode.INVALID_INPUT, "unsupported device action")
+        if (
+            set(body) != {"schema_name", "schema_version", "command_type", "payload"}
+            or body.get("schema_name") != "qc2.owner_api.OwnerCommandRequest.v1"
+            or body.get("schema_version") != "1.0"
+            or body.get("command_type") != command_type
+            or not isinstance(body.get("payload"), dict)
+        ):
+            raise IdentityAuthorityError(IdentityErrorCode.INVALID_INPUT)
+
+        payload = body["payload"]
+        uuid7_pattern = re.compile(
+            r"[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\Z"
+        )
+
+        def typed_reference(
+            value: Any, schema_name: str, *, content_addressed: bool
+        ) -> bool:
+            if not isinstance(value, dict):
+                return False
+            expected_keys = {"target_schema_name", "target_id"}
+            if content_addressed:
+                expected_keys.add("content_hash")
+            return (
+                set(value) == expected_keys
+                and value.get("target_schema_name") == schema_name
+                and isinstance(value.get("target_id"), str)
+                and uuid7_pattern.fullmatch(value["target_id"]) is not None
+                and (
+                    not content_addressed
+                    or isinstance(value.get("content_hash"), str)
+                    and _SHA256.fullmatch(value["content_hash"]) is not None
+                )
+            )
+
+        safe_integer = (1 << 53) - 1
+        valid = False
+        if command_type == "PROMOTION":
+            valid = (
+                set(payload) == {"challenge_ref", "decision", "request_hash"}
+                and typed_reference(
+                    payload.get("challenge_ref"),
+                    "qc2.governance_owner.PromotionChallenge.v1",
+                    content_addressed=True,
+                )
+                and isinstance(payload.get("decision"), str)
+                and payload["decision"] in {"APPROVE", "HOLD", "REJECT"}
+                and isinstance(payload.get("request_hash"), str)
+                and _SHA256.fullmatch(payload["request_hash"]) is not None
+            )
+        elif command_type == "EPOCH_ACTIVATION":
+            valid = (
+                set(payload)
+                == {"challenge_ref", "epoch_manifest_hash", "decision"}
+                and typed_reference(
+                    payload.get("challenge_ref"),
+                    "qc2.governance_owner.EpochActivationChallenge.v1",
+                    content_addressed=True,
+                )
+                and isinstance(payload.get("decision"), str)
+                and payload["decision"] in {"APPROVE", "REJECT"}
+                and isinstance(payload.get("epoch_manifest_hash"), str)
+                and _SHA256.fullmatch(payload["epoch_manifest_hash"]) is not None
+            )
+        elif command_type == "PAUSE_NEW_ENTRIES":
+            generation = payload.get("expected_generation")
+            valid = (
+                set(payload) == {"expected_generation", "reason_code"}
+                and isinstance(generation, int)
+                and not isinstance(generation, bool)
+                and 0 <= generation <= safe_integer
+                and isinstance(payload.get("reason_code"), str)
+                and _SLUG.fullmatch(payload["reason_code"]) is not None
+            )
+        elif command_type == "RESUME_REQUEST":
+            generation = payload.get("expected_pause_generation")
+            valid = (
+                set(payload) == {"expected_pause_generation"}
+                and isinstance(generation, int)
+                and not isinstance(generation, bool)
+                and 1 <= generation <= safe_integer
+            )
+        elif command_type == "ACKNOWLEDGE_ALERT":
+            sequence = payload.get("expected_projection_sequence")
+            valid = (
+                set(payload) == {"alert_ref", "expected_projection_sequence"}
+                and typed_reference(
+                    payload.get("alert_ref"),
+                    "qc2.governance_owner.Alert.v1",
+                    content_addressed=False,
+                )
+                and isinstance(sequence, int)
+                and not isinstance(sequence, bool)
+                and 1 <= sequence <= safe_integer
+            )
+        elif command_type == "DEVICE_ACTION":
+            device_id = payload.get("device_id")
+            valid = (
+                set(payload) == {"action", "device_id"}
+                and payload.get("action") == "REVOKE_DEVICE"
+                and isinstance(device_id, str)
+                and uuid7_pattern.fullmatch(device_id) is not None
+            )
+
+        if not valid:
+            raise IdentityAuthorityError(
+                IdentityErrorCode.INVALID_INPUT,
+                "unsupported or malformed owner command request",
+            )
 
 
 def _check_key_id(value: str) -> None:

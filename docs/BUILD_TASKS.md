@@ -1896,10 +1896,13 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-055 — Owner API Mutations
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Expose only authorized owner commands with exact-state signatures and idempotent receipts.
 **Dependencies:** QC2-042, QC2-043, QC2-051, QC2-053, QC2-054
 **Authorized legacy references:** None.
+**Authorized artifact drift:** QC2-042 — QC2-055 adds signed mutation request validation to the established owner API package and hostile command tests. Its acceptance receipt binds the updated owner API tree hashes. Paths: `packages/owner_api`, `tests/owner_api`
+**Authorized artifact drift:** QC2-053 — QC2-055 extends the existing identity boundary with versioned command bodies and device-management signing. Its acceptance receipt binds the updated owner API tree hashes. Paths: `packages/owner_api`, `tests/owner_api`
+**Authorized artifact drift:** QC2-054 — QC2-055 adds the authorized mutation routes, command validation and receipt projection alongside the accepted read-only owner API. Its acceptance receipt binds these updated source and test tree hashes. Paths: `packages/owner_api`, `tests/owner_api`, `artifacts/api-server/src`, `artifacts/api-server/test`
 **Required reference intake:** None. Do not inspect or copy legacy code for this task without a scoped amendment.
 
 **Required deliverables:**

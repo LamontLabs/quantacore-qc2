@@ -13,6 +13,8 @@ import pytest
 
 from qc2_alpaca_paper import (
     ACCOUNT_FINGERPRINT_DOMAIN,
+    ACCOUNT_FINGERPRINT_SCHEME,
+    PAPER_API_BASE_URL,
     PAPER_API_HOST,
     AccountIdentityMismatch,
     AlpacaPaperAdapter,
@@ -31,6 +33,7 @@ from qc2_alpaca_paper import (
     paper_account_fingerprint,
     validate_paper_relative_path,
 )
+from qc2_alpaca_paper.identity import observe_account_identity
 from qc2_execution.authority import SubmissionOutcome, build_normalized_request
 
 
@@ -152,6 +155,8 @@ def _normalized_cancel_request(
 
 
 class FakeTransport:
+    origin = PAPER_API_BASE_URL
+
     def __init__(self):
         self.responses: dict[tuple[str, str], deque[Any]] = defaultdict(deque)
         self.calls: list[tuple[str, str, Any]] = []
@@ -182,7 +187,8 @@ def _adapter(fake: FakeTransport, *, sleeper=lambda _: None) -> AlpacaPaperAdapt
 
 def test_fixed_paper_host_and_absolute_live_host_rejection():
     assert PAPER_API_HOST == "paper-api.alpaca.markets"
-    assert ACCOUNT_FINGERPRINT_DOMAIN == "qc2.identity_market.paper-account-fingerprint.v1"
+    assert ACCOUNT_FINGERPRINT_DOMAIN == ACCOUNT_FINGERPRINT_SCHEME
+    assert ACCOUNT_FINGERPRINT_SCHEME == "qc2.alpaca-paper-account-fingerprint.v1"
     with pytest.raises(PaperHostViolation):
         validate_paper_relative_path("https://api.alpaca.markets/v2/orders")
     with pytest.raises(PaperHostViolation):
@@ -228,9 +234,201 @@ def test_account_identity_hash_matches_but_never_returns_raw_or_financial_fields
     fake.add("GET", "/v2/account", _response(200, _account()))
     identity = _adapter(fake).get_account_identity()
     assert identity.account_fingerprint == ACCOUNT_FINGERPRINT
+    assert identity.fingerprint_scheme == ACCOUNT_FINGERPRINT_SCHEME
+    assert identity.broker == "alpaca"
+    assert identity.environment == "paper"
+    assert identity.origin == PAPER_API_BASE_URL
     assert identity.account_status == "ACTIVE"
     assert "98765.43" not in repr(identity)
     assert ACCOUNT_ID not in repr(identity)
+
+
+def test_new_fingerprint_golden_vector_has_exact_canonical_preimage():
+    from hashlib import sha256
+
+    from qc2_contracts.runtime import canonical_json_bytes
+
+    vector_id = "01234567-89ab-4cde-8f01-23456789abcd"
+    identity_object = {
+        "account_id": vector_id,
+        "broker": "alpaca",
+        "environment": "paper",
+        "origin": "https://paper-api.alpaca.markets",
+    }
+    payload = canonical_json_bytes(identity_object)
+    preimage = ACCOUNT_FINGERPRINT_SCHEME.encode("ascii") + b"\x00" + payload
+    assert len(preimage) == 177
+    assert sha256(preimage).hexdigest() == (
+        "ce862c5092d42d0ca7db43d55549f83bc1f66385680ec81d6e324cf76a7e24cf"
+    )
+    assert paper_account_fingerprint(vector_id) == sha256(preimage).hexdigest()
+    assert paper_account_fingerprint(vector_id.upper()) == sha256(preimage).hexdigest()
+
+
+@pytest.mark.parametrize(
+    "account_id",
+    [
+        " 01234567-89ab-4cde-8f01-23456789abcd",
+        "{01234567-89ab-4cde-8f01-23456789abcd}",
+        "0123456789ab4cde8f0123456789abcd",
+        "not-an-account-id",
+        "00000000-0000-0000-0000-000000000000",
+    ],
+)
+def test_fingerprint_rejects_noncanonical_or_nil_account_ids(account_id):
+    from qc2_alpaca_paper.fingerprint import InvalidPaperAccountIdentity
+
+    with pytest.raises(InvalidPaperAccountIdentity):
+        paper_account_fingerprint(account_id)
+
+
+def test_fingerprint_rejects_unapproved_identity_context():
+    from qc2_alpaca_paper.fingerprint import InvalidPaperAccountIdentity
+
+    for kwargs in (
+        {"environment": "live"},
+        {"broker": "other"},
+        {"origin": "https://api.alpaca.markets"},
+        {"origin": "https://paper-api.alpaca.markets:443"},
+        {"origin": "http://paper-api.alpaca.markets"},
+    ):
+        with pytest.raises(InvalidPaperAccountIdentity):
+            paper_account_fingerprint(ACCOUNT_ID, **kwargs)
+
+
+def test_adapter_rejects_unknown_scheme_and_transport_origin_before_requests():
+    fake = FakeTransport()
+    with pytest.raises(UnsupportedOrderTerms, match="paper_fingerprint_scheme_unsupported"):
+        AlpacaPaperAdapter(
+            api_key="synthetic-test-key",
+            secret_key="synthetic-test-secret",
+            expected_account_fingerprint=ACCOUNT_FINGERPRINT,
+            expected_fingerprint_scheme="qc2.identity_market.paper-account-fingerprint.v1",
+            transport=fake,
+        )
+    fake.origin = "https://api.alpaca.markets"
+    with pytest.raises(PaperHostViolation, match="paper_transport_origin_not_allowed"):
+        _adapter(fake)
+    assert fake.calls == []
+
+
+def test_mutable_account_fields_do_not_change_identity_fingerprint():
+    first = _account()
+    second = {
+        **_account(),
+        "status": "ACCOUNT_UPDATED",
+        "trading_blocked": True,
+        "account_blocked": False,
+        "equity": "1.00",
+        "cash": "0.00",
+    }
+    fake_first = FakeTransport()
+    fake_second = FakeTransport()
+    fake_first.add("GET", "/v2/account", _response(200, first))
+    fake_second.add("GET", "/v2/account", _response(200, second))
+
+    observed_first = observe_account_identity(fake_first)
+    observed_second = observe_account_identity(fake_second)
+    assert observed_first.account_fingerprint == observed_second.account_fingerprint
+    assert observed_first.account_status == "ACTIVE"
+    assert observed_second.account_status == "ACCOUNT_UPDATED"
+    assert observed_second.trading_blocked is True
+
+
+def test_credential_rotation_does_not_change_observed_account_fingerprint(monkeypatch):
+    class FakeHttpResponse:
+        status = 200
+
+        def read(self, _limit):
+            return json.dumps(_account()).encode("utf-8")
+
+        def getheaders(self):
+            return [("Content-Type", "application/json")]
+
+    class FakeHttpsConnection:
+        def __init__(self, *_args, **_kwargs):
+            self.closed = False
+
+        def request(self, method, path, *, body, headers):
+            assert method == "GET"
+            assert path == "/v2/account"
+            assert body is None
+            assert "APCA-API-KEY-ID" in headers
+            assert "APCA-API-SECRET-KEY" in headers
+
+        def getresponse(self):
+            return FakeHttpResponse()
+
+        def close(self):
+            self.closed = True
+
+    monkeypatch.setattr(
+        "qc2_alpaca_paper.transport.http.client.HTTPSConnection",
+        FakeHttpsConnection,
+    )
+    credential_fixture_pairs = (
+        ("synthetic-rotation-key-a", "synthetic-rotation-secret-a"),
+        ("synthetic-rotation-key-b", "synthetic-rotation-secret-b"),
+    )
+    observations = [
+        observe_account_identity(StdlibPaperTransport(api_key, secret_key))
+        for api_key, secret_key in credential_fixture_pairs
+    ]
+    assert observations[0].account_fingerprint == observations[1].account_fingerprint
+    assert observations[0] == observations[1]
+
+
+def test_supplemental_observation_schema_pins_identity_and_permission_boundaries():
+    from jsonschema import Draft202012Validator, ValidationError
+
+    schema_path = (
+        ROOT
+        / "docs"
+        / "reference"
+        / "QC2-047_PAPER_ACCOUNT_IDENTITY_OBSERVATION.schema.json"
+    )
+    schema = json.loads(schema_path.read_text(encoding="utf-8"))
+    record = {
+        "schema_name": "qc2.identity_market.AlpacaPaperIdentityObservation.v1",
+        "schema_version": "1.0",
+        "id": "018f47e6-c574-7b5a-8e2c-57fc2b824001",
+        "created_at": "2026-10-09T18:00:00Z",
+        "owning_authority": "market_data",
+        "evidence_class": "FORWARD_OPERATIONAL",
+        "environment_namespace": "development",
+        "source_refs": [],
+        "record_hash": "a" * 64,
+        "fingerprint_scheme": ACCOUNT_FINGERPRINT_SCHEME,
+        "account_fingerprint": ACCOUNT_FINGERPRINT,
+        "broker": "alpaca",
+        "environment": "paper",
+        "origin": PAPER_API_BASE_URL,
+        "observed_at": "2026-10-09T18:00:00Z",
+        "tested_source_identity": "b" * 40,
+        "capability": "PAPER_TRADING",
+        "observed_result": "PARTIAL",
+        "account_endpoint_http_status": 200,
+        "orders_endpoint_http_status": 200,
+        "account_status": "ACTIVE",
+        "trading_blocked": False,
+        "account_blocked": False,
+        "historical_account_continuity": "UNVERIFIED",
+        "execution_authorized": False,
+        "evidence_refs": ["docs/reference/QC2-047_READ_ONLY_PROBE_REPORT.md"],
+    }
+    validator = Draft202012Validator(schema)
+    validator.validate(record)
+
+    for changes in (
+        {"execution_authorized": True},
+        {"fingerprint_scheme": "qc2.identity_market.paper-account-fingerprint.v1"},
+        {"historical_account_continuity": "VERIFIED"},
+        {"origin": "https://api.alpaca.markets"},
+        {"account_id": ACCOUNT_ID},
+    ):
+        invalid_record = {**record, **changes}
+        with pytest.raises(ValidationError):
+            validator.validate(invalid_record)
 
 
 def test_wrong_account_fingerprint_fails_closed():

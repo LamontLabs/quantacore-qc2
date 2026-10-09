@@ -15,10 +15,17 @@ from typing import Any, Callable, Mapping
 from urllib.parse import urlencode
 import uuid
 
+from .fingerprint import (
+    InvalidPaperAccountIdentity,
+    require_fingerprint_scheme,
+    validate_paper_identity_context,
+)
 from qc2_contracts.runtime import canonical_decimal_text, canonical_json_bytes
 from qc2_execution.authority import BrokerResult, SubmissionOutcome
 
+from .identity import observe_account_identity
 from .models import (
+    ACCOUNT_FINGERPRINT_SCHEME,
     AccountIdentity,
     AccountIdentityMismatch,
     AccountNotTradeable,
@@ -76,6 +83,7 @@ class AlpacaPaperAdapter:
         api_key: str,
         secret_key: str,
         expected_account_fingerprint: str,
+        expected_fingerprint_scheme: str = ACCOUNT_FINGERPRINT_SCHEME,
         transport: PaperTransport | None = None,
         clock: Callable[[], float] = time.monotonic,
         sleeper: Callable[[float], None] = time.sleep,
@@ -83,6 +91,12 @@ class AlpacaPaperAdapter:
         self.expected_account_fingerprint = validate_account_fingerprint(
             expected_account_fingerprint
         )
+        try:
+            self.expected_fingerprint_scheme = require_fingerprint_scheme(
+                expected_fingerprint_scheme
+            )
+        except InvalidPaperAccountIdentity:
+            raise UnsupportedOrderTerms("paper_fingerprint_scheme_unsupported") from None
         if not isinstance(api_key, str) or not api_key:
             raise CredentialsMissing("alpaca_api_key_missing")
         if not isinstance(secret_key, str) or not secret_key:
@@ -91,6 +105,10 @@ class AlpacaPaperAdapter:
             from .transport import StdlibPaperTransport
 
             transport = StdlibPaperTransport(api_key, secret_key)
+        try:
+            validate_paper_identity_context(origin=getattr(transport, "origin", None))
+        except InvalidPaperAccountIdentity:
+            raise PaperHostViolation("paper_transport_origin_not_allowed") from None
         self._transport = transport
         self._clock = clock
         self._sleeper = sleeper
@@ -102,6 +120,7 @@ class AlpacaPaperAdapter:
     def __repr__(self) -> str:
         return (
             "AlpacaPaperAdapter(host='paper-api.alpaca.markets', "
+            f"fingerprint_scheme='{self.expected_fingerprint_scheme}', "
             f"account_fingerprint='{self.expected_account_fingerprint}', "
             "mutations_enabled=False)"
         )
@@ -111,6 +130,7 @@ class AlpacaPaperAdapter:
         cls,
         *,
         expected_account_fingerprint: str,
+        expected_fingerprint_scheme: str = ACCOUNT_FINGERPRINT_SCHEME,
         transport: PaperTransport | None = None,
     ) -> AlpacaPaperAdapter:
         api_key = os.environ.get("APCA_API_KEY_ID")
@@ -121,6 +141,7 @@ class AlpacaPaperAdapter:
             api_key=api_key,
             secret_key=secret_key,
             expected_account_fingerprint=expected_account_fingerprint,
+            expected_fingerprint_scheme=expected_fingerprint_scheme,
             transport=transport,
         )
 
@@ -156,6 +177,12 @@ class AlpacaPaperAdapter:
         *,
         body: Mapping[str, Any] | None = None,
     ) -> TransportResponse:
+        try:
+            validate_paper_identity_context(
+                origin=getattr(self._transport, "origin", None)
+            )
+        except InvalidPaperAccountIdentity:
+            raise PaperHostViolation("paper_transport_origin_not_allowed") from None
         validate_paper_relative_path(path)
         normalized_method = method.upper()
         attempts = _MAX_READ_ATTEMPTS if normalized_method == "GET" else 1
@@ -210,33 +237,18 @@ class AlpacaPaperAdapter:
 
     def get_account_identity(self) -> AccountIdentity:
         """Perform a read-only GET and return only a hash and tradeability flags."""
-        response = self._request("GET", "/v2/account")
-        value = self._require_object(
-            self._decode_json(response),
-            reason="paper_account_response_invalid",
-        )
-        account_id = value.get("id")
-        from .models import paper_account_fingerprint
-
-        fingerprint = paper_account_fingerprint(account_id)
-        status = value.get("status")
-        trading_blocked = value.get("trading_blocked")
-        account_blocked = value.get("account_blocked")
-        if (
-            not isinstance(status, str)
-            or not status
-            or not isinstance(trading_blocked, bool)
-            or not isinstance(account_blocked, bool)
+        identity = observe_account_identity(self._transport, request=self._request)
+        if not hmac.compare_digest(
+            identity.fingerprint_scheme,
+            self.expected_fingerprint_scheme,
         ):
-            raise MalformedProviderResponse("paper_account_identity_fields_missing")
-        if not hmac.compare_digest(fingerprint, self.expected_account_fingerprint):
+            raise AccountIdentityMismatch("paper_fingerprint_scheme_mismatch")
+        if not hmac.compare_digest(
+            identity.account_fingerprint,
+            self.expected_account_fingerprint,
+        ):
             raise AccountIdentityMismatch("paper_account_fingerprint_mismatch")
-        return AccountIdentity(
-            account_fingerprint=fingerprint,
-            account_status=status,
-            trading_blocked=trading_blocked,
-            account_blocked=account_blocked,
-        )
+        return identity
 
     def _verify_tradeable_account(self) -> AccountIdentity:
         identity = self.get_account_identity()

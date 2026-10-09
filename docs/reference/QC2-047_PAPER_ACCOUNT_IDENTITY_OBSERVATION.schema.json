@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:qc2:schema:qc2.identity_market.AlpacaPaperIdentityObservation.v1",
+  "title": "AlpacaPaperIdentityObservation",
+  "description": "Supplemental, read-only QC2-047 identity evidence. This is not an execution authorization or a canonical Section 12 object.",
+  "type": "object",
+  "properties": {
+    "schema_name": {
+      "type": "string",
+      "const": "qc2.identity_market.AlpacaPaperIdentityObservation.v1"
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "owning_authority": {
+      "type": "string",
+      "const": "market_data"
+    },
+    "evidence_class": {
+      "type": "string",
+      "const": "FORWARD_OPERATIONAL"
+    },
+    "environment_namespace": {
+      "type": "string",
+      "enum": [
+        "development",
+        "test",
+        "research",
+        "production"
+      ]
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "record_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "fingerprint_scheme": {
+      "type": "string",
+      "const": "qc2.alpaca-paper-account-fingerprint.v1"
+    },
+    "account_fingerprint": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "broker": {
+      "type": "string",
+      "const": "alpaca"
+    },
+    "environment": {
+      "type": "string",
+      "const": "paper"
+    },
+    "origin": {
+      "type": "string",
+      "const": "https://paper-api.alpaca.markets"
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "tested_source_identity": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "capability": {
+      "type": "string",
+      "const": "PAPER_TRADING"
+    },
+    "observed_result": {
+      "type": "string",
+      "const": "PARTIAL"
+    },
+    "account_endpoint_http_status": {
+      "type": "integer",
+      "const": 200
+    },
+    "orders_endpoint_http_status": {
+      "type": "integer",
+      "const": 200
+    },
+    "account_status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "trading_blocked": {
+      "type": "boolean"
+    },
+    "account_blocked": {
+      "type": "boolean"
+    },
+    "historical_account_continuity": {
+      "type": "string",
+      "const": "UNVERIFIED"
+    },
+    "execution_authorized": {
+      "type": "boolean",
+      "const": false
+    },
+    "evidence_refs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^(docs/reference|tools)/"
+      }
+    }
+  },
+  "required": [
+    "schema_name",
+    "schema_version",
+    "id",
+    "created_at",
+    "owning_authority",
+    "evidence_class",
+    "environment_namespace",
+    "source_refs",
+    "record_hash",
+    "fingerprint_scheme",
+    "account_fingerprint",
+    "broker",
+    "environment",
+    "origin",
+    "observed_at",
+    "tested_source_identity",
+    "capability",
+    "observed_result",
+    "account_endpoint_http_status",
+    "orders_endpoint_http_status",
+    "account_status",
+    "trading_blocked",
+    "account_blocked",
+    "historical_account_continuity",
+    "execution_authorized",
+    "evidence_refs"
+  ],
+  "additionalProperties": false
+}

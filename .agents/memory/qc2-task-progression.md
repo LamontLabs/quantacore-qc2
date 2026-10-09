@@ -14,3 +14,9 @@ For QC2-038, keep the Shadow implementation in its dedicated submodule and impor
 **Why:** Editing the shared initializer changed an earlier accepted artifact hash and QC2-038 preflight rejected it because no downstream drift authorization existed.
 
 **How to apply:** Before changing shared package entry points, check every pinned artifact path. Prefer a new focused module over modifying an accepted initializer unless the task explicitly authorizes the drift.
+
+When a master specification pins the canonical contract inventory, keep task-scoped evidence schemas supplemental unless an explicit specification migration is authorized.
+
+**Why:** Expanding the generated catalog changed the accepted canonical count and failed the contract gate; the new observation did not need to become a master-spec object.
+
+**How to apply:** Before adding a schema to the canonical catalog, verify the governing inventory and acceptance pins. Use a clearly scoped supplemental schema for evidence that must not alter the canonical contract set.

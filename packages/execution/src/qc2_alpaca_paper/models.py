@@ -10,10 +10,11 @@ import re
 import uuid
 from typing import Any, Mapping
 
-from qc2_contracts.runtime import domain_separated_sha256
+from .fingerprint import FINGERPRINT_SCHEME_ID
 
 
-ACCOUNT_FINGERPRINT_DOMAIN = "qc2.identity_market.paper-account-fingerprint.v1"
+ACCOUNT_FINGERPRINT_SCHEME = FINGERPRINT_SCHEME_ID
+ACCOUNT_FINGERPRINT_DOMAIN = ACCOUNT_FINGERPRINT_SCHEME
 _SHA256_PATTERN = re.compile(r"[0-9a-f]{64}\Z")
 _CLIENT_KEY_PATTERN = re.compile(r"[a-z][a-z0-9_-]{0,95}\Z")
 _SYMBOL_PATTERN = re.compile(r"[A-Z][A-Z0-9.-]{0,14}\Z")
@@ -90,7 +91,11 @@ class BrokerOrderEventType(StrEnum):
 
 @dataclass(frozen=True, slots=True)
 class AccountIdentity:
+    fingerprint_scheme: str
     account_fingerprint: str
+    broker: str
+    environment: str
+    origin: str
     account_status: str
     trading_blocked: bool
     account_blocked: bool
@@ -133,20 +138,6 @@ def validate_account_fingerprint(value: str) -> str:
     if not isinstance(value, str) or not _SHA256_PATTERN.fullmatch(value):
         raise ValueError("expected paper-account fingerprint must be lowercase SHA-256")
     return value
-
-
-def paper_account_fingerprint(account_id: str) -> str:
-    """Hash the provider account ID without returning or persisting it."""
-    if not isinstance(account_id, str):
-        raise MalformedProviderResponse("paper_account_id_missing")
-    try:
-        canonical_id = str(uuid.UUID(account_id))
-    except (ValueError, AttributeError) as exc:
-        raise MalformedProviderResponse("paper_account_id_invalid") from exc
-    return domain_separated_sha256(
-        ACCOUNT_FINGERPRINT_DOMAIN,
-        canonical_id.encode("ascii"),
-    )
 
 
 def require_client_order_key(value: str) -> str:

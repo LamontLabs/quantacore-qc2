@@ -44,4 +44,11 @@ The local `qc2_execution.authority` builds `qc2.execution.normalized_mutation_re
 
 `docs/reference/QC2-010_BLOCKED_REPORT.md` and `docs/reference/QC2-010_CAPABILITY_MANIFESTS/paper_trading.json` record the pinned digest but not its domain string or payload canonicalization. Neither inspected candidate adapter/test nor the inspected later adapter documentation supplies that missing derivation. The candidate constant `qc2.identity_market.paper-account-fingerprint.v1` is unverified and synthetic tests using it prove only internal consistency.
 
-The current credential-backed read-only probe reached `GET /v2/account` with HTTP 200. It did not emit or persist the account ID or financial fields and made no broker mutation requests. Recomputing the fingerprint with the proposed domain did not match the QC2-010 digest. The historical account's identity therefore remains unverified; see `QC2-047_BLOCKED_REPORT.md`.
+QC2-047 uses the separately authorized, versioned scheme in
+`QC2-047_ACCOUNT_FINGERPRINT_V1.md`; it is not presented as a recovery of the
+QC2-010 formula. The fresh observation will record current identity and
+read-only account/order-list results under that scheme, with continuity to the
+historical QC2-010 fingerprint explicitly `UNVERIFIED`. The original QC2-010
+manifest, acceptance receipt, and hashes remain unchanged. See the separate
+`QC2-010_ACCOUNT_IDENTITY_REVALIDATION_2026-10-09.md` addendum and
+`QC2-047_READ_ONLY_PROBE_REPORT.md` for the fresh evidence.

@@ -2,8 +2,10 @@
 
 from .adapter import AlpacaPaperAdapter
 from .fixtures import ActivityPage
+from .fingerprint import paper_account_fingerprint
 from .models import (
     ACCOUNT_FINGERPRINT_DOMAIN,
+    ACCOUNT_FINGERPRINT_SCHEME,
     AccountIdentity,
     AccountIdentityMismatch,
     AccountNotTradeable,
@@ -22,7 +24,6 @@ from .models import (
     WriteGateClosed,
     normalize_fill,
     normalize_order,
-    paper_account_fingerprint,
 )
 from .transport import (
     PAPER_API_BASE_URL,
@@ -34,6 +35,7 @@ from .transport import (
 
 __all__ = [
     "ACCOUNT_FINGERPRINT_DOMAIN",
+    "ACCOUNT_FINGERPRINT_SCHEME",
     "PAPER_API_BASE_URL",
     "PAPER_API_HOST",
     "AccountIdentity",

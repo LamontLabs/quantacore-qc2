@@ -9,6 +9,12 @@ import ssl
 from typing import Any, Mapping, Protocol
 from urllib.parse import unquote, urlsplit
 
+from .fingerprint import (
+    ALPACA_PAPER_API_ORIGIN,
+    InvalidPaperAccountIdentity,
+    validate_paper_identity_context,
+)
+
 from .models import PaperHostViolation, WriteGateClosed
 
 
@@ -32,6 +38,9 @@ class TransportResponse:
 
 
 class PaperTransport(Protocol):
+    @property
+    def origin(self) -> str: ...
+
     def request(
         self,
         method: str,
@@ -77,6 +86,10 @@ class StdlibPaperTransport:
         self._secret_key = secret_key
         self._timeout_seconds = timeout_seconds
 
+    @property
+    def origin(self) -> str:
+        return ALPACA_PAPER_API_ORIGIN
+
     def __repr__(self) -> str:
         return "StdlibPaperTransport(host='paper-api.alpaca.markets', mutations_enabled=False)"
 
@@ -90,6 +103,16 @@ class StdlibPaperTransport:
         normalized_method = method.upper() if isinstance(method, str) else ""
         if normalized_method != "GET":
             raise WriteGateClosed("paper_mutations_disabled_until_qc2_086")
+        try:
+            validate_paper_identity_context(origin=self.origin)
+        except InvalidPaperAccountIdentity:
+            raise PaperHostViolation("paper_connection_origin_not_allowed") from None
+        if (
+            self.origin != PAPER_API_BASE_URL
+            or PAPER_API_BASE_URL != f"https://{PAPER_API_HOST}"
+            or urlsplit(self.origin).hostname != PAPER_API_HOST
+        ):
+            raise PaperHostViolation("paper_connection_origin_not_allowed")
         validate_paper_relative_path(relative_path)
         connection = http.client.HTTPSConnection(
             PAPER_API_HOST,

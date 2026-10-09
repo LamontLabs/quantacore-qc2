@@ -1896,7 +1896,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-055 — Owner API Mutations
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Expose only authorized owner commands with exact-state signatures and idempotent receipts.
 **Dependencies:** QC2-042, QC2-043, QC2-051, QC2-053, QC2-054
 **Authorized legacy references:** None.
@@ -1925,7 +1925,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-09T21:58:41Z: `docs/reference/QC2-055_ACCEPTANCE_ASSESSMENT.md`, `docs/reference/QC2-055_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-055_TASK_RECORD.json`
 
 ---
 

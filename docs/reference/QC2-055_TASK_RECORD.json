@@ -1,0 +1,37 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a122ac-eeea-725f-aae2-24cedd061c23",
+  "created_at": "2026-10-09T21:58:41Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "de450b58944723f15978423cbe3e59bd61ac8a2e30951ea83a51fe86eda93427",
+  "task_id": "qc2-055",
+  "task_name": "Owner API Mutations",
+  "objective": "Expose only authorized owner commands with exact-state signatures and idempotent receipts.",
+  "dependency_task_ids": [
+    "QC2-042",
+    "QC2-043",
+    "QC2-051",
+    "QC2-053",
+    "QC2-054"
+  ],
+  "authorized_legacy_refs": [],
+  "deliverable_refs": [
+    "Promotion decisions, exact epoch-activation decisions, entry pause, resume request, acknowledgment and device-management endpoints.",
+    "Fresh challenges, body-hash/idempotency validation and commit-time identity checks.",
+    "Command receipt and projection linkage; Validation alone commits a verified epoch activation."
+  ],
+  "required_test_refs": [
+    "Duplicate tap returns same receipt; same ID/new body rejected.",
+    "Stale/expired/revoked approvals and unauthorized endpoint/action rejected.",
+    "No hidden buy/sell, force-promote, scientific-edit or safety-override route."
+  ],
+  "acceptance_gate": "Every permitted write maps to one scoped authority command; all other mutation classes are denied.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

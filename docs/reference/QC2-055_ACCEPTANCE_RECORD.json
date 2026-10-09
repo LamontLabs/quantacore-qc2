@@ -1,0 +1,104 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a122ac-eef1-7572-b7a4-1cc48bfedbb1",
+  "created_at": "2026-10-09T21:58:41Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "ed045e6c6ae119474c363a0140ac4411d63dee65a772efce25b33bc105b4cdb7",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a122ac-eeea-725f-aae2-24cedd061c23",
+    "content_hash": "de450b58944723f15978423cbe3e59bd61ac8a2e30951ea83a51fe86eda93427"
+  },
+  "task_spec_version": "QC2-055 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "c8312b1cbab6b150eafa0a2f5d7808c7ddcb301f",
+  "changed_paths": [
+    "packages/owner_api",
+    "tests/owner_api",
+    "artifacts/api-server/src",
+    "artifacts/api-server/test",
+    "migrations/0015_owner_api_command_receipts.sql",
+    "packages/owner_api/schemas/v1/OwnerCommandRequest.schema.json",
+    "lib/api-spec/openapi.yaml",
+    "lib/api-client-react/src/generated/api.ts",
+    "lib/api-client-react/src/generated/api.schemas.ts",
+    "lib/api-zod/src/generated/api.ts",
+    "lib/api-zod/src/generated/types"
+  ],
+  "executed_commands": [
+    "python3 tools/task_workflow.py preflight QC2-055",
+    "pnpm --filter @workspace/api-server run typecheck",
+    "pnpm --filter @workspace/api-server run build",
+    "pnpm --filter @workspace/api-server run test:owner-read",
+    "pnpm --filter @workspace/api-server run test:owner-commands",
+    "python3 -m pytest -q tests/owner_api/test_identity.py",
+    "fresh UTF8 PostgreSQL cluster; node tests/owner_api/run_qc2_055_postgres_integration.mjs",
+    "curl --fail /api/healthz"
+  ],
+  "test_counts": [
+    {
+      "test_id": "api_typecheck",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "api_build",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "owner_read_http",
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "owner_command_http",
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "owner_identity_python",
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "owner_command_postgres",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "api_health_check",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "849eb683a3963791f431c81e22dd7e26f9172fcec3036c53780d0d4ef1c35b14",
+    "928d8bdd90ebc835a6bcb9708403ce54f16827de15a6a950d856ca3bda5d365a",
+    "0bcafcdfc222cbef341551535b98a3302d4c523e3f077db107bd3d655038ee38",
+    "4c4d41ff58179483a029ff7c16eeed9b2d5957e1190951f8144e6dcd9613316e",
+    "140dca91905c2ac33b63e7838570abe95bec617a2e4270c25fe63d98f429cf45",
+    "2630131d29201c0d387d87a7ae00b37fdab55ad741d8faefa9095d470160a65c",
+    "758c29707a120a8907f210d14131ed94bc6051807ded4d5103f99f26134536f9",
+    "8a897cc280fda6ef8ce718c100162ea0be19299d71842f630033e66d67040dd9",
+    "fc924d82af152c9191e6887ca3692d9f9ad26e378a6d493645945db04e64fe01",
+    "c8e006ade1f4e55b17c53d52d8e8e29bf4dcce33ec7be19db9f67a50cda1ead8",
+    "de026d5a227695176d635b47d1c90f7761e3e4a3a8502b7e54d374625e645126"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-09T21:58:41Z"
+}

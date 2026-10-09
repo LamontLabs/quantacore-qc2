@@ -4,7 +4,10 @@ import { createRequire } from "node:module";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { runQc2051ExecutionReadinessAcceptance } from "./qc2_051_postgres_acceptance.mjs";
+import {
+  prepareQc2051EvidenceAcceptance,
+  runQc2051ExecutionReadinessAcceptance,
+} from "./qc2_051_postgres_acceptance.mjs";
 
 const testDirectory = path.dirname(fileURLToPath(import.meta.url));
 const repositoryRoot = path.resolve(testDirectory, "../..");
@@ -153,6 +156,7 @@ try {
   const reservationFixture = structuredClone(
     fixtures.find((fixture) => fixture.contract === "Reservation").payload,
   );
+  await prepareQc2051EvidenceAcceptance(scratchUrl.toString());
   await runQc2051ExecutionReadinessAcceptance({
     connectionString: scratchUrl.toString(),
     adminClient: scratchClient,

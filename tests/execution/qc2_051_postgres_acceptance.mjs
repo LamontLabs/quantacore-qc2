@@ -83,6 +83,53 @@ async function executionClient(connectionString) {
   return client;
 }
 
+export async function prepareQc2051EvidenceAcceptance(connectionString) {
+  const execution = await executionClient(connectionString);
+  try {
+    const before = await execution.query(
+      "SELECT * FROM qc2_control.get_entry_pause_state()",
+    );
+    assert.equal(before.rows[0].entry_paused, true);
+    assert.equal(Number(before.rows[0].generation), 1);
+
+    let missingEvidenceError;
+    try {
+      await execution.query(
+        "SELECT * FROM qc2_control.pause_new_entries($1::uuid, 'evidence_unavailable')",
+        [uuidV7()],
+      );
+    } catch (error) {
+      missingEvidenceError = error;
+    }
+    assert.equal(missingEvidenceError?.code, "23514");
+
+    const after = await execution.query(
+      "SELECT * FROM qc2_control.get_entry_pause_state()",
+    );
+    assert.equal(after.rows[0].entry_paused, true);
+    assert.equal(Number(after.rows[0].generation), 1);
+  } finally {
+    await execution.end();
+  }
+
+  const evidence = new Client({ connectionString });
+  try {
+    await evidence.connect();
+    await evidence.query("SET SESSION AUTHORIZATION qc2_runtime_evidence");
+    await evidence.query(
+      "SELECT qc2_integrity_build.create_evidence_stream($1, $2, $3, $4)",
+      [
+        "qc2-test-installation",
+        "test",
+        "qc2-051-execution-readiness",
+        "SYNTHETIC_FIXTURE",
+      ],
+    );
+  } finally {
+    await evidence.end();
+  }
+}
+
 async function expectSqlState(client, code, operation) {
   let caught;
   await client.query("BEGIN");
@@ -99,7 +146,11 @@ async function expectSqlState(client, code, operation) {
 
 function resumeAssessment(
   pauseGeneration,
-  { blockedPrerequisite = false } = {},
+  {
+    blockedPrerequisite = false,
+    includeWarning = false,
+    allowWarning = false,
+  } = {},
 ) {
   const deadline = new Date(Date.now() + 5 * 60 * 1000).toISOString();
   const gates = [
@@ -114,6 +165,13 @@ function resumeAssessment(
       reason_codes: blockedPrerequisite ? ["IDENTITY_UNVERIFIED"] : [],
     },
   ];
+  if (includeWarning) {
+    gates.push({
+      gate_id: "calibration_warning",
+      status: "WARN",
+      reason_codes: ["CALIBRATION_WARNING"],
+    });
+  }
   return {
     assessment_id: uuidV7(),
     action: "NEW_ENTRY",
@@ -123,7 +181,8 @@ function resumeAssessment(
     evaluated_at: new Date(Date.now() - 1000).toISOString(),
     freshness_deadline: deadline,
     pending_entry_orders_clear: true,
-    allowed_warning_gate_ids: [],
+    allowed_warning_gate_ids:
+      includeWarning && allowWarning ? ["calibration_warning"] : [],
     gate_results: gates,
   };
 }
@@ -204,11 +263,6 @@ async function prepareQueuedIntent(
     "SELECT qc2_control.reserve_paper_order_intent($1::uuid, $2::jsonb)",
     [intent.id, JSON.stringify(reservation)],
   );
-  const queued = await execution.query(
-    "SELECT qc2_control.transition_paper_order_intent($1::uuid, 'QUEUED_FOR_SUBMISSION') AS changed",
-    [intent.id],
-  );
-  assert.equal(queued.rows[0].changed, true);
   const outbox = await execution.query(
     "SELECT qc2_control.enqueue_paper_order_submission($1::uuid) AS message_id",
     [intent.id],
@@ -300,9 +354,20 @@ export async function runQc2051ExecutionReadinessAcceptance({
     );
     assert.equal(duplicateCount.rows[0].count, 1);
 
+    await expectSqlState(execution, "23514", async () => {
+      await execution.query(
+        "SELECT * FROM qc2_control.resume_new_entries($1::bigint, $2::jsonb)",
+        [1, JSON.stringify(resumeAssessment(1, { includeWarning: true }))],
+      );
+    });
     const resumed = await execution.query(
       "SELECT * FROM qc2_control.resume_new_entries($1::bigint, $2::jsonb)",
-      [1, JSON.stringify(resumeAssessment(1))],
+      [
+        1,
+        JSON.stringify(
+          resumeAssessment(1, { includeWarning: true, allowWarning: true }),
+        ),
+      ],
     );
     assert.equal(resumed.rows[0].entry_paused, false);
     assert.equal(Number(resumed.rows[0].generation), 2);

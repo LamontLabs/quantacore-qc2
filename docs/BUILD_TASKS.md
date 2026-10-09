@@ -1658,7 +1658,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-048 — Durable Position State
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Maintain auditable order/fill/cash/position state resilient to duplicate and corrected events.
 **Dependencies:** QC2-005, QC2-006, QC2-045, QC2-046, QC2-047
 **Authorized legacy references:** None.
@@ -1684,7 +1684,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-09T15:17:30Z: `docs/reference/QC2-048_ACCEPTANCE_RECEIPT.md`, `docs/reference/QC2-048_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-048_TASK_RECORD.json`
 
 ---
 

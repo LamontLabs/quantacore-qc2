@@ -1,0 +1,55 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a1213d-a6b0-7207-b039-0cdcfb1cf7ba",
+  "created_at": "2026-10-09T15:17:30Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "165420f2d2c5dec077339310f1096ec450f831b5fb1fffd14bbc9bcb8cb795fd",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a1213d-a6ac-7f2a-80e7-ca21489038f9",
+    "content_hash": "fceda1ca640605cef2659087a02d2e06663ba31d98777607a55ef727707de359"
+  },
+  "task_spec_version": "QC2-048 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "2a9272848941a068227ec8a77eb223d4f3c01509",
+  "changed_paths": [
+    "packages/execution/src/qc2_position_state",
+    "migrations/0010_durable_position_state.sql",
+    "tests/execution_position_state"
+  ],
+  "executed_commands": [
+    "PYTHONPATH=packages/execution/src:packages/contracts/src uv run pytest -q tests/execution_position_state",
+    "uv run ruff check packages/execution/src/qc2_position_state tests/execution_position_state",
+    "node --check tests/execution_position_state/qc2_048_postgres_acceptance.mjs && node --check tests/execution_position_state/run_qc2_048_postgres_integration.mjs",
+    "QC2_ENV=test QC2_EXPECTED_DATABASE_TEST=qc2_test_local QC2_POSTGRES_TEST_URL=postgresql://postgres@127.0.0.1:48353/qc2_test_local node tests/execution_position_state/run_qc2_048_postgres_integration.mjs",
+    "python3 tools/task_workflow.py preflight QC2-048"
+  ],
+  "test_counts": [
+    {
+      "test_id": "qc2_048_python",
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "qc2_048_postgres",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "d950db92504f3d0405a8c621419e7345d59ad0dacdb947dc9dc136ec034108b4",
+    "346ffd39cb11ac521a4e91d5b059edf77accff9eb9922005dc1a84eed2cb2f1d",
+    "e33d4a3698dff2b78179edcd4b387261d4ee26fa8b76ad5f38e6469eab14193c"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-09T15:17:30Z"
+}

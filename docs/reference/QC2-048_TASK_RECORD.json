@@ -1,0 +1,37 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a1213d-a6ac-7f2a-80e7-ca21489038f9",
+  "created_at": "2026-10-09T15:17:30Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "fceda1ca640605cef2659087a02d2e06663ba31d98777607a55ef727707de359",
+  "task_id": "qc2-048",
+  "task_name": "Durable Position State",
+  "objective": "Maintain auditable order/fill/cash/position state resilient to duplicate and corrected events.",
+  "dependency_task_ids": [
+    "QC2-005",
+    "QC2-006",
+    "QC2-045",
+    "QC2-046",
+    "QC2-047"
+  ],
+  "authorized_legacy_refs": [],
+  "deliverable_refs": [
+    "Immutable broker-event/fill ledger, correction events, positions and cash projections.",
+    "Cumulative-quantity checks, reservation settlement and execution-episode identity.",
+    "Corporate-action position adjustment interfaces."
+  ],
+  "required_test_refs": [
+    "Duplicate/out-of-order/partial fills do not double count shares or cost.",
+    "Trade correction/bust appends compensating state without deleting evidence.",
+    "Projection rebuild equals persisted totals and disallows accidental short position."
+  ],
+  "acceptance_gate": "Position and cash projections rebuild deterministically from the preserved ledger.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

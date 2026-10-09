@@ -5195,9 +5195,54 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-09T15:17:30Z",
+        "task_spec_version": "QC2-048 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "2a9272848941a068227ec8a77eb223d4f3c01509",
+        "receipt": "docs/reference/QC2-048_ACCEPTANCE_RECEIPT.md",
+        "contract_receipt": "docs/reference/QC2-048_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-048_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/execution/src/qc2_position_state",
+          "migrations/0010_durable_position_state.sql",
+          "tests/execution_position_state"
+        ],
+        "executed_commands": [
+          "PYTHONPATH=packages/execution/src:packages/contracts/src uv run pytest -q tests/execution_position_state",
+          "uv run ruff check packages/execution/src/qc2_position_state tests/execution_position_state",
+          "node --check tests/execution_position_state/qc2_048_postgres_acceptance.mjs && node --check tests/execution_position_state/run_qc2_048_postgres_integration.mjs",
+          "QC2_ENV=test QC2_EXPECTED_DATABASE_TEST=qc2_test_local QC2_POSTGRES_TEST_URL=postgresql://postgres@127.0.0.1:48353/qc2_test_local node tests/execution_position_state/run_qc2_048_postgres_integration.mjs",
+          "python3 tools/task_workflow.py preflight QC2-048"
+        ],
+        "test_counts": [
+          {
+            "test_id": "qc2_048_python",
+            "passed": 10,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "qc2_048_postgres",
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/execution/src/qc2_position_state": "d950db92504f3d0405a8c621419e7345d59ad0dacdb947dc9dc136ec034108b4",
+          "migrations/0010_durable_position_state.sql": "346ffd39cb11ac521a4e91d5b059edf77accff9eb9922005dc1a84eed2cb2f1d",
+          "tests/execution_position_state": "e33d4a3698dff2b78179edcd4b387261d4ee26fa8b76ad5f38e6469eab14193c"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "The implementation was committed before acceptance recording. Ten Python tests, lint, JavaScript syntax checks, task preflight, and the full QC2-045/046/048 PostgreSQL chain passed. PostgreSQL used a fresh disposable UTF8 local cluster and no live broker access.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-049",

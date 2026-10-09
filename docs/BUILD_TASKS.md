@@ -1722,7 +1722,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-050 — Prediction Readiness
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Compose infrastructure, snapshot and prediction readiness without circular prerequisites.
 **Dependencies:** QC2-007, QC2-008, QC2-010, QC2-013, QC2-021, QC2-025, QC2-037, QC2-039, QC2-043, QC2-049
 **Authorized legacy references:** None.

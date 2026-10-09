@@ -5005,7 +5005,7 @@
           "reason": "QC2-046 adds the execution-authority implementation and regression tests to the accepted execution source and test trees; its acceptance receipt will revalidate both tree hashes."
         }
       ],
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "blockers": [],
       "acceptance_receipt": null
     },

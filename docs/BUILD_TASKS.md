@@ -1557,10 +1557,14 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-045 — Paper Order Intent
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Create immutable broker-independent intentions with exact exposure and expiry semantics.
 **Dependencies:** QC2-003, QC2-005, QC2-006, QC2-021, QC2-025, QC2-044
 **Authorized legacy references:** None.
+**Authorized artifact drift:** QC2-000 — QC2-045 adds its paper-intent PostgreSQL acceptance command and binds the resulting root package metadata in its acceptance receipt. Paths: `package.json`
+**Authorized artifact drift:** QC2-005 — QC2-045 adds its isolated PostgreSQL acceptance command and formats the new runner as part of repository lint. Paths: `lib/db/package.json`, `package.json`
+**Authorized artifact drift:** QC2-006 — QC2-045 documents its isolated acceptance runner and disposable database behavior. Paths: `tests/database/README.md`
+**Authorized artifact drift:** QC2-026 — QC2-045 adds its isolated PostgreSQL acceptance command and formats the new runner as part of repository lint. Paths: `lib/db/package.json`, `package.json`
 **Required reference intake:** None. Do not inspect or copy legacy code for this task without a scoped amendment.
 
 **Required deliverables:**

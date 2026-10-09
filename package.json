@@ -12,10 +12,11 @@
     "build": "pnpm run typecheck && pnpm -r --if-present run build",
     "typecheck:libs": "tsc --build",
     "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck",
-    "lint": "python3 -m ruff check tests tools && pnpm exec prettier --check package.json lib/db/package.json lib/db/drizzle.config.ts lib/db/run-migrations.mjs lib/db/src/environment.js lib/db/src/environment.d.ts lib/db/test/environment.test.mjs lib/db/test/run-postgres-integration.mjs lib/db/test/run-qc2-026-postgres-integration.mjs .github/workflows/ci.yml",
+    "lint": "python3 -m ruff check tests tools && pnpm exec prettier --check package.json lib/db/package.json lib/db/drizzle.config.ts lib/db/run-migrations.mjs lib/db/src/environment.js lib/db/src/environment.d.ts lib/db/test/environment.test.mjs lib/db/test/run-postgres-integration.mjs lib/db/test/run-qc2-026-postgres-integration.mjs lib/db/test/qc2-045-paper-order-acceptance.mjs lib/db/test/run-qc2-045-postgres-integration.mjs .github/workflows/ci.yml",
     "test": "python3 -m pytest && pnpm --filter @workspace/db run test:guards",
     "test:postgres": "pnpm --filter @workspace/db run test:postgres",
     "test:postgres:qc2-026": "pnpm --filter @workspace/db run test:postgres:qc2-026",
+    "test:postgres:qc2-045": "pnpm --filter @workspace/db run test:postgres:qc2-045",
     "smoke": "node -e 'if (process.version !== \"v24.13.0\") { console.error(\"Expected Node v24.13.0, got \" + process.version); process.exit(1); }' && pnpm --filter @workspace/scripts run hello && python3 -m pytest -q tests/bootstrap/test_environment_smoke.py",
     "task-workflow:check": "python3 tools/generate_task_docs.py --check && python3 tools/task_workflow.py validate",
     "verify": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run smoke && pnpm run task-workflow:check"

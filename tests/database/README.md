@@ -12,3 +12,12 @@ Set `QC2_ENV=test`, `QC2_POSTGRES_TEST_URL`, and
 `qc2_test_*` database that is not shared with a configured runtime identity.
 It does not print connection strings and rolls back the transaction on both
 success and failure.
+
+QC2-045 runs the prior acceptance chain and the paper-order intent checks in a
+disposable UTF-8 `qc2_test_*` database. The runner commits migrations only in
+that temporary database, exercises concurrent reservations, and drops it when
+finished:
+
+```sh
+pnpm exec node lib/db/test/run-qc2-045-postgres-integration.mjs
+```

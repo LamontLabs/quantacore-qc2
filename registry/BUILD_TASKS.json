@@ -4850,7 +4850,39 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-000",
+          "artifact_paths": [
+            "package.json"
+          ],
+          "reason": "QC2-045 adds its paper-intent PostgreSQL acceptance command and binds the resulting root package metadata in its acceptance receipt."
+        },
+        {
+          "prior_task_id": "QC2-005",
+          "artifact_paths": [
+            "lib/db/package.json",
+            "package.json"
+          ],
+          "reason": "QC2-045 adds its isolated PostgreSQL acceptance command and formats the new runner as part of repository lint."
+        },
+        {
+          "prior_task_id": "QC2-006",
+          "artifact_paths": [
+            "tests/database/README.md"
+          ],
+          "reason": "QC2-045 documents its isolated acceptance runner and disposable database behavior."
+        },
+        {
+          "prior_task_id": "QC2-026",
+          "artifact_paths": [
+            "lib/db/package.json",
+            "package.json"
+          ],
+          "reason": "QC2-045 adds its isolated PostgreSQL acceptance command and formats the new runner as part of repository lint."
+        }
+      ],
       "blockers": [],
       "acceptance_receipt": null
     },

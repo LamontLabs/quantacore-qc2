@@ -11,7 +11,8 @@
     "migrate": "node ./run-migrations.mjs",
     "test:guards": "node --test ./test/environment.test.mjs",
     "test:postgres": "node ./test/run-postgres-integration.mjs",
-    "test:postgres:qc2-026": "node ./test/run-qc2-026-postgres-integration.mjs"
+    "test:postgres:qc2-026": "node ./test/run-qc2-026-postgres-integration.mjs",
+    "test:postgres:qc2-045": "node ./test/run-qc2-045-postgres-integration.mjs"
   },
   "dependencies": {
     "drizzle-orm": "catalog:",

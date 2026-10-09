@@ -1458,7 +1458,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-042 — Owner Approval Authority
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Define exact-state signed decisions using an identity-provider port before actual device enrollment exists.
 **Dependencies:** QC2-003, QC2-006, QC2-007, QC2-040, QC2-041
 **Authorized legacy references:** None.

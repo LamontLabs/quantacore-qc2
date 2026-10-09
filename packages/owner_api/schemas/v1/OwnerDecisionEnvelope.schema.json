@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:qc2:owner-api-schema:qc2.owner_api.OwnerDecisionEnvelope.v1",
+  "title": "OwnerDecisionEnvelope",
+  "description": "Strict device-signed owner decision. Domain, action, and environment are separately signed fields; the signature covers every other field.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_name": {
+      "type": "string",
+      "const": "qc2.owner_api.OwnerDecisionEnvelope.v1"
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "domain": {
+      "type": "string",
+      "const": "promotion"
+    },
+    "action": {
+      "type": "string",
+      "const": "PROMOTION_DECISION"
+    },
+    "environment_namespace": {
+      "type": "string",
+      "enum": ["development", "test", "research", "production"]
+    },
+    "challenge_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "target_schema_name": {
+          "type": "string",
+          "const": "qc2.owner_api.PromotionApprovalChallenge.v1"
+        },
+        "target_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": ["target_schema_name", "target_id"]
+    },
+    "promotion_challenge_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "target_schema_name": {
+          "type": "string",
+          "const": "qc2.governance_owner.PromotionChallenge.v1"
+        },
+        "target_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": ["target_schema_name", "target_id"]
+    },
+    "decision": {
+      "type": "string",
+      "enum": ["APPROVE", "HOLD", "REJECT"]
+    },
+    "request_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nonce": {
+      "type": "string",
+      "pattern": "^n[0-9a-f]{64}$"
+    },
+    "signed_by_device_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "target_schema_name": {
+          "type": "string",
+          "const": "qc2.governance_owner.OwnerDevice.v1"
+        },
+        "target_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": ["target_schema_name", "target_id"]
+    },
+    "owner_session_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "target_schema_name": {
+          "type": "string",
+          "const": "qc2.governance_owner.OwnerSession.v1"
+        },
+        "target_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": ["target_schema_name", "target_id"]
+    },
+    "key_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]{0,95}$"
+    },
+    "device_key_fingerprint": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "owner_session_binding_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "idempotency_key": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]{0,95}$"
+    },
+    "signing_algorithm": {
+      "type": "string",
+      "const": "ECDSA_P256_SHA256"
+    },
+    "signed_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$"
+    },
+    "signature": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]+$"
+    }
+  },
+  "required": [
+    "schema_name",
+    "schema_version",
+    "domain",
+    "action",
+    "environment_namespace",
+    "challenge_ref",
+    "promotion_challenge_ref",
+    "decision",
+    "request_hash",
+    "nonce",
+    "signed_by_device_ref",
+    "owner_session_ref",
+    "key_id",
+    "device_key_fingerprint",
+    "owner_session_binding_hash",
+    "idempotency_key",
+    "signing_algorithm",
+    "signed_at",
+    "signature"
+  ]
+}

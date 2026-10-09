@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:qc2:owner-api-schema:qc2.owner_api.PromotionApprovalChallenge.v1",
+  "title": "PromotionApprovalChallenge",
+  "description": "Owner-API scope envelope around the canonical PromotionChallenge contract. Domain, action, environment, session, device, key, request, and nonce are independently bound.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_name": {
+      "type": "string",
+      "const": "qc2.owner_api.PromotionApprovalChallenge.v1"
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "domain": {
+      "type": "string",
+      "const": "promotion"
+    },
+    "action": {
+      "type": "string",
+      "const": "PROMOTION_DECISION"
+    },
+    "environment_namespace": {
+      "type": "string",
+      "enum": ["development", "test", "research", "production"]
+    },
+    "evidence_class": {
+      "type": "string",
+      "enum": [
+        "SYNTHETIC_FIXTURE",
+        "HISTORICAL_RECONSTRUCTED",
+        "FORWARD_OPERATIONAL",
+        "FORWARD_SEALED"
+      ]
+    },
+    "promotion_challenge_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "target_schema_name": {
+          "type": "string",
+          "const": "qc2.governance_owner.PromotionChallenge.v1"
+        },
+        "target_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": ["target_schema_name", "target_id"]
+    },
+    "device_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "target_schema_name": {
+          "type": "string",
+          "const": "qc2.governance_owner.OwnerDevice.v1"
+        },
+        "target_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": ["target_schema_name", "target_id"]
+    },
+    "owner_session_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "target_schema_name": {
+          "type": "string",
+          "const": "qc2.governance_owner.OwnerSession.v1"
+        },
+        "target_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": ["target_schema_name", "target_id"]
+    },
+    "key_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]{0,95}$"
+    },
+    "device_key_fingerprint": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "owner_session_binding_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "request_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nonce": {
+      "type": "string",
+      "pattern": "^n[0-9a-f]{64}$"
+    },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$"
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "schema_name",
+    "schema_version",
+    "id",
+    "domain",
+    "action",
+    "environment_namespace",
+    "evidence_class",
+    "promotion_challenge_ref",
+    "device_ref",
+    "owner_session_ref",
+    "key_id",
+    "device_key_fingerprint",
+    "owner_session_binding_hash",
+    "request_hash",
+    "nonce",
+    "issued_at",
+    "expires_at",
+    "content_hash"
+  ]
+}

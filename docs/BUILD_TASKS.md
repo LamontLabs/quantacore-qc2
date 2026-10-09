@@ -1931,7 +1931,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-056 — Alert Authority
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Create deterministic operational alerts with five severities and separate acknowledgment/resolution.
 **Dependencies:** QC2-006, QC2-050, QC2-051, QC2-052, QC2-053, QC2-054, QC2-055
 **Authorized legacy references:** None.

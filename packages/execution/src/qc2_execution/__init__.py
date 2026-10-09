@@ -1,5 +1,31 @@
-"""Broker-independent paper order intent primitives."""
+"""Broker-independent execution intent and authority primitives."""
 
+from .authority import (
+    AttemptRecord,
+    AttemptState,
+    BrokerAdapter,
+    BrokerResult,
+    ExecutionAuthority,
+    ExecutionBlocked,
+    ExecutionDeferred,
+    ExecutionSnapshot,
+    ExecutionStore,
+    FencedLeaseLost,
+    OutboxDelivery,
+    ProcessResult,
+    ReadinessAction,
+    ReadinessAssessmentSnapshot,
+    ReconciliationDisposition,
+    ReconciliationEvidence,
+    SubmissionOutcome,
+    build_normalized_request,
+    build_submission_attempt_contract,
+    normalized_request_hash,
+    required_readiness_action,
+    validate_execution_gate,
+    validate_reconciliation_evidence,
+)
+from .postgres import PostgresExecutionStore
 from .intents import (
     IntentAction,
     IntentState,
@@ -11,11 +37,35 @@ from .intents import (
 )
 
 __all__ = [
+    "AttemptRecord",
+    "AttemptState",
+    "BrokerAdapter",
+    "BrokerResult",
+    "ExecutionAuthority",
+    "ExecutionBlocked",
+    "ExecutionDeferred",
+    "ExecutionSnapshot",
+    "ExecutionStore",
+    "FencedLeaseLost",
     "IntentAction",
     "IntentState",
+    "OutboxDelivery",
     "PaperOrderIntent",
+    "PostgresExecutionStore",
+    "ProcessResult",
+    "ReadinessAction",
+    "ReadinessAssessmentSnapshot",
+    "ReconciliationDisposition",
+    "ReconciliationEvidence",
     "ReservationEffect",
+    "SubmissionOutcome",
     "build_paper_order_intent",
+    "build_normalized_request",
+    "build_submission_attempt_contract",
+    "normalized_request_hash",
     "plan_reservation_effect",
+    "required_readiness_action",
+    "validate_execution_gate",
+    "validate_reconciliation_evidence",
     "whole_shares_floor",
 ]

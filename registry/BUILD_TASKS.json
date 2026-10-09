@@ -5277,9 +5277,67 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-09T15:50:59Z",
+        "task_spec_version": "QC2-049 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "744a1b90c50aa67a0e9113c7d9171b870a254a78",
+        "receipt": "docs/reference/QC2-049_ACCEPTANCE_ASSESSMENT.md",
+        "contract_receipt": "docs/reference/QC2-049_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-049_TASK_RECORD.json",
+        "changed_paths": [
+          "migrations/0011_broker_reconciliation.sql",
+          "packages/execution/src/qc2_broker_reconciliation",
+          "tests/broker_reconciliation"
+        ],
+        "executed_commands": [
+          "PYTHONPATH=tests/apexlab:tests/promotion:$(find packages -type d -name src -print | paste -sd:) python3 -m pytest -q --import-mode=importlib",
+          "python3 -m ruff check packages/execution/src/qc2_broker_reconciliation tests/broker_reconciliation",
+          "QC2_ENV=test QC2_EXPECTED_DATABASE_TEST=qc2_test_broker_reconciliation QC2_POSTGRES_TEST_URL=postgresql://postgres@127.0.0.1:58651/qc2_test_broker_reconciliation node ./tests/broker_reconciliation/run_qc2_049_postgres_integration.mjs",
+          "node --check tests/broker_reconciliation/qc2_049_postgres_acceptance.mjs && node --check tests/broker_reconciliation/run_qc2_049_postgres_integration.mjs",
+          "pnpm exec prettier --check tests/broker_reconciliation/qc2_049_postgres_acceptance.mjs tests/broker_reconciliation/run_qc2_049_postgres_integration.mjs",
+          "pnpm --filter @workspace/db run test:guards"
+        ],
+        "test_counts": [
+          {
+            "test_id": "qc2_049_python",
+            "passed": 14,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "qc2_049_full_suite",
+            "passed": 568,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "qc2_049_postgres",
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "qc2_db_guards",
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "migrations/0011_broker_reconciliation.sql": "68928d29487698aeed3fed18a10bed7d0dfbcf7e80c75ddd057aa583599a3f39",
+          "packages/execution/src/qc2_broker_reconciliation": "ccc2b5e0bf4606b116a630a6e6905da93a8882bf42e27691e1bdf6311e968b4a",
+          "tests/broker_reconciliation": "6f0ff50a561615aa6c80ab247ecda304b42a59db97da55b5168d44fd2d2eb3b1"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "Fixture-only and isolated PostgreSQL acceptance checks were rerun against the tested source commit.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-050",

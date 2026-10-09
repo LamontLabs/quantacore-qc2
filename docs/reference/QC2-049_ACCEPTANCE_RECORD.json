@@ -1,0 +1,68 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a1215c-4b7e-7c2c-a96c-4ed2e4e7c272",
+  "created_at": "2026-10-09T15:50:59Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "fe7b54041efb5ec98862a4cbd866f7168649f191825c52a848927a49b1bef15d",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a1215c-4b77-7390-b7ad-aeb9c8948c67",
+    "content_hash": "f5a1951416be389c1c5b7a6ce542a87845c588607f430760fb9c80736da76273"
+  },
+  "task_spec_version": "QC2-049 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "744a1b90c50aa67a0e9113c7d9171b870a254a78",
+  "changed_paths": [
+    "migrations/0011_broker_reconciliation.sql",
+    "packages/execution/src/qc2_broker_reconciliation",
+    "tests/broker_reconciliation"
+  ],
+  "executed_commands": [
+    "PYTHONPATH=tests/apexlab:tests/promotion:$(find packages -type d -name src -print | paste -sd:) python3 -m pytest -q --import-mode=importlib",
+    "python3 -m ruff check packages/execution/src/qc2_broker_reconciliation tests/broker_reconciliation",
+    "QC2_ENV=test QC2_EXPECTED_DATABASE_TEST=qc2_test_broker_reconciliation QC2_POSTGRES_TEST_URL=postgresql://postgres@127.0.0.1:58651/qc2_test_broker_reconciliation node ./tests/broker_reconciliation/run_qc2_049_postgres_integration.mjs",
+    "node --check tests/broker_reconciliation/qc2_049_postgres_acceptance.mjs && node --check tests/broker_reconciliation/run_qc2_049_postgres_integration.mjs",
+    "pnpm exec prettier --check tests/broker_reconciliation/qc2_049_postgres_acceptance.mjs tests/broker_reconciliation/run_qc2_049_postgres_integration.mjs",
+    "pnpm --filter @workspace/db run test:guards"
+  ],
+  "test_counts": [
+    {
+      "test_id": "qc2_049_python",
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "qc2_049_full_suite",
+      "passed": 568,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "qc2_049_postgres",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "qc2_db_guards",
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "68928d29487698aeed3fed18a10bed7d0dfbcf7e80c75ddd057aa583599a3f39",
+    "ccc2b5e0bf4606b116a630a6e6905da93a8882bf42e27691e1bdf6311e968b4a",
+    "6f0ff50a561615aa6c80ab247ecda304b42a59db97da55b5168d44fd2d2eb3b1"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-09T15:50:59Z"
+}

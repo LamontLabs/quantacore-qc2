@@ -1,0 +1,36 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a1215c-4b77-7390-b7ad-aeb9c8948c67",
+  "created_at": "2026-10-09T15:50:59Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "f5a1951416be389c1c5b7a6ce542a87845c588607f430760fb9c80736da76273",
+  "task_id": "qc2-049",
+  "task_name": "Broker Reconciliation",
+  "objective": "Resolve local/remote differences before opening new exposure or recovering after restart.",
+  "dependency_task_ids": [
+    "QC2-006",
+    "QC2-046",
+    "QC2-047",
+    "QC2-048"
+  ],
+  "authorized_legacy_refs": [],
+  "deliverable_refs": [
+    "ReconciliationReport, unknown-submission resolver, broker inventory comparison.",
+    "Manual-order/unknown-position/cash-change/account-reset detection.",
+    "Hold/resolution workflow with evidence and stable checkpoints."
+  ],
+  "required_test_refs": [
+    "Remote accepted/local unknown, local missing fill and unknown remote order scenarios.",
+    "Account reset cannot be interpreted as all positions safely closed.",
+    "Repeated reconciliation is idempotent and cannot create an order."
+  ],
+  "acceptance_gate": "All fixture discrepancies converge through explicit evidence or retain a blocking unresolved state.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

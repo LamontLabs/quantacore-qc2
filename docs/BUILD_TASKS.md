@@ -1690,7 +1690,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-049 — Broker Reconciliation
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Resolve local/remote differences before opening new exposure or recovering after restart.
 **Dependencies:** QC2-006, QC2-046, QC2-047, QC2-048
 **Authorized legacy references:** None.
@@ -1716,7 +1716,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-09T15:50:59Z: `docs/reference/QC2-049_ACCEPTANCE_ASSESSMENT.md`, `docs/reference/QC2-049_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-049_TASK_RECORD.json`
 
 ---
 

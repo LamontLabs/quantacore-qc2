@@ -1,0 +1,45 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a1217d-5787-7971-9999-d346704d23b9",
+  "created_at": "2026-10-09T16:27:04Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "6d2e171216be276d585ef19f5a9dbf9a7278602d068487e604efc0f48b87b4c1",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a1217d-5780-7365-a805-0551861d9d60",
+    "content_hash": "64c0fe28851647bdd3482a9fb72338bc53fe55354675de17b686eb3aeb44265b"
+  },
+  "task_spec_version": "QC2-050 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "25dd82f950ecf9447535b6ef2b8126673de8a1ba",
+  "changed_paths": [
+    "packages/readiness_authority",
+    "tests/readiness_authority"
+  ],
+  "executed_commands": [
+    "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/readiness_authority/src:packages/contracts/src python3 -m pytest -q --import-mode=importlib tests/readiness_authority/test_readiness.py",
+    "python3 -m ruff check packages/readiness_authority/src/qc2_readiness_authority tests/readiness_authority/test_readiness.py",
+    "python3 -m ruff format --check packages/readiness_authority/src/qc2_readiness_authority tests/readiness_authority/test_readiness.py"
+  ],
+  "test_counts": [
+    {
+      "test_id": "readiness_authority",
+      "passed": 11,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "638d7ccbd789e3ffad9e34ecfb30596db9a3db434730f7d4bc51bbcffc0cba47",
+    "00014d53e4ec6ddcb49128e13c00dc8c64375a5a6912f56d64d994a4e7906285"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-09T16:27:04Z"
+}

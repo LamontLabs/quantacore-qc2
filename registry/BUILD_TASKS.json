@@ -5378,9 +5378,44 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-09T16:27:04Z",
+        "task_spec_version": "QC2-050 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "25dd82f950ecf9447535b6ef2b8126673de8a1ba",
+        "receipt": "docs/reference/QC2-050_ACCEPTANCE_ASSESSMENT.md",
+        "contract_receipt": "docs/reference/QC2-050_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-050_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/readiness_authority",
+          "tests/readiness_authority"
+        ],
+        "executed_commands": [
+          "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/readiness_authority/src:packages/contracts/src python3 -m pytest -q --import-mode=importlib tests/readiness_authority/test_readiness.py",
+          "python3 -m ruff check packages/readiness_authority/src/qc2_readiness_authority tests/readiness_authority/test_readiness.py",
+          "python3 -m ruff format --check packages/readiness_authority/src/qc2_readiness_authority tests/readiness_authority/test_readiness.py"
+        ],
+        "test_counts": [
+          {
+            "test_id": "readiness_authority",
+            "passed": 11,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/readiness_authority": "638d7ccbd789e3ffad9e34ecfb30596db9a3db434730f7d4bc51bbcffc0cba47",
+          "tests/readiness_authority": "00014d53e4ec6ddcb49128e13c00dc8c64375a5a6912f56d64d994a4e7906285"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "QC2-050 was verified with focused synthetic fixtures and code checks against the committed implementation.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-051",

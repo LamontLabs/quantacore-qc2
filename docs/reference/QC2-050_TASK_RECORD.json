@@ -1,0 +1,42 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a1217d-5780-7365-a805-0551861d9d60",
+  "created_at": "2026-10-09T16:27:04Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "64c0fe28851647bdd3482a9fb72338bc53fe55354675de17b686eb3aeb44265b",
+  "task_id": "qc2-050",
+  "task_name": "Prediction Readiness",
+  "objective": "Compose infrastructure, snapshot and prediction readiness without circular prerequisites.",
+  "dependency_task_ids": [
+    "QC2-007",
+    "QC2-008",
+    "QC2-010",
+    "QC2-013",
+    "QC2-021",
+    "QC2-025",
+    "QC2-037",
+    "QC2-039",
+    "QC2-043",
+    "QC2-049"
+  ],
+  "authorized_legacy_refs": [],
+  "deliverable_refs": [
+    "INGESTION_PREFLIGHT, SNAPSHOT_READY and PREDICTION_READY engines.",
+    "Version/freshness/deadline assessments and reason-coded mobile/API projections.",
+    "Loaded-model/pointer consistency and seal-capability checks."
+  ],
+  "required_test_refs": [
+    "Broker outage leaves scientific readiness unaffected.",
+    "Unknown clock, illegal dependency, missing artifact or model load mismatch blocks prediction.",
+    "Run readiness cannot require that the same run already has a completed prediction."
+  ],
+  "acceptance_gate": "Each scientific stage exposes exact prerequisites and fails only for relevant unavailable evidence.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

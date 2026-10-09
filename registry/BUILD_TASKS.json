@@ -4995,6 +4995,16 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-045",
+          "artifact_paths": [
+            "packages/execution/src/qc2_execution",
+            "tests/execution"
+          ],
+          "reason": "QC2-046 adds the execution-authority implementation and regression tests to the accepted execution source and test trees; its acceptance receipt will revalidate both tree hashes."
+        }
+      ],
       "status": "TODO",
       "blockers": [],
       "acceptance_receipt": null

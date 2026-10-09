@@ -1597,6 +1597,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Objective:** Implement the only broker-mutation gateway with durable attempts and unknown-state recovery.
 **Dependencies:** QC2-005, QC2-006, QC2-021, QC2-043, QC2-044, QC2-045
 **Authorized legacy references:** Gen 1 execution/idempotency logic
+**Authorized artifact drift:** QC2-045 — QC2-046 adds the execution-authority implementation and regression tests to the accepted execution source and test trees; its acceptance receipt will revalidate both tree hashes. Paths: `packages/execution/src/qc2_execution`, `tests/execution`
 **Required reference intake:** Mandatory for each referenced repository/file actually inspected; record revision, path/hash, source-supported meaning, tests, conflicts, license, and disposition.
 
 **Required deliverables:**

@@ -1490,7 +1490,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-043 — Atomic Champion Transition
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Commit one exact approved model transition without ambiguous or split authority.
 **Dependencies:** QC2-005, QC2-006, QC2-025, QC2-037, QC2-041, QC2-042
 **Authorized legacy references:** None.
@@ -1519,7 +1519,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-09T01:32:03Z: `docs/reference/QC2-043_ACCEPTANCE_RECEIPT.md`, `docs/reference/QC2-043_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-043_TASK_RECORD.json`
 
 ---
 

@@ -1,0 +1,58 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a11e49-ee0a-7409-9684-68ec15d94cf5",
+  "created_at": "2026-10-09T01:32:03Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "6bbc29c106dd460c57d6390733c2a5deba0c6e9a824822d016aa8b2386ec2039",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a11e49-ee07-7c07-8d19-e55f5d1c7956",
+    "content_hash": "2c3ec4829e3ec69cc99b496c5b883be29db2a3c3ee5481e2e16e7f8a0fcfc93f"
+  },
+  "task_spec_version": "QC2-043 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "a13f80d5a6b0a8a61f4e5df7c1011ab8df32693e",
+  "changed_paths": [
+    "packages/promotion",
+    "tests/promotion",
+    "migrations/0007_atomic_champion_transition.sql",
+    "tests/database/qc2_043_postgres_acceptance.sql",
+    "lib/db/test/run-qc2-043-postgres-integration.mjs"
+  ],
+  "executed_commands": [
+    "PYTHONPATH=\"$(printf '%s:' packages/*/src)\" python -m pytest tests/promotion/test_transition.py -q",
+    "QC2_ENV=test QC2_EXPECTED_DATABASE_TEST=qc2_test_043 QC2_POSTGRES_TEST_URL=postgres://postgres@127.0.0.1:55473/qc2_test_043?sslmode=disable pnpm --filter @workspace/db exec node ./test/run-qc2-043-postgres-integration.mjs",
+    "python3 tools/task_workflow.py preflight QC2-043",
+    "python3 tools/generate_task_docs.py --check"
+  ],
+  "test_counts": [
+    {
+      "test_id": "qc2_043_python_transition",
+      "passed": 22,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "qc2_043_postgres_acceptance",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "5933831e321ab998110f85ef23255d5ccf03c81176f01639ed264b8ec8159b1a",
+    "587a670e9f17cd19020277027ce18e9f6d71192f261153864350d56811daa4f6",
+    "8c8538fb956c9849c908b6614421b6bcfd8bda1e50439cf0e1d91ca600f8eb92",
+    "73ec1c8695a8bfcc9c74d63d8a82af55726da5960e0f1bc92431dee199c03a8b",
+    "5146de7f4f7ef59d13c116a1eb03a1bf6a01a877b9761ba4d3816db3db398bbc"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-09T01:32:03Z"
+}

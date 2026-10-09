@@ -4674,9 +4674,57 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-09T01:32:03Z",
+        "task_spec_version": "QC2-043 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "a13f80d5a6b0a8a61f4e5df7c1011ab8df32693e",
+        "receipt": "docs/reference/QC2-043_ACCEPTANCE_RECEIPT.md",
+        "contract_receipt": "docs/reference/QC2-043_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-043_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/promotion",
+          "tests/promotion",
+          "migrations/0007_atomic_champion_transition.sql",
+          "tests/database/qc2_043_postgres_acceptance.sql",
+          "lib/db/test/run-qc2-043-postgres-integration.mjs"
+        ],
+        "executed_commands": [
+          "PYTHONPATH=\"$(printf '%s:' packages/*/src)\" python -m pytest tests/promotion/test_transition.py -q",
+          "QC2_ENV=test QC2_EXPECTED_DATABASE_TEST=qc2_test_043 QC2_POSTGRES_TEST_URL=postgres://postgres@127.0.0.1:55473/qc2_test_043?sslmode=disable pnpm --filter @workspace/db exec node ./test/run-qc2-043-postgres-integration.mjs",
+          "python3 tools/task_workflow.py preflight QC2-043",
+          "python3 tools/generate_task_docs.py --check"
+        ],
+        "test_counts": [
+          {
+            "test_id": "qc2_043_python_transition",
+            "passed": 22,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "qc2_043_postgres_acceptance",
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/promotion": "5933831e321ab998110f85ef23255d5ccf03c81176f01639ed264b8ec8159b1a",
+          "tests/promotion": "587a670e9f17cd19020277027ce18e9f6d71192f261153864350d56811daa4f6",
+          "migrations/0007_atomic_champion_transition.sql": "8c8538fb956c9849c908b6614421b6bcfd8bda1e50439cf0e1d91ca600f8eb92",
+          "tests/database/qc2_043_postgres_acceptance.sql": "73ec1c8695a8bfcc9c74d63d8a82af55726da5960e0f1bc92431dee199c03a8b",
+          "lib/db/test/run-qc2-043-postgres-integration.mjs": "5146de7f4f7ef59d13c116a1eb03a1bf6a01a877b9761ba4d3816db3db398bbc"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "Executed the Python transition suite and isolated UTF8 PostgreSQL migration/acceptance suite against the committed implementation. Production approval remains disabled until Owner API nonce consumption can share the PostgreSQL CAS transaction.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-044",

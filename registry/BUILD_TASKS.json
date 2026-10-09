@@ -5623,9 +5623,47 @@
           "reason": "QC2-052 adds research launch readiness and scheduling in the shared ApexLab source and regression-test trees; acceptance reruns the full ApexLab suite to revalidate prior behavior while each prior receipt remains bound to its tested source commit."
         }
       ],
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-09T18:59:39Z",
+        "task_spec_version": "QC2-052 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "ff538217f760f439ed23325ca728acdb4c18a2c8",
+        "receipt": "docs/reference/QC2-052_ACCEPTANCE_ASSESSMENT.md",
+        "contract_receipt": "docs/reference/QC2-052_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-052_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/apexlab",
+          "tests/apexlab"
+        ],
+        "executed_commands": [
+          "python3 -m pytest -q tests/apexlab",
+          "python3 -m ruff check packages/apexlab/src/qc2_apexlab tests/apexlab",
+          "python3 -m compileall -q packages/apexlab/src/qc2_apexlab tests/apexlab",
+          "python3 -m ruff format --check packages/apexlab/src/qc2_apexlab/research_readiness.py",
+          "python3 tools/generate_task_docs.py && python3 tools/generate_task_docs.py --check",
+          "python3 tools/task_workflow.py preflight QC2-052"
+        ],
+        "test_counts": [
+          {
+            "test_id": "apexlab",
+            "passed": 64,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/apexlab": "e54f0b86f21cc7206c19adbdba6779ea9f4866d407fb4cb12a296b2ddda7abc8",
+          "tests/apexlab": "ec3ee57e81bbda8e61bcf01805f34fcb5aeecf17f832755f45176f0ec76a4f00"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "Acceptance was performed now because trustworthy historical evidence was missing.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-053",

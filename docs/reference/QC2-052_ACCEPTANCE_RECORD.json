@@ -1,0 +1,48 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a12209-093b-7a56-ac91-e2188d6be246",
+  "created_at": "2026-10-09T18:59:39Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "d371ab4d78be71c6c3dd19417aaaaf0e0948a2a871e01111dc5c981545089844",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a12209-0934-7213-9c8a-fc8c6ce5ec8f",
+    "content_hash": "f1c9e3476ae79d8e98f82781453682e25ebf52dab422ae385480b321fe20435f"
+  },
+  "task_spec_version": "QC2-052 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "ff538217f760f439ed23325ca728acdb4c18a2c8",
+  "changed_paths": [
+    "packages/apexlab",
+    "tests/apexlab"
+  ],
+  "executed_commands": [
+    "python3 -m pytest -q tests/apexlab",
+    "python3 -m ruff check packages/apexlab/src/qc2_apexlab tests/apexlab",
+    "python3 -m compileall -q packages/apexlab/src/qc2_apexlab tests/apexlab",
+    "python3 -m ruff format --check packages/apexlab/src/qc2_apexlab/research_readiness.py",
+    "python3 tools/generate_task_docs.py && python3 tools/generate_task_docs.py --check",
+    "python3 tools/task_workflow.py preflight QC2-052"
+  ],
+  "test_counts": [
+    {
+      "test_id": "apexlab",
+      "passed": 64,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "e54f0b86f21cc7206c19adbdba6779ea9f4866d407fb4cb12a296b2ddda7abc8",
+    "ec3ee57e81bbda8e61bcf01805f34fcb5aeecf17f832755f45176f0ec76a4f00"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-09T18:59:39Z"
+}

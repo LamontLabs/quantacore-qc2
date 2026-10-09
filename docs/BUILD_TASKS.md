@@ -1754,7 +1754,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-051 — Execution Readiness
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Separate entry, cancellation and exit trust requirements.
 **Dependencies:** QC2-021, QC2-044, QC2-045, QC2-046, QC2-047, QC2-048, QC2-049, QC2-050
 **Authorized legacy references:** None.

@@ -1,0 +1,48 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a11e22-979c-7442-8106-8dd6d4dc860f",
+  "created_at": "2026-10-09T00:49:05Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "45c14b0551fd6b250884896ad92c62775fce5b90e047b6a01a1ffc2e3dfe85ef",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a11e22-9798-7c1f-9a28-e063d9fec863",
+    "content_hash": "43c2a493955f82b2c48b45c94649aba71376184906e595deaa53612bb81c3a06"
+  },
+  "task_spec_version": "QC2-042 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "4ed6bf86cc437cb31ebb2f28d9f3d0a17698cc3f",
+  "changed_paths": [
+    "packages/owner_api",
+    "tests/owner_api"
+  ],
+  "executed_commands": [
+    "uv run python -m pytest -q tests/owner_api",
+    "uv run python -m py_compile packages/owner_api/src/qc2_owner_api/*.py",
+    "uv run ruff format --check packages/owner_api/src/qc2_owner_api tests/owner_api",
+    "uv run ruff check packages/owner_api/src/qc2_owner_api tests/owner_api",
+    "python3 tools/task_workflow.py preflight QC2-042",
+    "DANGEROUSLY_ALLOW_GIT=1 git diff --check"
+  ],
+  "test_counts": [
+    {
+      "test_id": "owner_approval_fixtures",
+      "passed": 27,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "f60a5f1eea1e8f1c60c9fcacfc9bb75e2dbcb7aedf15e9f73ba5d6b3a2214f31",
+    "1eb42c0e41b72a26f947024b8aa75999d953383a522e02fd1d0647a80798c243"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-09T00:49:05Z"
+}

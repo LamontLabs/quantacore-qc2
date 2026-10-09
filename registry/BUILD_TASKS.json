@@ -4572,9 +4572,47 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-09T00:49:05Z",
+        "task_spec_version": "QC2-042 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "4ed6bf86cc437cb31ebb2f28d9f3d0a17698cc3f",
+        "receipt": "docs/reference/QC2-042_ACCEPTANCE_RECEIPT.md",
+        "contract_receipt": "docs/reference/QC2-042_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-042_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/owner_api",
+          "tests/owner_api"
+        ],
+        "executed_commands": [
+          "uv run python -m pytest -q tests/owner_api",
+          "uv run python -m py_compile packages/owner_api/src/qc2_owner_api/*.py",
+          "uv run ruff format --check packages/owner_api/src/qc2_owner_api tests/owner_api",
+          "uv run ruff check packages/owner_api/src/qc2_owner_api tests/owner_api",
+          "python3 tools/task_workflow.py preflight QC2-042",
+          "DANGEROUSLY_ALLOW_GIT=1 git diff --check"
+        ],
+        "test_counts": [
+          {
+            "test_id": "owner_approval_fixtures",
+            "passed": 27,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/owner_api": "f60a5f1eea1e8f1c60c9fcacfc9bb75e2dbcb7aedf15e9f73ba5d6b3a2214f31",
+          "tests/owner_api": "1eb42c0e41b72a26f947024b8aa75999d953383a522e02fd1d0647a80798c243"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "Executed fixture-device acceptance tests and static checks against the committed implementation; production authority remains disabled.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-043",

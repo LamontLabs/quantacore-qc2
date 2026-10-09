@@ -21,6 +21,8 @@ The adapter, synthetic API fixtures, and tests are implemented. Final account bi
 
 QC2-010 pins account fingerprint `4c426c01ca1732ea982aa644458b4577b88bec5c98800ade1920516b4134ec0c` and describes it only as a domain-separated SHA-256 of the account ID. The exact domain and payload encoding are absent from the report and manifest. The current adapter constant is explicitly unverified. A read-only probe returned HTTP 200, but the derived digest did not match the pinned digest. A bounded local check of 650 candidate domain labels across five plausible payload encodings also found no match; this search is not a substitute for source provenance.
 
+The supplied reference `https://paper-api.alpaca.markets/v2` identifies the paper API base URL, not the fingerprint domain or payload encoding. The QC2-010 tested source revision (`7e905c7df041f26a7618756cdd9d0f1603487d65`) and evidence commit (`4ceea37`) were checked; the source contains generic domain-separated hashing and fingerprint contract fields, but no account-specific fingerprint derivation or original probe script.
+
 The account ID and financial fields were not emitted or persisted. The probe performed no broker mutation requests. Connectivity is confirmed; the expected account identity is not.
 
 **Needed to unblock:** provide the original QC2-010 probe/source revision or the exact fingerprint domain and payload canonicalization, and confirm that the currently configured paper credentials are intended to identify the same account. Do not provide credentials or the raw account ID. Do not change the pinned QC2-010 digest or assume a match without explicit authorization.

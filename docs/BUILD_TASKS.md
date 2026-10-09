@@ -1525,7 +1525,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-044 — Paper Strategy Framework
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Define frozen long-only paper rules separately from intelligence and owner capital caps.
 **Dependencies:** QC2-007, QC2-015, QC2-021, QC2-025, QC2-026, QC2-043
 **Authorized legacy references:** Gen 1 strategy tiers, concepts only

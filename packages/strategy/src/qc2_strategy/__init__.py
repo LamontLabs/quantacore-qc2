@@ -1,0 +1,58 @@
+"""QC2 paper strategy contracts, pure planning, and synthetic test profiles."""
+
+from .fixtures import FixtureStrategyProfile, fixture_profiles
+from .framework import (
+    assess_activation_readiness,
+    assess_daily_exit,
+    build_allocation_plan,
+    classify_fill_feedback,
+    prediction_to_candidate,
+    strategy_rules_hash,
+)
+from .models import (
+    ActivationReadiness,
+    AllocationContext,
+    AllocationPlan,
+    CandidateDecision,
+    CandidateDisposition,
+    CompletedDailyBar,
+    ExecutionFillFeedback,
+    ExitAssessment,
+    ExitSignal,
+    FillClassification,
+    InstrumentTradingEligibility,
+    PlannedReservation,
+    PositionSnapshot,
+    ProposedActionKind,
+    ProposedPaperAction,
+    StrategyCandidate,
+    StrategyRules,
+)
+
+__all__ = [
+    "ActivationReadiness",
+    "AllocationContext",
+    "AllocationPlan",
+    "CandidateDecision",
+    "CandidateDisposition",
+    "CompletedDailyBar",
+    "ExecutionFillFeedback",
+    "ExitAssessment",
+    "ExitSignal",
+    "FillClassification",
+    "FixtureStrategyProfile",
+    "InstrumentTradingEligibility",
+    "PlannedReservation",
+    "PositionSnapshot",
+    "ProposedActionKind",
+    "ProposedPaperAction",
+    "StrategyCandidate",
+    "StrategyRules",
+    "assess_activation_readiness",
+    "assess_daily_exit",
+    "build_allocation_plan",
+    "classify_fill_feedback",
+    "fixture_profiles",
+    "prediction_to_candidate",
+    "strategy_rules_hash",
+]

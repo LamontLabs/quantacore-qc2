@@ -5678,6 +5678,16 @@
         "QC2-052"
       ],
       "authorized_legacy_references": [],
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-042",
+          "artifact_paths": [
+            "packages/owner_api",
+            "tests/owner_api"
+          ],
+          "reason": "QC2-053 extends the existing owner API with identity and device lifecycle behavior and verifies it in backend integration. Its acceptance receipt will bind the updated implementation and test-tree hashes."
+        }
+      ],
       "required_reference_intake": "None. Do not inspect or copy legacy code for this task without a scoped amendment.",
       "required_deliverables": [
         "Single-use bootstrap, device public-key registry, sessions and rotating refresh credentials.",
@@ -5700,7 +5710,7 @@
         "IDENTITY_INTEGRATION"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "blockers": [],
       "acceptance_receipt": null
     },

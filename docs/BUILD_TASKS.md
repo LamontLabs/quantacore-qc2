@@ -1828,10 +1828,11 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-053 — Owner Identity and Device Enrollment
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Implement one-owner trust, secure device enrollment, revocation and recovery.
 **Dependencies:** QC2-003, QC2-005, QC2-006, QC2-007, QC2-042, QC2-052
 **Authorized legacy references:** None.
+**Authorized artifact drift:** QC2-042 — QC2-053 extends the existing owner API with identity and device lifecycle behavior and verifies it in backend integration. Its acceptance receipt will bind the updated implementation and test-tree hashes. Paths: `packages/owner_api`, `tests/owner_api`
 **Required reference intake:** None. Do not inspect or copy legacy code for this task without a scoped amendment.
 
 **Required deliverables:**

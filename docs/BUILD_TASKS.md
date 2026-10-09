@@ -1690,7 +1690,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-049 — Broker Reconciliation
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Resolve local/remote differences before opening new exposure or recovering after restart.
 **Dependencies:** QC2-006, QC2-046, QC2-047, QC2-048
 **Authorized legacy references:** None.

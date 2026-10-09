@@ -51,7 +51,8 @@ import socket
 import subprocess
 import sys
 
-candidate_root, contracts_root = sys.argv[1:3]
+candidate_root, contracts_root, *trusted_package_roots = sys.argv[1:]
+sys.path.extend(trusted_package_roots)
 sys.path.insert(0, contracts_root)
 sys.path.insert(0, candidate_root)
 
@@ -135,6 +136,7 @@ def probe_candidate_model(
     """Load and probe verified JSON bytes without running bundle-provided code."""
     candidate_root = _source_root("qc2_candidate_evaluator.inference")
     contracts_root = _source_root("qc2_contracts.runtime")
+    trusted_package_roots = _trusted_package_roots()
     request = {
         "model": base64.b64encode(model_bytes).decode("ascii"),
         "environment": base64.b64encode(environment_bytes).decode("ascii"),
@@ -152,6 +154,7 @@ def probe_candidate_model(
                 _WORKER,
                 str(candidate_root),
                 str(contracts_root),
+                *map(str, trusted_package_roots),
             ],
             input=json.dumps(request, ensure_ascii=False, separators=(",", ":")).encode(
                 "utf-8"
@@ -205,6 +208,38 @@ def _source_root(module_name: str) -> Path:
     if spec is None or spec.origin is None:
         raise CandidateSandboxError(f"trusted module {module_name!r} is unavailable")
     return Path(spec.origin).resolve().parents[1]
+
+
+def _trusted_package_roots() -> tuple[Path, ...]:
+    """Resolve isolated import roots from the installed contract validator stack."""
+    roots: set[Path] = set()
+    for module_name in ("jsonschema", "attrs", "referencing", "rpds"):
+        try:
+            spec = importlib.util.find_spec(module_name)
+        except (ImportError, ModuleNotFoundError, ValueError) as exc:
+            raise CandidateSandboxError(
+                f"trusted runtime dependency {module_name!r} is unavailable"
+            ) from exc
+        if spec is None:
+            raise CandidateSandboxError(
+                f"trusted runtime dependency {module_name!r} is unavailable"
+            )
+        locations = list(spec.submodule_search_locations or ())
+        if not locations and spec.origin is not None:
+            locations = [spec.origin]
+        module_roots: set[Path] = set()
+        for location in locations:
+            path = Path(location).resolve()
+            for parent in (path, *path.parents):
+                if parent.name in {"site-packages", "dist-packages"}:
+                    module_roots.add(parent)
+                    break
+        if not module_roots:
+            raise CandidateSandboxError(
+                f"trusted runtime dependency {module_name!r} has no installed package root"
+            )
+        roots.update(module_roots)
+    return tuple(sorted(roots))
 
 
 def _apply_limits(limits: SandboxLimits) -> None:

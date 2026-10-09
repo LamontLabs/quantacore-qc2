@@ -230,9 +230,11 @@ def _make_gates(
 def _verifier_fixture(
     *,
     corrupt_report_gate: bool = False,
+    manipulate_metrics: bool = False,
     unsafe_model: bool = False,
     label_mismatch: bool = False,
     future_shadow: bool = False,
+    stale_report: bool = False,
 ) -> tuple[bytes, dict[str, Any]]:
     manifest, original_files, evaluator_ref, owner_ref = _fixture_bundle()
     documents: dict[tuple[str, str], dict[str, Any]] = {}
@@ -264,6 +266,7 @@ def _verifier_fixture(
     run = _contract_doc(documents, "PredictionRun")
     seal = _contract_doc(documents, "PredictionSeal")
     replay = _contract_doc(documents, "ReplayReceipt")
+    evaluated_at = "2026-09-01T20:00:00Z" if stale_report else NOW
 
     evaluation_artifact_manifest = copy.deepcopy(model_artifact_manifest)
     evaluation_artifact_manifest["id"] = EVALUATION_ARTIFACT_ID
@@ -321,18 +324,18 @@ def _verifier_fixture(
     )
     evaluation.update(
         {
-            "created_at": NOW,
-            "evaluated_at": NOW,
+            "created_at": evaluated_at,
+            "evaluated_at": evaluated_at,
             "evaluator_identity": EVALUATOR_NAME,
         }
     )
     holdout.update(
         {
-            "created_at": NOW,
+            "created_at": evaluated_at,
             "evaluator_identity": EVALUATOR_NAME,
             "access_scope": "METRICS_ONLY",
-            "requested_at": NOW,
-            "granted_at": NOW,
+            "requested_at": evaluated_at,
+            "granted_at": evaluated_at,
             "consumed_fields": ["aggregate_metrics"],
             "released_metrics": [
                 "observation_count",
@@ -491,6 +494,9 @@ def _verifier_fixture(
         "zero_baseline_rmse": "1",
         "rmse_skill_vs_zero": "0.5",
     }
+    if manipulate_metrics:
+        metrics["rmse"] = "2"
+        metrics["rmse_skill_vs_zero"] = "-1"
     resource_usage = {
         "elapsed_seconds": "0.2",
         "cpu_seconds": "0.1",
@@ -498,7 +504,7 @@ def _verifier_fixture(
         "artifact_bytes": len(model_bytes) + len(environment_bytes),
     }
     gates = _make_gates(
-        evaluated_at=NOW,
+        evaluated_at=evaluated_at,
         source_refs=source_refs,
         evidence_class=dataset["evidence_class"],
     )
@@ -757,6 +763,32 @@ def test_signed_but_inconsistent_gate_report_is_rejected() -> None:
             policy=_policy(fixture["policy_hash"]),
         )
     assert raised.value.code is VerificationErrorCode.GATE_RECOMPUTATION_MISMATCH
+
+
+def test_recomputation_rejects_signed_metrics_that_change_the_gate() -> None:
+    archive, fixture = _verifier_fixture(manipulate_metrics=True)
+    with pytest.raises(PromotionVerificationError) as raised:
+        verify_promotion_bundle(
+            archive,
+            key_registry=_registry(),
+            now=NOW,
+            limits=LIMITS,
+            policy=_policy(fixture["policy_hash"]),
+        )
+    assert raised.value.code is VerificationErrorCode.GATE_RECOMPUTATION_MISMATCH
+
+
+def test_stale_evaluation_report_is_rejected() -> None:
+    archive, fixture = _verifier_fixture(stale_report=True)
+    with pytest.raises(PromotionVerificationError) as raised:
+        verify_promotion_bundle(
+            archive,
+            key_registry=_registry(),
+            now=NOW,
+            limits=LIMITS,
+            policy=_policy(fixture["policy_hash"]),
+        )
+    assert raised.value.code is VerificationErrorCode.EVIDENCE_STALE
 
 
 @pytest.mark.parametrize(

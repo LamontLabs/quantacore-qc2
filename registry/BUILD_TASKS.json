@@ -4498,9 +4498,45 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-09T00:25:23Z",
+        "task_spec_version": "QC2-041 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "fd7b76bfa4d7bec41e12ce342f5400b99e8b6e1a",
+        "receipt": "docs/reference/QC2-041_ACCEPTANCE_RECEIPT.md",
+        "contract_receipt": "docs/reference/QC2-041_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-041_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/promotion",
+          "tests/promotion"
+        ],
+        "executed_commands": [
+          "uv run ruff check packages/promotion/src tests/promotion --output-format concise",
+          "uv run pytest tests/promotion -q",
+          "python3 tools/task_workflow.py preflight QC2-041",
+          "python3 tools/task_workflow.py validate"
+        ],
+        "test_counts": [
+          {
+            "test_id": "promotion_suite",
+            "passed": 21,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/promotion": "1ef3bc2723fb9e01527c6f6caa2b56bcf55adf5f05689ac31fa2143da44520db",
+          "tests/promotion": "a64c655c313199d6a345d88db3cd3e53bb635c2dacb3e804b6c5bceeae6816c8"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "QC2-041 was revalidated against the committed verifier and its promotion tests; historical evidence did not cover the independent verifier.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-042",

@@ -1,0 +1,46 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a11e0c-e2db-7d42-a09f-536665267d92",
+  "created_at": "2026-10-09T00:25:23Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "df6b77a841199ac673df83ececc9d9d86a981d8cf5cb54182f49bfb1dad845e2",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a11e0c-e2d8-7927-a23d-47c6bb54c852",
+    "content_hash": "a210678b5c068ab524ce5560acd6cea4732e3a31075e86aaca22c3660d166e65"
+  },
+  "task_spec_version": "QC2-041 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "fd7b76bfa4d7bec41e12ce342f5400b99e8b6e1a",
+  "changed_paths": [
+    "packages/promotion",
+    "tests/promotion"
+  ],
+  "executed_commands": [
+    "uv run ruff check packages/promotion/src tests/promotion --output-format concise",
+    "uv run pytest tests/promotion -q",
+    "python3 tools/task_workflow.py preflight QC2-041",
+    "python3 tools/task_workflow.py validate"
+  ],
+  "test_counts": [
+    {
+      "test_id": "promotion_suite",
+      "passed": 21,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "1ef3bc2723fb9e01527c6f6caa2b56bcf55adf5f05689ac31fa2143da44520db",
+    "a64c655c313199d6a345d88db3cd3e53bb635c2dacb3e804b6c5bceeae6816c8"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-09T00:25:23Z"
+}

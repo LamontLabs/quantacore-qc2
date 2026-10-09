@@ -1,0 +1,37 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a11e0c-e2d8-7927-a23d-47c6bb54c852",
+  "created_at": "2026-10-09T00:25:23Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "a210678b5c068ab524ce5560acd6cea4732e3a31075e86aaca22c3660d166e65",
+  "task_id": "qc2-041",
+  "task_name": "Promotion Verification",
+  "objective": "Verify bundles independently before model loading or owner decision.",
+  "dependency_task_ids": [
+    "QC2-023",
+    "QC2-036",
+    "QC2-037",
+    "QC2-039",
+    "QC2-040"
+  ],
+  "authorized_legacy_refs": [],
+  "deliverable_refs": [
+    "Strict verifier, key-role/revocation registry and recomputed gate receipts.",
+    "Compatibility and temporal-evidence checks with exact error taxonomy.",
+    "Sandboxed candidate load/probe after byte and manifest verification."
+  ],
+  "required_test_refs": [
+    "Wrong signer role, stale reports, label mismatch, future Shadow evidence and unsafe model fail.",
+    "Revoked/unknown keys and extra archive entries rejected.",
+    "Independent gate recomputation detects manipulated metrics."
+  ],
+  "acceptance_gate": "Every bundle field and required evidence item is validated by the verifier authority.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

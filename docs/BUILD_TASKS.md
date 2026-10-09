@@ -1931,7 +1931,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-056 — Alert Authority
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Create deterministic operational alerts with five severities and separate acknowledgment/resolution.
 **Dependencies:** QC2-006, QC2-050, QC2-051, QC2-052, QC2-053, QC2-054, QC2-055
 **Authorized legacy references:** None.
@@ -1957,7 +1957,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-09T22:17:43Z: `docs/reference/QC2-056_ACCEPTANCE_RECEIPT.md`, `docs/reference/QC2-056_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-056_TASK_RECORD.json`
 
 ---
 

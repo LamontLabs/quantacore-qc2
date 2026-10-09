@@ -1,0 +1,39 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a122be-5e7c-7fe4-8718-4f8e696811a0",
+  "created_at": "2026-10-09T22:17:43Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "61d4a9648acac03208f72e32ec522715191d07b316585b5b32af4ed5102e1cd4",
+  "task_id": "qc2-056",
+  "task_name": "Alert Authority",
+  "objective": "Create deterministic operational alerts with five severities and separate acknowledgment/resolution.",
+  "dependency_task_ids": [
+    "QC2-006",
+    "QC2-050",
+    "QC2-051",
+    "QC2-052",
+    "QC2-053",
+    "QC2-054",
+    "QC2-055"
+  ],
+  "authorized_legacy_refs": [],
+  "deliverable_refs": [
+    "INFO/NOTICE/WARNING/CRITICAL/EMERGENCY taxonomy and trigger/escalation catalog.",
+    "Dedupe, delivery outbox, stale-delivery visibility and source-event references.",
+    "Acknowledgment and automatic/manual resolution rules."
+  ],
+  "required_test_refs": [
+    "Repeated trigger does not flood; recurrence after resolution is visible.",
+    "Acknowledgment cannot clear failed readiness.",
+    "Push-delivery failure cannot suppress server safety behavior."
+  ],
+  "acceptance_gate": "Alerts reliably reflect source conditions and delivery state without becoming an authority shortcut.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

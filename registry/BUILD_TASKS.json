@@ -6096,9 +6096,45 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-09T22:17:43Z",
+        "task_spec_version": "QC2-056 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "53e47a8348b6226be94358bff2c77a9292fe8416",
+        "receipt": "docs/reference/QC2-056_ACCEPTANCE_RECEIPT.md",
+        "contract_receipt": "docs/reference/QC2-056_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-056_TASK_RECORD.json",
+        "changed_paths": [
+          "migrations/0016_alert_authority.sql",
+          "tests/alert_authority/run_qc2_056_postgres_acceptance.mjs"
+        ],
+        "executed_commands": [
+          "node --check tests/alert_authority/run_qc2_056_postgres_acceptance.mjs",
+          "pnpm exec prettier --check tests/alert_authority/run_qc2_056_postgres_acceptance.mjs",
+          "Fresh local UTF-8 PostgreSQL cluster; applied migrations 0001 through 0016; ran QC2_ENV=test node tests/alert_authority/run_qc2_056_postgres_acceptance.mjs",
+          "pnpm run verify (stopped during Python test collection: duplicate test_adapter module and missing qc2_readiness_authority, qc2_scientific_replay, and qc2_strategy imports)"
+        ],
+        "test_counts": [
+          {
+            "test_id": "alert_postgres_acceptance",
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "migrations/0016_alert_authority.sql": "f27e31bc5df7532913b9fe88564f84e4a1fedfa2328b29411291697c18c92471",
+          "tests/alert_authority/run_qc2_056_postgres_acceptance.mjs": "ab5996f784c2cee8dcb17d7737bd63578953f085e599522428b5694409d82040"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "A fresh local UTF-8 PostgreSQL cluster passed alert-authority acceptance for source references, severity, dedupe, escalation, recurrence, independent acknowledgment/resolution, and delivery failure/staleness. No production database or external push provider was used. The repo-wide verify command did not complete because Python collection has pre-existing duplicate-module and missing-package import errors outside this task.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-057",

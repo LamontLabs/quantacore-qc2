@@ -1,0 +1,46 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a122be-5e82-7973-b706-18e18c8c1d02",
+  "created_at": "2026-10-09T22:17:43Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "e9dfa5415ace87731d8670e409c515d32ec135b6ec8cca0a3d9f4e415fd82d94",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a122be-5e7c-7fe4-8718-4f8e696811a0",
+    "content_hash": "61d4a9648acac03208f72e32ec522715191d07b316585b5b32af4ed5102e1cd4"
+  },
+  "task_spec_version": "QC2-056 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "53e47a8348b6226be94358bff2c77a9292fe8416",
+  "changed_paths": [
+    "migrations/0016_alert_authority.sql",
+    "tests/alert_authority/run_qc2_056_postgres_acceptance.mjs"
+  ],
+  "executed_commands": [
+    "node --check tests/alert_authority/run_qc2_056_postgres_acceptance.mjs",
+    "pnpm exec prettier --check tests/alert_authority/run_qc2_056_postgres_acceptance.mjs",
+    "Fresh local UTF-8 PostgreSQL cluster; applied migrations 0001 through 0016; ran QC2_ENV=test node tests/alert_authority/run_qc2_056_postgres_acceptance.mjs",
+    "pnpm run verify (stopped during Python test collection: duplicate test_adapter module and missing qc2_readiness_authority, qc2_scientific_replay, and qc2_strategy imports)"
+  ],
+  "test_counts": [
+    {
+      "test_id": "alert_postgres_acceptance",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "f27e31bc5df7532913b9fe88564f84e4a1fedfa2328b29411291697c18c92471",
+    "ab5996f784c2cee8dcb17d7737bd63578953f085e599522428b5694409d82040"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-09T22:17:43Z"
+}

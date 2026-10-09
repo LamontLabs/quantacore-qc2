@@ -1557,7 +1557,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-045 — Paper Order Intent
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Create immutable broker-independent intentions with exact exposure and expiry semantics.
 **Dependencies:** QC2-003, QC2-005, QC2-006, QC2-021, QC2-025, QC2-044
 **Authorized legacy references:** None.
@@ -1587,7 +1587,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-09T02:25:42Z: `docs/reference/QC2-045_ACCEPTANCE.md`, `docs/reference/QC2-045_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-045_TASK_RECORD.json`
 
 ---
 

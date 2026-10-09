@@ -1,0 +1,38 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a11e7b-0acf-7842-a71f-af9dc0c2bde3",
+  "created_at": "2026-10-09T02:25:42Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "3c0c2d1ef5299197564775b357df165b9c3043eb1ca7f7e04237627fbc4ca6a6",
+  "task_id": "qc2-045",
+  "task_name": "Paper Order Intent",
+  "objective": "Create immutable broker-independent intentions with exact exposure and expiry semantics.",
+  "dependency_task_ids": [
+    "QC2-003",
+    "QC2-005",
+    "QC2-006",
+    "QC2-021",
+    "QC2-025",
+    "QC2-044"
+  ],
+  "authorized_legacy_refs": [],
+  "deliverable_refs": [
+    "Intent schemas/state machine, stable request/client key, evidence links and reservations.",
+    "Entry/reduce/close/cancel/replace distinctions with position references.",
+    "Idempotent intent persistence and whole-share rounding."
+  ],
+  "required_test_refs": [
+    "Same key/different bytes, expired intent, excessive sell quantity and wrong account rejected.",
+    "Concurrent reservations cannot spend the same cash twice.",
+    "Replacement preserves worst-case pending exposure."
+  ],
+  "acceptance_gate": "Each valid fixture action has one immutable intention and a safe explicit reservation effect.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

@@ -5828,9 +5828,77 @@
           "reason": "QC2-054 extends the existing owner identity package with read-only projections and hostile access-control tests. This scoped drift preserves the identity implementation while binding the updated tree hashes in the QC2-054 receipt."
         }
       ],
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-09T21:17:46Z",
+        "task_spec_version": "QC2-054 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "65f45005a30fb829ff718db8fa4cf2e7f7c42d1e",
+        "receipt": "docs/reference/QC2-054_ACCEPTANCE_RECEIPT.md",
+        "contract_receipt": "docs/reference/QC2-054_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-054_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/owner_api",
+          "tests/owner_api",
+          "artifacts/api-server/src",
+          "artifacts/api-server/test",
+          "migrations/0014_owner_read_models.sql"
+        ],
+        "executed_commands": [
+          "python3 tools/task_workflow.py preflight QC2-054",
+          "pnpm --filter @workspace/api-server run typecheck",
+          "pnpm --filter @workspace/api-server run test:owner-read",
+          "python3 -m pytest -q tests/owner_api",
+          "fresh UTF8 PostgreSQL cluster with migrations 0001-0014; node tests/owner_api/run_qc2_054_postgres_integration.mjs",
+          "API Server workflow; curl --fail /api/healthz"
+        ],
+        "test_counts": [
+          {
+            "test_id": "owner_read_http",
+            "passed": 9,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "owner_api_python",
+            "passed": 50,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "owner_read_postgres",
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "api_typecheck",
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "api_health_check",
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/owner_api": "9bb1931fbbb41058bf03a13fca3bc4db7a4da96e2b1df7dea97a8f70887183e2",
+          "tests/owner_api": "20aed891617dad14f42c4c4aa7f1ea84edd0a362b6c22abc3f05f9af7e1b70f4",
+          "artifacts/api-server/src": "9944e379140d20e89bed4e4b5b30828ec3c108bb9d0faac9b56f15c9613e85b0",
+          "artifacts/api-server/test": "449f46ae05e1fd08e99c8a83a4801c81240ceb654b075c20382b71440a72fe3b",
+          "migrations/0014_owner_read_models.sql": "5efcd014bd34985a59427e1888ab5169eeb837fc8755254a984ec1aa29bc4131"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "Revalidated the integrated QC2-054 implementation because its merged task had no canonical acceptance receipt; all checks were run in a disposable local test environment.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-055",

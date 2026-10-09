@@ -1862,7 +1862,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-054 — Owner API Read Models
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Expose authenticated rebuildable owner views with evidence and freshness.
 **Dependencies:** QC2-025, QC2-026, QC2-037, QC2-048, QC2-049, QC2-050, QC2-051, QC2-052, QC2-053
 **Authorized legacy references:** None.
@@ -1890,7 +1890,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-09T21:17:46Z: `docs/reference/QC2-054_ACCEPTANCE_RECEIPT.md`, `docs/reference/QC2-054_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-054_TASK_RECORD.json`
 
 ---
 

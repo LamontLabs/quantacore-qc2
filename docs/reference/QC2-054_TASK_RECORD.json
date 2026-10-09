@@ -1,0 +1,41 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a12287-78ed-716c-9707-aa7ee1547ffb",
+  "created_at": "2026-10-09T21:17:46Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "44eb45e51210623562279575a376fb99c3a395bdd1c5720293811bcd25dfc2bf",
+  "task_id": "qc2-054",
+  "task_name": "Owner API Read Models",
+  "objective": "Expose authenticated rebuildable owner views with evidence and freshness.",
+  "dependency_task_ids": [
+    "QC2-025",
+    "QC2-026",
+    "QC2-037",
+    "QC2-048",
+    "QC2-049",
+    "QC2-050",
+    "QC2-051",
+    "QC2-052",
+    "QC2-053"
+  ],
+  "authorized_legacy_refs": [],
+  "deliverable_refs": [
+    "Today/Predictions/Validation/Models/System/Positions/Alerts/Reports read schemas.",
+    "Bounded pagination, stable sort, projection sequence/lag and redacted errors.",
+    "Minimal public liveness and private detailed diagnostics."
+  ],
+  "required_test_refs": [
+    "Unauthenticated/object-ID guessing cannot read sensitive state.",
+    "Projection rebuild matches source receipts; stale data remains labeled.",
+    "Large exports and invalid pagination are bounded."
+  ],
+  "acceptance_gate": "All owner views are permissioned projections with traceable canonical sources.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

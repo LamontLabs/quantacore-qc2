@@ -1,0 +1,13 @@
+{
+  "activity_type": "FILL",
+  "cum_qty": "1",
+  "id": "20261008143107977::8efc7b9a-8b2b-4000-9955-d36e7db0df74",
+  "leaves_qty": "2",
+  "price": "12.33",
+  "qty": "1",
+  "side": "buy",
+  "symbol": "XYZ",
+  "transaction_time": "2026-10-08T14:31:07.977Z",
+  "order_id": "a4f6b0fc-306c-4db1-8d9d-8107323f3461",
+  "type": "partial_fill"
+}

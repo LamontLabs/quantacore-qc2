@@ -1,0 +1,13 @@
+{
+  "activity_type": "FILL",
+  "cum_qty": "3",
+  "id": "20261008143109977::a7b9e1f8-59d5-4d9e-8b07-520c6bd7d8b4",
+  "leaves_qty": "0",
+  "price": "12.35",
+  "qty": "2",
+  "side": "buy",
+  "symbol": "XYZ",
+  "transaction_time": "2026-10-08T14:31:09.977Z",
+  "order_id": "a4f6b0fc-306c-4db1-8d9d-8107323f3461",
+  "type": "fill"
+}

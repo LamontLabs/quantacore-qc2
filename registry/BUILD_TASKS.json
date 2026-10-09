@@ -5101,8 +5101,10 @@
         "PAPER_READ_ONLY_INTEGRATION"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "TODO",
-      "blockers": [],
+      "status": "IN_PROGRESS",
+      "blockers": [
+        "QC2-010 account fingerprint derivation is not recorded; current read-only probe cannot match the pinned fingerprint"
+      ],
       "acceptance_receipt": null
     },
     {

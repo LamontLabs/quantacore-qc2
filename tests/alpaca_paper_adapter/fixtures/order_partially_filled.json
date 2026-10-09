@@ -1,0 +1,19 @@
+{
+  "id": "a4f6b0fc-306c-4db1-8d9d-8107323f3461",
+  "client_order_id": "qc2-entry-002",
+  "created_at": "2026-10-08T14:31:00Z",
+  "submitted_at": "2026-10-08T14:31:00Z",
+  "updated_at": "2026-10-08T14:31:07Z",
+  "status": "partially_filled",
+  "symbol": "XYZ",
+  "qty": "3",
+  "filled_qty": "1",
+  "filled_avg_price": "12.33",
+  "side": "buy",
+  "type": "limit",
+  "time_in_force": "day",
+  "limit_price": "12.34",
+  "stop_price": null,
+  "order_class": "simple",
+  "extended_hours": false
+}

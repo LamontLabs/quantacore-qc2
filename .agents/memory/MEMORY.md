@@ -6,6 +6,7 @@
 - [QC2 task progression](qc2-task-progression.md) — handle task completion and advance through eligible QC2 work without asking the owner to mark each task complete.
 - [Alpaca calendar time semantics](alpaca-calendar-time-semantics.md) — calendar open/close values may be exchange-local `HH:MM`; combine with the session date and exchange timezone before UTC comparisons.
 - [QC2 label precision](qc2-label-decimal-precision.md) — fractional-return values and event comparisons use 12 places with `ROUND_HALF_EVEN`; extrema ties use raw observed prices.
+- [Reconciliation checkpoint hashes](reconciliation-checkpoint-hash.md) — hash inventory facts, not hold-side-effect generation counters, so unchanged snapshots remain idempotent.
 - [Python worker package isolation](python-worker-package-isolation.md) — discover trusted package roots from installed module origins; pytest may expose `.pythonlibs` outside `sys.prefix`.
 - [Private GitHub source access](private-github-source-access.md) — confirm a live read of each pinned private revision; installed integration metadata and prior manifests are not current access proof.
 - [ApexLab temporal memory indexes](apexlab-temporal-memory-indexes.md) — keep replay proofs scoped to the cutoff-eligible dependency closure and preserve actual versus reconstructed availability.

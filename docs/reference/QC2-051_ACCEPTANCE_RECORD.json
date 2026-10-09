@@ -1,0 +1,55 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a121e6-9bcd-7f79-8359-36a297ff545c",
+  "created_at": "2026-10-09T18:22:03Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "267c5c2bd7f4af14f86b87858a7356143922b5f6ec62d2231700d2b1327f19ab",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a121e6-9bc6-76d5-8671-bdd2704e2b9a",
+    "content_hash": "b9492c1a23b65a8059bd758f2099c18eadb7323f3a58eed667c042dcedd7b714"
+  },
+  "task_spec_version": "QC2-051 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "aecc7571d2ae7472eab5e4ee2ebeac73ab16fc81",
+  "changed_paths": [
+    "packages/execution/src/qc2_execution",
+    "migrations/0012_execution_readiness.sql",
+    "tests/execution"
+  ],
+  "executed_commands": [
+    "python3 -m pytest -q tests/execution",
+    "python3 -m ruff check packages/execution/src/qc2_execution tests/execution",
+    "pnpm run lint",
+    "pnpm exec prettier --check tests/execution/qc2_051_postgres_acceptance.mjs tests/execution/run_qc2_051_postgres_integration.mjs; node --check both acceptance runners",
+    "Fresh UTF-8 disposable PostgreSQL cluster: QC2-046 runner then QC2-051 runner; QC2-045 persistence acceptance passed in the QC2-046 run"
+  ],
+  "test_counts": [
+    {
+      "test_id": "execution",
+      "passed": 36,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "test_id": "postgres_acceptance",
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "127828d77527c8cab45e189fd986b50b9e6299856c06fc5ba6070111268a2d9a",
+    "a6076f8ef183a636acf07bb6108c2c51c1f1690676944e78d7e5f83a6ee3586c",
+    "6a33e058d004dc353702869587bd6528500d29d46ac33eb893ee8e96a6c10b3e"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-09T18:22:03Z"
+}

@@ -1754,7 +1754,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-051 — Execution Readiness
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Separate entry, cancellation and exit trust requirements.
 **Dependencies:** QC2-021, QC2-044, QC2-045, QC2-046, QC2-047, QC2-048, QC2-049, QC2-050
 **Authorized legacy references:** None.
@@ -1782,7 +1782,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-09T18:22:03Z: `docs/reference/QC2-051_ACCEPTANCE_ASSESSMENT.md`, `docs/reference/QC2-051_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-051_TASK_RECORD.json`
 
 ---
 

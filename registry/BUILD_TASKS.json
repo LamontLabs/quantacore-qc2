@@ -5454,7 +5454,7 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "authorized_artifact_drift": [
         {
           "prior_task_id": "QC2-045",
@@ -5474,7 +5474,52 @@
         }
       ],
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-09T18:22:03Z",
+        "task_spec_version": "QC2-051 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "aecc7571d2ae7472eab5e4ee2ebeac73ab16fc81",
+        "receipt": "docs/reference/QC2-051_ACCEPTANCE_ASSESSMENT.md",
+        "contract_receipt": "docs/reference/QC2-051_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-051_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/execution/src/qc2_execution",
+          "migrations/0012_execution_readiness.sql",
+          "tests/execution"
+        ],
+        "executed_commands": [
+          "python3 -m pytest -q tests/execution",
+          "python3 -m ruff check packages/execution/src/qc2_execution tests/execution",
+          "pnpm run lint",
+          "pnpm exec prettier --check tests/execution/qc2_051_postgres_acceptance.mjs tests/execution/run_qc2_051_postgres_integration.mjs; node --check both acceptance runners",
+          "Fresh UTF-8 disposable PostgreSQL cluster: QC2-046 runner then QC2-051 runner; QC2-045 persistence acceptance passed in the QC2-046 run"
+        ],
+        "test_counts": [
+          {
+            "test_id": "execution",
+            "passed": 36,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "postgres_acceptance",
+            "passed": 3,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/execution/src/qc2_execution": "127828d77527c8cab45e189fd986b50b9e6299856c06fc5ba6070111268a2d9a",
+          "migrations/0012_execution_readiness.sql": "a6076f8ef183a636acf07bb6108c2c51c1f1690676944e78d7e5f83a6ee3586c",
+          "tests/execution": "6a33e058d004dc353702869587bd6528500d29d46ac33eb893ee8e96a6c10b3e"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "QC2-051 was verified against the committed implementation with focused execution tests and disposable PostgreSQL acceptance; repository-wide collection remains blocked by unrelated import errors.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-052",

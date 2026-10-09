@@ -1,0 +1,40 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a121e6-9bc6-76d5-8671-bdd2704e2b9a",
+  "created_at": "2026-10-09T18:22:03Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "b9492c1a23b65a8059bd758f2099c18eadb7323f3a58eed667c042dcedd7b714",
+  "task_id": "qc2-051",
+  "task_name": "Execution Readiness",
+  "objective": "Separate entry, cancellation and exit trust requirements.",
+  "dependency_task_ids": [
+    "QC2-021",
+    "QC2-044",
+    "QC2-045",
+    "QC2-046",
+    "QC2-047",
+    "QC2-048",
+    "QC2-049",
+    "QC2-050"
+  ],
+  "authorized_legacy_refs": [],
+  "deliverable_refs": [
+    "NEW_ENTRY_READY, CANCEL_ENTRY_READY, EXIT_READY and emergency scope logic.",
+    "Pause-new-entries behavior and fresh server-side resume assessment.",
+    "Generation-bound readiness lifetime and submit-time checks."
+  ],
+  "required_test_refs": [
+    "Champion failure does not itself block valid exit; storage/evidence failure still blocks unrecordable mutation.",
+    "Pause cancels pending entries according to policy and prevents race-through submission.",
+    "Unknown reconciliation/account identity blocks exposure."
+  ],
+  "acceptance_gate": "Action-specific tests demonstrate the intended reduction of exposure while preserving fail-closed identity/evidence.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

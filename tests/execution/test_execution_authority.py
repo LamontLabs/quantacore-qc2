@@ -3,22 +3,34 @@ from __future__ import annotations
 from copy import deepcopy
 from dataclasses import replace
 from datetime import UTC, datetime, timedelta
-from hashlib import sha256
 from typing import Any
 
 import pytest
 
 from qc2_execution import (
+    AccountIdentityStatus,
     AttemptRecord,
     AttemptState,
     BrokerResult,
+    EntryPauseAuthority,
+    EntryPauseState,
+    EmergencyScope,
+    ExecutionBlocked,
     ExecutionAuthority,
     ExecutionSnapshot,
     FencedLeaseLost,
     OutboxDelivery,
+    PauseCancellationWork,
     ReadinessAssessmentSnapshot,
+    ResumeAssessment,
+    ResumeAssessmentInputs,
+    ResumeGateSnapshot,
+    ResumeReadinessSnapshot,
+    ReconciliationStatus,
     SubmissionOutcome,
+    build_resume_assessment,
     build_paper_order_intent,
+    validate_execution_gate,
 )
 
 
@@ -114,13 +126,21 @@ def _snapshot(
     action = {
         "OPEN_LONG": "NEW_ENTRY",
         "CANCEL_PENDING_ENTRY": "CANCEL_ENTRY",
-        "REPLACE_ORDER": "NEW_ENTRY",
+        "REDUCE_LONG": "EXIT_POSITION",
+        "CLOSE_LONG": "EXIT_POSITION",
+        "REPLACE_ORDER": (
+            "NEW_ENTRY" if intent["side"] == "BUY" else "EXIT_POSITION"
+        ),
     }[intent["action_kind"]]
     return ExecutionSnapshot(
         paper_account_fingerprint=ACCOUNT,
         account_mode="PAPER",
         paper_endpoint_verified=True,
+        account_identity_status=AccountIdentityStatus.VERIFIED,
+        reconciliation_status=ReconciliationStatus.FRESH,
         entry_paused=paused,
+        entry_pause_generation=1,
+        input_generation=1,
         current_session=current_session
         if current_session is not None
         else intent["target_execution_session"],
@@ -169,6 +189,7 @@ class MemoryStore:
         self.deferred_reason: str | None = None
         self.prior_reservation_active = prior is not None
         self.stale_on_authorize = False
+        self.fail_authorize = False
 
     def claim_next(self, worker_id: str, lease_seconds: int):
         return replace(
@@ -218,6 +239,8 @@ class MemoryStore:
         return self.attempt
 
     def authorize_attempt(self, delivery, attempt_id, snapshot):
+        if self.fail_authorize:
+            raise RuntimeError("evidence append failed")
         if self.stale_on_authorize:
             self.current_generation += 1
             return False
@@ -520,3 +543,359 @@ def test_crash_after_attempt_start_recovers_as_unknown_without_retry(
     assert result.reason_code == "RECOVERED_STARTED_ATTEMPT_AS_UNKNOWN"
     assert broker.submit_calls == 0
     assert store.attempt.state == AttemptState.SUBMISSION_UNKNOWN
+
+
+@pytest.mark.parametrize(
+    ("identity_status", "reconciliation_status", "reason"),
+    [
+        (
+            AccountIdentityStatus.UNKNOWN,
+            ReconciliationStatus.FRESH,
+            "PAPER_ACCOUNT_IDENTITY_NOT_VERIFIED",
+        ),
+        (
+            AccountIdentityStatus.MISMATCH,
+            ReconciliationStatus.FRESH,
+            "PAPER_ACCOUNT_IDENTITY_NOT_VERIFIED",
+        ),
+        (
+            AccountIdentityStatus.VERIFIED,
+            ReconciliationStatus.STALE,
+            "BROKER_RECONCILIATION_NOT_FRESH",
+        ),
+        (
+            AccountIdentityStatus.VERIFIED,
+            ReconciliationStatus.DISCREPANCY,
+            "BROKER_RECONCILIATION_NOT_FRESH",
+        ),
+    ],
+)
+def test_unverified_identity_or_reconciliation_blocks_before_attempt(
+    valid_intent_fixture,
+    identity_status,
+    reconciliation_status,
+    reason,
+):
+    intent = _make_intent(
+        valid_intent_fixture,
+        key="identity-or-reconciliation-hold",
+        intent_id="018f0000-0000-7000-8000-000000000016",
+    )
+    store = MemoryStore(intent)
+    broker = FakeBroker()
+    snapshot = replace(
+        _snapshot(intent),
+        account_identity_status=identity_status,
+        reconciliation_status=reconciliation_status,
+    )
+
+    result = _authority(store, SequenceGate(snapshot), broker).process_one()
+
+    assert result is not None and result.state == AttemptState.BLOCKED.value
+    assert result.reason_code == reason
+    assert store.attempt is None
+    assert broker.submit_calls == 0
+
+
+def test_readiness_input_generation_mismatch_blocks_without_broker_mutation(
+    valid_intent_fixture,
+):
+    intent = _make_intent(
+        valid_intent_fixture,
+        key="stale-readiness-generation",
+        intent_id="018f0000-0000-7000-8000-000000000017",
+    )
+    store = MemoryStore(intent)
+    broker = FakeBroker()
+    snapshot = _snapshot(intent)
+    snapshot = replace(
+        snapshot,
+        input_generation=2,
+        readiness=(replace(snapshot.readiness[0], input_generation=1),),
+    )
+
+    result = _authority(store, SequenceGate(snapshot), broker).process_one()
+
+    assert result is not None and result.state == AttemptState.BLOCKED.value
+    assert result.reason_code == "ACTION_PERMISSION_GENERATION_MISMATCH"
+    assert store.attempt is None
+    assert broker.submit_calls == 0
+
+
+def test_emergency_scope_blocks_entries_but_preserves_valid_exit_and_cancel(
+    valid_intent_fixture,
+):
+    entry = _make_intent(
+        valid_intent_fixture,
+        key="emergency-entry",
+        intent_id="018f0000-0000-7000-8000-000000000018",
+    )
+    with pytest.raises(ExecutionBlocked, match="NEW_ENTRY_EMERGENCY_HOLD"):
+        validate_execution_gate(
+            entry,
+            replace(
+                _snapshot(entry),
+                emergency_scopes=(EmergencyScope.SCIENTIFIC_HOLD,),
+            ),
+            now=NOW,
+        )
+
+    exit_intent = _make_intent(
+        valid_intent_fixture,
+        key="emergency-exit",
+        intent_id="018f0000-0000-7000-8000-000000000019",
+        action="CLOSE_LONG",
+        side="SELL",
+        source_ref=_reference("qc2.execution.Position.v1", PRIOR_ID),
+    )
+    exit_readiness = validate_execution_gate(
+        exit_intent,
+        replace(
+            _snapshot(exit_intent),
+            emergency_scopes=(EmergencyScope.SCIENTIFIC_HOLD,),
+            readiness=(
+                ReadinessAssessmentSnapshot(
+                    assessment_id="018f0000-0000-7000-8000-000000000027",
+                    action="NEW_ENTRY",
+                    status="BLOCKED",
+                    input_generation=1,
+                    freshness_deadline=NOW + timedelta(minutes=5),
+                ),
+                _snapshot(exit_intent).readiness[0],
+            ),
+        ),
+        now=NOW,
+    )
+    assert exit_readiness.action == "EXIT_POSITION"
+
+    prior = _prior_intent(valid_intent_fixture)
+    cancel_intent = _make_intent(
+        valid_intent_fixture,
+        key="emergency-cancel",
+        intent_id="018f0000-0000-7000-8000-000000000020",
+        action="CANCEL_PENDING_ENTRY",
+        side="BUY",
+        source_ref=_reference(
+            "qc2.execution.PaperOrderIntent.v1",
+            prior["id"],
+            prior["content_hash"],
+        ),
+        reservation_id=None,
+    )
+    cancel_readiness = validate_execution_gate(
+        cancel_intent,
+        replace(
+            _snapshot(
+                cancel_intent,
+                prior_state="ACKNOWLEDGED",
+                prior_reservation_active=True,
+            ),
+            entry_paused=True,
+            emergency_scopes=(EmergencyScope.NEW_EXPOSURE_HALT,),
+        ),
+        now=NOW,
+    )
+    assert cancel_readiness.action == "CANCEL_ENTRY"
+
+
+def test_identity_halt_blocks_exits_and_evidence_failure_prevents_send(
+    valid_intent_fixture,
+):
+    exit_intent = _make_intent(
+        valid_intent_fixture,
+        key="identity-halt-exit",
+        intent_id="018f0000-0000-7000-8000-000000000021",
+        action="CLOSE_LONG",
+        side="SELL",
+        source_ref=_reference("qc2.execution.Position.v1", PRIOR_ID),
+    )
+    with pytest.raises(ExecutionBlocked, match="EMERGENCY_SCOPE_BLOCKED"):
+        validate_execution_gate(
+            exit_intent,
+            replace(
+                _snapshot(exit_intent),
+                emergency_scopes=(EmergencyScope.IDENTITY_HALT,),
+            ),
+            now=NOW,
+        )
+
+    entry = _make_intent(
+        valid_intent_fixture,
+        key="evidence-failure",
+        intent_id="018f0000-0000-7000-8000-000000000022",
+    )
+    store = MemoryStore(entry)
+    store.fail_authorize = True
+    broker = FakeBroker()
+    with pytest.raises(RuntimeError, match="evidence append failed"):
+        _authority(store, SequenceGate(_snapshot(entry)), broker).process_one()
+    assert store.attempt is not None
+    assert store.attempt.state == AttemptState.STARTED
+    assert broker.submit_calls == 0
+    assert not store.completed
+
+
+class _PauseMemoryStore:
+    def __init__(self, *, state: EntryPauseState, work=()):
+        self.state = state
+        self.work = list(work)
+        self.intents: dict[str, dict[str, Any]] = {}
+        self.assessment: ResumeAssessment | None = None
+
+    def get_entry_pause_state(self):
+        return self.state
+
+    def pause_new_entries(self, request_id, reason_code):
+        assert request_id
+        assert reason_code
+        return self.state
+
+    def pending_entry_pause_cancellations(self):
+        return tuple(self.work)
+
+    def reserve_pause_cancel_intent_id(self, pause_generation, target_intent_id, proposed_id):
+        for index, work in enumerate(self.work):
+            if work.target_intent_id == target_intent_id:
+                stable_id = work.cancel_intent_id or proposed_id
+                self.work[index] = replace(work, cancel_intent_id=stable_id)
+                return stable_id
+        raise AssertionError("cancellation work was not found")
+
+    def mark_pause_cancel_enqueued(self, pause_generation, target_intent_id, cancel_intent_id):
+        for index, work in enumerate(self.work):
+            if work.target_intent_id == target_intent_id:
+                self.work.pop(index)
+                return True
+        return False
+
+    def resume_new_entries(self, expected_pause_generation, assessment):
+        if not self.state.paused or self.state.generation != expected_pause_generation:
+            return None
+        self.assessment = assessment
+        self.state = EntryPauseState(False, self.state.generation + 1)
+        return self.state
+
+    def load_intent(self, intent_id):
+        intent = self.intents.get(intent_id)
+        return deepcopy(intent) if intent is not None else None
+
+    def persist_intent(self, intent, expected_account_fingerprint):
+        assert intent["paper_account_fingerprint"] == expected_account_fingerprint
+        self.intents.setdefault(intent["id"], deepcopy(dict(intent)))
+        return intent["id"]
+
+    def transition_intent(self, intent_id, next_state):
+        self.intents[intent_id]["intent_state"] = next_state
+        return True
+
+    def reserve_intent(self, intent_id):
+        self.intents[intent_id]["intent_state"] = "RESERVED"
+
+    def enqueue(self, intent_id):
+        self.intents[intent_id]["intent_state"] = "QUEUED_FOR_SUBMISSION"
+        return MESSAGE_ID
+
+
+def _resume_inputs(
+    *, pending_clear=True, extra_gate_status="PASS", allow_extra_warning=False
+):
+    deadline = NOW + timedelta(minutes=2)
+    readiness = ResumeReadinessSnapshot(
+        action="NEW_ENTRY",
+        status="BLOCKED",
+        input_generation=9,
+        evaluated_at=NOW,
+        freshness_deadline=deadline,
+        gate_results=(
+            ResumeGateSnapshot(
+                "entry_pause_authority", "BLOCK", ("ENTRY_PAUSED",), deadline
+            ),
+            ResumeGateSnapshot(
+                "account_identity", extra_gate_status, (), deadline
+            ),
+        ),
+        allowed_warning_gate_ids=(
+            ("account_identity",) if allow_extra_warning else ()
+        ),
+    )
+    return ResumeAssessmentInputs(readiness, 9, pending_clear)
+
+
+def test_resume_requires_fresh_server_assessment_and_cleared_entry_orders():
+    assessment = build_resume_assessment(
+        _resume_inputs(),
+        pause_generation=4,
+        assessment_id="018f0000-0000-7000-8000-000000000023",
+        now=NOW,
+    )
+    assert assessment.as_json()["status"] == "READY_TO_RESUME"
+    assert assessment.as_json()["pause_generation"] == 4
+
+    with pytest.raises(ExecutionBlocked, match="PENDING_ENTRY_ORDERS_NOT_CLEAR"):
+        build_resume_assessment(
+            _resume_inputs(pending_clear=False),
+            pause_generation=4,
+            assessment_id="018f0000-0000-7000-8000-000000000024",
+            now=NOW,
+        )
+    with pytest.raises(ExecutionBlocked, match="RESUME_PREREQUISITE_NOT_READY"):
+        build_resume_assessment(
+            _resume_inputs(extra_gate_status="BLOCK"),
+            pause_generation=4,
+            assessment_id="018f0000-0000-7000-8000-000000000025",
+            now=NOW,
+        )
+    warning = build_resume_assessment(
+        _resume_inputs(extra_gate_status="WARN", allow_extra_warning=True),
+        pause_generation=4,
+        assessment_id="018f0000-0000-7000-8000-000000000028",
+        now=NOW,
+    )
+    assert warning.allowed_warning_gate_ids == ("account_identity",)
+
+
+def test_pause_persists_and_queues_idempotent_entry_cancellation_work(
+    valid_intent_fixture,
+):
+    target = _prior_intent(valid_intent_fixture)
+    work = PauseCancellationWork(
+        pause_generation=4,
+        target_intent_id=target["id"],
+        target_state=target["intent_state"],
+        target_intent=target,
+    )
+    store = _PauseMemoryStore(state=EntryPauseState(True, 4), work=(work,))
+    authority = EntryPauseAuthority(
+        store=store,
+        resume_assessor=lambda: _resume_inputs(),
+        clock=lambda: NOW,
+    )
+
+    result = authority.pause_new_entries(
+        request_id="018f0000-0000-7000-8000-000000000026",
+        reason_code="operator_pause",
+    )
+
+    assert result.state == EntryPauseState(True, 4)
+    assert result.dispatch.enqueued_target_ids == (target["id"],)
+    cancel = next(iter(store.intents.values()))
+    assert cancel["action_kind"] == "CANCEL_PENDING_ENTRY"
+    assert cancel["source_ref"]["target_id"] == target["id"]
+    assert cancel["intent_state"] == "QUEUED_FOR_SUBMISSION"
+    assert store.work == []
+
+
+def test_resume_transition_uses_assessor_result_and_increments_generation():
+    store = _PauseMemoryStore(state=EntryPauseState(True, 4))
+    authority = EntryPauseAuthority(
+        store=store,
+        resume_assessor=lambda: _resume_inputs(),
+        clock=lambda: NOW,
+    )
+
+    state = authority.request_resume()
+
+    assert state == EntryPauseState(False, 5)
+    assert store.assessment is not None
+    assert store.assessment.pause_generation == 4
+    assert store.assessment.input_generation == 9

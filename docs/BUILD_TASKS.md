@@ -1758,6 +1758,8 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Objective:** Separate entry, cancellation and exit trust requirements.
 **Dependencies:** QC2-021, QC2-044, QC2-045, QC2-046, QC2-047, QC2-048, QC2-049, QC2-050
 **Authorized legacy references:** None.
+**Authorized artifact drift:** QC2-045 — QC2-051 adds action-specific generation and emergency/pause checks in the execution authority with regression tests. The complete QC2-046 execution suite will be rerun and its source/test tree hashes revalidated. Paths: `packages/execution/src/qc2_execution`, `tests/execution`
+**Authorized artifact drift:** QC2-046 — QC2-051 adds action-specific generation and emergency/pause checks in the execution authority with regression tests. The complete QC2-046 execution suite will be rerun and its source/test tree hashes revalidated. Paths: `packages/execution/src/qc2_execution`, `tests/execution`
 **Required reference intake:** None. Do not inspect or copy legacy code for this task without a scoped amendment.
 
 **Required deliverables:**

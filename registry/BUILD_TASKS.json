@@ -5455,6 +5455,24 @@
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
       "status": "IN_PROGRESS",
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-045",
+          "artifact_paths": [
+            "packages/execution/src/qc2_execution",
+            "tests/execution"
+          ],
+          "reason": "QC2-051 adds action-specific generation and emergency/pause checks in the execution authority with regression tests. The complete QC2-046 execution suite will be rerun and its source/test tree hashes revalidated."
+        },
+        {
+          "prior_task_id": "QC2-046",
+          "artifact_paths": [
+            "packages/execution/src/qc2_execution",
+            "tests/execution"
+          ],
+          "reason": "QC2-051 adds action-specific generation and emergency/pause checks in the execution authority with regression tests. The complete QC2-046 execution suite will be rerun and its source/test tree hashes revalidated."
+        }
+      ],
       "blockers": [],
       "acceptance_receipt": null
     },

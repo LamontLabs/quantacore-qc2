@@ -58,6 +58,33 @@ class ReadinessAction(StrEnum):
     EXIT_POSITION = "EXIT_POSITION"
 
 
+class ReadinessPermission(StrEnum):
+    NEW_ENTRY_READY = "NEW_ENTRY_READY"
+    CANCEL_ENTRY_READY = "CANCEL_ENTRY_READY"
+    EXIT_READY = "EXIT_READY"
+
+
+class AccountIdentityStatus(StrEnum):
+    VERIFIED = "VERIFIED"
+    UNKNOWN = "UNKNOWN"
+    MISMATCH = "MISMATCH"
+
+
+class ReconciliationStatus(StrEnum):
+    FRESH = "FRESH"
+    UNKNOWN = "UNKNOWN"
+    STALE = "STALE"
+    DISCREPANCY = "DISCREPANCY"
+
+
+class EmergencyScope(StrEnum):
+    NEW_EXPOSURE_HALT = "NEW_EXPOSURE_HALT"
+    SCIENTIFIC_HOLD = "SCIENTIFIC_HOLD"
+    EXECUTION_UNCERTAIN = "EXECUTION_UNCERTAIN"
+    IDENTITY_HALT = "IDENTITY_HALT"
+    INTEGRITY_HALT = "INTEGRITY_HALT"
+
+
 class SubmissionOutcome(StrEnum):
     ACKNOWLEDGED = "ACKNOWLEDGED"
     SUBMISSION_UNKNOWN = "SUBMISSION_UNKNOWN"
@@ -113,6 +140,9 @@ class ReadinessAssessmentSnapshot:
     def __post_init__(self) -> None:
         if not _UUID7_PATTERN.fullmatch(self.assessment_id):
             raise ValueError("readiness assessment ID must be UUIDv7")
+        object.__setattr__(self, "action", ReadinessAction(self.action).value)
+        if self.status not in {"READY", "BLOCKED", "UNKNOWN"}:
+            raise ValueError("readiness status must be READY, BLOCKED, or UNKNOWN")
         if isinstance(self.input_generation, bool) or self.input_generation < 1:
             raise ValueError("readiness input generation must be positive")
         _aware_datetime(self.freshness_deadline, "freshness_deadline")
@@ -134,13 +164,18 @@ class ExecutionSnapshot:
     paper_account_fingerprint: str
     account_mode: str
     paper_endpoint_verified: bool
+    account_identity_status: AccountIdentityStatus
+    reconciliation_status: ReconciliationStatus
     entry_paused: bool
+    entry_pause_generation: int
+    input_generation: int
     current_session: str | None
     session_open: bool
     reservation_active: bool
     symbol_assignment_id: str | None
     broker_symbol: str | None
     readiness: tuple[ReadinessAssessmentSnapshot, ...]
+    emergency_scopes: tuple[EmergencyScope, ...] = ()
     prior_intent_state: str | None = None
     prior_reservation_active: bool | None = None
     prior_broker_order_id: str | None = None
@@ -148,23 +183,49 @@ class ExecutionSnapshot:
     def __post_init__(self) -> None:
         if not _SHA256_PATTERN.fullmatch(self.paper_account_fingerprint):
             raise ValueError("paper account fingerprint must be lowercase SHA-256")
+        object.__setattr__(
+            self,
+            "account_identity_status",
+            AccountIdentityStatus(self.account_identity_status),
+        )
+        object.__setattr__(
+            self, "reconciliation_status", ReconciliationStatus(self.reconciliation_status)
+        )
+        if isinstance(self.input_generation, bool) or self.input_generation < 1:
+            raise ValueError("execution input generation must be positive")
+        if (
+            isinstance(self.entry_pause_generation, bool)
+            or self.entry_pause_generation < 1
+        ):
+            raise ValueError("entry-pause generation must be positive")
         if not isinstance(self.readiness, tuple):
             raise ValueError("readiness assessments must be an immutable tuple")
         if len({row.action for row in self.readiness}) != len(self.readiness):
             raise ValueError("readiness assessments must have unique action scopes")
+        if not isinstance(self.emergency_scopes, tuple):
+            raise ValueError("emergency scopes must be an immutable tuple")
+        normalized_scopes = tuple(EmergencyScope(scope) for scope in self.emergency_scopes)
+        if len(set(normalized_scopes)) != len(normalized_scopes):
+            raise ValueError("emergency scopes must be unique")
+        object.__setattr__(self, "emergency_scopes", normalized_scopes)
 
     def as_json(self) -> dict[str, Any]:
         return {
             "paper_account_fingerprint": self.paper_account_fingerprint,
             "account_mode": self.account_mode,
             "paper_endpoint_verified": self.paper_endpoint_verified,
+            "account_identity_status": self.account_identity_status.value,
+            "reconciliation_status": self.reconciliation_status.value,
             "entry_paused": self.entry_paused,
+            "entry_pause_generation": self.entry_pause_generation,
+            "input_generation": self.input_generation,
             "current_session": self.current_session,
             "session_open": self.session_open,
             "reservation_active": self.reservation_active,
             "symbol_assignment_id": self.symbol_assignment_id,
             "broker_symbol": self.broker_symbol,
             "readiness": [row.as_json() for row in self.readiness],
+            "emergency_scopes": [scope.value for scope in self.emergency_scopes],
             "prior_intent_state": self.prior_intent_state,
             "prior_reservation_active": self.prior_reservation_active,
             "prior_broker_order_id": self.prior_broker_order_id,
@@ -317,6 +378,18 @@ def required_readiness_action(intent: Mapping[str, Any]) -> ReadinessAction:
     raise ExecutionBlocked("UNSUPPORTED_PAPER_ACTION")
 
 
+def readiness_permission_for_action(action: ReadinessAction | str) -> ReadinessPermission:
+    """Project an internal action scope to its stable public readiness label."""
+    normalized = ReadinessAction(action)
+    return ReadinessPermission(
+        {
+            ReadinessAction.NEW_ENTRY: ReadinessPermission.NEW_ENTRY_READY,
+            ReadinessAction.CANCEL_ENTRY: ReadinessPermission.CANCEL_ENTRY_READY,
+            ReadinessAction.EXIT_POSITION: ReadinessPermission.EXIT_READY,
+        }[normalized]
+    )
+
+
 def normalized_request_hash(request: Mapping[str, Any]) -> str:
     """Match qc2_integrity_build.hash_json's QC2-HASH-V1 domain separation."""
     payload = _REQUEST_HASH_DOMAIN + canonical_json_bytes(dict(request))
@@ -348,8 +421,13 @@ def validate_execution_gate(
         raise ExecutionBlocked("PAPER_ACCOUNT_CHANGED")
     if snapshot.account_mode != "PAPER":
         raise ExecutionBlocked("ACCOUNT_MODE_NOT_PAPER")
+    if snapshot.account_identity_status is not AccountIdentityStatus.VERIFIED:
+        raise ExecutionBlocked("PAPER_ACCOUNT_IDENTITY_NOT_VERIFIED")
+    if snapshot.reconciliation_status is not ReconciliationStatus.FRESH:
+        raise ExecutionBlocked("BROKER_RECONCILIATION_NOT_FRESH")
 
     action = required_readiness_action(intent)
+    _assert_emergency_scope_allows(action, snapshot.emergency_scopes)
     if action == ReadinessAction.NEW_ENTRY and snapshot.entry_paused:
         raise ExecutionBlocked("NEW_ENTRY_PAUSED")
 
@@ -359,6 +437,8 @@ def validate_execution_gate(
     )
     if assessment is None:
         raise ExecutionBlocked("ACTION_PERMISSION_MISSING")
+    if assessment.input_generation != snapshot.input_generation:
+        raise ExecutionBlocked("ACTION_PERMISSION_GENERATION_MISMATCH")
     if assessment.status != "READY":
         raise ExecutionBlocked("ACTION_PERMISSION_NOT_READY")
     if assessment.freshness_deadline <= current:
@@ -402,6 +482,28 @@ def validate_execution_gate(
             raise ExecutionDeferred("PRIOR_ORDER_RESERVATION_STILL_ACTIVE")
 
     return assessment
+
+
+def _assert_emergency_scope_allows(
+    action: ReadinessAction,
+    scopes: tuple[EmergencyScope, ...],
+) -> None:
+    """Emergency holds stay scoped; scientific and exposure holds preserve exits."""
+    if any(
+        scope in {EmergencyScope.IDENTITY_HALT, EmergencyScope.INTEGRITY_HALT}
+        for scope in scopes
+    ):
+        raise ExecutionBlocked("EMERGENCY_SCOPE_BLOCKED")
+    if action is ReadinessAction.NEW_ENTRY and any(
+        scope
+        in {
+            EmergencyScope.NEW_EXPOSURE_HALT,
+            EmergencyScope.SCIENTIFIC_HOLD,
+            EmergencyScope.EXECUTION_UNCERTAIN,
+        }
+        for scope in scopes
+    ):
+        raise ExecutionBlocked("NEW_ENTRY_EMERGENCY_HOLD")
 
 
 def build_normalized_request(

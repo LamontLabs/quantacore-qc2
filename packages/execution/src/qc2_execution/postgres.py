@@ -20,6 +20,7 @@ from .authority import (
     ReconciliationEvidence,
     SubmissionOutcome,
 )
+from .pause import EntryPauseState, PauseCancellationWork, ResumeAssessment
 
 
 class PostgresExecutionStore:
@@ -29,6 +30,144 @@ class PostgresExecutionStore:
         if not callable(connection_factory):
             raise TypeError("connection_factory must be callable")
         self._connection_factory = connection_factory
+
+    def get_entry_pause_state(self) -> EntryPauseState:
+        row = self._query_one("SELECT * FROM qc2_control.get_entry_pause_state()", ())
+        if row is None:
+            raise RuntimeError("entry-pause state is missing")
+        return EntryPauseState(bool(row["entry_paused"]), int(row["generation"]))
+
+    def pause_new_entries(
+        self, request_id: str, reason_code: str
+    ) -> EntryPauseState:
+        row = self._query_one(
+            """
+            SELECT * FROM qc2_control.pause_new_entries(
+              %s::uuid, %s::text
+            )
+            """,
+            (request_id, reason_code),
+        )
+        if row is None:
+            raise RuntimeError("entry-pause transition returned no state")
+        return EntryPauseState(bool(row["entry_paused"]), int(row["generation"]))
+
+    def resume_new_entries(
+        self, expected_pause_generation: int, assessment: ResumeAssessment
+    ) -> EntryPauseState | None:
+        row = self._query_one(
+            """
+            SELECT * FROM qc2_control.resume_new_entries(
+              %s::bigint, %s::jsonb
+            )
+            """,
+            (
+                expected_pause_generation,
+                _json_text(assessment.as_json()),
+            ),
+        )
+        if row is None:
+            return None
+        return EntryPauseState(bool(row["entry_paused"]), int(row["generation"]))
+
+    def pending_entry_pause_cancellations(
+        self,
+    ) -> tuple[PauseCancellationWork, ...]:
+        row = self._query_one(
+            "SELECT qc2_control.pending_entry_pause_cancellations() AS items",
+            (),
+        )
+        if row is None:
+            raise RuntimeError("pause cancellation queue query returned no result")
+        items = row["items"]
+        if isinstance(items, str):
+            items = json.loads(items)
+        if not isinstance(items, list):
+            raise TypeError("pause cancellation queue must be a JSON array")
+        result: list[PauseCancellationWork] = []
+        for item in items:
+            value = _as_mapping(item)
+            target = _as_mapping(value["target_intent"])
+            result.append(
+                PauseCancellationWork(
+                    pause_generation=int(value["pause_generation"]),
+                    target_intent_id=str(value["target_intent_id"]),
+                    target_state=str(target["intent_state"]),
+                    target_intent=target,
+                    cancel_intent_id=(
+                        None
+                        if value.get("cancel_intent_id") is None
+                        else str(value["cancel_intent_id"])
+                    ),
+                )
+            )
+        return tuple(result)
+
+    def reserve_pause_cancel_intent_id(
+        self, pause_generation: int, target_intent_id: str, proposed_id: str
+    ) -> str:
+        row = self._query_one(
+            """
+            SELECT qc2_control.reserve_pause_cancel_intent_id(
+              %s::bigint, %s::uuid, %s::uuid
+            ) AS cancel_intent_id
+            """,
+            (pause_generation, target_intent_id, proposed_id),
+        )
+        if row is None or row["cancel_intent_id"] is None:
+            raise RuntimeError("pause cancellation intent ID could not be reserved")
+        return str(row["cancel_intent_id"])
+
+    def mark_pause_cancel_enqueued(
+        self, pause_generation: int, target_intent_id: str, cancel_intent_id: str
+    ) -> bool:
+        row = self._query_one(
+            """
+            SELECT qc2_control.mark_pause_cancel_enqueued(
+              %s::bigint, %s::uuid, %s::uuid
+            ) AS marked
+            """,
+            (pause_generation, target_intent_id, cancel_intent_id),
+        )
+        return row is not None and bool(row["marked"])
+
+    def persist_intent(
+        self, intent: Mapping[str, Any], expected_account_fingerprint: str
+    ) -> str:
+        row = self._query_one(
+            """
+            SELECT qc2_control.persist_paper_order_intent(
+              %s::jsonb, %s::text
+            ) AS intent_id
+            """,
+            (_json_text(intent), expected_account_fingerprint),
+        )
+        if row is None or row["intent_id"] is None:
+            raise RuntimeError("paper-order intent persistence returned no ID")
+        return str(row["intent_id"])
+
+    def transition_intent(self, intent_id: str, next_state: str) -> bool:
+        row = self._query_one(
+            """
+            SELECT qc2_control.transition_paper_order_intent(
+              %s::uuid, %s::text
+            ) AS transitioned
+            """,
+            (intent_id, next_state),
+        )
+        return row is not None and bool(row["transitioned"])
+
+    def reserve_intent(self, intent_id: str) -> None:
+        row = self._query_one(
+            """
+            SELECT qc2_control.reserve_paper_order_intent(
+              %s::uuid, NULL::jsonb
+            ) AS reservation_id
+            """,
+            (intent_id,),
+        )
+        if row is None or row["reservation_id"] is not None:
+            raise RuntimeError("cancellation intent reservation result is invalid")
 
     def enqueue(self, intent_id: str) -> str:
         row = self._query_one(

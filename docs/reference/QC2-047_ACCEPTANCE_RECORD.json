@@ -1,0 +1,66 @@
+{
+  "schema_name": "qc2.integrity_build.TaskAcceptanceReceipt.v1",
+  "schema_version": "1.0",
+  "id": "01a1211c-b363-7f27-b924-18b858a6a070",
+  "created_at": "2026-10-09T14:41:31Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "FORWARD_OPERATIONAL",
+  "environment_namespace": "production",
+  "source_refs": [],
+  "content_hash": "40bc677a09c968747a0e99fc4397b941b31a8ebee19ea18fed283d2ae1a706a0",
+  "task_ref": {
+    "target_schema_name": "qc2.integrity_build.BuildTask.v1",
+    "target_id": "01a1211c-b35f-7703-833a-cb516464082b",
+    "content_hash": "1064a73ebb6da5671d3225fd37e68bbb13c3e0f5768da8480eb4bc00f75ec17a"
+  },
+  "task_spec_version": "QC2-047 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+  "source_commit": "44cf6bab29819369e7188019561668f5b877d795",
+  "changed_paths": [
+    "docs/reference/QC2-047_ACCOUNT_FINGERPRINT_V1.md",
+    "docs/reference/QC2-047_PAPER_ACCOUNT_IDENTITY_OBSERVATION.schema.json",
+    "packages/execution/src/qc2_alpaca_paper/__init__.py",
+    "packages/execution/src/qc2_alpaca_paper/adapter.py",
+    "packages/execution/src/qc2_alpaca_paper/fingerprint.py",
+    "packages/execution/src/qc2_alpaca_paper/identity.py",
+    "packages/execution/src/qc2_alpaca_paper/models.py",
+    "packages/execution/src/qc2_alpaca_paper/transport.py",
+    "tests/alpaca_paper_adapter/test_adapter.py",
+    "tools/qc2_047_readonly_probe.py"
+  ],
+  "executed_commands": [
+    "uv run python tools/generate_contract_package.py --check",
+    "uv run pytest -q tests/contracts tests/alpaca_paper_adapter tests/execution",
+    "uv run ruff check packages/execution/src/qc2_alpaca_paper tools/qc2_047_readonly_probe.py tests/alpaca_paper_adapter",
+    "Authenticated GET /v2/account and GET /v2/orders?status=all&limit=1; both HTTP 200; no mutations",
+    "Observation JSON Schema, record hash, file hash, and authorization boundaries validated",
+    "uv run python tools/task_workflow.py preflight QC2-047",
+    "uv run python tools/task_workflow.py validate",
+    "DANGEROUSLY_ALLOW_GIT=1 git diff --check"
+  ],
+  "test_counts": [
+    {
+      "test_id": "qc2_047_contract_execution_adapter",
+      "passed": 85,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "artifact_hashes": [
+    "37c5594f61608385ab48ba4b1813f5a1faf6566561b44e43e1d90fddf5f25805",
+    "c1ccace50acf7ec75edde51cd324528e7f5b08b3ee7aca61c161ada8d60c727e",
+    "0d97a75f302cd9cfd48ac2a7d2b20ca5757b4df0e875a5eabad496f0f86fbc72",
+    "1837717374b74516a29c9c91a04964be59b91ed958b412ff07e0ddac383f7003",
+    "7611659b95acc2c9ebc157dbdcdb503e4d577767d46b413d407614427e3cd598",
+    "de8cbf69f936439042575dcc82f5dbad7f10a97031cbeb407176abde43b78c5a",
+    "82226cf6d5c0d81e9ad19d6d1d41d627945b4e80873c220879be709602185d11",
+    "fcb1bccb2c168482c3cfb9c6dedaae2ef9d4a00e6d29f74c9b87d11184ce065f",
+    "1f3650b8e75179a880ad2c19681461bcf7d3b181b005d2894fe323697ee44e1d",
+    "87f4ff6b5e500ac33823a39351288faae6f9bc6c9a52b1e665c1bcbcc0507056"
+  ],
+  "legacy_intake_refs": [],
+  "unresolved_decisions": [],
+  "gate_verdict": "PASS",
+  "agent_identity": "Replit Agent",
+  "reviewer_identity": null,
+  "checked_at": "2026-10-09T14:41:31Z"
+}

@@ -46,9 +46,12 @@ The local `qc2_execution.authority` builds `qc2.execution.normalized_mutation_re
 
 QC2-047 uses the separately authorized, versioned scheme in
 `QC2-047_ACCOUNT_FINGERPRINT_V1.md`; it is not presented as a recovery of the
-QC2-010 formula. The fresh observation will record current identity and
-read-only account/order-list results under that scheme, with continuity to the
-historical QC2-010 fingerprint explicitly `UNVERIFIED`. The original QC2-010
+QC2-010 formula. The fresh observation at
+`2026-10-09T14:36:46.444364Z` returned HTTP 200 for both authenticated paper
+account and order-list GETs. The account was `ACTIVE`, with account/trading
+blocks false. Its v1 fingerprint and source identity are recorded in
+`QC2-047_PAPER_ACCOUNT_IDENTITY_OBSERVATION_2026-10-09.json`; continuity to the
+historical QC2-010 fingerprint is explicitly `UNVERIFIED`. The original QC2-010
 manifest, acceptance receipt, and hashes remain unchanged. See the separate
 `QC2-010_ACCOUNT_IDENTITY_REVALIDATION_2026-10-09.md` addendum and
-`QC2-047_READ_ONLY_PROBE_REPORT.md` for the fresh evidence.
+`QC2-047_READ_ONLY_PROBE_REPORT.md` for the fresh evidence and limitations.

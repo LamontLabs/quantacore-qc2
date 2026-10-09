@@ -1626,7 +1626,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-047 — Alpaca Paper Adapter
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Implement only the pinned paper broker API surface and response normalization.
 **Dependencies:** QC2-009, QC2-010, QC2-045, QC2-046
 **Authorized legacy references:** Gen 1 Alpaca adapter and tests
@@ -1651,8 +1651,8 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Acceptance gate:** Only paper endpoints are reachable through the adapter; actual write behavior remains a QC2-086 gate.
 **Required evidence/environment:** ALPACA_CREDENTIALS, PAPER_READ_ONLY_INTEGRATION
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
-**Blockers:** QC2-010 account fingerprint derivation is not recorded; current read-only probe cannot match the pinned fingerprint
-**Acceptance receipt:** Not recorded.
+**Blockers:** None recorded.
+**Acceptance receipt:** PASS; checked 2026-10-09T14:41:31Z: `docs/reference/QC2-047_READ_ONLY_PROBE_REPORT.md`, `docs/reference/QC2-047_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-047_TASK_RECORD.json`
 
 ---
 

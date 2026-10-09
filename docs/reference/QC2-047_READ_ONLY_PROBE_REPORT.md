@@ -1,0 +1,102 @@
+# QC2-047 Read-Only Probe and Acceptance Report
+
+## Acceptance assessment
+
+- **Result:** PASS for QC2-047's paper-only adapter and read-only identity scope.
+- **Capability observation:** `PARTIAL`; it establishes only authenticated account and order-list read access.
+- **Execution authorization:** `false`. This report does not authorize broker writes or replace owner approval. Actual broker writes remain gated by QC2-086.
+
+## Fresh paper identity observation
+
+- **Observed at (UTC):** `2026-10-09T14:36:46.444364Z`
+- **Replit environment namespace:** `production`; Alpaca environment: `paper`
+- **Broker and origin:** Alpaca, `https://paper-api.alpaca.markets`
+- **Authenticated GET `/v2/account`:** HTTP 200
+- **Authenticated GET `/v2/orders?status=all&limit=1`:** HTTP 200
+- **Account status:** `ACTIVE`
+- **Trading blocked / account blocked:** `false` / `false`
+- **Fingerprint scheme:** `qc2.alpaca-paper-account-fingerprint.v1`
+- **Current account fingerprint:** `5ad45910697fc1333985dc584b571d82bea0623abc2242874c3cbdd32d1575f6`
+- **Observation ID:** `01a12118-59ec-72cc-b36f-7d17fe6e0a2e`
+- **Observation record hash:** `84c3ee6145ae7d88d269ac3d58cdcee40a297dfd84f8003b777e8d7d64b5960d`
+- **Observation file SHA-256:** `3b6a83209a9b3d7b300183e7e33f8828e257f2b048aa3c8775c262636f61eb75`
+- **Tested source identity:** `44cf6bab29819369e7188019561668f5b877d795`
+- **Historical QC2-010 account continuity:** `UNVERIFIED`
+
+The sanitized observation is stored at
+`QC2-047_PAPER_ACCOUNT_IDENTITY_OBSERVATION_2026-10-09.json`. It contains no
+raw account ID, credential, balance, position, or order data. The order response
+body was discarded after its HTTP status was checked. No other endpoint was
+contacted, no retry was issued, and no POST, PATCH, DELETE, or other broker
+mutation was sent.
+
+## QC2-010 account-related evidence
+
+The current credential pair again returned a readable paper account and order
+list, with an active, unblocked account. This revalidates current read-only
+account/access status only. QC2-010's older paper-account fingerprint was
+computed under an undocumented formula; the new versioned fingerprint cannot
+be compared to it. This report does not assert that the current credentials
+identify the same account as the 2026-10-07 observation.
+
+The original QC2-010 manifests, acceptance record, task record, and report were
+not edited. Their verified SHA-256 values remain:
+
+| Original QC2-010 artifact | SHA-256 |
+|---|---|
+| `QC2-010_CAPABILITY_MANIFESTS/calendar.json` | `c706fbbdb9ce543dd7e6f4b367dfb5597b92b4076bc7c1b67c5a7b8e27c14faa` |
+| `QC2-010_CAPABILITY_MANIFESTS/classification.json` | `5b814fb8cedbc0eb42afd1119b409a2010d14602887225ba74b96030b821c9da` |
+| `QC2-010_CAPABILITY_MANIFESTS/corporate_actions.json` | `22cea41caf054be44e0130906ea2df5ddedaa73aa783e659c7e793667055e422` |
+| `QC2-010_CAPABILITY_MANIFESTS/market_data_iex.json` | `264da50d7c794bdb871b5eabfa6251b5c1526faaeb311d86a288ce6df7fd8d0b` |
+| `QC2-010_CAPABILITY_MANIFESTS/market_data_sip.json` | `0d87f352fff65c4a8156b53f8d95761c999fa27d103db64ffc5c54867dc654b5` |
+| `QC2-010_CAPABILITY_MANIFESTS/paper_trading.json` | `48a7a6cc24e900eeabbe5811222b97769475e115d8978e49bdb4816840ff8811` |
+| `QC2-010_ACCEPTANCE_RECORD.json` | `7ce27833d6b3bcee3088b11e20d542116d4a0881f614be2cb6a882d556bdfd46` |
+| `QC2-010_TASK_RECORD.json` | `fbbdec230a4316157797977f2db0d9c934c65e4d02041e8a6e244ba2651ec7f9` |
+
+The 2026-10-07 market-data, calendar, classification, and corporate-action
+measurements remain historical evidence; they were not reprobed or refreshed
+by this account-identity check. The original report's 24-hour manifest expiry
+was 2026-10-08, and this observation does not extend it.
+
+## Acceptance checklist
+
+- [x] DELIVERABLE: Allowlisted paper host/account checks; submit/query/cancel/replace/read-activity interfaces. | evidence: `packages/execution/src/qc2_alpaca_paper/`, paper-host safety tests, and the current paper-account observation
+- [x] DELIVERABLE: Client-order lookup, order-state mapping, bounded rate/retry and redaction. | evidence: adapter implementation and synthetic duplicate, partial-fill, delayed-visibility, retry, and redaction tests
+- [x] DELIVERABLE: Contract fixtures derived from current official API semantics. | evidence: current official Alpaca references in `QC2-047_REFERENCE_INTAKE.md` and their derived adapter fixtures
+- [x] TEST: Reject live host, redirects to unapproved hosts, wrong account, unsupported TIF/type and malformed events. | evidence: hostile-host, redirect, identity, order-term, and malformed-response tests
+- [x] TEST: Duplicate key, partial fill, delayed visibility and nonterminal cancel fixtures. | evidence: synthetic adapter fixtures and corresponding regression tests
+- [x] TEST: Read-only actual account identity/connectivity check where credentials exist. | evidence: two authenticated GETs returned HTTP 200; sanitized observation record above
+
+## Acceptance record (generated by task_workflow.py)
+
+- **Result:** PASS
+- **Checked at (UTC):** 2026-10-09T14:41:31Z
+- **Acceptance workflow version:** 2.0
+- **Task/specification version:** QC2-047 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0
+- **Tested source commit:** `44cf6bab29819369e7188019561668f5b877d795`
+- **Verification reason:** The current authenticated paper account and order-list GETs returned HTTP 200, and the account was ACTIVE with both block flags false. The new v1 identity scheme is separate from QC2-010; the historical formula and account continuity remain UNVERIFIED. Mutation methods remain gated by QC2-086.
+- **Evidence:** `docs/reference/QC2-047_READ_ONLY_PROBE_REPORT.md`; `docs/reference/QC2-047_ACCEPTANCE_RECORD.json`; `docs/reference/QC2-047_TASK_RECORD.json`
+- **Evidence class/environment:** `FORWARD_OPERATIONAL` / `production`
+- **Commands executed:**
+  - `uv run python tools/generate_contract_package.py --check`
+  - `uv run pytest -q tests/contracts tests/alpaca_paper_adapter tests/execution`
+  - `uv run ruff check packages/execution/src/qc2_alpaca_paper tools/qc2_047_readonly_probe.py tests/alpaca_paper_adapter`
+  - `Authenticated GET /v2/account and GET /v2/orders?status=all&limit=1; both HTTP 200; no mutations`
+  - `Observation JSON Schema, record hash, file hash, and authorization boundaries validated`
+  - `uv run python tools/task_workflow.py preflight QC2-047`
+  - `uv run python tools/task_workflow.py validate`
+  - `DANGEROUSLY_ALLOW_GIT=1 git diff --check`
+- **Test counts:**
+  - `qc2_047_contract_execution_adapter`: 85 passed, 0 failed, 0 skipped
+- **Artifact hashes:**
+  - `docs/reference/QC2-047_ACCOUNT_FINGERPRINT_V1.md` — `37c5594f61608385ab48ba4b1813f5a1faf6566561b44e43e1d90fddf5f25805`
+  - `docs/reference/QC2-047_PAPER_ACCOUNT_IDENTITY_OBSERVATION.schema.json` — `c1ccace50acf7ec75edde51cd324528e7f5b08b3ee7aca61c161ada8d60c727e`
+  - `packages/execution/src/qc2_alpaca_paper/__init__.py` — `0d97a75f302cd9cfd48ac2a7d2b20ca5757b4df0e875a5eabad496f0f86fbc72`
+  - `packages/execution/src/qc2_alpaca_paper/adapter.py` — `1837717374b74516a29c9c91a04964be59b91ed958b412ff07e0ddac383f7003`
+  - `packages/execution/src/qc2_alpaca_paper/fingerprint.py` — `7611659b95acc2c9ebc157dbdcdb503e4d577767d46b413d407614427e3cd598`
+  - `packages/execution/src/qc2_alpaca_paper/identity.py` — `de8cbf69f936439042575dcc82f5dbad7f10a97031cbeb407176abde43b78c5a`
+  - `packages/execution/src/qc2_alpaca_paper/models.py` — `82226cf6d5c0d81e9ad19d6d1d41d627945b4e80873c220879be709602185d11`
+  - `packages/execution/src/qc2_alpaca_paper/transport.py` — `fcb1bccb2c168482c3cfb9c6dedaae2ef9d4a00e6d29f74c9b87d11184ce065f`
+  - `tests/alpaca_paper_adapter/test_adapter.py` — `1f3650b8e75179a880ad2c19681461bcf7d3b181b005d2894fe323697ee44e1d`
+  - `tools/qc2_047_readonly_probe.py` — `87f4ff6b5e500ac33823a39351288faae6f9bc6c9a52b1e665c1bcbcc0507056`
+- **Independent reviewer:** None supplied; this is a self-assessment.

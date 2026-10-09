@@ -5101,11 +5101,65 @@
         "PAPER_READ_ONLY_INTEGRATION"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
-      "blockers": [
-        "QC2-010 account fingerprint derivation is not recorded; current read-only probe cannot match the pinned fingerprint"
-      ],
-      "acceptance_receipt": null
+      "status": "PASS",
+      "blockers": [],
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-09T14:41:31Z",
+        "task_spec_version": "QC2-047 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "44cf6bab29819369e7188019561668f5b877d795",
+        "receipt": "docs/reference/QC2-047_READ_ONLY_PROBE_REPORT.md",
+        "contract_receipt": "docs/reference/QC2-047_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-047_TASK_RECORD.json",
+        "changed_paths": [
+          "docs/reference/QC2-047_ACCOUNT_FINGERPRINT_V1.md",
+          "docs/reference/QC2-047_PAPER_ACCOUNT_IDENTITY_OBSERVATION.schema.json",
+          "packages/execution/src/qc2_alpaca_paper/__init__.py",
+          "packages/execution/src/qc2_alpaca_paper/adapter.py",
+          "packages/execution/src/qc2_alpaca_paper/fingerprint.py",
+          "packages/execution/src/qc2_alpaca_paper/identity.py",
+          "packages/execution/src/qc2_alpaca_paper/models.py",
+          "packages/execution/src/qc2_alpaca_paper/transport.py",
+          "tests/alpaca_paper_adapter/test_adapter.py",
+          "tools/qc2_047_readonly_probe.py"
+        ],
+        "executed_commands": [
+          "uv run python tools/generate_contract_package.py --check",
+          "uv run pytest -q tests/contracts tests/alpaca_paper_adapter tests/execution",
+          "uv run ruff check packages/execution/src/qc2_alpaca_paper tools/qc2_047_readonly_probe.py tests/alpaca_paper_adapter",
+          "Authenticated GET /v2/account and GET /v2/orders?status=all&limit=1; both HTTP 200; no mutations",
+          "Observation JSON Schema, record hash, file hash, and authorization boundaries validated",
+          "uv run python tools/task_workflow.py preflight QC2-047",
+          "uv run python tools/task_workflow.py validate",
+          "DANGEROUSLY_ALLOW_GIT=1 git diff --check"
+        ],
+        "test_counts": [
+          {
+            "test_id": "qc2_047_contract_execution_adapter",
+            "passed": 85,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "docs/reference/QC2-047_ACCOUNT_FINGERPRINT_V1.md": "37c5594f61608385ab48ba4b1813f5a1faf6566561b44e43e1d90fddf5f25805",
+          "docs/reference/QC2-047_PAPER_ACCOUNT_IDENTITY_OBSERVATION.schema.json": "c1ccace50acf7ec75edde51cd324528e7f5b08b3ee7aca61c161ada8d60c727e",
+          "packages/execution/src/qc2_alpaca_paper/__init__.py": "0d97a75f302cd9cfd48ac2a7d2b20ca5757b4df0e875a5eabad496f0f86fbc72",
+          "packages/execution/src/qc2_alpaca_paper/adapter.py": "1837717374b74516a29c9c91a04964be59b91ed958b412ff07e0ddac383f7003",
+          "packages/execution/src/qc2_alpaca_paper/fingerprint.py": "7611659b95acc2c9ebc157dbdcdb503e4d577767d46b413d407614427e3cd598",
+          "packages/execution/src/qc2_alpaca_paper/identity.py": "de8cbf69f936439042575dcc82f5dbad7f10a97031cbeb407176abde43b78c5a",
+          "packages/execution/src/qc2_alpaca_paper/models.py": "82226cf6d5c0d81e9ad19d6d1d41d627945b4e80873c220879be709602185d11",
+          "packages/execution/src/qc2_alpaca_paper/transport.py": "fcb1bccb2c168482c3cfb9c6dedaae2ef9d4a00e6d29f74c9b87d11184ce065f",
+          "tests/alpaca_paper_adapter/test_adapter.py": "1f3650b8e75179a880ad2c19681461bcf7d3b181b005d2894fe323697ee44e1d",
+          "tools/qc2_047_readonly_probe.py": "87f4ff6b5e500ac33823a39351288faae6f9bc6c9a52b1e665c1bcbcc0507056"
+        },
+        "evidence_class": "FORWARD_OPERATIONAL",
+        "environment_namespace": "production",
+        "verification_reason": "The current authenticated paper account and order-list GETs returned HTTP 200, and the account was ACTIVE with both block flags false. The new v1 identity scheme is separate from QC2-010; the historical formula and account continuity remain UNVERIFIED. Mutation methods remain gated by QC2-086.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-048",

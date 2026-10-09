@@ -1,0 +1,40 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a1211c-b35f-7703-833a-cb516464082b",
+  "created_at": "2026-10-09T14:41:31Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "FORWARD_OPERATIONAL",
+  "environment_namespace": "production",
+  "source_refs": [],
+  "content_hash": "1064a73ebb6da5671d3225fd37e68bbb13c3e0f5768da8480eb4bc00f75ec17a",
+  "task_id": "qc2-047",
+  "task_name": "Alpaca Paper Adapter",
+  "objective": "Implement only the pinned paper broker API surface and response normalization.",
+  "dependency_task_ids": [
+    "QC2-009",
+    "QC2-010",
+    "QC2-045",
+    "QC2-046"
+  ],
+  "authorized_legacy_refs": [
+    "Gen 1 Alpaca adapter and tests"
+  ],
+  "deliverable_refs": [
+    "Allowlisted paper host/account checks; submit/query/cancel/replace/read-activity interfaces.",
+    "Client-order lookup, order-state mapping, bounded rate/retry and redaction.",
+    "Contract fixtures derived from current official API semantics."
+  ],
+  "required_test_refs": [
+    "Reject live host, redirects to unapproved hosts, wrong account, unsupported TIF/type and malformed events.",
+    "Duplicate key, partial fill, delayed visibility and nonterminal cancel fixtures.",
+    "Read-only actual account identity/connectivity check where credentials exist."
+  ],
+  "acceptance_gate": "Only paper endpoints are reachable through the adapter; actual write behavior remains a QC2-086 gate.",
+  "evidence_requirement": "alpaca_credentials_and_paper_read_only_integration",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": [
+    "QC2-010 account fingerprint derivation is not recorded; current read-only probe cannot match the pinned fingerprint"
+  ]
+}

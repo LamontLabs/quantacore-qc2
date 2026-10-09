@@ -2,7 +2,9 @@ import assert from "node:assert/strict";
 import { createHash, randomBytes } from "node:crypto";
 import { createRequire } from "node:module";
 
-const require = createRequire(new URL("../../lib/db/package.json", import.meta.url));
+const require = createRequire(
+  new URL("../../lib/db/package.json", import.meta.url),
+);
 const { Client } = require("pg");
 
 const INTENT_HASH_DOMAIN =
@@ -42,10 +44,7 @@ async function sealIntent(adminClient, fixture, account) {
   intent.expires_at = new Date(Date.now() + 30 * 60 * 1000).toISOString();
   intent.idempotency_key = `qc2-051-${randomBytes(8).toString("hex")}`;
   intent.intent_state = "CREATED";
-  intent.reservation_ref = reference(
-    "qc2.execution.Reservation.v1",
-    uuidV7(),
-  );
+  intent.reservation_ref = reference("qc2.execution.Reservation.v1", uuidV7());
   intent.content_hash = "0".repeat(64);
   const immutableTerms = Object.fromEntries(
     Object.entries(intent).filter(([key]) => !HASH_ENVELOPE_FIELDS.has(key)),
@@ -98,7 +97,10 @@ async function expectSqlState(client, code, operation) {
   assert.equal(caught.code, code);
 }
 
-function resumeAssessment(pauseGeneration, { blockedPrerequisite = false } = {}) {
+function resumeAssessment(
+  pauseGeneration,
+  { blockedPrerequisite = false } = {},
+) {
   const deadline = new Date(Date.now() + 5 * 60 * 1000).toISOString();
   const gates = [
     {
@@ -179,7 +181,12 @@ function normalizedRequest(intent, gate) {
   };
 }
 
-async function prepareQueuedIntent(execution, adminClient, intent, reservation) {
+async function prepareQueuedIntent(
+  execution,
+  adminClient,
+  intent,
+  reservation,
+) {
   await execution.query(
     "SELECT qc2_control.persist_paper_order_intent($1::jsonb, $2::text)",
     [JSON.stringify(intent), intent.paper_account_fingerprint],
@@ -217,10 +224,7 @@ async function prepareQueuedIntent(execution, adminClient, intent, reservation) 
   const request = normalizedRequest(intent, gate);
   const requestHashResult = await adminClient.query(
     "SELECT qc2_integrity_build.hash_json($1, $2::jsonb) AS request_hash",
-    [
-      "qc2.execution.normalized-request.v1",
-      JSON.stringify(request),
-    ],
+    ["qc2.execution.normalized-request.v1", JSON.stringify(request)],
   );
   const started = await execution.query(
     `
@@ -343,7 +347,10 @@ export async function runQc2051ExecutionReadinessAcceptance({
     );
     assert.equal(pending.rows[0].items.length, 1);
     assert.equal(pending.rows[0].items[0].target_intent_id, intent.id);
-    assert.equal(pending.rows[0].items[0].target_intent.intent_state, "SUBMISSION_STARTED");
+    assert.equal(
+      pending.rows[0].items[0].target_intent.intent_state,
+      "SUBMISSION_STARTED",
+    );
 
     const proposedCancelId = uuidV7();
     const firstReservedId = await execution.query(

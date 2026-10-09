@@ -30,13 +30,17 @@ const migrationPaths = [
 const connectionString = process.env.QC2_POSTGRES_TEST_URL;
 const expectedDatabase = process.env.QC2_EXPECTED_DATABASE_TEST;
 if (process.env.QC2_ENV !== "test") {
-  throw new Error("Set QC2_ENV=test before running PostgreSQL acceptance checks.");
+  throw new Error(
+    "Set QC2_ENV=test before running PostgreSQL acceptance checks.",
+  );
 }
 if (!connectionString) {
   throw new Error("QC2_POSTGRES_TEST_URL is required; no URL value is logged.");
 }
 if (!expectedDatabase) {
-  throw new Error("QC2_EXPECTED_DATABASE_TEST is required; no database URL is logged.");
+  throw new Error(
+    "QC2_EXPECTED_DATABASE_TEST is required; no database URL is logged.",
+  );
 }
 
 const parsedUrl = new URL(connectionString);

@@ -13,7 +13,12 @@ import pytest
 
 from qc2_apexlab import contract_artifact
 from qc2_apexlab.dataset_builder import DatasetBuilderError, build_dataset
-from qc2_apexlab.dataset_models import DatasetBuildPlan, DatasetSourceRow, WalkForwardFold
+from qc2_apexlab.dataset_models import (
+    DatasetBuildPlan,
+    DatasetSourceRow,
+    WalkForwardFold,
+    fold_rows_hash,
+)
 from qc2_apexlab.models import seal_content_addressed_contract
 from qc2_contracts.runtime import validate_contract
 from qc2_temporal_firewall import (
@@ -580,8 +585,23 @@ def test_crossing_label_intervals_are_purged_and_sessions_stay_whole():
         item["reason"] == "PURGED_LABEL_DEPENDENCY_OVERLAP"
         for item in result.excluded_rows
     ) == 2
-    assert all(row.sample_weight is None for row in result.folds[0].validation_rows)
-    assert result.folds[0].training_index.rows
+    prepared = result.folds[0]
+    assert all(row.sample_weight is None for row in prepared.validation_rows)
+    assert prepared.training_index.rows
+    assert all(row.label_available_at is not None for row in prepared.training_index.rows)
+    assert all(row.label_available_at is not None for row in prepared.validation_rows)
+    assert prepared.training_index.index_hash == fold_rows_hash(
+        prepared.fold_id,
+        fold.training_cutoff_at,
+        prepared.transform.transform_hash,
+        prepared.training_index.rows,
+    )
+    assert prepared.validation_index_hash == fold_rows_hash(
+        prepared.fold_id,
+        fold.validation_cutoff_at,
+        prepared.transform.transform_hash,
+        prepared.validation_rows,
+    )
 
 
 def test_fold_local_fit_maturity_and_weight_export_use_real_firewall_pipeline():

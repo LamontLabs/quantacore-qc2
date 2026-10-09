@@ -3,7 +3,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
-from dataclasses import fields
+from dataclasses import fields, replace
 from decimal import Decimal
 from pathlib import Path
 from types import MappingProxyType
@@ -16,8 +16,15 @@ from qc2_contracts.runtime import (
     validate_contract,
     verify_content_hash,
 )
-from qc2_apexlab.dataset_models import FoldFeatureTransform, FoldTrainingIndex, PreparedDatasetRow
+from qc2_apexlab.dataset_models import (
+    FoldFeatureTransform,
+    FoldTrainingIndex,
+    PreparedDatasetRow,
+    fold_rows_hash,
+)
 from qc2_apexlab.dataset_builder import _hash as dataset_hash
+from qc2_apexlab.experiment_models import HoldoutConsumptionState
+from qc2_apexlab.experiment_ledger import ExperimentLedger
 from qc2_apexlab.model_factory import (
     FROZEN_PARAMETER_SPACES,
     ModelFamily,
@@ -26,6 +33,13 @@ from qc2_apexlab.model_factory import (
     TrainingOutcomeState,
     load_safe_model_artifact,
     train_candidate,
+)
+from qc2_apexlab.research_readiness import (
+    QueueJob,
+    ResearchMode,
+    ResearchRuntimeContext,
+    WorkloadClass,
+    schedule_jobs,
 )
 import qc2_apexlab.model_factory as model_factory
 
@@ -89,6 +103,7 @@ def _governed_contracts() -> tuple[dict, dict, dict, dict]:
             feature_values=(Decimal(value),),
             target_value=Decimal(index % 2),
             sample_weight=Decimal("1"),
+            label_available_at="2026-10-08T23:59:59Z",
         )
         for index, (session, value) in enumerate(
             zip(TRAIN_SESSIONS, ("-1.5", "-0.5", "0.5", "1.5"), strict=True)
@@ -102,6 +117,7 @@ def _governed_contracts() -> tuple[dict, dict, dict, dict]:
             feature_values=(Decimal(value),),
             target_value=Decimal(index),
             sample_weight=None,
+            label_available_at="2026-10-12T23:59:59Z",
         )
         for index, (session, value) in enumerate(
             zip(VALIDATION_SESSIONS, ("2.5", "3.5"), strict=True)
@@ -189,6 +205,7 @@ def _training_rows():
                 feature_values=(Decimal(value),),
                 target_value=Decimal(index % 2),
                 sample_weight=Decimal("1"),
+                label_available_at="2026-10-08T23:59:59Z",
             )
             for index, (session, value) in enumerate(
                 zip(TRAIN_SESSIONS, ("-1.5", "-0.5", "0.5", "1.5"), strict=True)
@@ -202,6 +219,7 @@ def _training_rows():
                 feature_values=(Decimal(value),),
                 target_value=Decimal(index),
                 sample_weight=None,
+                label_available_at="2026-10-12T23:59:59Z",
             )
             for index, (session, value) in enumerate(
                 zip(VALIDATION_SESSIONS, ("2.5", "3.5"), strict=True)
@@ -235,13 +253,11 @@ def _request(
         cutoff_at=TRAINING_CUTOFF,
         member_row_keys=keys,
         rows=training_rows,
-        index_hash=dataset_hash(
-            {
-                "fold_id": fold_id,
-                "cutoff_at": TRAINING_CUTOFF,
-                "transform_hash": transform_hash,
-                "rows": training_rows,
-            }
+        index_hash=fold_rows_hash(
+            fold_id,
+            TRAINING_CUTOFF,
+            transform_hash,
+            training_rows,
         ),
     )
     transform = FoldFeatureTransform(
@@ -265,6 +281,22 @@ def _request(
         validation_rows=validation_rows,
         protocol_registry_ref=protocol_ref,
         resource_budget=budget,
+        validation_index_hash=fold_rows_hash(
+            fold_id,
+            VALIDATION_CUTOFF,
+            transform_hash,
+            validation_rows,
+        ),
+        readiness_context=ResearchRuntimeContext(
+            mode=ResearchMode.ENABLED,
+            environment_namespace=budget["environment_namespace"],
+            assessed_at="2026-10-09T12:00:00Z",
+            budget_expires_at="2026-10-10T00:00:00Z",
+            holdout_consumption_state=HoldoutConsumptionState.NOT_CONSUMED,
+            storage_available=True,
+            running_jobs=0,
+            spent_minor_units=0,
+        ),
     )
 
 
@@ -467,3 +499,320 @@ def test_strict_safe_json_parser_rejects_duplicate_keys(tmp_path: Path):
     )
     with pytest.raises(ValueError, match="duplicate JSON key"):
         load_safe_model_artifact(artifact_path)
+
+
+@pytest.mark.parametrize(
+    ("context_changes", "expected_reason"),
+    [
+        ({"mode": ResearchMode.DISABLED}, "RESEARCH_DISABLED"),
+        (
+            {"holdout_consumption_state": HoldoutConsumptionState.CONSUMED},
+            "QUALIFICATION_ALREADY_CONSUMED",
+        ),
+        ({"budget_expires_at": "2026-10-09T12:00:00Z"}, "BUDGET_EXPIRED"),
+        ({"storage_available": False}, "STORAGE_UNAVAILABLE"),
+        ({"environment_namespace": "production"}, "ENVIRONMENT_NOT_ISOLATED"),
+        ({"requested_cost_minor_units": 1}, "COST_NOT_AUTHORIZED"),
+        ({"running_jobs": 1}, "CONCURRENCY_BUDGET_EXHAUSTED"),
+    ],
+)
+def test_readiness_failures_block_before_worker_launch(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    context_changes: dict,
+    expected_reason: str,
+):
+    request = _request(
+        _governed_contracts(),
+        ModelFamily.LINEAR_REGRESSION,
+        PredictionTask.REGRESSION,
+    )
+    blocked_context = replace(request.readiness_context, **context_changes)
+    request = replace(request, readiness_context=blocked_context)
+    monkeypatch.setattr(
+        model_factory,
+        "_worker_environment",
+        lambda _home: pytest.fail("blocked research must not launch a worker"),
+    )
+    outcome = train_candidate(
+        request,
+        export_directory=tmp_path / "exports",
+        lock_file=Path(__file__).parents[2] / "uv.lock",
+    )
+    assert outcome.state is TrainingOutcomeState.FAILED
+    assert outcome.candidate is None
+    assert outcome.reason_code == "RESEARCH_NOT_READY"
+    assert expected_reason in (outcome.reason or "").split(",")
+    assert outcome.resource_usage.elapsed_seconds == 0
+    assert outcome.resource_usage.cost_minor_units == 0
+
+
+def test_unwritable_storage_probe_blocks_launch(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    request = _request(
+        _governed_contracts(),
+        ModelFamily.LINEAR_REGRESSION,
+        PredictionTask.REGRESSION,
+    )
+    monkeypatch.setattr(model_factory, "_storage_available", lambda _path: False)
+    monkeypatch.setattr(
+        model_factory,
+        "_worker_environment",
+        lambda _home: pytest.fail("unwritable research storage must block worker launch"),
+    )
+    outcome = train_candidate(
+        request,
+        export_directory=tmp_path / "exports",
+        lock_file=Path(__file__).parents[2] / "uv.lock",
+    )
+    assert outcome.state is TrainingOutcomeState.FAILED
+    assert outcome.reason_code == "RESEARCH_NOT_READY"
+    assert "STORAGE_UNAVAILABLE" in (outcome.reason or "").split(",")
+
+
+def test_storage_probe_performs_and_cleans_a_temporary_write(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    export_directory = tmp_path / "missing" / "exports"
+    assert model_factory._storage_available(export_directory)
+    assert list(tmp_path.iterdir()) == []
+
+    def fail_write_probe(*_args, **_kwargs):
+        raise PermissionError("storage is read-only")
+
+    monkeypatch.setattr(
+        model_factory.tempfile,
+        "NamedTemporaryFile",
+        fail_write_probe,
+    )
+    assert not model_factory._storage_available(export_directory)
+
+
+def test_label_available_at_cutoff_is_immature_and_cannot_launch(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    request = _request(
+        _governed_contracts(),
+        ModelFamily.LINEAR_REGRESSION,
+        PredictionTask.REGRESSION,
+    )
+    rows = list(request.training_index.rows)
+    rows[0] = replace(rows[0], label_available_at=TRAINING_CUTOFF)
+    rows = tuple(rows)
+    training_index = replace(
+        request.training_index,
+        rows=rows,
+        index_hash=fold_rows_hash(
+            request.fold_id,
+            TRAINING_CUTOFF,
+            request.transform.transform_hash,
+            rows,
+        ),
+    )
+    request = replace(request, training_index=training_index)
+    monkeypatch.setattr(
+        model_factory,
+        "_worker_environment",
+        lambda _home: pytest.fail("immature research data must not launch a worker"),
+    )
+    outcome = train_candidate(
+        request,
+        export_directory=tmp_path / "exports",
+        lock_file=Path(__file__).parents[2] / "uv.lock",
+    )
+    assert outcome.state is TrainingOutcomeState.FAILED
+    assert outcome.reason_code == "RESEARCH_NOT_READY"
+    assert "IMMATURE_TRAINING_LABEL" in (outcome.reason or "").split(",")
+
+
+def test_research_failure_does_not_change_a_sealed_production_prediction(
+    tmp_path: Path,
+):
+    prediction_seal = _sealed("PredictionSeal", copy.deepcopy(FIXTURES["PredictionSeal"]))
+    before = copy.deepcopy(prediction_seal)
+    verify_content_hash("PredictionSeal", prediction_seal)
+    request = _request(
+        _governed_contracts(),
+        ModelFamily.LINEAR_REGRESSION,
+        PredictionTask.REGRESSION,
+    )
+    request = replace(
+        request,
+        readiness_context=replace(
+            request.readiness_context,
+            mode=ResearchMode.DISABLED,
+        ),
+    )
+    outcome = train_candidate(
+        request,
+        export_directory=tmp_path / "exports",
+        lock_file=Path(__file__).parents[2] / "uv.lock",
+    )
+    assert outcome.state is TrainingOutcomeState.FAILED
+    assert outcome.reason_code == "RESEARCH_NOT_READY"
+    assert prediction_seal == before
+    verify_content_hash("PredictionSeal", prediction_seal)
+
+
+def test_readiness_block_is_recordable_as_a_terminal_trial_event(tmp_path: Path):
+    dataset, split, budget, protocol_ref = _governed_contracts()
+    request = _request(
+        (dataset, split, budget, protocol_ref),
+        ModelFamily.LINEAR_REGRESSION,
+        PredictionTask.REGRESSION,
+    )
+    request = replace(
+        request,
+        readiness_context=replace(
+            request.readiness_context,
+            mode=ResearchMode.DISABLED,
+        ),
+    )
+    outcome = train_candidate(
+        request,
+        export_directory=tmp_path / "exports",
+        lock_file=Path(__file__).parents[2] / "uv.lock",
+    )
+    assert outcome.state is TrainingOutcomeState.FAILED
+    assert outcome.reason_code == "RESEARCH_NOT_READY"
+
+    experiment = copy.deepcopy(FIXTURES["Experiment"])
+    experiment.update(
+        {
+            "id": new_uuidv7(),
+            "created_at": "2026-10-09T12:00:00Z",
+            "environment_namespace": budget["environment_namespace"],
+            "dataset_ref": {
+                "target_schema_name": "qc2.outcomes_research.DatasetManifest.v1",
+                "target_id": dataset["id"],
+                "content_hash": dataset["content_hash"],
+            },
+            "split_ref": {
+                "target_schema_name": "qc2.outcomes_research.SplitManifest.v1",
+                "target_id": split["id"],
+                "content_hash": split["content_hash"],
+            },
+            "budget_ref": {
+                "target_schema_name": "qc2.integrity_build.ResourceBudget.v1",
+                "target_id": budget["id"],
+                "content_hash": budget["content_hash"],
+            },
+        }
+    )
+    experiment = _sealed("Experiment", experiment)
+    ledger = ExperimentLedger()
+    ledger.register_budget(budget)
+    ledger.register_experiment(experiment)
+    ledger.reject_trial(
+        experiment["id"],
+        reason=outcome.reason or "Research readiness blocked.",
+        reason_code=outcome.reason_code or "RESEARCH_NOT_READY",
+        recorded_at="2026-10-09T12:01:00Z",
+        usage=outcome.resource_usage,
+    )
+    events = ledger.trial_events(experiment["id"])
+    assert len(events) == 1
+    assert events[0].event_type == "TRIAL_REJECTED"
+    assert events[0].payload["reason_code"] == "RESEARCH_NOT_READY"
+    assert ledger.verify_history(experiment["id"])
+
+
+def test_prediction_and_evidence_precede_research_even_when_research_priority_is_higher():
+    jobs = (
+        QueueJob(
+            job_id="research",
+            workload_class=WorkloadClass.RESEARCH,
+            priority=10_000,
+            enqueued_at="2026-10-09T12:00:00Z",
+        ),
+        QueueJob(
+            job_id="prediction",
+            workload_class=WorkloadClass.PREDICTION,
+            priority=0,
+            enqueued_at="2026-10-09T12:00:00Z",
+        ),
+        QueueJob(
+            job_id="evidence",
+            workload_class=WorkloadClass.EVIDENCE,
+            priority=0,
+            enqueued_at="2026-10-09T12:00:00Z",
+        ),
+    )
+    decision = schedule_jobs(
+        jobs,
+        capacity=2,
+        active_jobs=0,
+        active_research_jobs=0,
+        research_concurrency_limit=1,
+    )
+    assert decision.scheduled_job_ids == ("evidence", "prediction")
+    assert [(item.job_id, item.reason_code) for item in decision.deferred] == [
+        ("research", "NO_CAPACITY")
+    ]
+    assert decision.decision_hash == schedule_jobs(
+        jobs,
+        capacity=2,
+        active_jobs=0,
+        active_research_jobs=0,
+        research_concurrency_limit=1,
+    ).decision_hash
+
+
+def test_research_concurrency_limit_does_not_hold_prediction_or_evidence():
+    jobs = (
+        QueueJob(
+            job_id="research-waiting",
+            workload_class=WorkloadClass.RESEARCH,
+            priority=100,
+            enqueued_at="2026-10-09T12:00:00Z",
+        ),
+        QueueJob(
+            job_id="prediction",
+            workload_class=WorkloadClass.PREDICTION,
+            priority=0,
+            enqueued_at="2026-10-09T12:00:00Z",
+        ),
+    )
+    decision = schedule_jobs(
+        jobs,
+        capacity=3,
+        active_jobs=1,
+        active_research_jobs=1,
+        research_concurrency_limit=1,
+    )
+    assert decision.scheduled_job_ids == ("prediction",)
+    assert [(item.job_id, item.reason_code) for item in decision.deferred] == [
+        ("research-waiting", "RESEARCH_CONCURRENCY_LIMIT")
+    ]
+
+
+def test_older_prediction_is_not_starved_by_newer_high_priority_evidence():
+    jobs = (
+        QueueJob(
+            job_id="new-evidence",
+            workload_class=WorkloadClass.EVIDENCE,
+            priority=10_000,
+            enqueued_at="2026-10-09T12:01:00Z",
+        ),
+        QueueJob(
+            job_id="old-prediction",
+            workload_class=WorkloadClass.PREDICTION,
+            priority=0,
+            enqueued_at="2026-10-09T12:00:00Z",
+        ),
+        QueueJob(
+            job_id="research",
+            workload_class=WorkloadClass.RESEARCH,
+            priority=100_000,
+            enqueued_at="2026-10-09T11:59:00Z",
+        ),
+    )
+    decision = schedule_jobs(
+        jobs,
+        capacity=1,
+        active_jobs=0,
+        active_research_jobs=0,
+        research_concurrency_limit=1,
+    )
+    assert decision.scheduled_job_ids == ("old-prediction",)

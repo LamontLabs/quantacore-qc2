@@ -34,6 +34,7 @@ from .dataset_models import (
     FoldTrainingIndex,
     PreparedDatasetRow,
     QualificationFeatureRow,
+    fold_rows_hash,
 )
 
 _MANIFEST_SCHEMA = "qc2.outcomes_research.DatasetManifest.v1"
@@ -684,6 +685,8 @@ def build_dataset(
             }
         )
 
+    label_availability_by_row_key: dict[str, str] = {}
+
     def load_row(
         row_key: str,
         row: DatasetSourceRow,
@@ -804,6 +807,7 @@ def build_dataset(
                 target = _target_value(outcome_payload, plan.target_field)
             except DatasetBuilderError:
                 return (), None, "TARGET_FIELD_UNRESOLVED"
+            label_availability_by_row_key[row_key] = available_at
         if include_weight_source:
             if row.sample_weight_source_ref is None:
                 raise DatasetBuilderError("training weight source is missing")
@@ -933,6 +937,7 @@ def build_dataset(
                 feature_values=transform.transform(values),
                 target_value=target,
                 sample_weight=row.sample_weight,
+                label_available_at=label_availability_by_row_key[row_key],
             )
             for row_key, row, values, target in train_candidates
         )
@@ -944,18 +949,17 @@ def build_dataset(
                 feature_values=transform.transform(values),
                 target_value=target,
                 sample_weight=None,
+                label_available_at=label_availability_by_row_key[row_key],
             )
             for row_key, row, values, target in validation_candidates
         )
         training_prepared = tuple(sorted(training_prepared, key=lambda item: item.row_key))
         validation_prepared = tuple(sorted(validation_prepared, key=lambda item: item.row_key))
-        index_hash = _hash(
-            {
-                "fold_id": fold.fold_id,
-                "cutoff_at": fold.training_cutoff_at,
-                "transform_hash": transform.transform_hash,
-                "rows": training_prepared,
-            }
+        index_hash = fold_rows_hash(
+            fold.fold_id,
+            fold.training_cutoff_at,
+            transform.transform_hash,
+            training_prepared,
         )
         training_index = FoldTrainingIndex(
             fold_id=fold.fold_id,
@@ -1001,6 +1005,12 @@ def build_dataset(
                 training_index=training_index,
                 validation_rows=validation_prepared,
                 qualification_rows=tuple(qualification_prepared),
+                validation_index_hash=fold_rows_hash(
+                    fold.fold_id,
+                    fold.validation_cutoff_at,
+                    transform.transform_hash,
+                    validation_prepared,
+                ),
             )
         )
         qualification_rows_all.extend(qualification_prepared)

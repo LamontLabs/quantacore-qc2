@@ -1,9 +1,40 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+import hashlib
+from dataclasses import dataclass, fields, is_dataclass
 from decimal import Decimal
 from types import MappingProxyType
 from typing import Any, Mapping
+
+from qc2_contracts.runtime import canonical_json_bytes
+
+
+def _plain(value: Any) -> Any:
+    if is_dataclass(value) and not isinstance(value, type):
+        return {item.name: _plain(getattr(value, item.name)) for item in fields(value)}
+    if isinstance(value, Mapping):
+        return {str(key): _plain(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_plain(item) for item in value]
+    if isinstance(value, Decimal):
+        return format(value, "f")
+    return value
+
+
+def fold_rows_hash(
+    fold_id: str,
+    cutoff_at: str,
+    transform_hash: str,
+    rows: tuple["PreparedDatasetRow", ...],
+) -> str:
+    """Bind released rows, including label maturity instants, to a fold index."""
+    payload = {
+        "fold_id": fold_id,
+        "cutoff_at": cutoff_at,
+        "transform_hash": transform_hash,
+        "rows": rows,
+    }
+    return hashlib.sha256(canonical_json_bytes(_plain(payload))).hexdigest()
 
 
 def _freeze(value: Any) -> Any:
@@ -123,6 +154,7 @@ class PreparedDatasetRow:
     feature_values: tuple[Decimal, ...]
     target_value: Decimal
     sample_weight: Decimal | None
+    label_available_at: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -182,6 +214,7 @@ class FoldPreparedData:
     training_index: FoldTrainingIndex
     validation_rows: tuple[PreparedDatasetRow, ...]
     qualification_rows: tuple[QualificationFeatureRow, ...]
+    validation_index_hash: str
 
 
 @dataclass(frozen=True, slots=True)

@@ -34,8 +34,16 @@ from qc2_contracts.runtime import (
     verify_content_hash,
 )
 
-from .dataset_models import FoldFeatureTransform, FoldTrainingIndex, PreparedDatasetRow
+from .dataset_models import (
+    FoldFeatureTransform,
+    FoldTrainingIndex,
+    PreparedDatasetRow,
+)
 from .experiment_models import ResourceUsage
+from .research_readiness import (
+    ResearchRuntimeContext,
+    assess_research_readiness,
+)
 
 _MODEL_SCHEMA = "qc2.models_prediction.ModelManifest.v1"
 _ARTIFACT_SCHEMA = "qc2.integrity_build.ArtifactManifest.v1"
@@ -143,6 +151,8 @@ class ModelTrainingRequest:
     validation_rows: tuple[PreparedDatasetRow, ...]
     protocol_registry_ref: Mapping[str, Any]
     resource_budget: Mapping[str, Any]
+    validation_index_hash: str
+    readiness_context: ResearchRuntimeContext = ResearchRuntimeContext()
 
 
 @dataclass(frozen=True, slots=True)
@@ -545,6 +555,32 @@ def _worker_environment(home: Path) -> dict[str, str]:
     }
 
 
+def _storage_available(directory: Path) -> bool:
+    try:
+        candidate = Path(directory)
+        while not candidate.exists():
+            if candidate.parent == candidate:
+                return False
+            candidate = candidate.parent
+        if (
+            not candidate.is_dir()
+            or not os.access(candidate, os.W_OK | os.X_OK)
+            or shutil.disk_usage(candidate).free <= 0
+        ):
+            return False
+        with tempfile.NamedTemporaryFile(
+            mode="w+b",
+            prefix=".qc2-research-storage-probe-",
+            dir=candidate,
+        ) as probe:
+            probe.write(b"\0")
+            probe.flush()
+            os.fsync(probe.fileno())
+        return True
+    except (OSError, TypeError, ValueError):
+        return False
+
+
 def _limits_preexec(cpu_seconds: int, memory_bytes: int):
     def apply_limits() -> None:
         resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
@@ -885,6 +921,27 @@ def train_candidate(
         return _incompatible(
             "TASK_FAMILY_MISMATCH",
             "logistic regression requires a binary classification target",
+        )
+    readiness = assess_research_readiness(
+        dataset_manifest=request.dataset_manifest,
+        split_manifest=request.split_manifest,
+        resource_budget=request.resource_budget,
+        fold_id=request.fold_id,
+        training_index=request.training_index,
+        transform_hash=getattr(request.transform, "transform_hash", ""),
+        validation_rows=request.validation_rows,
+        validation_index_hash=request.validation_index_hash,
+        context=request.readiness_context,
+        storage_available=(
+            request.readiness_context.storage_available and _storage_available(export_directory)
+            if isinstance(request.readiness_context, ResearchRuntimeContext)
+            else False
+        ),
+    )
+    if not readiness.ready:
+        return _budget_failure(
+            "RESEARCH_NOT_READY",
+            ",".join(readiness.reason_codes),
         )
     try:
         job = _prepare_job(request)

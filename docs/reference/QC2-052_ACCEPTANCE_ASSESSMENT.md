@@ -1,0 +1,32 @@
+# QC2-052 Acceptance Assessment
+
+## Acceptance assessment
+
+- **Result:** PASS
+- **Task:** QC2-052 — Research Readiness
+- **Evidence class:** SYNTHETIC_FIXTURE
+- **Environment:** test
+- **Acceptance gate:** Research can be paused or fail independently with complete job/trial accounting.
+
+The research launch path now fails closed unless the request is enabled, its dataset and split contracts are valid and aligned, training and validation labels were available before their fold cutoffs, qualification remains sealed and unconsumed, the research budget is effective and unexpired, cost and concurrency remain within authorization, the environment is isolated, and writable storage is available. Readiness failures return reason-coded outcomes before worker launch. Trial rejection can be retained in the existing append-only experiment ledger with its reason and resource usage.
+
+Research scheduling gives prediction and evidence jobs a protected FIFO lane ahead of research. Research priority cannot override that ordering, and the configured research concurrency limit is enforced without withholding protected work. Worker environments are constructed from a fixed allowlist rather than inherited production or broker credentials.
+
+## Acceptance checklist
+
+- [x] DELIVERABLE: RESEARCH_READY engine, disabled mode, job budgets and schedule priorities. | evidence: `packages/apexlab/src/qc2_apexlab/research_readiness.py`; `packages/apexlab/src/qc2_apexlab/model_factory.py`; readiness and resource-limit tests in `tests/apexlab/test_model_factory.py`.
+- [x] DELIVERABLE: Dataset/holdout/environment/cost readiness reasons. | evidence: `assess_research_readiness` validates cutoff-bound row indexes, holdout state, environment, budget expiry, concurrency, cost, and storage; covered by reason-specific launch-blocking tests in `tests/apexlab/test_model_factory.py`.
+- [x] DELIVERABLE: Research queue controls that cannot starve prediction/evidence. | evidence: deterministic protected FIFO ordering and research concurrency deferrals in `schedule_jobs`; priority, capacity, and protected-lane fairness tests in `tests/apexlab/test_model_factory.py`.
+- [x] TEST: Immature labels, consumed qualification, expired budget and missing storage prevent launch. | evidence: `test_label_available_at_cutoff_is_immature_and_cannot_launch` and `test_readiness_failures_block_before_worker_launch` in `tests/apexlab/test_model_factory.py`.
+- [x] TEST: Research failure does not invalidate sealed production predictions. | evidence: `test_research_failure_does_not_change_a_sealed_production_prediction` in `tests/apexlab/test_model_factory.py`.
+- [x] TEST: Worker lacks production/broker mutation credentials. | evidence: `test_fixture_competition_trains_all_families_on_identical_governed_inputs` verifies the worker environment allowlist excludes production, database, and broker credential sentinels.
+
+## Verification
+
+- `python3 -m pytest -q tests/apexlab` — 64 passed, 0 failed, 0 skipped.
+- `python3 -m ruff check packages/apexlab/src/qc2_apexlab tests/apexlab` — passed.
+- `python3 -m compileall -q packages/apexlab/src/qc2_apexlab tests/apexlab` — passed.
+- `python3 tools/generate_task_docs.py && python3 tools/generate_task_docs.py --check` — generated task documentation matches the registry.
+- `python3 tools/task_workflow.py preflight QC2-052` — dependencies and acceptance evidence available.
+
+No legacy source was read or copied. No paid capacity, nightly prediction dependency, live trading, or provider/feed fallback was added. No downstream task was started.

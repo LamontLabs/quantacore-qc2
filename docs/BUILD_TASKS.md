@@ -1788,10 +1788,18 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-052 — Research Readiness
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Gate research on legal mature data and bounded isolated resources.
 **Dependencies:** QC2-007, QC2-013, QC2-033, QC2-034, QC2-035, QC2-036, QC2-051
 **Authorized legacy references:** None.
+**Authorized artifact drift:** QC2-028 — QC2-052 adds research launch readiness and scheduling in the shared ApexLab source and regression-test trees; acceptance reruns the full ApexLab suite to revalidate prior behavior while each prior receipt remains bound to its tested source commit. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-029 — QC2-052 adds research launch readiness and scheduling in the shared ApexLab source and regression-test trees; acceptance reruns the full ApexLab suite to revalidate prior behavior while each prior receipt remains bound to its tested source commit. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-030 — QC2-052 adds research launch readiness and scheduling in the shared ApexLab source and regression-test trees; acceptance reruns the full ApexLab suite to revalidate prior behavior while each prior receipt remains bound to its tested source commit. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-031 — QC2-052 adds research launch readiness and scheduling in the shared ApexLab source and regression-test trees; acceptance reruns the full ApexLab suite to revalidate prior behavior while each prior receipt remains bound to its tested source commit. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-032 — QC2-052 adds research launch readiness and scheduling in the shared ApexLab source and regression-test trees; acceptance reruns the full ApexLab suite to revalidate prior behavior while each prior receipt remains bound to its tested source commit. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-033 — QC2-052 adds research launch readiness and scheduling in the shared ApexLab source and regression-test trees; acceptance reruns the full ApexLab suite to revalidate prior behavior while each prior receipt remains bound to its tested source commit. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-034 — QC2-052 adds research launch readiness and scheduling in the shared ApexLab source and regression-test trees; acceptance reruns the full ApexLab suite to revalidate prior behavior while each prior receipt remains bound to its tested source commit. Paths: `packages/apexlab`, `tests/apexlab`
+**Authorized artifact drift:** QC2-035 — QC2-052 adds research launch readiness and scheduling in the shared ApexLab source and regression-test trees; acceptance reruns the full ApexLab suite to revalidate prior behavior while each prior receipt remains bound to its tested source commit. Paths: `packages/apexlab`, `tests/apexlab`
 **Required reference intake:** None. Do not inspect or copy legacy code for this task without a scoped amendment.
 
 **Required deliverables:**

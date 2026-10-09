@@ -35,3 +35,31 @@ Run the focused hostile-fixture suite with:
 ```sh
 uv run python -m pytest -q tests/owner_api/test_promotion_approval.py
 ```
+
+## Owner read projections
+
+The nine owner views are rebuildable projections. The projector and database
+writer enforce the same per-view source-reference allowlists:
+
+| View | Accepted canonical receipt schemas |
+| --- | --- |
+| Today | `PredictionSeal.v1`, `MarketSession.v1`, `ReadinessAssessment.v1` |
+| Predictions | `Prediction.v1` |
+| Validation | `QualificationReceipt.v1`, `ValidationReport.v1` |
+| Models | `ModelManifest.v1`, `ChampionPointer.v1` |
+| System | `ReadinessAssessment.v1` |
+| Positions | `Position.v1` |
+| Alerts | `Alert.v1`, `ReconciliationReport.v1` |
+| Reports | `ValidationReport.v1`, `ReconciliationReport.v1` |
+| Evidence | `EvidenceEvent.v1`, `Checkpoint.v1` |
+
+The trusted source builder supplies receipts from the owning authorities and
+the authoritative per-view event sequence/high-water; timestamps or generated
+database IDs are not substitutes for those watermarks. This package exposes a
+typed projector and constrained persistence functions, not arbitrary source
+table queries. Owner read endpoints query the projection functions rather than
+source tables; the migration grants no direct table access to its projection
+tables and leaves pre-existing grants from other QC2 subsystems unchanged.
+Source references in a page are limited to the distinct references used by
+that page's items. Cursor pagination is bound to an immutable projection
+sequence and does not grant access.

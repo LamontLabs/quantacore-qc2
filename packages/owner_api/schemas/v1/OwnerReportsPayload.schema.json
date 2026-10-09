@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "qc2.owner_api.OwnerReportsPayload.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["report_ref", "report_type", "status", "created_at", "source_refs", "export_bytes"],
+  "properties": {
+    "report_ref": {"$ref": "#/$defs/sourceRef"},
+    "report_type": {"type": "string", "minLength": 1, "maxLength": 96},
+    "status": {"enum": ["PROVISIONAL", "FINAL", "BLOCKED", "FAILED", "UNKNOWN"]},
+    "created_at": {"type": "string", "format": "date-time"},
+    "source_refs": {
+      "type": "array",
+      "maxItems": 128,
+      "items": {"$ref": "#/$defs/sourceRef"}
+    },
+    "export_bytes": {"type": ["integer", "null"], "minimum": 0, "maximum": 10485760}
+  },
+  "$defs": {
+    "sourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_schema_name", "target_id"],
+      "properties": {
+        "target_schema_name": {"type": "string", "minLength": 1, "maxLength": 160},
+        "target_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "content_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

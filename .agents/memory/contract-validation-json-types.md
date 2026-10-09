@@ -1,13 +1,13 @@
 ---
 name: Contract validation JSON types
-description: Preserve JSON Schema compatibility when validating immutable contract records.
+description: Thaw immutable containers before JSON Schema validation or canonical JSON encoding.
 ---
 
-Convert immutable or generic collection wrappers to built-in `dict` and `list` values before calling the QC2 contract validators. Freeze records only after validation.
+Convert immutable or generic collection wrappers to built-in `dict` and `list` values at JSON boundaries, including before QC2 contract validation and canonical hashing. Freeze records only after validation.
 
-**Why:** The project's JSON Schema runtime recognizes built-in JSON object/array containers; `MappingProxyType` and tuples can fail `object`/`array` checks despite implementing mapping or sequence interfaces.
+**Why:** The project's JSON Schema runtime and canonical JSON encoder require built-in JSON object/array containers; `MappingProxyType` and tuples can fail validation or hashing despite implementing mapping or sequence interfaces. Snapshot hashing also fails if immutable tuple collections are passed through unchanged.
 
-**How to apply:** When an authority stores immutable snapshots, thaw all nested values before `validate_contract` or `validate_contract_collection`, then freeze validated copies for internal use.
+**How to apply:** When an authority stores immutable snapshots, thaw all nested values before validation or canonical serialization, then freeze validated copies for internal use.
 
 Content-addressed fixture contracts used as adapter inputs must carry hashes computed from their final canonical payloads, not schema-valid placeholder digests.
 

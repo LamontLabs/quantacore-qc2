@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "qc2.owner_api.OwnerPositionsPayload.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "position_ref",
+    "instrument_ref",
+    "quantity",
+    "average_entry_price",
+    "unrealized_pnl",
+    "reconciliation_state"
+  ],
+  "properties": {
+    "position_ref": {"$ref": "#/$defs/sourceRef"},
+    "instrument_ref": {"$ref": "#/$defs/sourceRef"},
+    "quantity": {
+      "type": "string",
+      "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?$",
+      "maxLength": 64
+    },
+    "average_entry_price": {
+      "type": ["string", "null"],
+      "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$",
+      "maxLength": 64
+    },
+    "unrealized_pnl": {
+      "type": ["string", "null"],
+      "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?$",
+      "maxLength": 64
+    },
+    "reconciliation_state": {
+      "enum": ["RECONCILED", "PENDING", "DISCREPANCY", "HELD", "UNKNOWN"]
+    }
+  },
+  "$defs": {
+    "sourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_schema_name", "target_id"],
+      "properties": {
+        "target_schema_name": {"type": "string", "minLength": 1, "maxLength": 160},
+        "target_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "content_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

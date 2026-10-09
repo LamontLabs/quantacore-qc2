@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "qc2.owner_api.OwnerModelsPayload.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "model_ref",
+    "role",
+    "state",
+    "display_name",
+    "lineage_refs",
+    "eligible_for_promotion"
+  ],
+  "properties": {
+    "model_ref": {"$ref": "#/$defs/sourceRef"},
+    "role": {"enum": ["REFERENCE", "CHAMPION", "SHADOW", "CANDIDATE"]},
+    "state": {
+      "enum": ["ACTIVE", "SHADOW", "RETIRED", "REVOKED", "UNKNOWN"]
+    },
+    "display_name": {"type": "string", "minLength": 1, "maxLength": 128},
+    "lineage_refs": {
+      "type": "array",
+      "maxItems": 128,
+      "items": {"$ref": "#/$defs/sourceRef"}
+    },
+    "eligible_for_promotion": {"type": "boolean"}
+  },
+  "$defs": {
+    "sourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_schema_name", "target_id"],
+      "properties": {
+        "target_schema_name": {"type": "string", "minLength": 1, "maxLength": 160},
+        "target_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "content_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

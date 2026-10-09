@@ -2,7 +2,7 @@
 - [PostgreSQL role-boundary testing](postgresql-role-boundary-testing.md) — use real session authorization; account for CREATEROLE's implicit role membership.
 - [PostgreSQL acceptance session state](postgresql-acceptance-session-state.md) — sequential rollback-only suites share transaction-local settings; reset test-only GUCs before later RLS checks.
 - [QC2 PostgreSQL test encoding](qc2-postgresql-test-encoding.md) — local acceptance databases must use UTF8 for PostgreSQL Unicode normalization in canonical hashing.
-- [Contract validation JSON types](contract-validation-json-types.md) — thaw immutable mappings and tuples to dicts and lists before JSON Schema validation.
+- [Contract validation JSON types](contract-validation-json-types.md) — thaw immutable mappings and tuples before schema validation or canonical JSON hashing.
 - [QC2 task progression](qc2-task-progression.md) — handle task completion and advance through eligible QC2 work without asking the owner to mark each task complete.
 - [Alpaca calendar time semantics](alpaca-calendar-time-semantics.md) — calendar open/close values may be exchange-local `HH:MM`; combine with the session date and exchange timezone before UTC comparisons.
 - [QC2 label precision](qc2-label-decimal-precision.md) — fractional-return values and event comparisons use 12 places with `ROUND_HALF_EVEN`; extrema ties use raw observed prices.
@@ -12,5 +12,5 @@
 - [ApexLab temporal memory indexes](apexlab-temporal-memory-indexes.md) — keep replay proofs scoped to the cutoff-eligible dependency closure and preserve actual versus reconstructed availability.
 - [Isolated PostgreSQL acceptance](isolated-postgresql-acceptance.md) — initialize, migrate, and test a fresh local cluster within one shell run; runtime cleanup stops background servers.
 - [QC2 owner approval binding](qc2-owner-approval-binding.md) — extend pinned promotion contracts through owner-API scope envelopes; bind non-content-addressed identity records by IDs and key/session hashes.
-- [PL/pgSQL name resolution](plpgsql-name-resolution.md) — prefix locals and qualify SQL columns to avoid runtime ambiguity in stored procedures.
+- [PL/pgSQL name resolution](plpgsql-name-resolution.md) — qualify ordinary SQL names, but leave special forms like GREATEST unqualified.
 - [Execution PostgreSQL acceptance fixtures](execution-postgresql-acceptance-fixtures.md) — verify evidence rollback before seeding a synthetic stream; let enqueue perform the reserved-to-queued transition.

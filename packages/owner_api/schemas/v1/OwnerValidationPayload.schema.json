@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "qc2.owner_api.OwnerValidationPayload.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "epoch_ref",
+    "session_id",
+    "status",
+    "collection_count",
+    "matured_count",
+    "coverage",
+    "report_ref"
+  ],
+  "properties": {
+    "epoch_ref": {"$ref": "#/$defs/sourceRef"},
+    "session_id": {"type": ["string", "null"], "format": "date"},
+    "status": {
+      "enum": ["PROVISIONAL", "PASS", "FAIL", "BLOCKED", "NOT_READY", "UNKNOWN"]
+    },
+    "collection_count": {"type": "integer", "minimum": 0},
+    "matured_count": {"type": "integer", "minimum": 0},
+    "coverage": {
+      "type": ["string", "null"],
+      "pattern": "^(0|1)(\\.[0-9]+)?$",
+      "maxLength": 64
+    },
+    "report_ref": {
+      "anyOf": [
+        {"$ref": "#/$defs/sourceRef"},
+        {"type": "null"}
+      ]
+    }
+  },
+  "$defs": {
+    "sourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_schema_name", "target_id"],
+      "properties": {
+        "target_schema_name": {"type": "string", "minLength": 1, "maxLength": 160},
+        "target_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "content_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

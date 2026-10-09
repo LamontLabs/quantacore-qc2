@@ -1,0 +1,239 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "qc2.owner_api.OwnerReadSourceReceipt.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_name",
+    "schema_version",
+    "environment_namespace",
+    "view_name",
+    "source_sequence",
+    "item_id",
+    "sort_key",
+    "source_ref",
+    "payload",
+    "receipt_hash"
+  ],
+  "properties": {
+    "schema_name": {
+      "const": "qc2.owner_api.OwnerReadSourceReceipt.v1"
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "environment_namespace": {
+      "enum": ["development", "test", "research", "production"]
+    },
+    "view_name": {
+      "enum": [
+        "today",
+        "predictions",
+        "validation",
+        "models",
+        "system",
+        "positions",
+        "alerts",
+        "reports",
+        "evidence"
+      ]
+    },
+    "source_sequence": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "item_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "sort_key": {
+      "type": "string",
+      "maxLength": 256,
+      "pattern": "^[\\x20-\\x7E]*$"
+    },
+    "source_ref": {
+      "$ref": "#/$defs/sourceRef"
+    },
+    "payload": {
+      "type": "object"
+    },
+    "receipt_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "$defs": {
+    "sourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_schema_name", "target_id"],
+      "properties": {
+        "target_schema_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "^qc2\\.[A-Za-z0-9_.-]+\\.v[1-9][0-9]*$"
+        },
+        "target_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "view_name": { "const": "today" } } },
+      "then": {
+        "properties": {
+          "source_ref": {
+            "properties": {
+              "target_schema_name": {
+                "enum": [
+                  "qc2.models_prediction.PredictionSeal.v1",
+                  "qc2.time_operation.MarketSession.v1",
+                  "qc2.time_operation.ReadinessAssessment.v1"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "view_name": { "const": "predictions" } } },
+      "then": {
+        "properties": {
+          "source_ref": {
+            "properties": {
+              "target_schema_name": {
+                "const": "qc2.models_prediction.Prediction.v1"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "view_name": { "const": "validation" } } },
+      "then": {
+        "properties": {
+          "source_ref": {
+            "properties": {
+              "target_schema_name": {
+                "enum": [
+                  "qc2.validation.QualificationReceipt.v1",
+                  "qc2.validation.ValidationReport.v1"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "view_name": { "const": "models" } } },
+      "then": {
+        "properties": {
+          "source_ref": {
+            "properties": {
+              "target_schema_name": {
+                "enum": [
+                  "qc2.models_prediction.ModelManifest.v1",
+                  "qc2.governance_owner.ChampionPointer.v1"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "view_name": { "const": "system" } } },
+      "then": {
+        "properties": {
+          "source_ref": {
+            "properties": {
+              "target_schema_name": {
+                "const": "qc2.time_operation.ReadinessAssessment.v1"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "view_name": { "const": "positions" } } },
+      "then": {
+        "properties": {
+          "source_ref": {
+            "properties": {
+              "target_schema_name": {
+                "const": "qc2.execution.Position.v1"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "view_name": { "const": "alerts" } } },
+      "then": {
+        "properties": {
+          "source_ref": {
+            "properties": {
+              "target_schema_name": {
+                "enum": [
+                  "qc2.governance_owner.Alert.v1",
+                  "qc2.execution.ReconciliationReport.v1"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "view_name": { "const": "reports" } } },
+      "then": {
+        "properties": {
+          "source_ref": {
+            "properties": {
+              "target_schema_name": {
+                "enum": [
+                  "qc2.validation.ValidationReport.v1",
+                  "qc2.execution.ReconciliationReport.v1"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "view_name": { "const": "evidence" } } },
+      "then": {
+        "properties": {
+          "source_ref": {
+            "properties": {
+              "target_schema_name": {
+                "enum": [
+                  "qc2.integrity_build.EvidenceEvent.v1",
+                  "qc2.integrity_build.Checkpoint.v1"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

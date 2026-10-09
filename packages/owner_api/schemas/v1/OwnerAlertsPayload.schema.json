@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "qc2.owner_api.OwnerAlertsPayload.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "alert_ref",
+    "severity",
+    "state",
+    "title",
+    "triggered_at",
+    "acknowledged_at",
+    "source_refs"
+  ],
+  "properties": {
+    "alert_ref": {"$ref": "#/$defs/sourceRef"},
+    "severity": {"enum": ["INFO", "NOTICE", "WARNING", "CRITICAL", "EMERGENCY"]},
+    "state": {"enum": ["OPEN", "ACKNOWLEDGED", "RESOLVED", "SUPPRESSED"]},
+    "title": {"type": "string", "minLength": 1, "maxLength": 160},
+    "triggered_at": {"type": "string", "format": "date-time"},
+    "acknowledged_at": {"type": ["string", "null"], "format": "date-time"},
+    "source_refs": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {"$ref": "#/$defs/sourceRef"}
+    }
+  },
+  "$defs": {
+    "sourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_schema_name", "target_id"],
+      "properties": {
+        "target_schema_name": {"type": "string", "minLength": 1, "maxLength": 160},
+        "target_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "content_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

@@ -5810,7 +5810,25 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "TODO",
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-042",
+          "artifact_paths": [
+            "packages/owner_api",
+            "tests/owner_api"
+          ],
+          "reason": "QC2-054 adds the authenticated owner read-model boundary and its acceptance tests under the already established owner API package. The new task receipt will bind the updated tree hashes."
+        },
+        {
+          "prior_task_id": "QC2-053",
+          "artifact_paths": [
+            "packages/owner_api",
+            "tests/owner_api"
+          ],
+          "reason": "QC2-054 extends the existing owner identity package with read-only projections and hostile access-control tests. This scoped drift preserves the identity implementation while binding the updated tree hashes in the QC2-054 receipt."
+        }
+      ],
+      "status": "IN_PROGRESS",
       "blockers": [],
       "acceptance_receipt": null
     },

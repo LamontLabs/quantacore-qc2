@@ -1862,10 +1862,12 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-054 — Owner API Read Models
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Expose authenticated rebuildable owner views with evidence and freshness.
 **Dependencies:** QC2-025, QC2-026, QC2-037, QC2-048, QC2-049, QC2-050, QC2-051, QC2-052, QC2-053
 **Authorized legacy references:** None.
+**Authorized artifact drift:** QC2-042 — QC2-054 adds the authenticated owner read-model boundary and its acceptance tests under the already established owner API package. The new task receipt will bind the updated tree hashes. Paths: `packages/owner_api`, `tests/owner_api`
+**Authorized artifact drift:** QC2-053 — QC2-054 extends the existing owner identity package with read-only projections and hostile access-control tests. This scoped drift preserves the identity implementation while binding the updated tree hashes in the QC2-054 receipt. Paths: `packages/owner_api`, `tests/owner_api`
 **Required reference intake:** None. Do not inspect or copy legacy code for this task without a scoped amendment.
 
 **Required deliverables:**

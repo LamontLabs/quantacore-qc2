@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "qc2.owner_api.OwnerEvidencePayload.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "evidence_ref",
+    "evidence_type",
+    "verification_status",
+    "created_at",
+    "source_refs",
+    "artifact_length_bytes"
+  ],
+  "properties": {
+    "evidence_ref": {"$ref": "#/$defs/sourceRef"},
+    "evidence_type": {"type": "string", "minLength": 1, "maxLength": 96},
+    "verification_status": {
+      "enum": ["VERIFIED", "PENDING", "FAILED", "UNAVAILABLE", "UNKNOWN"]
+    },
+    "created_at": {"type": "string", "format": "date-time"},
+    "source_refs": {
+      "type": "array",
+      "maxItems": 128,
+      "items": {"$ref": "#/$defs/sourceRef"}
+    },
+    "artifact_length_bytes": {
+      "type": ["integer", "null"],
+      "minimum": 0
+    }
+  },
+  "$defs": {
+    "sourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_schema_name", "target_id"],
+      "properties": {
+        "target_schema_name": {"type": "string", "minLength": 1, "maxLength": 160},
+        "target_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "content_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

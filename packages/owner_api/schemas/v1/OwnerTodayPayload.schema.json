@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "qc2.owner_api.OwnerTodayPayload.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "session_id",
+    "session_state",
+    "last_sealed_run_ref",
+    "top_1_symbols",
+    "top_5_symbols",
+    "top_10_symbols",
+    "actionable_alert_count",
+    "paper_state",
+    "readiness_state"
+  ],
+  "properties": {
+    "session_id": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "session_state": {
+      "enum": ["UNKNOWN", "UPCOMING", "OPEN", "CLOSED"]
+    },
+    "last_sealed_run_ref": {
+      "anyOf": [
+        {"$ref": "#/$defs/sourceRef"},
+        {"type": "null"}
+      ]
+    },
+    "top_1_symbols": {
+      "type": "array",
+      "maxItems": 1,
+      "items": {"type": "string", "minLength": 1, "maxLength": 16}
+    },
+    "top_5_symbols": {
+      "type": "array",
+      "maxItems": 5,
+      "items": {"type": "string", "minLength": 1, "maxLength": 16}
+    },
+    "top_10_symbols": {
+      "type": "array",
+      "maxItems": 10,
+      "items": {"type": "string", "minLength": 1, "maxLength": 16}
+    },
+    "actionable_alert_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "paper_state": {
+      "enum": ["UNKNOWN", "DISABLED", "READY", "HELD", "RECONCILIATION_REQUIRED"]
+    },
+    "readiness_state": {
+      "enum": ["BOOTING", "RECOVERY", "READY", "DEGRADED", "HOLD", "OFFLINE"]
+    }
+  },
+  "$defs": {
+    "sourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_schema_name", "target_id"],
+      "properties": {
+        "target_schema_name": {"type": "string", "minLength": 1, "maxLength": 160},
+        "target_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "content_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

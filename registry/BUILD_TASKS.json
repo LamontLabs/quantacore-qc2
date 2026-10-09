@@ -4628,6 +4628,14 @@
       ],
       "authorized_artifact_drift": [
         {
+          "prior_task_id": "QC2-040",
+          "artifact_paths": [
+            "packages/promotion",
+            "tests/promotion"
+          ],
+          "reason": "QC2-043 extends and revalidates the atomic Champion transition implementation and regression tests in the promotion trees. Its acceptance binds both complete tree hashes; QC2-040 remains historically verified at its tested source."
+        },
+        {
           "prior_task_id": "QC2-041",
           "artifact_paths": [
             "packages/promotion",
@@ -4640,7 +4648,7 @@
           "artifact_paths": [
             "registry/BUILD_TASKS.json"
           ],
-          "reason": "QC2-043 updates canonical task status, drift authorization, and its final acceptance record in this registry. Its receipt binds the exact final registry hash; QC2-042 remains valid at its accepted state."
+          "reason": "QC2-043 records its in-progress status and scoped drift authorization in this registry before the tested source commit; that commit binds this registry state. QC2-042 remains historically verified at its accepted source."
         }
       ],
       "authorized_legacy_references": [],

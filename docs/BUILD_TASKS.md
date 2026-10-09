@@ -1494,8 +1494,9 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Objective:** Commit one exact approved model transition without ambiguous or split authority.
 **Dependencies:** QC2-005, QC2-006, QC2-025, QC2-037, QC2-041, QC2-042
 **Authorized legacy references:** None.
+**Authorized artifact drift:** QC2-040 — QC2-043 extends and revalidates the atomic Champion transition implementation and regression tests in the promotion trees. Its acceptance binds both complete tree hashes; QC2-040 remains historically verified at its tested source. Paths: `packages/promotion`, `tests/promotion`
 **Authorized artifact drift:** QC2-041 — QC2-043 extends and revalidates the promotion implementation and regression-test trees for atomic Champion transitions. Its acceptance receipt will bind both complete tree hashes; QC2-041 remains valid at its tested source. Paths: `packages/promotion`, `tests/promotion`
-**Authorized artifact drift:** QC2-042 — QC2-043 updates canonical task status, drift authorization, and its final acceptance record in this registry. Its receipt binds the exact final registry hash; QC2-042 remains valid at its accepted state. Paths: `registry/BUILD_TASKS.json`
+**Authorized artifact drift:** QC2-042 — QC2-043 records its in-progress status and scoped drift authorization in this registry before the tested source commit; that commit binds this registry state. QC2-042 remains historically verified at its accepted source. Paths: `registry/BUILD_TASKS.json`
 **Required reference intake:** None. Do not inspect or copy legacy code for this task without a scoped amendment.
 
 **Required deliverables:**

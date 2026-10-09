@@ -1,0 +1,40 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a11e99-fdbd-7ca9-ba8a-479a47a72509",
+  "created_at": "2026-10-09T02:59:30Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "a5c9ea164e84364d61f3b57c07655fd29e2b417950a848bce120f61c9660fb13",
+  "task_id": "qc2-046",
+  "task_name": "Execution Authority",
+  "objective": "Implement the only broker-mutation gateway with durable attempts and unknown-state recovery.",
+  "dependency_task_ids": [
+    "QC2-005",
+    "QC2-006",
+    "QC2-021",
+    "QC2-043",
+    "QC2-044",
+    "QC2-045"
+  ],
+  "authorized_legacy_refs": [
+    "Gen 1 execution/idempotency logic"
+  ],
+  "deliverable_refs": [
+    "Outbox consumer, just-in-time gate recheck and stable SubmissionAttempt records.",
+    "SUBMISSION_UNKNOWN workflow, cancellation/replacement races and adapter interface.",
+    "Fenced leases and action-scoped execution permissions."
+  ],
+  "required_test_refs": [
+    "Timeout after remote acceptance cannot cause blind resubmission.",
+    "Pause/expiry/account change between validation and send blocks unsafe action.",
+    "Stale worker cannot commit; repeated delivery preserves one logical operation."
+  ],
+  "acceptance_gate": "Faulted simulated broker interactions always produce known terminal or explicitly unresolved state.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

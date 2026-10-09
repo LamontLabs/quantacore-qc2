@@ -5005,9 +5005,65 @@
           "reason": "QC2-046 adds the execution-authority implementation and regression tests to the accepted execution source and test trees; its acceptance receipt will revalidate both tree hashes."
         }
       ],
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-09T02:59:30Z",
+        "task_spec_version": "QC2-046 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "91166b7a55f9cb307ca6943360e3c16c45e575cd",
+        "receipt": "docs/reference/QC2-046_ACCEPTANCE.md",
+        "contract_receipt": "docs/reference/QC2-046_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-046_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/execution/src/qc2_execution",
+          "migrations/0009_execution_authority.sql",
+          "tests/execution"
+        ],
+        "executed_commands": [
+          "pytest -q tests/execution",
+          "node --check tests/execution/qc2_046_postgres_acceptance.mjs && node --check tests/execution/run_qc2_046_postgres_integration.mjs",
+          "QC2_ENV=test QC2_POSTGRES_TEST_URL=postgresql://postgres@127.0.0.1:55439/qc2_test_execution QC2_EXPECTED_DATABASE_TEST=qc2_test_execution node tests/execution/run_qc2_046_postgres_integration.mjs",
+          "python3 tools/task_workflow.py preflight QC2-046"
+        ],
+        "test_counts": [
+          {
+            "test_id": "execution_unit_tests",
+            "passed": 26,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "qc2_045_postgres_regression",
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "qc2_046_postgresql_integration",
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0
+          },
+          {
+            "test_id": "node_syntax_checks",
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/execution/src/qc2_execution": "d148f37515eb9ee99f26643b99d800a1543a8e7157e5fb9e44a3ab4ef55020bc",
+          "migrations/0009_execution_authority.sql": "f9e851dada3d60cd17afe527a236144d5e87493bb232b87de7f2c9aa19ec8135",
+          "tests/execution": "15f4148703ec2cfe8216a13466256714854936fa6803dede00dca5721bfdd27c"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "Fresh local unit and disposable PostgreSQL acceptance with synthetic fixtures; no broker submission, live provider fallback, production data, or credentials were used.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-047",

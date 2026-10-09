@@ -1593,7 +1593,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-046 — Execution Authority
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Implement the only broker-mutation gateway with durable attempts and unknown-state recovery.
 **Dependencies:** QC2-005, QC2-006, QC2-021, QC2-043, QC2-044, QC2-045
 **Authorized legacy references:** Gen 1 execution/idempotency logic
@@ -1620,7 +1620,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-09T02:59:30Z: `docs/reference/QC2-046_ACCEPTANCE.md`, `docs/reference/QC2-046_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-046_TASK_RECORD.json`
 
 ---
 

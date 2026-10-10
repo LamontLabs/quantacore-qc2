@@ -2190,7 +2190,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-064 — Internal Observability
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Make missing work, lag and failures visible without exposing sensitive internals.
 **Dependencies:** QC2-006, QC2-025, QC2-049, QC2-050, QC2-051, QC2-052, QC2-054, QC2-056, QC2-063
 **Authorized legacy references:** None.

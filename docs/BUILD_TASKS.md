@@ -1967,6 +1967,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Objective:** Build the authenticated Kotlin/Compose owner app with real device signing and safe cache behavior.
 **Dependencies:** QC2-003, QC2-053, QC2-054, QC2-055, QC2-056
 **Authorized legacy references:** None.
+**Authorized artifact drift:** QC2-000 — QC2-057 repairs CI verification startup: run checks in the locked uv environment and explicitly expose package/test import roots so the clean GitHub runner can execute the existing suite. Paths: `.github/workflows/ci.yml`
 **Required reference intake:** None. Do not inspect or copy legacy code for this task without a scoped amendment.
 
 **Required deliverables:**

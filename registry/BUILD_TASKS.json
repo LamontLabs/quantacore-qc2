@@ -6147,6 +6147,15 @@
         "QC2-055",
         "QC2-056"
       ],
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-000",
+          "artifact_paths": [
+            ".github/workflows/ci.yml"
+          ],
+          "reason": "QC2-057 repairs CI verification startup: run checks in the locked uv environment and explicitly expose package/test import roots so the clean GitHub runner can execute the existing suite."
+        }
+      ],
       "authorized_legacy_references": [],
       "required_reference_intake": "None. Do not inspect or copy legacy code for this task without a scoped amendment.",
       "required_deliverables": [

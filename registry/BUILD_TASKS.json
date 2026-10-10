@@ -6153,7 +6153,7 @@
           "artifact_paths": [
             ".github/workflows/ci.yml"
           ],
-          "reason": "QC2-057 repairs CI verification startup: run checks in the locked uv environment and explicitly expose package/test import roots so the clean GitHub runner can execute the existing suite."
+          "reason": "QC2-057 repairs CI verification startup: run checks in the locked uv environment, expose package/test import roots, and fetch full Git history so canonical acceptance validation can inspect its pinned source commits."
         }
       ],
       "authorized_legacy_references": [],

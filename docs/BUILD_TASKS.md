@@ -7,7 +7,7 @@ acceptance receipts at specification creation.
 **Acceptance workflow version:** 2.0.
 **Authority:** `docs/GEN2_MASTER_SPEC.md` and `registry/BUILD_TASKS.json`.
 **Execution rule:**
-Execute tasks in topological order; each task after QC2-000 depends on its immediate predecessor plus listed prerequisites. Preflight validates dependency receipts and implementation bytes in the receiving workspace. After accepted implementation and its records are integrated, automatically begin the next eligible task without renewed permission. Native task-board status is a projection and never establishes canonical PASS.
+Execute tasks in dependency-respecting order; task IDs are stable identifiers, not a mandatory sequence. A task is eligible only after every declared dependency is PASS with valid acceptance evidence. Keep one IN_PROGRESS task at a time; when a dependency branch is deferred, continue with eligible independent work and resume the deferred branch before its dependents. After accepted implementation and its records are integrated, automatically begin the next eligible task without renewed permission. Native task-board status is a projection and never establishes canonical PASS.
 **Task-board rule:** Native task-board status and merge labels are projections only; they never establish canonical PASS.
 **Current registry implementation status:**
 ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipts.
@@ -18,9 +18,9 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 - Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.
 - Broaden architecture, spend without authorization, or bypass dependency and acceptance checks.
 
-## Exact topological order
+## Deterministic dependency-respecting schedule
 
-`QC2-000 → QC2-001 → QC2-002 → QC2-003 → QC2-004 → QC2-005 → QC2-006 → QC2-007 → QC2-008 → QC2-009 → QC2-010 → QC2-011 → QC2-012 → QC2-013 → QC2-014 → QC2-015 → QC2-016 → QC2-017 → QC2-018 → QC2-019 → QC2-020 → QC2-021 → QC2-022 → QC2-023 → QC2-024 → QC2-025 → QC2-026 → QC2-027 → QC2-028 → QC2-029 → QC2-030 → QC2-031 → QC2-032 → QC2-033 → QC2-034 → QC2-035 → QC2-036 → QC2-037 → QC2-038 → QC2-039 → QC2-040 → QC2-041 → QC2-042 → QC2-043 → QC2-044 → QC2-045 → QC2-046 → QC2-047 → QC2-048 → QC2-049 → QC2-050 → QC2-051 → QC2-052 → QC2-053 → QC2-054 → QC2-055 → QC2-056 → QC2-057 → QC2-058 → QC2-059 → QC2-060 → QC2-061 → QC2-062 → QC2-063 → QC2-064 → QC2-065 → QC2-066 → QC2-067 → QC2-068 → QC2-069 → QC2-070 → QC2-071 → QC2-072 → QC2-073 → QC2-074 → QC2-075 → QC2-076 → QC2-077 → QC2-078 → QC2-079 → QC2-080 → QC2-081 → QC2-082 → QC2-083 → QC2-084 → QC2-085 → QC2-086 → QC2-087 → QC2-088`
+`QC2-000 → QC2-001 → QC2-002 → QC2-003 → QC2-004 → QC2-005 → QC2-006 → QC2-007 → QC2-008 → QC2-009 → QC2-010 → QC2-011 → QC2-012 → QC2-013 → QC2-014 → QC2-015 → QC2-016 → QC2-017 → QC2-018 → QC2-019 → QC2-020 → QC2-021 → QC2-022 → QC2-023 → QC2-024 → QC2-025 → QC2-026 → QC2-027 → QC2-028 → QC2-029 → QC2-030 → QC2-031 → QC2-032 → QC2-033 → QC2-034 → QC2-035 → QC2-036 → QC2-037 → QC2-038 → QC2-039 → QC2-040 → QC2-041 → QC2-042 → QC2-043 → QC2-044 → QC2-045 → QC2-046 → QC2-047 → QC2-048 → QC2-049 → QC2-050 → QC2-051 → QC2-052 → QC2-053 → QC2-054 → QC2-055 → QC2-056 → QC2-063 → QC2-064 → QC2-065 → QC2-066 → QC2-067 → QC2-057 → QC2-058 → QC2-059 → QC2-060 → QC2-061 → QC2-062 → QC2-068 → QC2-069 → QC2-070 → QC2-071 → QC2-072 → QC2-073 → QC2-074 → QC2-075 → QC2-076 → QC2-077 → QC2-078 → QC2-079 → QC2-080 → QC2-081 → QC2-082 → QC2-083 → QC2-084 → QC2-085 → QC2-086 → QC2-087 → QC2-088`
 
 ## Task contracts
 
@@ -1963,11 +1963,10 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-057 — Android Foundation
 
-**Current status:** IN_PROGRESS
+**Current status:** TODO
 **Objective:** Build the authenticated Kotlin/Compose owner app with real device signing and safe cache behavior.
-**Dependencies:** QC2-003, QC2-053, QC2-054, QC2-055, QC2-056
+**Dependencies:** QC2-003, QC2-053, QC2-054, QC2-055, QC2-056, QC2-067
 **Authorized legacy references:** None.
-**Authorized artifact drift:** QC2-000 — QC2-057 repairs CI verification startup: run checks in the locked uv environment, expose package/test import roots, and fetch full Git history so canonical acceptance validation can inspect its pinned source commits. Paths: `.github/workflows/ci.yml`
 **Required reference intake:** None. Do not inspect or copy legacy code for this task without a scoped amendment.
 
 **Required deliverables:**
@@ -1989,7 +1988,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Acceptance gate:** A real device communicates with the test backend using its own registered key and all required user flows are reachable.
 **Required evidence/environment:** ANDROID_BUILD_ENVIRONMENT, REAL_ANDROID_DEVICE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
-**Blockers:** None recorded.
+**Blockers:** Deferred until QC2-063 through QC2-067 complete the backend report, observability, backup, restore, and retention foundation.
 **Acceptance receipt:** Not recorded.
 
 ---
@@ -2158,8 +2157,11 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 **Current status:** TODO
 **Objective:** Generate immutable evidence-linked daily, learning, promotion and validation reports.
-**Dependencies:** QC2-026, QC2-027, QC2-031, QC2-032, QC2-034, QC2-038, QC2-039, QC2-041, QC2-048, QC2-056, QC2-060, QC2-062
+**Dependencies:** QC2-026, QC2-027, QC2-031, QC2-032, QC2-034, QC2-038, QC2-039, QC2-041, QC2-048, QC2-056
 **Authorized legacy references:** None.
+**Authorized artifact drift:** QC2-000 — QC2-063 retains authorization for the previously repaired CI workflow while the dependency graph is decoupled from the deferred Android branch. Paths: `.github/workflows/ci.yml`
+**Authorized artifact drift:** QC2-007 — QC2-063 updates the canonical task workflow from a fixed predecessor chain to a validated dependency DAG so independent platform work can proceed before Android. Paths: `tests/policy/test_task_workflow.py`, `tools/generate_task_docs.py`, `tools/task_workflow.py`
+**Authorized artifact drift:** QC2-010 — QC2-063 updates the canonical task workflow from a fixed predecessor chain to a validated dependency DAG so independent platform work can proceed before Android. Paths: `tests/policy/test_task_workflow.py`, `tools/task_workflow.py`
 **Required reference intake:** None. Do not inspect or copy legacy code for this task without a scoped amendment.
 
 **Required deliverables:**

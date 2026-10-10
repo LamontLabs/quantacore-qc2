@@ -13,6 +13,7 @@ ROOT = TOOLS.parent
 sys.path.insert(0, str(TOOLS))
 
 from generate_task_docs import render_build_tasks, render_dependencies  # noqa: E402
+from generate_task_docs import topological_task_order  # noqa: E402
 from task_workflow import (  # noqa: E402
     WorkflowError,
     _acceptance_checklist_errors,
@@ -85,6 +86,32 @@ def test_registry_rejects_multiple_active_tasks() -> None:
     assert any("more than one canonical task is IN_PROGRESS" in error for error in errors)
 
 
+def test_graph_schedule_can_place_independent_platform_work_before_android() -> None:
+    registry = _registry()
+    tasks = registry["tasks"]
+    schedule = [task["task_id"] for task in topological_task_order(tasks)]
+    assert schedule.index("QC2-067") < schedule.index("QC2-057")
+    assert schedule.index("QC2-057") < schedule.index("QC2-068")
+    assert "QC2-060" not in next(
+        task for task in tasks if task["task_id"] == "QC2-063"
+    )["dependencies"]
+    assert "QC2-062" not in next(
+        task for task in tasks if task["task_id"] == "QC2-063"
+    )["dependencies"]
+
+
+def test_registry_rejects_dependency_cycles() -> None:
+    registry = _registry()
+    _reset_task_states(registry)
+    task_057 = next(task for task in registry["tasks"] if task["task_id"] == "QC2-057")
+    task_067 = next(task for task in registry["tasks"] if task["task_id"] == "QC2-067")
+    task_057["dependencies"].append("QC2-067")
+    task_067["dependencies"].append("QC2-057")
+
+    errors = validate_registry(registry, check_documents=False)
+    assert "dependency graph contains a cycle" in errors
+
+
 def test_build_task_evidence_identifier_preserves_all_registry_requirements() -> None:
     task = next(
         item for item in _registry()["tasks"] if item["task_id"] == "QC2-010"
@@ -127,6 +154,32 @@ def test_artifact_drift_requires_explicit_scope_and_downstream_acceptance() -> N
     assert (
         _authorized_artifact_drift(
             registry, "QC2-003", "packages/contracts", "later-unaccepted-hash"
+        )
+        is None
+    )
+
+
+def test_preapproved_future_task_can_authorize_scoped_drift_before_start() -> None:
+    registry = _registry()
+    _reset_task_states(registry)
+    task = next(item for item in registry["tasks"] if item["task_id"] == "QC2-063")
+    authorization = task["authorized_artifact_drift"][0]
+    authorization["approved_before_start"] = True
+    task["status"] = "TODO"
+
+    assert _authorized_artifact_drift(
+        registry,
+        authorization["prior_task_id"],
+        authorization["artifact_paths"][0],
+        "changed-hash",
+    )
+    authorization["approved_before_start"] = False
+    assert (
+        _authorized_artifact_drift(
+            registry,
+            authorization["prior_task_id"],
+            authorization["artifact_paths"][0],
+            "changed-hash",
         )
         is None
     )

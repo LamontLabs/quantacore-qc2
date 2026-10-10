@@ -4,7 +4,7 @@
   "task_count": 89,
   "acceptance_workflow_version": "2.0",
   "implementation_status": "ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipts.",
-  "dependency_policy": "Execute tasks in topological order; each task after QC2-000 depends on its immediate predecessor plus listed prerequisites. Preflight validates dependency receipts and implementation bytes in the receiving workspace. After accepted implementation and its records are integrated, automatically begin the next eligible task without renewed permission. Native task-board status is a projection and never establishes canonical PASS.",
+  "dependency_policy": "Execute tasks in dependency-respecting order; task IDs are stable identifiers, not a mandatory sequence. A task is eligible only after every declared dependency is PASS with valid acceptance evidence. Keep one IN_PROGRESS task at a time; when a dependency branch is deferred, continue with eligible independent work and resume the deferred branch before its dependents. After accepted implementation and its records are integrated, automatically begin the next eligible task without renewed permission. Native task-board status is a projection and never establishes canonical PASS.",
   "common_forbidden_actions": [
     "Implement live trading or allow runtime provider/feed fallback.",
     "Modify legacy sources, fabricate passing evidence, or activate fixture/uncalibrated values.",
@@ -6145,16 +6145,8 @@
         "QC2-053",
         "QC2-054",
         "QC2-055",
-        "QC2-056"
-      ],
-      "authorized_artifact_drift": [
-        {
-          "prior_task_id": "QC2-000",
-          "artifact_paths": [
-            ".github/workflows/ci.yml"
-          ],
-          "reason": "QC2-057 repairs CI verification startup: run checks in the locked uv environment, expose package/test import roots, and fetch full Git history so canonical acceptance validation can inspect its pinned source commits."
-        }
+        "QC2-056",
+        "QC2-067"
       ],
       "authorized_legacy_references": [],
       "required_reference_intake": "None. Do not inspect or copy legacy code for this task without a scoped amendment.",
@@ -6180,8 +6172,10 @@
         "REAL_ANDROID_DEVICE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
-      "blockers": [],
+      "status": "TODO",
+      "blockers": [
+        "Deferred until QC2-063 through QC2-067 complete the backend report, observability, backup, restore, and retention foundation."
+      ],
       "acceptance_receipt": null
     },
     {
@@ -6401,9 +6395,36 @@
         "QC2-039",
         "QC2-041",
         "QC2-048",
-        "QC2-056",
-        "QC2-060",
-        "QC2-062"
+        "QC2-056"
+      ],
+      "authorized_artifact_drift": [
+        {
+          "prior_task_id": "QC2-000",
+          "approved_before_start": true,
+          "artifact_paths": [
+            ".github/workflows/ci.yml"
+          ],
+          "reason": "QC2-063 retains authorization for the previously repaired CI workflow while the dependency graph is decoupled from the deferred Android branch."
+        },
+        {
+          "prior_task_id": "QC2-007",
+          "approved_before_start": true,
+          "artifact_paths": [
+            "tests/policy/test_task_workflow.py",
+            "tools/generate_task_docs.py",
+            "tools/task_workflow.py"
+          ],
+          "reason": "QC2-063 updates the canonical task workflow from a fixed predecessor chain to a validated dependency DAG so independent platform work can proceed before Android."
+        },
+        {
+          "prior_task_id": "QC2-010",
+          "approved_before_start": true,
+          "artifact_paths": [
+            "tests/policy/test_task_workflow.py",
+            "tools/task_workflow.py"
+          ],
+          "reason": "QC2-063 updates the canonical task workflow from a fixed predecessor chain to a validated dependency DAG so independent platform work can proceed before Android."
+        }
       ],
       "authorized_legacy_references": [],
       "required_reference_intake": "None. Do not inspect or copy legacy code for this task without a scoped amendment.",

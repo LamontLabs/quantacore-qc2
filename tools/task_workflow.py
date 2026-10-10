@@ -22,7 +22,11 @@ from qc2_contracts.runtime import (  # noqa: E402
     verify_content_hash,
 )
 
-from generate_task_docs import render_build_tasks, render_dependencies  # noqa: E402
+from generate_task_docs import (  # noqa: E402
+    render_build_tasks,
+    render_dependencies,
+    topological_task_order,
+)
 
 REGISTRY_PATH = ROOT / "registry/BUILD_TASKS.json"
 RECEIPT_SCHEMA_PATH = (
@@ -272,6 +276,10 @@ def _authorized_artifact_drift(
             ):
                 continue
             reason = authorization.get("reason")
+            if later.get("status") == "TODO" and authorization.get(
+                "approved_before_start"
+            ) is True:
+                return reason if isinstance(reason, str) and reason.strip() else None
             if later.get("status") == "IN_PROGRESS":
                 return reason if isinstance(reason, str) and reason.strip() else None
             if later.get("status") != "PASS":
@@ -453,8 +461,6 @@ def validate_registry(
         if status not in VALID_STATUSES:
             errors.append(f"{task_id}: unknown status {status!r}")
         dependencies = task.get("dependencies", [])
-        if index and tasks[index - 1]["task_id"] not in dependencies:
-            errors.append(f"{task_id}: immediate predecessor is missing from dependencies")
         for dependency_id in dependencies:
             if dependency_id not in by_id:
                 errors.append(f"{task_id}: unknown dependency {dependency_id}")
@@ -482,6 +488,9 @@ def validate_registry(
                         errors.append(f"{task_id}: {exc}")
         elif status == "TODO" and task.get("acceptance_receipt") is not None:
             errors.append(f"{task_id}: TODO task has an acceptance receipt")
+
+    if not topological_task_order(tasks):
+        errors.append("dependency graph contains a cycle")
 
     if in_progress:
         active = in_progress[0]

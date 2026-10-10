@@ -1963,7 +1963,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-057 — Android Foundation
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Build the authenticated Kotlin/Compose owner app with real device signing and safe cache behavior.
 **Dependencies:** QC2-003, QC2-053, QC2-054, QC2-055, QC2-056
 **Authorized legacy references:** None.

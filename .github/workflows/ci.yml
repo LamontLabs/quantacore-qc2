@@ -41,4 +41,9 @@ jobs:
           uv sync --locked
 
       - name: Verify
-        run: pnpm run verify
+        run: |
+          package_sources="$(find packages -type d -name src -print | paste -sd:)"
+          test_modules="$(find tests -mindepth 1 -maxdepth 1 -type d -print | paste -sd:)"
+          export PYTHONPATH="${package_sources}:${test_modules}${PYTHONPATH:+:$PYTHONPATH}"
+          export PYTEST_ADDOPTS="--import-mode=importlib"
+          uv run pnpm run verify

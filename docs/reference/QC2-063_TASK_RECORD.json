@@ -1,0 +1,42 @@
+{
+  "schema_name": "qc2.integrity_build.BuildTask.v1",
+  "schema_version": "1.0",
+  "id": "01a12744-2143-71c2-bb25-37fbc9b345ed",
+  "created_at": "2026-10-10T19:22:18Z",
+  "owning_authority": "build_governance",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "environment_namespace": "test",
+  "source_refs": [],
+  "content_hash": "4708b3fbb3353d27bcb7ed897e4cbb396793625f70d164781d32e332ca0307a0",
+  "task_id": "qc2-063",
+  "task_name": "Generated Reports",
+  "objective": "Generate immutable evidence-linked daily, learning, promotion and validation reports.",
+  "dependency_task_ids": [
+    "QC2-026",
+    "QC2-027",
+    "QC2-031",
+    "QC2-032",
+    "QC2-034",
+    "QC2-038",
+    "QC2-039",
+    "QC2-041",
+    "QC2-048",
+    "QC2-056"
+  ],
+  "authorized_legacy_refs": [],
+  "deliverable_refs": [
+    "Daily Runner, Weekly Learning, Missed Monster, False Monster, Promotion, F0 Validation and Integrity reports.",
+    "Machine-readable metric source manifests and human-readable versions.",
+    "Report revisions/amendments, scope limitations and provisional status."
+  ],
+  "required_test_refs": [
+    "Recompute report totals from source artifacts; denominators match.",
+    "No report presents survivor-limited research or paper fills as broader proof.",
+    "Changed source correction produces amendment, not overwritten final report."
+  ],
+  "acceptance_gate": "Every material number and verdict resolves to immutable inputs and a registered metric definition.",
+  "evidence_requirement": "local_fixture_and_code_evidence",
+  "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
+  "task_state": "PASS",
+  "blocker_refs": []
+}

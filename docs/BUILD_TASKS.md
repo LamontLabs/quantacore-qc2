@@ -2155,7 +2155,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-063 — Generated Reports
 
-**Current status:** IN_PROGRESS
+**Current status:** PASS
 **Objective:** Generate immutable evidence-linked daily, learning, promotion and validation reports.
 **Dependencies:** QC2-026, QC2-027, QC2-031, QC2-032, QC2-034, QC2-038, QC2-039, QC2-041, QC2-048, QC2-056
 **Authorized legacy references:** None.
@@ -2184,7 +2184,7 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 **Required evidence/environment:** LOCAL_FIXTURE_AND_CODE_EVIDENCE
 **Calibration dependency:** FRAMEWORK_OR_POLICY_ONLY
 **Blockers:** None recorded.
-**Acceptance receipt:** Not recorded.
+**Acceptance receipt:** PASS; checked 2026-10-10T19:22:18Z: `docs/reference/QC2-063_ACCEPTANCE_RECEIPT.md`, `docs/reference/QC2-063_ACCEPTANCE_RECORD.json`, `docs/reference/QC2-063_TASK_RECORD.json`
 
 ---
 

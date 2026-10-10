@@ -6450,9 +6450,56 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "blockers": [],
-      "acceptance_receipt": null
+      "acceptance_receipt": {
+        "result": "PASS",
+        "acceptance_workflow_version": "2.0",
+        "checked_at": "2026-10-10T19:22:18Z",
+        "task_spec_version": "QC2-063 / registry schema 1.0 / governing spec 2.0 / acceptance workflow 2.0",
+        "source_commit": "f566c9dfced599b5c2256d019a34231cdaf2dd4d",
+        "receipt": "docs/reference/QC2-063_ACCEPTANCE_RECEIPT.md",
+        "contract_receipt": "docs/reference/QC2-063_ACCEPTANCE_RECORD.json",
+        "task_record": "docs/reference/QC2-063_TASK_RECORD.json",
+        "changed_paths": [
+          "packages/reporting",
+          "tests/reporting",
+          "docs/GENERATED_REPORTS.md",
+          "docs/GEN2_MASTER_SPEC.md",
+          "tools/task_workflow.py",
+          "tools/generate_task_docs.py",
+          "tests/policy/test_task_workflow.py"
+        ],
+        "executed_commands": [
+          "PYTHONPATH=<workspace package and test sources> PYTEST_ADDOPTS=--import-mode=importlib uv run pytest -q tests/reporting/test_reports.py",
+          "uv run ruff check packages/reporting tests/reporting",
+          "python3 tools/generate_task_docs.py --check",
+          "DANGEROUSLY_ALLOW_GIT=1 python3 tools/task_workflow.py preflight QC2-063",
+          "git diff --check"
+        ],
+        "test_counts": [
+          {
+            "test_id": "qc2_063_reporting",
+            "passed": 18,
+            "failed": 0,
+            "skipped": 0
+          }
+        ],
+        "artifact_hashes": {
+          "packages/reporting": "16d5be4a87bcf9057ebfeff3a6d5492a52144f044b978fa50c58881e4eadbd90",
+          "tests/reporting": "857cadcd1467b1a1e414df6c3c4f1cd2d525a6336b0bd9b6daea78c99ce8b92f",
+          "docs/GENERATED_REPORTS.md": "06d675d0d7c6515b3834600a8c30cd6e1ee8b9447fb33987aa0184eafc638223",
+          "docs/GEN2_MASTER_SPEC.md": "3c9ed34333f1be9385a9d7dc85633af249e7f1172534cce2bc7950636809f0ee",
+          "tools/task_workflow.py": "0680ec21b2d55a23f18832cda41b26ef8808865914d44fe49181ac8a760d40d8",
+          "tools/generate_task_docs.py": "ccbca49c38016d98e1cbd698335f04abc0d5ec340bb3da23c655767233008c63",
+          "tests/policy/test_task_workflow.py": "d9eb261355da8a83cbc39a95693e8e20c11a76dc3f905172a648d2f2ba3f4b8d"
+        },
+        "evidence_class": "SYNTHETIC_FIXTURE",
+        "environment_namespace": "test",
+        "verification_reason": "Revalidated report generation and source boundaries using registered synthetic contracts; no operational report evidence is claimed.",
+        "agent_identity": "Replit Agent",
+        "reviewer_identity": null
+      }
     },
     {
       "task_id": "QC2-064",

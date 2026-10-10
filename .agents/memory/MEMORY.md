@@ -15,3 +15,4 @@
 - [QC2 database authority separation](qc2-database-authority-separation.md) — separate identity and owner API pools; SQL grants do not change a connection's authenticated authority.
 - [PL/pgSQL name resolution](plpgsql-name-resolution.md) — qualify ordinary SQL names, but leave special forms like GREATEST unqualified.
 - [Execution PostgreSQL acceptance fixtures](execution-postgresql-acceptance-fixtures.md) — verify evidence rollback before seeding a synthetic stream; let enqueue perform the reserved-to-queued transition.
+- [QC2-057 source of truth](qc2-057-source-of-truth.md) — the current Replit workspace is the authorized source; do not substitute either Project LEE GitHub repository.

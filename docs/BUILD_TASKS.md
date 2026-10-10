@@ -2155,12 +2155,12 @@ ACTIVE_BUILD; consult per-task canonical status and validated acceptance receipt
 
 ### QC2-063 — Generated Reports
 
-**Current status:** TODO
+**Current status:** IN_PROGRESS
 **Objective:** Generate immutable evidence-linked daily, learning, promotion and validation reports.
 **Dependencies:** QC2-026, QC2-027, QC2-031, QC2-032, QC2-034, QC2-038, QC2-039, QC2-041, QC2-048, QC2-056
 **Authorized legacy references:** None.
 **Authorized artifact drift:** QC2-000 — QC2-063 retains authorization for the previously repaired CI workflow while the dependency graph is decoupled from the deferred Android branch. Paths: `.github/workflows/ci.yml`
-**Authorized artifact drift:** QC2-007 — QC2-063 updates the canonical task workflow from a fixed predecessor chain to a validated dependency DAG so independent platform work can proceed before Android. Paths: `tests/policy/test_task_workflow.py`, `tools/generate_task_docs.py`, `tools/task_workflow.py`
+**Authorized artifact drift:** QC2-007 — QC2-063 synchronizes the governing task specification with the validated dependency DAG so independent backend work proceeds before Android. Paths: `tests/policy/test_task_workflow.py`, `tools/generate_task_docs.py`, `tools/task_workflow.py`, `docs/GEN2_MASTER_SPEC.md`
 **Authorized artifact drift:** QC2-010 — QC2-063 updates the canonical task workflow from a fixed predecessor chain to a validated dependency DAG so independent platform work can proceed before Android. Paths: `tests/policy/test_task_workflow.py`, `tools/task_workflow.py`
 **Required reference intake:** None. Do not inspect or copy legacy code for this task without a scoped amendment.
 

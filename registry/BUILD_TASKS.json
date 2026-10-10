@@ -6412,9 +6412,10 @@
           "artifact_paths": [
             "tests/policy/test_task_workflow.py",
             "tools/generate_task_docs.py",
-            "tools/task_workflow.py"
+            "tools/task_workflow.py",
+            "docs/GEN2_MASTER_SPEC.md"
           ],
-          "reason": "QC2-063 updates the canonical task workflow from a fixed predecessor chain to a validated dependency DAG so independent platform work can proceed before Android."
+          "reason": "QC2-063 synchronizes the governing task specification with the validated dependency DAG so independent backend work proceeds before Android."
         },
         {
           "prior_task_id": "QC2-010",
@@ -6449,7 +6450,7 @@
         "LOCAL_FIXTURE_AND_CODE_EVIDENCE"
       ],
       "calibration_dependency": "FRAMEWORK_OR_POLICY_ONLY",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "blockers": [],
       "acceptance_receipt": null
     },

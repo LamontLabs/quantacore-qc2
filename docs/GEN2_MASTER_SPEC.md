@@ -807,7 +807,7 @@ Additional technical dependencies are listed beside the immediate predecessor. R
 
 **Evidence/environment:** LOCAL_TOOLCHAIN  
 **Calibration state:** FRAMEWORK_OR_POLICY_ONLY  
-**Initial status:** TODO. **Blockers:** none assessed; required inputs must be verified when the task begins. **Acceptance receipt:** absent; no work is certified complete.
+**Initial status:** TODO. **Blockers:** deferred until QC2-063 through QC2-067 complete the backend report, observability, backup, restore, and retention foundation. **Acceptance receipt:** absent; no work is certified complete.
 
 ### QC2-001 — Legacy Reference Manifest
 
@@ -2502,7 +2502,7 @@ Additional technical dependencies are listed beside the immediate predecessor. R
 
 **Objective:** Build the authenticated Kotlin/Compose owner app with real device signing and safe cache behavior.
 
-**Dependencies:** QC2-003, QC2-053, QC2-054, QC2-055, QC2-056  
+**Dependencies:** QC2-003, QC2-053, QC2-054, QC2-055, QC2-056, QC2-067
 **Authorized legacy references:** None.  
 **Reference intake:** None. Do not inspect or copy legacy code for this task without a scoped amendment.
 
@@ -2682,7 +2682,7 @@ Additional technical dependencies are listed beside the immediate predecessor. R
 
 **Objective:** Generate immutable evidence-linked daily, learning, promotion and validation reports.
 
-**Dependencies:** QC2-026, QC2-027, QC2-031, QC2-032, QC2-034, QC2-038, QC2-039, QC2-041, QC2-048, QC2-056, QC2-060, QC2-062  
+**Dependencies:** QC2-026, QC2-027, QC2-031, QC2-032, QC2-034, QC2-038, QC2-039, QC2-041, QC2-048, QC2-056
 **Authorized legacy references:** None.  
 **Reference intake:** None. Do not inspect or copy legacy code for this task without a scoped amendment.
 

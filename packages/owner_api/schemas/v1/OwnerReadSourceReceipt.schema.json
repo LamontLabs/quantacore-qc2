@@ -148,7 +148,8 @@
               "target_schema_name": {
                 "enum": [
                   "qc2.models_prediction.ModelManifest.v1",
-                  "qc2.governance_owner.ChampionPointer.v1"
+                  "qc2.governance_owner.ChampionPointer.v1",
+                  "qc2.governance_owner.PromotionChallenge.v1"
                 ]
               }
             }
@@ -163,7 +164,10 @@
           "source_ref": {
             "properties": {
               "target_schema_name": {
-                "const": "qc2.time_operation.ReadinessAssessment.v1"
+                "enum": [
+                  "qc2.time_operation.ReadinessAssessment.v1",
+                  "qc2.owner_api.PaperExecutionControlProjection.v1"
+                ]
               }
             }
           }

@@ -90,7 +90,7 @@ private fun OwnerApp() {
     var busy by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var actionMessage by remember { mutableStateOf<String?>(null) }
-    var bootstrapSecret by remember { mutableStateOf("") }
+    var pairingCode by remember { mutableStateOf("") }
     var recoveryMaterial by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
@@ -237,18 +237,18 @@ private fun OwnerApp() {
 
     fun enrollOwnerDevice() {
         if (busy) return
-        val supplied = bootstrapSecret
-        if (supplied.length < 32) {
-            errorMessage = "Enter the one-time owner bootstrap secret supplied by the operator."
+        val supplied = pairingCode.trim()
+        if (!supplied.matches(Regex("^[A-Za-z0-9_-]{43}$"))) {
+            errorMessage = "Enter the 5-minute pairing code issued from the owner console."
             return
         }
         scope.launch {
             busy = true
             errorMessage = null
-            bootstrapSecret = ""
+            pairingCode = ""
             try {
                 val (newSession, recovery) = withContext(Dispatchers.IO) {
-                    client.enrollWithBootstrap(supplied)
+                    client.enrollWithPairingCode(supplied)
                 }
                 withContext(Dispatchers.IO) { secureStore.saveSession(newSession) }
                 session = newSession
@@ -324,8 +324,8 @@ private fun OwnerApp() {
 
                 if (session == null) {
                     EnrollmentCard(
-                        bootstrapSecret = bootstrapSecret,
-                        onSecretChange = { bootstrapSecret = it },
+                        pairingCode = pairingCode,
+                        onPairingCodeChange = { pairingCode = it },
                         onEnroll = ::enrollOwnerDevice,
                         busy = busy,
                     )
@@ -368,8 +368,8 @@ private fun OwnerApp() {
 
 @Composable
 private fun EnrollmentCard(
-    bootstrapSecret: String,
-    onSecretChange: (String) -> Unit,
+    pairingCode: String,
+    onPairingCodeChange: (String) -> Unit,
     onEnroll: () -> Unit,
     busy: Boolean,
 ) {
@@ -380,15 +380,15 @@ private fun EnrollmentCard(
         ) {
             Text("Enroll this owner device", style = MaterialTheme.typography.titleLarge)
             Text(
-                "Enrollment signs the server-issued challenge with this device’s Android Keystore key. The bootstrap secret is sent only to the hosted API and is not saved.",
+                "Get a one-time pairing code from the Clerk-protected owner console. It expires in 5 minutes; this device signs the server challenge with its Android Keystore key.",
             )
             OutlinedTextField(
-                value = bootstrapSecret,
-                onValueChange = onSecretChange,
+                value = pairingCode,
+                onValueChange = onPairingCodeChange,
                 modifier = Modifier.fillMaxWidth(),
-                label = { Text("One-time bootstrap secret") },
+                label = { Text("One-time pairing code") },
                 visualTransformation = PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Ascii),
                 singleLine = true,
                 enabled = !busy,
             )

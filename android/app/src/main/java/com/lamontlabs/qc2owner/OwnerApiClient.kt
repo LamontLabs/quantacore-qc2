@@ -21,8 +21,10 @@ internal class OwnerApiClient(
         it.openConnection() as HttpURLConnection
     },
 ) {
-    fun enrollWithBootstrap(bootstrapSecret: String): Pair<OwnerSession, String?> {
-        require(bootstrapSecret.length >= 32) { "bootstrap_secret_too_short" }
+    fun enrollWithPairingCode(pairingCode: String): Pair<OwnerSession, String?> {
+        require(pairingCode.matches(Regex("^[A-Za-z0-9_-]{43}$"))) {
+            "invalid_pairing_code"
+        }
         OwnerSigningKey.ensureCreated()
         val challengeResponse = request(
             path = "owner/v1/enrollment/challenges",
@@ -31,7 +33,7 @@ internal class OwnerApiClient(
                 .put("owner_key_id", OWNER_KEY_ID)
                 .put("public_key_der_base64url", encodeBase64Url(OwnerSigningKey.publicKeyEncoded()))
                 .put("app_version", version),
-            headers = mapOf("x-owner-bootstrap-secret" to bootstrapSecret),
+            headers = mapOf("x-owner-pairing-code" to pairingCode),
         )
         val challenge = challengeResponse.getJSONObject("challenge")
         val signingBytes = decodeBase64Url(
@@ -46,7 +48,7 @@ internal class OwnerApiClient(
                     "signature_base64url",
                     encodeBase64Url(OwnerSigningKey.sign(signingBytes)),
                 ),
-            headers = mapOf("x-owner-bootstrap-secret" to bootstrapSecret),
+            headers = mapOf("x-owner-pairing-code" to pairingCode),
         )
         return parseSession(completed) to optionalRecoveryMaterial(completed)
     }

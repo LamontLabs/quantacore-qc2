@@ -87,6 +87,14 @@ class OwnerContractsTest {
     }
 
     @Test
+    fun pairingCodeFormatIsBoundedAndUsesOnlyUrlSafeCharacters() {
+        val validCode = "A".repeat(43)
+        assertTrue(validCode.matches(Regex("^[A-Za-z0-9_-]{43}$")))
+        assertFalse("A".repeat(42).matches(Regex("^[A-Za-z0-9_-]{43}$")))
+        assertFalse(("A".repeat(42) + "!").matches(Regex("^[A-Za-z0-9_-]{43}$")))
+    }
+
+    @Test
     fun apiErrorsDoNotExposeResponseBodiesAsExceptionText() {
         val client = OwnerApiClient(
             "https://owner.example.test/api",

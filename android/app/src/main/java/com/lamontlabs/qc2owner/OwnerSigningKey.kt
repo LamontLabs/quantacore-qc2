@@ -46,4 +46,9 @@ internal object OwnerSigningKey {
             sign()
         }
     }
+
+    fun delete() {
+        val store = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
+        if (store.containsAlias(ALIAS)) store.deleteEntry(ALIAS)
+    }
 }

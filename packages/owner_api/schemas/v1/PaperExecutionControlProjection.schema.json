@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "qc2.owner_api.PaperExecutionControlProjection.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_name",
+    "schema_version",
+    "entries_paused",
+    "emergency_halted",
+    "state_version",
+    "updated_at",
+    "readiness_state",
+    "readiness_reasons"
+  ],
+  "properties": {
+    "schema_name": {
+      "const": "qc2.owner_api.PaperExecutionControlProjection.v1"
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "entries_paused": {
+      "type": "boolean"
+    },
+    "emergency_halted": {
+      "type": "boolean"
+    },
+    "state_version": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "readiness_state": {
+      "enum": ["EXECUTION_READY", "BLOCKED", "UNKNOWN"]
+    },
+    "readiness_reasons": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128
+      }
+    }
+  }
+}
